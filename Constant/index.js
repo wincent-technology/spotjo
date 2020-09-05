@@ -7,7 +7,7 @@ export const IC_ARR_UP = require('../Img/up.png')
 export const IC_ARR_DOWN = require('../Img/down.png')
 export const FontBold = "Roboto-Bold";
 export const FontRegular = "Roboto-Regular";
-export const Background = require('../Img/hahave.jpg')
+export const Background = require('../Img/bighdbg.jpg')
 
 export const sort = require('../Img/sort.png')
 export const filter = require('../Img/filter.png')

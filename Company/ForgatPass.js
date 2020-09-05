@@ -7,14 +7,14 @@
  */
 
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
-
+import { Background } from '../Constant/index'
 
 class ForgatPass extends Component {
     constructor(props) {
@@ -37,15 +37,9 @@ class ForgatPass extends Component {
 
     render() {
         return (
+            <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
-            source = {
-            require('../Img/bg.jpg')
-            }
-            resizeMode = {
-            'stretch'
-            } >
-        <ImageBackground style={styles.ImageBlue}
-            source = {require('../Img/glossy.png')}
+            source={Background}
             resizeMode={'stretch'}>
         <StatusBar hidden ={true}/>
          <View style={[{
@@ -83,7 +77,7 @@ class ForgatPass extends Component {
                 // marginRight: scale(10)
             }}><Text style={styles.CompanyOppoTalentText}>Reset</Text></View></View></TouchableWithoutFeedback>
         </View>
-       </ImageBackground></ImageBackground>
+       </ImageBackground></SafeAreaView>
 
         );
     }

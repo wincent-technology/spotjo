@@ -39,9 +39,6 @@ class PersonalCompany extends Component {
             source={Background}
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
-                <ImageBackground style={styles.ImageBlue}
-            source={require('../Img/glossy.png')}
-            resizeMode={'stretch'}>
                     <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source={require('../Img/logo-spotjo.png')}
@@ -122,7 +119,7 @@ class PersonalCompany extends Component {
                 fontSize: scale(20),
             }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
                     </View>
-                </ImageBackground></ImageBackground></SafeAreaView>
+                </ImageBackground></SafeAreaView>
         );
     }
 }

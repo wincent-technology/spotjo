@@ -7,14 +7,14 @@
  */
 
 import React, { Component } from 'react';
-import { Dimensions, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { Dimensions, View, Text, SafeAreaView, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale } from '../src/Util';
 import { play } from '../src/IconManager';
 import { widthPercentageToDP as wp } from '../Component/responsive-ratio';
 import CustomButton from '../Component/Button'
-import { themeColor } from '../Constant/index'
+import { themeColor, Background } from '../Constant/index'
 
 class JobVideoResume extends Component {
     constructor(props) {
@@ -30,15 +30,9 @@ class JobVideoResume extends Component {
 
     render() {
         return (
+            <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
-            source = {
-            require('../Img/bg.jpg')
-            }
-            resizeMode = {
-            'stretch'
-            } >
-        <ImageBackground style={styles.ImageBlue}
-            source = {require('../Img/glossy.png')}
+            source={Background}
             resizeMode={'stretch'}>
         <StatusBar hidden ={true}/>
          <View style={[{
@@ -81,7 +75,7 @@ class JobVideoResume extends Component {
             }]}><Text style={[{
                 fontSize: scale(20),
             }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
-       </ImageBackground></ImageBackground>
+       </ImageBackground></SafeAreaView>
 
         );
     }

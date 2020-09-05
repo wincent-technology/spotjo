@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StatusBar, ImageBackground, FlatList, Text, Image, View } from 'react-native';
+import { SafeAreaView, StatusBar, ImageBackground, FlatList, Text, Image, View } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, leftVid } from '../src/IconManager';
@@ -8,7 +8,7 @@ import { themeColor, themeWhite } from '../Constant/index'
 import { Rating, NavigationHead } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { FontBold, FontRegular } from '../Constant/index'
+import { FontBold, FontRegular, Background } from '../Constant/index'
 import ItemMV from './ItemMV'
 
 
@@ -71,17 +71,11 @@ class EditWorkExperience extends Component {
     render() {
         const {Hourly, Monthly, Yearly} = this.state
         return (
+            <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
-            source={
-            require('../Img/bg.jpg')
-            }
-            resizeMode={
-            'stretch'
-            } >
-                <StatusBar hidden={true} />
-                <ImageBackground style={styles.ImageBlue}
-            source={require('../Img/glossy.png')}
+            source={Background}
             resizeMode={'stretch'}>
+                <StatusBar hidden={true} />
             <NavigationHead centerComponent='Work Experience' rightComponent="Save" onPress={() => this.Back()} onExit={() => this.save()}/>
                     <View style={{
                 width: wp('96%'),
@@ -184,7 +178,7 @@ class EditWorkExperience extends Component {
             }
             />
             </View></View>
-                </ImageBackground></ImageBackground>
+                </ImageBackground></SafeAreaView>
         )
     }
 }

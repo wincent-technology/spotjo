@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
@@ -15,7 +15,7 @@ import { scale } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import CustomButton from '../Component/Button'
-import { themeColor } from '../Constant/index'
+import { themeColor, Background } from '../Constant/index'
 
 class Companylogo extends Component {
     constructor(props) {
@@ -31,15 +31,9 @@ class Companylogo extends Component {
 
     render() {
         return (
+            <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
-            source = {
-            require('../Img/bg.jpg')
-            }
-            resizeMode = {
-            'stretch'
-            } >
-        <ImageBackground style={styles.ImageBlue}
-            source = {require('../Img/glossy.png')}
+            source={Background}
             resizeMode={'stretch'}>
         <StatusBar hidden ={true}/>
          <View style={[{
@@ -83,7 +77,7 @@ class Companylogo extends Component {
             }]}><Text style={[{
                 fontSize: scale(20),
             }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
-       </ImageBackground></ImageBackground>
+       </ImageBackground></SafeAreaView>
 
         );
     }
