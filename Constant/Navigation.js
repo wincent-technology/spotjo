@@ -22,6 +22,8 @@ import PersonalCompany from '../Company/PersonalCompany'
 import NoAccount from '../Company/NoAccount'
 import Signup from '../Company/Signup'
 import Companylogo from '../Company/Companylogo'
+import JobListCompany from '../Company/JobListCompany'
+import UserProfile from '../Company/UserProfile'
 
 import JobLogin from '../JobSeeker/Login';
 import JobLoginWithEmail from '../JobSeeker/LoginWithEmail';
@@ -34,6 +36,14 @@ import EditWorkExperience from '../JobSeeker/EditWorkExperience';
 import JobSignup from '../JobSeeker/JobSignup';
 import JobNoAccount from '../JobSeeker/JobNoAccount';
 import JobSeekerPhoto from '../JobSeeker/JobSeekerPhoto'
+import MyProfile from '../JobSeeker/MyProfile';
+import JobSeekerlist from '../JobSeeker/JobSeekerlist';
+import JobCompanyProfile from '../JobSeeker/JobCompanyProfile';
+import AddSkilJob from '../JobSeeker/AddSkilJob'
+import EditEducation from '../JobSeeker/EditEducation'
+import BasicInfoOfCompany from '../JobSeeker/BasicInfoOfCompany'
+import JobDescription from '../JobSeeker/JobDescription';
+import JobAboutCompany from '../JobSeeker/JobAboutCompany'
 
 import { createBottomTabNavigator } from 'react-navigation-tabs';
 import { library, leftVid } from '../src/IconManager';
@@ -129,9 +139,31 @@ const TabScreen = createBottomTabNavigator({
     },
 },);
 
+
+const Join = createStackNavigator({
+    JobEditProfile: JobEditProfile,
+    EditWorkExperience: EditWorkExperience,
+    AddSkilJob: AddSkilJob,
+    EditEducation: EditEducation
+}, {
+    headerMode: 'none',
+    initialRouteName: 'JobEditProfile',
+},)
+
+const jobli = createStackNavigator({
+    JobSeekerlist: JobSeekerlist,
+    JobCompanyProfile: JobCompanyProfile,
+    BasicInfoOfCompany: BasicInfoOfCompany,
+    JobDescription: JobDescription,
+    JobAboutCompany: JobAboutCompany
+}, {
+    headerMode: 'none',
+    initialRouteName: 'JobSeekerlist',
+},)
+
 const TabScreenJob = createBottomTabNavigator({
-    Home: {
-        screen: JobList,
+    jobli: {
+        screen: jobli,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: (<Image style={{
@@ -141,8 +173,8 @@ const TabScreenJob = createBottomTabNavigator({
             source={require('../Img/homeTab.png')} />),
         },
     },
-    CompanyProfile: {
-        screen: Personal,
+    MyProfile: {
+        screen: MyProfile,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: (<Image style={{
@@ -152,8 +184,8 @@ const TabScreenJob = createBottomTabNavigator({
             source={require('../Img/userTab.png')} />),
         },
     },
-    Filter: {
-        screen: JobEditProfile,
+    Join: {
+        screen: Join,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: (<Image style={{
@@ -175,12 +207,13 @@ const TabScreenJob = createBottomTabNavigator({
             source={require('../Img/CommentTab.png')} />),
         },
     },
+
 }, {
     shifting: true,
     swipeEnabled: true,
     animationEnabled: true,
-    initialRouteName: 'Filter',
-    order: ['Home', 'CompanyProfile', 'Filter', 'ScreenMap'],
+    initialRouteName: 'Join',
+    order: ['jobli', 'MyProfile', 'Join', 'ScreenMap',],
     tabBarPosition: 'bottom',
     lazy: false,
     tabBarOptions: {
@@ -221,18 +254,18 @@ const TabScreenJob = createBottomTabNavigator({
 
 const TabScreenCompany = createBottomTabNavigator({
     Home: {
-        screen: JobList,
+        screen: JobListCompany,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: (<Image style={{
                 width: 28,
-                height: 30
+                height: 28
             }}
             source={require('../Img/homeTab.png')} />),
         },
     },
     CompanyProfile: {
-        screen: PersonalCompany,
+        screen: UserProfile,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: (<Image style={{
@@ -350,7 +383,8 @@ const AppNavigator = createStackNavigator({
     JobSignup: JobSignup,
     JobNoAccount: JobNoAccount,
     Companylogo: Companylogo,
-    JobSeekerPhoto: JobSeekerPhoto
+    JobSeekerPhoto: JobSeekerPhoto,
+    MyProfile: MyProfile,
 }, {
     headerMode: 'none',
     animationEnabled: true,

@@ -16,7 +16,7 @@ const NavigationHeader = ({onPress, text = '', ...props}) => (
     }</TouchableOpacity>
             <View style={styles.HeaderLayer}><View style={styles.JoblistLogo}>
     <Image
-    source = {require('../Img/icon-search-blue.png')}
+    source = {require('../Img/search.png')}
     style={styles.JoblistLogoImageSize}
     resizeMode={'contain'}
     /></View>

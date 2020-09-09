@@ -1,20 +1,25 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, StatusBar, ScrollView, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View, } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
-import styles from './Style';
-import { left, library, icon, play, leftVid } from './IconManager';
+import styles from '../src/Style';
+import { left, library, icon, play, leftVid } from '../src/IconManager';
 import { themeColor, themeWhite, home, place, screen, edit, earth, dollor, user, bag, Background, sort, filter, TRANLINE } from '../Constant/index';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { scale } from './Util';
+import { scale } from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import { Rating, NavigationHeader } from '../Component/ViewManager.js';
 // import ItemMV from './ItemMV'
+import Swiper from 'react-native-swiper';
+import BasicInfoOfCompany from './BasicInfoOfCompany';
+import JobDescription from './JobDescription';
+import JobAboutCompany from './JobAboutCompany'
 
-
-
-class CompanyProfile extends Component {
+class JobCompanyProfile extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            changedindex: 0
+        }
     }
 
     Back = () => {
@@ -29,6 +34,17 @@ class CompanyProfile extends Component {
             source = {Background}
             resizeMode={'stretch'}>
             <NavigationHeader onPress={() => this.Back()} text='Fresher Java Devloper'/>
+            <Swiper
+            onIndexChanged ={(index) => this.setState({
+                changedindex: index == 0 ? 0 : 1
+            })}
+            dotColor={themeWhite}
+            paginationStyle={{
+                top: hp(-82),
+                position: "absolute",
+                opacity: this.state.changedindex
+            }} >
+            <View>
        <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
             <Text style={styles.JoblistSecondViewHeadingText}>Results - 200</Text>
@@ -161,7 +177,12 @@ class CompanyProfile extends Component {
         
         
         </View>
-         <View style={styles.TranLingImage}>
+            </View>
+            <View><BasicInfoOfCompany /></View>
+            <View><JobDescription /></View>
+            <View><JobAboutCompany /></View>
+            </Swiper>
+            <View style={styles.TranLingImage}>
              <Image
             source={TRANLINE}
             style={styles.imageStyle}
@@ -169,8 +190,8 @@ class CompanyProfile extends Component {
             /></View>
         </ImageBackground>
       </SafeAreaView>
-            ) : null;
+            ) : null
     }
 }
 
-export default withNavigationFocus(CompanyProfile);
+export default withNavigationFocus(JobCompanyProfile);

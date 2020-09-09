@@ -12,7 +12,7 @@ export default CustomInput = (props) => <Input
         marginVertical: 6,
     }, props.containerStyle]}
     inputContainerStyle={[{
-        height: scale(45),
+        height: props.height ? props.height : scale(45),
         width: props.width ? props.width : '92%',
         alignSelf: 'center',
         borderBottomColor: "#E5E5E5",
@@ -51,7 +51,7 @@ export default CustomInput = (props) => <Input
         marginLeft: 10
     }}>
     <Image
-    source = {props.iconName ? props.iconName : require('../Img/icon-search-blue.png')}
+    source = {props.iconName ? props.iconName : require('../Img/search.png')}
     style={{
         width: 25,
         height: 25

@@ -481,7 +481,19 @@ module.exports = {
     },
     CompanyProfileMainImage: {
         width: wp('96%'),
-        height: hp('100%') - (StatusBar.currentHeight + scale(130)),
+        height: hp('100%') - (StatusBar.currentHeight + scale(100)),
+        // backgroundColor: themeWhite,
+        marginHorizontal: wp('2%'),
+        marginTop: scale(20),
+        borderRadius: scale(20),
+        // elevation: 8,
+        // borderBottomWidth: scale(2),
+        // borderRightWidth: scale(1),
+        borderRightColor: "gray"
+    },
+    CompanyProfileMainImage1: {
+        width: wp('96%'),
+        height: hp('100%') - (StatusBar.currentHeight + scale(135)),
         // backgroundColor: themeWhite,
         marginHorizontal: wp('2%'),
         marginTop: scale(20),
@@ -718,5 +730,19 @@ module.exports = {
         height: 5,
         width: '100%',
         position: "absolute",
-    }
+    },
+    myProfileIconImage: {
+        height: scale(25),
+        marginLeft: scale(15),
+        width: scale(25),
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
+    myProfileIconImageBuilding: {
+        height: scale(40),
+        width: scale(35),
+
+        justifyContent: 'center',
+        alignItems: 'flex-start',
+    },
 };

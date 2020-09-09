@@ -32,7 +32,15 @@ class JobEditProfile extends Component {
         this.props.navigation.navigate('Personal');
     }
     Work = () => {
-        // this.props.navigation.navigate('EditWorkExperience');
+        this.props.navigation.navigate('EditWorkExperience');
+    }
+    addskills = () => {
+        this.props.navigation.navigate('AddSkilJob');
+
+    }
+
+    addEducation = () => {
+        this.props.navigation.navigate('EditEducation');
     }
 
     render() {
@@ -100,7 +108,7 @@ class JobEditProfile extends Component {
             }}
             /><CustomButton title={'Skills'}
             iconName={skill}
-            onPress={() => this.Back}
+            onPress={() => this.addskills()}
             containerStyle={styles.buttonContainerStyle}
             buttonStyle={styles.ButtonStyle}
             titleStyle={styles.titleStyle}
@@ -118,7 +126,7 @@ class JobEditProfile extends Component {
             }}
             /><CustomButton title={'Education'}
             iconName={education}
-            onPress={() => this.Back}
+            onPress={() => this.addEducation()}
             containerStyle={styles.buttonContainerStyle}
             buttonStyle={styles.ButtonStyle}
             titleStyle={styles.titleStyle}
@@ -127,7 +135,7 @@ class JobEditProfile extends Component {
             }}
             /><CustomButton title={'Languages'}
             iconName={languages}
-            onPress={() => this.Back}
+            onPress={() => this.addskills()}
             containerStyle={styles.buttonContainerStyle}
             buttonStyle={styles.ButtonStyle}
             titleStyle={styles.titleStyle}
@@ -136,7 +144,7 @@ class JobEditProfile extends Component {
             }}
             /><CustomButton title={'Qualification'}
             iconName={qualification}
-            onPress={() => this.Back}
+            onPress={() => this.addskills()}
             containerStyle={styles.buttonContainerStyle}
             buttonStyle={styles.ButtonStyle}
             titleStyle={styles.titleStyle}

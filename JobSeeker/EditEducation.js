@@ -13,40 +13,24 @@ import ItemMV from './ItemMV'
 
 
 const data = [{
-    heading: ['Technical Programmer', 'Technical Programmer', 'Technical Programmer'],
-    Company: 'Google',
+    heading: ['BBA', 'MBA',],
+    Company: 'BIT',
     Experience: 'Jan 2015 - Feb -2020'
 }, {
-    heading: ['Senior IT Expert Manager'],
-    Company: 'tcs',
+    heading: ['MBA'],
+    Company: 'UVC',
     Experience: 'Jan 2014 - Jan - 2015'
 }, {
-    heading: ['Senior IT Consultant'],
-    Company: 'Google',
+    heading: ['BCA', 'MCA'],
+    Company: 'BU',
     Experience: 'Jan 2015 - Feb -2020'
 }, {
-    heading: ['Technical Programmer', 'Technical Consultant'],
-    Company: 'IBM',
+    heading: ['Bechelor of information Science and technology'],
+    Company: 'VTU',
     Experience: 'Jan 2013 - feb - 2014'
-}, {
-    heading: ['Technical Programmer', 'Technical Programmer', 'Technical Programmer'],
-    Company: 'Google',
-    Experience: 'Jan 2015 - Feb -2020'
-}, {
-    heading: ['Senior IT Expert Manager'],
-    Company: 'tcs',
-    Experience: 'Jan 2014 - Jan - 2015'
-}, {
-    heading: ['Senior IT Consultant'],
-    Company: 'Google',
-    Experience: 'Jan 2015 - Feb -2020'
-}, {
-    heading: ['Technical Programmer', 'Technical Consultant'],
-    Company: 'IBM',
-    Experience: 'Jan 2013 - feb - 2014'
-}]
+},]
 
-class EditWorkExperience extends Component {
+class EditEducation extends Component {
     constructor(props) {
         super(props);
 
@@ -55,10 +39,6 @@ class EditWorkExperience extends Component {
         };
     }
 
-    static navigationOptions = ({navigation}) => ({
-        tabBarVisible: true,
-        animationEnabled: true
-    })
     Back = () => {
         // console.log("hi");
         this.props.navigation.goBack()
@@ -80,7 +60,7 @@ class EditWorkExperience extends Component {
             source={Background}
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
-            <NavigationHead centerComponent='Work Experience' rightComponent="Save" onPress={() => this.Back()} onExit={() => this.save()}/>
+            <NavigationHead centerComponent='Education' rightComponent="Save" onPress={() => this.Back()} onExit={() => this.save()}/>
                     <ImageBackground style={{
                 width: wp('96%'),
                 marginHorizontal: wp(2),
@@ -110,12 +90,12 @@ class EditWorkExperience extends Component {
                 fontWeight: 'bold',
                 fontSize: scale(18),
                 fontFamily: FontBold
-            }}>Edit Work Experience</Text></View>
+            }}>Edit Education</Text></View>
             <View style={{
                 alignItems: "flex-end",
-                right: wp(5),
+                right: wp(10),
                 top: hp(-2)
-            }}><CustomButton title={'Add Experience'}
+            }}><CustomButton title={'Add Education'}
             onPress={() => this.Back}
             containerStyle={{
                 width: '25%',
@@ -126,7 +106,8 @@ class EditWorkExperience extends Component {
                 backgroundColor: themeColor,
                 height: '33%',
                 borderRadius: scale(2),
-                borderWidth: 0
+                borderWidth: 0,
+                elevation: 5
             }}
             titleStyle={{
                 color: themeWhite,
@@ -139,7 +120,7 @@ class EditWorkExperience extends Component {
                 width: '90%',
                 alignItems: "center",
                 alignSelf: "center",
-                top: hp(-20),
+                top: hp(-22),
                 height: hp('50%'),
                 backgroundColor: themeWhite,
                 marginHorizontal: wp('2%'),
@@ -191,4 +172,4 @@ class EditWorkExperience extends Component {
     }
 }
 
-export default withNavigationFocus(EditWorkExperience);
+export default withNavigationFocus(EditEducation);

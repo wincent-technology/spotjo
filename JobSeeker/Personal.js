@@ -29,6 +29,9 @@ class Personal extends Component {
     next = () => {
         this.props.navigation.navigate('JobSeekerPhoto');
     }
+    profile = () => {
+        this.props.navigation.navigate('MyProfile');
+    }
     render() {
         return (
             <SafeAreaView style={styles.backGround}>
@@ -44,11 +47,11 @@ class Personal extends Component {
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }} /></View>
-                        <ImageBackground style={styles.AvtarView} source={backgroundCorner} resizeMode={'contain'}><Image source={avtar} style={{
+                        <ImageBackground style={styles.AvtarView} source={backgroundCorner} resizeMode={'contain'}><TouchableWithoutFeedback onPress={this.profile}><Image source={avtar} style={{
                 height: wp('22'),
                 width: wp('22'),
             // backgroundColor: "transparent"
-            }} resizeMode={'contain'}/></ImageBackground>
+            }} resizeMode={'contain'}/></TouchableWithoutFeedback></ImageBackground>
                         <View style={styles.PersonalInfo}>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
