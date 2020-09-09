@@ -24,6 +24,9 @@ import Signup from '../Company/Signup'
 import Companylogo from '../Company/Companylogo'
 import JobListCompany from '../Company/JobListCompany'
 import UserProfile from '../Company/UserProfile'
+import AdminDashboard from '../Company/AdminDashboard'
+import PostedJobList from '../Company/PostedJobList'
+import CreateJob from '../Company/CreateJob'
 
 import JobLogin from '../JobSeeker/Login';
 import JobLoginWithEmail from '../JobSeeker/LoginWithEmail';
@@ -252,9 +255,19 @@ const TabScreenJob = createBottomTabNavigator({
     },
 },);
 
+const ComAd = createStackNavigator({
+    AdminDashboard: AdminDashboard,
+    PostedJobList: PostedJobList,
+    JobListCompany: JobListCompany,
+    CreateJob: CreateJob,
+}, {
+    headerMode: 'none',
+    initialRouteName: 'AdminDashboard',
+},)
+
 const TabScreenCompany = createBottomTabNavigator({
     Home: {
-        screen: JobListCompany,
+        screen: ComAd,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: (<Image style={{

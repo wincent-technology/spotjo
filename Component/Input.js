@@ -52,10 +52,10 @@ export default CustomInput = (props) => <Input
     }}>
     <Image
     source = {props.iconName ? props.iconName : require('../Img/search.png')}
-    style={{
-        width: 25,
-        height: 25
-    }}
+    style={[{
+        width: props.width ? props.width : 25,
+        height: props.height ? props.height : 25
+    }], props.iconStyle}
     resizeMode={'contain'}
     /></View>
     }

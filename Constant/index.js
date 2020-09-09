@@ -64,3 +64,5 @@ export const notheme = require('../Img/notheme.png');
 export const mailtheme = require('../Img/mailtheme.png');
 export const editTheme = require('../Img/editTheme.png');
 export const rightWrongBack = require('../Img/rightWrongBack.png');
+export const overlayimage = require('../Img/overlayimage.png');
+export const canvas = require('../Img/canvas.png');

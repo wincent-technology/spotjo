@@ -3,70 +3,61 @@ import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE, male, female, canvas } from '../Constant/index'
+import { themeColor, themeWhite, Background, sort, filter, TRANLINE, canvas } from '../Constant/index'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { scale } from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import { Rating, NavigationHeader } from '../Component/ViewManager.js'
-import ItemMVJob from './ItemMVJob'
-import CompanyProfile from '../src/CompanyProfile';
+import ItemMV from '../src/ItemMV'
 import DeviceInfo from 'react-native-device-info';
 
 // import styles from './Style'
 var c = 0;
 const data = [{
-    name: 'Suresh Kumar',
     Header: 'JAVA DEVELOPER(M/W)',
-    image: male,
+    image: 'https://turbologo.com/articles/wp-content/uploads/2019/11/Porsche-logo-cover-1280x720.jpg',
     ComPany_Name: 'Porsche AG',
     Working: 'Employed',
     Address: 'Stuttgart',
     skill: ['JAVA', 'J2EE', 'SQL'],
     work_Experience: '5-6 Years',
     salary: '50000$',
-    cell: '00-00-000',
-    email: 'Email@email.com'
+    webSite: 'www.example.com'
 }, {
-    name: 'Kusuma Kulkarni',
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: female,
+    Header: 'Senior Java Devloper',
+    image: 'https://cdn.vox-cdn.com/thumbor/2eZPJ-j9zXm5AIro7TIiEBCgNoc=/0x0:640x427/1200x800/filters:focal(0x0:640x427)/cdn.vox-cdn.com/assets/3218223/google.jpg',
     ComPany_Name: 'Google',
     Working: 'Employed',
     Address: 'Stuttgart',
     skill: ['JAVA', 'J2EE', 'SQL'],
     work_Experience: '5-6 Years',
     salary: '50000$',
-    cell: '00-00-000',
-    email: 'Email@email.com'
+    webSite: 'www.example.com'
 }, {
-    name: 'Ramya Priya',
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: female,
+    Header: 'JAVA DEVELOPER / J2EE',
+    image: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Logo.png',
     ComPany_Name: 'Amazon',
     Working: 'Employed',
     Address: 'Stuttgart',
     skill: ['JAVA', 'J2EE', 'SQL'],
     work_Experience: '5-6 Years',
     salary: '50000$',
-    cell: '00-00-000',
-    email: 'Email@email.com'
+    webSite: 'www.example.com'
 }, {
-    name: 'Suresh Kumar',
     Header: 'JAVA DEVELOPER(M/W)',
-    image: male,
+    image: 'https://di-uploads-pod3.dealerinspire.com/porscheoffremont/uploads/2018/09/porsche-logo.jpg',
     ComPany_Name: 'Porsche AG',
     Working: 'Employed',
     Address: 'Stuttgart',
     skill: ['JAVA', 'J2EE', 'SQL'],
     work_Experience: '5-6 Years',
     salary: '50000$',
-    cell: '00-00-000',
-    email: 'Email@email.com'
+    webSite: 'www.example.com'
 },];
 
 global.item = data[0];
 
-class JobListCompany extends PureComponent {
+class PostedJobList extends PureComponent {
 
 
     constructor(props) {
@@ -84,10 +75,10 @@ class JobListCompany extends PureComponent {
     push = (item) => {
         console.log("heelo", item);
         global.item = item;
-        this.props.navigation.navigate('UserProfile')
+    // this.props.navigation.navigate('CompanyProfile')
     }
     Back = () => {
-        this.props.navigation.navigate('ChooseTalent')
+        // this.props.navigation.navigate('ChooseTalent')
     }
     render() {
         console.warn(">>", DeviceInfo.hasNotch())
@@ -105,10 +96,10 @@ class JobListCompany extends PureComponent {
             }}>
             <TouchableWithoutFeedback onPress={this.PostedJob}><View style={{
                 alignItems: 'center',
-                width: wp(97) / 3,
+                width: wp(100) / 3,
                 height: hp(10),
-                marginLeft: wp(3),
-                justifyContent: "center",
+                // marginLeft: wp(1),
+                // justifyContent: "center",
                 flexDirection: "column"
             }}><ImageBackground source={canvas} style={{
                 height: '100%',
@@ -127,10 +118,10 @@ class JobListCompany extends PureComponent {
             }}>Published</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.Interviews}><View style={{
                 alignItems: 'center',
-                width: wp(95) / 3,
+                width: wp(100) / 3,
                 height: hp(10),
                 justifyContent: "center",
-                marginHorizontal: wp(1),
+                // marginHorizontal: wp(1),
                 flexDirection: "column"
             }}><ImageBackground source={canvas} style={{
                 height: '100%',
@@ -150,7 +141,7 @@ class JobListCompany extends PureComponent {
             }}>Expired</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.Matches}><View style={{
                 alignItems: 'center',
-                width: wp(85) / 3,
+                width: wp(100) / 3,
                 height: hp(10),
                 justifyContent: "center",
                 flexDirection: "column"
@@ -171,6 +162,7 @@ class JobListCompany extends PureComponent {
                 color: themeWhite
             }}>Active</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             </View>
+       
    <FlatList
             style={{
                 marginTop: 4,
@@ -180,7 +172,7 @@ class JobListCompany extends PureComponent {
             data = {data}
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
-            renderItem={({item, index}) => <ItemMVJob
+            renderItem={({item, index}) => <ItemMV
                 item={item}
                 index={index}
                 push={this.push}
@@ -200,18 +192,30 @@ class JobListCompany extends PureComponent {
             (item, index) => index + ''
             }
             />
+            <View>
+            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('CreateJob')}>
+            <View style={{
+                bottom: scale(47),
+                height: scale(40),
+                position: "absolute",
+                width: wp(92),
+                marginHorizontal: wp(4),
+                backgroundColor: 'rgba(0,0,0,0.8)',
+                borderRadius: wp(15),
+                justifyContent: "center",
+                alignItems: "center"
+            }}>
+            <Text style={{
+                color: themeWhite,
+                fontSize: scale(20),
+                fontFamily: "Roboto-Bold"
+            }}>Create Job</Text>
+            </View>
+            </TouchableWithoutFeedback>
+            </View>
         </View>
         )
     }
 }
-;
 
-
-// class CompanyProfile extends Component {
-//     render() {
-//         return <View><Text>{this.props.item.header}</Text></View>;
-//     }
-// }
-
-
-export default withNavigationFocus(JobListCompany);
+export default withNavigationFocus(PostedJobList);

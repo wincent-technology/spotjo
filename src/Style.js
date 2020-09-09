@@ -745,4 +745,9 @@ module.exports = {
         justifyContent: 'center',
         alignItems: 'flex-start',
     },
+    EmploymentJobtype: {
+        fontFamily: FontRegular,
+        color: 'black',
+        fontWeight: 'bold',
+    },
 };
