@@ -66,3 +66,4 @@ export const editTheme = require('../Img/editTheme.png');
 export const rightWrongBack = require('../Img/rightWrongBack.png');
 export const overlayimage = require('../Img/overlayimage.png');
 export const canvas = require('../Img/canvas.png');
+export const darkract = require('../Img/darkract.png');

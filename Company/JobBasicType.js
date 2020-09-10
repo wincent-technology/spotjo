@@ -5,7 +5,7 @@ import { scale } from '../src/Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { switchColor, Background, themeColor, themeWhite, iconSearch } from '../Constant/index'
+import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract } from '../Constant/index'
 import styles from '../src/Style';
 
 
@@ -36,13 +36,14 @@ class JobBasicType extends Component {
 
             <ImageBackground style={{
                 width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(5)),
+                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(4)),
             // justifyContent: "center",
             // alignItems: 'center'
-            }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
+            }} source={darkract} resizeMode={'stretch'}>
             <View style={{
                 justifyContent: "center",
-                alignItems: "center"
+                alignItems: "center",
+                marginTop: hp(4)
             }}>
             <View style={{
                 alignItems: "center",
@@ -51,7 +52,8 @@ class JobBasicType extends Component {
 
             }}><Text style={{
                 fontSize: scale(18),
-                fontFamily: "Roboto-Bold"
+                fontFamily: "Roboto-Bold",
+                color: themeWhite
             }}>Job Basic Type</Text></View>
             <View style={{
                 alignItems: "center",
@@ -60,7 +62,8 @@ class JobBasicType extends Component {
             }}><Text style={{
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
-                textAlign: "center"
+                textAlign: "center",
+                color: themeWhite
             }}>Please provide all the information mentioned below</Text></View>
             <View style={{
                 marginTop: hp(2)
@@ -85,17 +88,21 @@ class JobBasicType extends Component {
                 height: scale(45)
             }}
             iconName={iconSearch}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
             /></View>
             <View style={{
                 flexDirection: 'column',
-                width: wp(85),
+                width: wp(80),
                 top: hp(2)
             }}>
                             <View style={styles.PersonalInfoRowChoose}>
                                 <View style={{
                 flexDirection: 'row',
                 alignItems: 'flex-start',
-                width: wp(45)
+                width: wp(40)
             }}><Text style={[{
                 marginRight: scale(5),
                 fontSize: scale(20)
@@ -112,7 +119,7 @@ class JobBasicType extends Component {
             <View style={{
                 flexDirection: "row",
                 alignItems: 'flex-end',
-                width: wp(45),
+                width: wp(40),
                 justifyContent: "center"
             }}><Text style={[{
                 marginRight: scale(5),
@@ -135,7 +142,7 @@ class JobBasicType extends Component {
                 alignItems: 'flex-start',
                 width: wp(45)
             }}><Text style={[{
-                marginLeft: wp(5),
+                marginLeft: wp(7.2),
                 fontSize: scale(20),
                 fontWeight: "bold"
             }, styles.EmploymentJobtype]}>Employment</Text></View></View></View>
@@ -146,7 +153,7 @@ class JobBasicType extends Component {
                 top: hp(3)
             }}>
             <View style={[styles.PersonalInfoRowChoose, {
-                marginTop: hp(3)
+                marginTop: hp(2)
             }]}>
                                 <View style={styles.PersonalInfoStartEmp}><Text style={[styles.EmploymentJobtype, {
                 fontSize: scale(18)
@@ -216,17 +223,6 @@ class JobBasicType extends Component {
                 Freelancer: toggle
             })}
             /></View></View></View>
-            <View style={{
-                top: hp('35'),
-                width: wp(75),
-                alignItems: "flex-end",
-                position: "absolute"
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}>
-                                <View style={[styles.Size, {
-                alignItems: "flex-end"
-            }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
             </View></View>
             </ImageBackground>
         )

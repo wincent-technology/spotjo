@@ -5,7 +5,7 @@ import { scale } from '../src/Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { switchColor, Background, themeColor, themeWhite, iconSearch } from '../Constant/index'
+import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract } from '../Constant/index'
 import styles from '../src/Style';
 import Slider from '@react-native-community/slider';
 import { Rating, NavigationHead, DropDownItem } from '../Component/ViewManager'
@@ -43,10 +43,10 @@ class JobHiddenCritearia extends Component {
 
             <ImageBackground style={{
                 width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(5)),
+                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(4)),
             // justifyContent: "center",
             // alignItems: 'center'
-            }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
+            }} source={darkract} resizeMode={'stretch'}>
             <View style={{
                 justifyContent: "center",
                 alignItems: "center"
@@ -54,7 +54,7 @@ class JobHiddenCritearia extends Component {
             <View style={{
                 alignItems: "center",
                 width: wp(96),
-                marginVertical: hp(1)
+                marginVertical: hp(4)
 
             }}><Text style={{
                 fontSize: scale(18),
@@ -69,7 +69,7 @@ class JobHiddenCritearia extends Component {
                 alignSelf: "center",
                 top: hp(0),
                 height: hp('20%'),
-                backgroundColor: themeWhite,
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('1%'),
                 borderRadius: scale(20),
             }}>
@@ -123,7 +123,7 @@ class JobHiddenCritearia extends Component {
                     }}><Text key={index}
                     style={{
                         fontSize: scale(16),
-                        color: themeColor,
+                        color: themeWhite,
                         fontFamily: 'Roboto-Regular',
                     }}>
                       {item}
@@ -152,7 +152,7 @@ class JobHiddenCritearia extends Component {
                 alignSelf: "center",
                 top: hp(-5),
                 height: hp('17%'),
-                backgroundColor: themeWhite,
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
@@ -168,7 +168,7 @@ class JobHiddenCritearia extends Component {
                 borderWidth: scale(1),
                 borderRadius: scale(5),
             }} inputStyle={{
-                color: 'white',
+                color: themeWhite,
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 fontWeight: "bold"
@@ -195,8 +195,12 @@ class JobHiddenCritearia extends Component {
             <View style={{
                 width: wp('85%'),
                 height: scale(27),
-            }}><View style={styles.FilterMinimumSalaryMin}><Text style={styles.FilterMinText}>0</Text>
-            <Text style={styles.FilterMaxText}>150k+</Text></View><Slider
+            }}><View style={styles.FilterMinimumSalaryMin}><Text style={[styles.FilterMinText, {
+                color: themeWhite
+            }]}>0</Text>
+            <Text style={[styles.FilterMaxText, {
+                color: themeWhite
+            }]}>150k+</Text></View><Slider
             style={{
                 width: wp('80%'),
                 height: scale(5),
@@ -205,8 +209,8 @@ class JobHiddenCritearia extends Component {
             }}
             minimumValue={0}
             maximumValue={1}
-            minimumTrackTintColor={themeColor}
-            maximumTrackTintColor={themeColor}
+            minimumTrackTintColor={themeWhite}
+            maximumTrackTintColor={themeWhite}
             /></View>
                     <View style={{
                 flexDirection: 'row',
@@ -250,7 +254,7 @@ class JobHiddenCritearia extends Component {
                 alignSelf: "center",
                 top: hp(-7),
                 height: hp('20%'),
-                backgroundColor: themeWhite,
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
@@ -266,7 +270,7 @@ class JobHiddenCritearia extends Component {
                 borderWidth: scale(1),
                 borderRadius: scale(5),
             }} inputStyle={{
-                color: 'white',
+                color: themeWhite,
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 fontWeight: "bold"
@@ -306,7 +310,7 @@ class JobHiddenCritearia extends Component {
                     }}><Text key={index}
                     style={{
                         fontSize: scale(16),
-                        color: themeColor,
+                        color: themeWhite,
                         fontFamily: 'Roboto-Regular',
                     }}>
                       {item}
@@ -335,7 +339,7 @@ class JobHiddenCritearia extends Component {
                 alignSelf: "center",
                 top: hp(-12),
                 height: hp('18%'),
-                backgroundColor: themeWhite,
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
@@ -391,7 +395,7 @@ class JobHiddenCritearia extends Component {
                     }}><Text key={index}
                     style={{
                         fontSize: scale(16),
-                        color: themeColor,
+                        color: themeWhite,
                         fontFamily: 'Roboto-Regular',
                     }}>
                       {item}

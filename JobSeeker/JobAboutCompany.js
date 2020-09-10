@@ -51,7 +51,7 @@ class JobAboutCompany extends Component {
             }}>About</Text></View>
             <FlatList
             style={{
-                marginTop: 4,
+                marginTop: scale(10),
                 marginBottom: 50,
                 backgroundColor: 'transparent',
             }}

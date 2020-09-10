@@ -6,7 +6,6 @@ import { left, library, icon, play, leftVid } from './IconManager';
 import { themeColor, themeWhite, Background, sort, filter, TRANLINE } from '../Constant/index'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { scale } from './Util'
-// import { Rating, AirbnbRating } from 'react-native-ratings';
 import { Rating, NavigationHeader } from '../Component/ViewManager.js'
 import ItemMV from './ItemMV'
 import CompanyProfile from './CompanyProfile';

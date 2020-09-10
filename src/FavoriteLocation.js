@@ -50,8 +50,12 @@ class FavoriteLocation extends Component {
             })} inputStyle={{
                 fontWeight: "bold",
                 fontSize: scale(18)
-
-            }}/></View></View>
+            }}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
+            /></View></View>
             <View style={styles.Next}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
                 alignItems: 'flex-end'
             }]}><Text style={[{

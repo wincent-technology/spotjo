@@ -139,7 +139,7 @@ class EditWorkExperience extends Component {
                 width: '90%',
                 alignItems: "center",
                 alignSelf: "center",
-                top: hp(-20),
+                top: hp(-24),
                 height: hp('50%'),
                 backgroundColor: themeWhite,
                 marginHorizontal: wp('2%'),

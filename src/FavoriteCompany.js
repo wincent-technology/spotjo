@@ -52,7 +52,12 @@ class FavoriteCompany extends Component {
             })} inputStyle={{
                 fontWeight: "bold",
                 fontSize: scale(18)
-            }}/></View></View>
+            }}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
+            /></View></View>
               <View style={{
                 flex: 1,
                 flexDirection: "row",

@@ -5,7 +5,7 @@ import { scale } from '../src/Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { switchColor, Background, themeColor, themeWhite, iconSearch } from '../Constant/index'
+import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract } from '../Constant/index'
 import styles from '../src/Style';
 
 
@@ -36,10 +36,10 @@ class JobTaskDescription extends Component {
 
             <ImageBackground style={{
                 width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(5)),
+                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(4)),
             // justifyContent: "center",
             // alignItems: 'center'
-            }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
+            }} source={darkract} resizeMode={'stretch'}>
             <View style={{
                 justifyContent: "center",
                 alignItems: "center"
@@ -47,11 +47,12 @@ class JobTaskDescription extends Component {
             <View style={{
                 alignItems: "center",
                 width: wp(96),
-                marginVertical: hp(1)
+                marginVertical: hp(4)
 
             }}><Text style={{
                 fontSize: scale(18),
-                fontFamily: "Roboto-Bold"
+                fontFamily: "Roboto-Bold",
+                color: themeWhite
             }}>Task Description</Text></View>
            </View>
             </ImageBackground>

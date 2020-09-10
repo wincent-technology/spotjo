@@ -107,7 +107,7 @@ class PostedJobList extends PureComponent {
                 position: "absolute",
                 alignItems: "center",
                 justifyContent: "center"
-            }} resizeMode={'contain'}><Text style={{
+            }} resizeMode={'cover'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
@@ -130,7 +130,7 @@ class PostedJobList extends PureComponent {
                 alignItems: "center",
                 justifyContent: "center"
 
-            }} resizeMode={'contain'}><Text style={{
+            }} resizeMode={'cover'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
@@ -152,7 +152,7 @@ class PostedJobList extends PureComponent {
                 alignItems: "center",
                 justifyContent: "center"
 
-            }} resizeMode={'contain'}><Text style={{
+            }} resizeMode={'cover'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
@@ -195,22 +195,25 @@ class PostedJobList extends PureComponent {
             <View>
             <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('CreateJob')}>
             <View style={{
-                bottom: scale(47),
-                height: scale(40),
+                bottom: scale(30),
                 position: "absolute",
-                width: wp(92),
-                marginHorizontal: wp(4),
-                backgroundColor: 'rgba(0,0,0,0.8)',
+                marginHorizontal: wp(2),
+                // backgroundColor: 'rgba(0,0,0,0.8)',
                 borderRadius: wp(15),
+            // justifyContent: "center",
+            // alignItems: "center"
+            }}><ImageBackground source={require('../Img/create-job.png')} style={{
+                height: scale(60),
+                width: wp(96),
                 justifyContent: "center",
                 alignItems: "center"
-            }}>
+            }} resizeMode={'stretch'}>
             <Text style={{
                 color: themeWhite,
                 fontSize: scale(20),
                 fontFamily: "Roboto-Bold"
             }}>Create Job</Text>
-            </View>
+           </ImageBackground></View>
             </TouchableWithoutFeedback>
             </View>
         </View>

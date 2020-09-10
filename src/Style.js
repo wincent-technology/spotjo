@@ -747,7 +747,7 @@ module.exports = {
     },
     EmploymentJobtype: {
         fontFamily: FontRegular,
-        color: 'black',
+        color: themeWhite,
         fontWeight: 'bold',
     },
 };

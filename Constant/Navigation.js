@@ -277,7 +277,7 @@ const TabScreenCompany = createBottomTabNavigator({
             source={require('../Img/homeTab.png')} />),
         },
     },
-    CompanyProfile: {
+    UserProfile: {
         screen: UserProfile,
         navigationOptions: {
             tabBarColor: 'transparent',
@@ -316,7 +316,7 @@ const TabScreenCompany = createBottomTabNavigator({
     swipeEnabled: true,
     animationEnabled: true,
     initialRouteName: 'Filter',
-    order: ['Home', 'CompanyProfile', 'Filter', 'ScreenMap'],
+    order: ['Home', 'UserProfile', 'Filter', 'ScreenMap'],
     tabBarPosition: 'bottom',
     lazy: false,
     tabBarOptions: {

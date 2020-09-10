@@ -14,6 +14,7 @@ import JobBasicType from './JobBasicType';
 import JobPreference from './JobPreference';
 import JobTaskDescription from './JobTaskDescription'
 import JobHiddenCritearia from './JobHiddenCritearia';
+import PreviewJob from './PreviewJob'
 import Swiper from 'react-native-swiper';
 // import PostedJobList from './PostedJobList';
 // import styles from './Style'
@@ -33,7 +34,10 @@ class CreateJob extends PureComponent {
     }
 
     Back = () => {
-        this.props.navigation.navigate('ChooseTalent')
+        this.props.navigation.goBack()
+    }
+    Exit = () => {
+        this.props.navigation.navigate('AdminDashboard');
     }
 
     // renderPage = () => {
@@ -55,7 +59,7 @@ class CreateJob extends PureComponent {
                 <ImageBackground style={styles.ImageBlue}
             source={Background}
             resizeMode={'stretch'}>
-                    <NavigationHead centerComponent='Create Job' rightComponent='Exit' onPress={() => this.Back()} onExit={() => this.Exit()} />
+                    <NavigationHead centerComponent={this.state.index != 4 ? 'Create Job' : 'Preview Job'} rightComponent='Exit' onPress={() => this.Back()} onExit={() => this.Exit()} />
                     <View style={{
                 height: hp(100) - hp(5),
                 width: wp(96),
@@ -78,6 +82,7 @@ class CreateJob extends PureComponent {
                     <View><JobPreference /></View>
                     <View><JobTaskDescription/></View>
                     <View><JobHiddenCritearia/></View>
+                    <View><PreviewJob/></View>
 
                     </Swiper>
                     </View>
@@ -98,7 +103,7 @@ class CreateJob extends PureComponent {
                 left: wp(-2)
             }}>
             <ImageBackground source={rightWrongBack} style={styles.imageStyle} resizeMode={'stretch'}>
-            <View style={{
+            {this.state.index != 4 ? (<View style={{
                 flexDirection: "row",
                 height: hp(6),
                 width: wp(103),
@@ -107,12 +112,12 @@ class CreateJob extends PureComponent {
             }}><TouchableWithoutFeedback><Text style={{
                 fontSize: scale(17),
                 color: this.state.index == 0 ? themeColor : '#000',
-                textDecorationLine: this.state.index == 0 ? 'underline' : ''
+                textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
             }}>Type {'>'}</Text></TouchableWithoutFeedback>
             <TouchableWithoutFeedback><Text style={{
                 fontSize: scale(17),
                 color: this.state.index == 1 ? themeColor : '#000',
-                textDecorationLine: this.state.index == 1 ? 'underline' : ''
+                textDecorationLine: this.state.index == 1 ? 'underline' : 'none'
             }}>Preferences {'>'}</Text></TouchableWithoutFeedback>
             <TouchableWithoutFeedback><Text style={{
                 fontSize: scale(17),
@@ -121,7 +126,17 @@ class CreateJob extends PureComponent {
             <TouchableWithoutFeedback><Text style={{
                 fontSize: scale(17),
                 color: this.state.index == 3 ? themeColor : '#000'
-            }}>Criteria</Text></TouchableWithoutFeedback></View>
+            }}>Criteria</Text></TouchableWithoutFeedback></View>) : (
+                <View style={{
+                    height: hp(6),
+                    width: wp(103),
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}><TouchableWithoutFeedback>
+                <Text style={{
+                    fontSize: scale(17),
+                    color: this.state.index == 3 ? themeColor : '#000'
+                }}>Go Live</Text></TouchableWithoutFeedback></View>)}
             </ImageBackground></View>
                 </ImageBackground>
             </View>

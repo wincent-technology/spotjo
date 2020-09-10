@@ -126,6 +126,10 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  style={{
                 marginTop: '-5%',

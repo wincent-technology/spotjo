@@ -9,7 +9,6 @@ import { Rating, NavigationHeader } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
 import { FontBold, FontRegular, Background } from '../Constant/index'
-import JobBasicInfoItemMV from './JobBasicInfoItemMV'
 
 
 class BasicInfoOfCompany extends Component {
