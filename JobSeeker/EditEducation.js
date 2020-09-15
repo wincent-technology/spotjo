@@ -4,7 +4,7 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, leftVid } from '../src/IconManager';
 import { scale } from '../src/Util'
-import { themeColor, themeWhite, TRANLINE } from '../Constant/index'
+import { themeColor, themeWhite, TRANLINE, educationCap } from '../Constant/index'
 import { Rating, NavigationHead } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
@@ -70,7 +70,7 @@ class EditEducation extends Component {
             <View style={{
                 justifyContent: "flex-end",
                 flexDirection: 'column',
-                height: wp(20),
+                height: wp(22),
                 width: wp(35),
                 borderRadius: scale(20),
                 borderColor: themeColor,
@@ -78,10 +78,12 @@ class EditEducation extends Component {
                 alignItems: "center",
                 backgroundColor: themeWhite,
                 left: wp(30.5),
-                top: wp(-10),
-            }}><View style={{
-                top: hp(1.5)
-            }}>{leftVid('briefcase', 60, themeColor)}</View></View>
+                top: wp(-11),
+            }}><View><Image source={educationCap} style={{
+                height: scale(60),
+                top: hp(-0.3),
+                width: scale(100)
+            }} resizeMode={'cover'} /></View></View>
             <View style={{
                 alignItems: "center",
                 top: hp(-4)

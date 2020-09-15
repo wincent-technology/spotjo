@@ -71,7 +71,7 @@ class AddskilJob extends Component {
             <View style={{
                 justifyContent: "flex-end",
                 flexDirection: 'column',
-                height: wp(20),
+                height: wp(22),
                 width: wp(35),
                 borderRadius: scale(20),
                 borderColor: themeColor,
@@ -79,14 +79,14 @@ class AddskilJob extends Component {
                 alignItems: "center",
                 backgroundColor: themeWhite,
                 left: wp(30.5),
-                top: wp(-10),
+                top: wp(-11),
             }}><View><Image source={editTheme} style={{
                 height: scale(60),
                 width: scale(60)
             }} resizeMode={'contain'}/></View></View>
             <View style={{
                 alignItems: "center",
-                top: hp(-4)
+                top: hp(-5)
             }}><Text style={{
                 color: '#000',
                 fontWeight: 'bold',
@@ -101,7 +101,7 @@ class AddskilJob extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(0),
-                height: hp('20%'),
+                height: hp('19%'),
                 backgroundColor: themeWhite,
                 marginHorizontal: wp('1%'),
                 borderRadius: scale(20),

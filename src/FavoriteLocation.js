@@ -21,6 +21,9 @@ class FavoriteLocation extends Component {
     next = () => {
         this.props.navigation.navigate('FavoriteCompany')
     }
+    back = () => {
+        this.props.navigation.goBack();
+    }
 
     render() {
         return (
@@ -56,11 +59,30 @@ class FavoriteLocation extends Component {
                 width: 25
             }}
             /></View></View>
-            <View style={styles.Next}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
+            <View style={{
+                flexDirection: "row",
+                width: wp(100),
+                top: hp(40)
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                width: wp(40),
+                marginLeft: wp(7)
+            }}>
+            <TouchableWithoutFeedback style={styles.Size} onPress={this.back}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableWithoutFeedback>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                // right: wp(7),
+                width: wp(47)
+            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
                 alignItems: 'flex-end'
             }]}><Text style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View></View>
+            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            </View></View>
         </ImageBackground></SafeAreaView>
         )
     }

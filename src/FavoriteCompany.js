@@ -22,6 +22,9 @@ class FavoriteCompany extends Component {
     next = () => {
         this.props.navigation.navigate('ChooseTalent')
     }
+    back = () => {
+        this.props.navigation.goBack();
+    }
 
     render() {
         const {Anywhere, name} = this.state
@@ -62,7 +65,7 @@ class FavoriteCompany extends Component {
                 flex: 1,
                 flexDirection: "row",
             }}><View style={[{
-                top: hp('41%'),
+                top: hp('35%'),
                 left: wp('7%'),
             }, styles.MainSwitchView]}><View style={styles.SwitchView}><ToggleSwitch
             isOn={Anywhere}
@@ -76,16 +79,30 @@ class FavoriteCompany extends Component {
                 marginLeft: scale(5),
                 fontSize: scale(20),
             }, styles.FontSty]}>Anywhere?</Text></View>
+             <View style={{
+                flexDirection: "row",
+                width: wp(100),
+                top: hp(40)
+            }}>
             <View style={{
-                top: hp('41%'),
-                right: wp('7%'),
-                position: "absolute"
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}>
-                       <View  style={[styles.Size, {
-                alignItems: "flex-end"
+                alignItems: "flex-start",
+                width: wp(40),
+                marginLeft: wp(7)
+            }}>
+            <TouchableWithoutFeedback style={styles.Size} onPress={this.back}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableWithoutFeedback>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                // right: wp(7),
+                width: wp(47)
+            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
+                alignItems: 'flex-end'
             }]}><Text style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View></View></View>
+            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            </View></View></View>
         </ImageBackground></SafeAreaView>
         )
     }

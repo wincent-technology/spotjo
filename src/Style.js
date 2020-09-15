@@ -245,9 +245,13 @@ module.exports = {
         marginBottom: scale(10),
     },
     CheckBoxLabel: {
-        marginLeft: scale(9),
+        marginLeft: scale(7),
     },
     CheckBoxLabelFont: {
+        fontSize: scale(18),
+        fontFamily: FontRegular,
+    },
+    CheckBoxLabelFontSc: {
         fontSize: scale(18),
         fontFamily: FontRegular,
     },
@@ -507,7 +511,7 @@ module.exports = {
         width: wp(91),
         // marginLeft: wp(2),
         marginHorizontal: wp('2%'),
-        height: hp(30),
+        height: hp(26),
         borderTopLeftRadius: scale(20),
         borderTopRightRadius: scale(20),
         overflow: 'hidden',
@@ -722,7 +726,7 @@ module.exports = {
         backgroundColor: "rgba(255,255,255,0.4)",
         width: wp(80),
         borderRadius: wp(10),
-        height: hp(5),
+        height: hp(4.3),
         justifyContent: "center",
     },
     TranLingImage: {

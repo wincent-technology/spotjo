@@ -27,10 +27,10 @@ class Personal extends Component {
     }
 
     next = () => {
-        this.props.navigation.navigate('JobSeekerPhoto');
+        this.props.navigation.navigate('JobVideoResume');
     }
     profile = () => {
-        this.props.navigation.navigate('MyProfile');
+        this.props.navigation.navigate('JobSeekerPhoto');
     }
     render() {
         return (

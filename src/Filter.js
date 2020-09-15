@@ -36,27 +36,17 @@ class Filter extends Component {
             addSkill: ['J2EE', 'SQL,Mysql', 'Java'],
             FullTime: false,
             PartTime: false,
+            // Employed: false,
+            // Internship: false,
+            // StudentJobs: false,
+            // HelpingVacancies: false,
+            // Freelancer: false,
             Employed: false,
             Internship: false,
             StudentJobs: false,
             HelpingVacancies: false,
-            Freelancer: false,
-            skillCategorylist: [{
-                'name': 'Employed',
-                'bool': false
-            }, {
-                'name': 'Internship',
-                'bool': false
-            }, {
-                'name': 'StudentJobs',
-                'bool': false
-            }, {
-                'name': 'HelpingVacancies',
-                'bool': false
-            }, {
-                'name': 'Freelancer',
-                'bool': false
-            },]
+            Freelancer: false
+
         };
     }
 
@@ -84,7 +74,7 @@ class Filter extends Component {
 
 
     render() {
-        const {Hourly, Monthly, Yearly, ByDistance, ByLocation, name, addSkill, Employed, skillCategorylist, FullTime, PartTime} = this.state
+        const {Hourly, Monthly, Yearly, ByDistance, ByLocation, name, addSkill, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, skillCategorylist, FullTime, PartTime} = this.state
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -127,7 +117,10 @@ class Filter extends Component {
             invisibleImage={IC_ARR_DOWN}
             visibleImage={IC_ARR_UP}
             header={
-            <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={salaryType} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Salary Type</Text>
+            <View  style={styles.FilterDropDownInnerView}>
+            <View style={styles.fliterIcon}>
+            <Image source={salaryType} style={styles.imageStyle} resizeMode={'contain'}/>
+            </View><Text style={styles.DropDownHeader}>Salary Type</Text>
                 </View>
             }
             ><View style={styles.SalaryTypeView}><CheckBox
@@ -178,6 +171,7 @@ class Filter extends Component {
             })} inputContainerStyle={{
                 backgroundColor: themeColor,
                 // width: "100%",
+                height: scale(40),
                 borderColor: themeColor,
                 justifyContent: "center",
                 borderWidth: scale(1),
@@ -193,6 +187,10 @@ class Filter extends Component {
                 width: wp(85)
             }}
             iconName={iconSearch}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
             /></View>
             </DropDownItem>
             <DropDownItem
@@ -211,6 +209,7 @@ class Filter extends Component {
                 name: text
             })} inputContainerStyle={{
                 backgroundColor: themeColor,
+                height: scale(40),
                 // width: "100%",
                 borderColor: themeColor,
                 borderWidth: scale(1),
@@ -226,6 +225,10 @@ class Filter extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView style={{
                 marginTop: '-5%',
@@ -287,58 +290,85 @@ class Filter extends Component {
                 </View>
             }
             ><View style={{
-                marginHorizontal: '10%',
+                marginHorizontal: '1%',
                 top: 10
             }}><ScrollView style={{
                 marginTop: '-5%',
                 marginBottom: 20,
-                height: scale(50),
+            // height: scale(50),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center"
             }} nestedScrollEnabled={true}>
-            {skillCategorylist.map((item, index) => {
-                return (
-                    <View style={{
-                        flexDirection: 'row',
-                        width: '100%',
-                        marginLeft: '3%',
-                        height: scale(20)
-                    }}><View style={{
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        width: '70%'
-                    }}><Text key={index}
-                    style={{
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Regular',
-                    }}>
-                      {item.name}
-                    </Text></View><View style={{
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        width: '30%'
-
-                    }}><View style={{
-                        backgroundColor: themeColor,
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        borderRadius: scale(18),
-                        height: scale(18),
-                        width: scale(32),
-                        top: 2,
-                        alignSelf: "center"
-                    }}><ToggleSwitch
-                    isOn={item.bool}
-                    onColor={switchColor}
-                    offColor="#b4b4b4"
-                    size="small"
-                    onToggle={toggle => this.setState({
-                        bool: toggle
-                    })}
-                    /></View></View></View>
-                )
-            })}</ScrollView></View>
+            <View Style={{
+                flexDirection: "column",
+            }}><View style={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                justifyContent: 'center',
+                marginBottom: scale(10),
+            }}><CheckBox
+            selected={Employed}
+            style={styles.CheckBoxLabel}
+            textStyle={styles.CheckBoxLabelFontSc}
+            onPress={() => {
+                this.setState({
+                    Employed: !Employed
+                })
+            }}
+            text='Employed'
+            /><CheckBox
+            selected={Internship}
+            textStyle={styles.CheckBoxLabelFontSc}
+            style={styles.CheckBoxLabel}
+            onPress={() => {
+                this.setState({
+                    Internship: !Internship
+                })
+            }}
+            text='Internship'
+            />  
+            </View>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: 'flex-start',
+                flexWrap: "wrap",
+                marginBottom: scale(10),
+            }}>
+            <CheckBox
+            selected={StudentJobs}
+            textStyle={styles.CheckBoxLabelFontSc}
+            style={styles.CheckBoxLabel}
+            onPress={() => {
+                this.setState({
+                    StudentJobs: !StudentJobs
+                })
+            }}
+            text='StudentJobs'
+            /><CheckBox
+            selected={Freelancer}
+            textStyle={styles.CheckBoxLabelFontSc}
+            style={styles.CheckBoxLabel}
+            onPress={() => {
+                this.setState({
+                    Freelancer: !Freelancer
+                })
+            }}
+            text='Freelancer'
+            />
+            <CheckBox
+            selected={HelpingVacancies}
+            style={styles.CheckBoxLabel}
+            textStyle={styles.CheckBoxLabelFontSc}
+            onPress={() => {
+                this.setState({
+                    HelpingVacancies: !HelpingVacancies
+                })
+            }}
+            text='HelpingVacancies'
+            /></View>
+            </View>
+            </ScrollView></View>
             </DropDownItem>
            <DropDownItem
             // key={i}

@@ -26,6 +26,9 @@ class ChooseTalent extends Component {
     next = () => {
         this.props.navigation.navigate('TabScreen')
     }
+    back = () => {
+        this.props.navigation.goBack();
+    }
 
     render() {
         const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
@@ -166,16 +169,30 @@ class ChooseTalent extends Component {
             })}
             /></View></View></View>
             <View style={{
-                top: hp('35'),
-                width: wp(75),
-                alignItems: "flex-end",
-                position: "absolute"
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}>
-                                <View style={[styles.Size, {
-                alignItems: "flex-end"
+                flexDirection: "row",
+                width: wp(100),
+                top: hp(10)
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                justifyContent: "center",
+                width: wp(20),
+                marginLeft: wp(-6)
+            }}>
+            <TouchableWithoutFeedback style={styles.Size} onPress={this.back}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableWithoutFeedback>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                // right: wp(7),
+                width: wp(62)
+            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
+                alignItems: 'flex-end'
             }]}><Text style={[{
                 fontSize: scale(20),
             }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            </View>
             </View>
             </View>
             </View>

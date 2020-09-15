@@ -90,7 +90,7 @@ class EditWorkExperience extends Component {
             <View style={{
                 justifyContent: "flex-end",
                 flexDirection: 'column',
-                height: wp(20),
+                height: wp(22),
                 width: wp(35),
                 borderRadius: scale(20),
                 borderColor: themeColor,
@@ -98,7 +98,7 @@ class EditWorkExperience extends Component {
                 alignItems: "center",
                 backgroundColor: themeWhite,
                 left: wp(30.5),
-                top: wp(-10),
+                top: wp(-11),
             }}><View style={{
                 top: hp(1.5)
             }}>{leftVid('briefcase', 60, themeColor)}</View></View>

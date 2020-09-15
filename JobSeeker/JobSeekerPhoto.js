@@ -26,7 +26,7 @@ class JobSeekerPhoto extends Component {
 
 
     next = () => {
-        this.props.navigation.navigate('JobVideoResume')
+        this.props.navigation.navigate('Personal')
     }
 
     render() {
