@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
 
 import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
@@ -15,13 +8,15 @@ import { scale } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
 import { BackGround } from '../Constant/index'
+import http from '../api';
 
 class LoginWithEmail extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: ''
+            email: '',
+            password: ''
         };
     }
 
@@ -31,8 +26,29 @@ class LoginWithEmail extends Component {
     forgat = () => {
         this.props.navigation.navigate('EmailSend')
     }
-    Login = () => {
-        this.props.navigation.navigate('TabScreenCompany')
+
+    onLogin = async () => {
+        const { email, password } = this.state;       
+        try {
+          if (email.length > 0 && password.length > 0) {
+            http.POST('api/company/login',  {
+                email : email,
+                password: password
+            }).then((res)=> {
+                if (res['data']['status']){    
+                   //will get data in this    res['data']['result']             
+                   this.props.navigation.navigate('TabScreenCompany')
+                } else {
+                   alert(res['data']['message']);
+                }
+            }, err=> alert(JSON.stringify(err)));
+          }
+          else {
+               alert("Required Email Password");
+          }
+        } catch (error) {
+            console.log("error while register"+error);         
+        }
     }
 
     render() {
@@ -64,10 +80,10 @@ class LoginWithEmail extends Component {
                 alignItems: "center"
             }}>
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
-                name: text
+                email: text
             })}/>
        <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
-                name: text
+                password: text
             })}/>
        <TouchableWithoutFeedback onPress={this.forgat}><Text style={{
                 marginTop: scale(-8),
@@ -75,7 +91,7 @@ class LoginWithEmail extends Component {
                 marginBottom: scale(40),
                 color: '#fff'
             }}>Forget Password?</Text></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.Login}><View  style={[styles.CompanyLoginWithEmailView, {
+            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onLogin}><View  style={[styles.CompanyLoginWithEmailView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
             }]}><View><Text style={styles.CompanyOppoTalentText}>Login</Text></View></View></TouchableWithoutFeedback>

@@ -15,14 +15,12 @@ import { FontBold, FontRegular, Background } from '../Constant/index'
 import ItemMV from './ItemMV'
 
 
-
 class AddskilJob extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             addSkill: ['J2EE', 'SQL,Mysql', 'Java'],
-
         };
     }
 

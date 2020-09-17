@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
@@ -13,24 +5,46 @@ import styles from '../src/Style';
 import { scale } from '../src/Util';
 import CustomInput from '../Component/TextInput'
 import { Background } from '../Constant/index'
-
+import http from '../api';
 
 class LoginWithEmail extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: ''
+            email: '',
+            password: ''
         };
     }
 
+    onLogin = async () => {
+        const { email, password } = this.state;       
+        try {
+          if (email.length > 0 && password.length > 0) {
+            http.POST('api/user/login',  {
+                email : email,
+                password: password
+            }).then((res)=> {
+                if (res['data']['status']){    
+                   //will get data in this    res['data']['result']             
+                   this.props.navigation.navigate('TabScreenJob')
+                } else {
+                   alert(res['data']['message']);
+                }
+            }, err=> alert(JSON.stringify(err)));
+          }
+          else {
+               alert("Required Email Password");
+          }
+        } catch (error) {
+            console.log("error while register"+error);         
+        }
+    }
 
     forgat = () => {
         this.props.navigation.navigate('JobEmailSend')
     }
-    Login = () => {
-        this.props.navigation.navigate('TabScreenJob')
-    }
+   
     create = () => {
         this.props.navigation.navigate('JobNoAccount')
     }
@@ -64,10 +78,10 @@ class LoginWithEmail extends Component {
                 alignItems: "center"
             }}>
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
-                name: text
+                email: text
             })} />
        <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
-                name: text
+                password: text
             })}/>
        <TouchableWithoutFeedback onPress={this.forgat}><Text style={{
                 marginTop: scale(-8),
@@ -75,7 +89,7 @@ class LoginWithEmail extends Component {
                 marginBottom: scale(40),
                 color: '#fff'
             }}>Forget Password?</Text></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.Login}><View  style={[styles.CompanyLoginWithEmailView, {
+            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onLogin}><View  style={[styles.CompanyLoginWithEmailView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
             }]}><View style={{

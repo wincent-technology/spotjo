@@ -15,23 +15,46 @@ import { scale } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
 import { Background } from '../Constant/index'
+import http from '../api';
 
 class Signup extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            name: ''
+       this.state = {
+            email: '',
+            password: ''
         };
+    }
+
+    onSignup = async () => {
+        const { email, password } = this.state;       
+        try {
+          if (email.length > 0 && password.length > 0) {
+            http.POST('api/company/register',  {
+                email : email,
+                password: password
+            }).then((res)=> {
+                if (res['data']['status']){                    
+                   this.props.navigation.navigate('TabScreenCompany')
+                } else {
+                   alert(res['data']['message']);
+                }
+            }, err=> alert(JSON.stringify(err)));
+          }
+          else {
+               alert("Required Email Password");
+          }
+        } catch (error) {
+            console.log("error while register"+error);         
+        }
     }
 
 
     forgat = () => {
         this.props.navigation.navigate('EmailSend')
     }
-    Login = () => {
-        this.props.navigation.navigate('TabScreenCompany')
-    }
+    
 
     render() {
         return (
@@ -61,12 +84,12 @@ class Signup extends Component {
                 alignItems: "center"
             }}>
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
-                name: text
+                email: text
             })} />
        <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
-                name: text
+                password: text
             })} />
-            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.Login}><View  style={[styles.CompanyLoginWithEmailView, {
+            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onSignup}><View  style={[styles.CompanyLoginWithEmailView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
             }]}><View><Text style={styles.CompanyOppoTalentText}>Signup</Text></View></View></TouchableWithoutFeedback>

@@ -1,10 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
+
 
 import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
@@ -13,21 +7,41 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
-import CustomInput from '../Component/TextInput'
-import { Background } from '../Constant/index'
+import CustomInput from '../Component/TextInput';
+import { Background } from '../Constant/index';
+import http from '../api';
 
 class JobSignup extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: ''
+            email: '',
+            password: ''
         };
     }
 
-
-    Login = () => {
-        this.props.navigation.navigate('TabScreenJob')
+    onSignup = async () => {
+        const { email, password } = this.state;       
+        try {
+          if (email.length > 0 && password.length > 0) {
+            http.POST('api/user/register',  {
+                email : email,
+                password: password
+            }).then((res)=> {
+                if (res['data']['status']){                    
+                   this.props.navigation.navigate('TabScreenJob')
+                } else {
+                   alert(res['data']['message']);
+                }
+            }, err=> alert(JSON.stringify(err)));
+          }
+          else {
+               alert("Required Email Password");
+          }
+        } catch (error) {
+            console.log("error while register"+error);         
+        }
     }
 
     render() {
@@ -58,12 +72,12 @@ class JobSignup extends Component {
                 alignItems: "center"
             }}>
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
-                name: text
+                email: text
             })} />
        <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
-                name: text
+                password: text
             })} />
-            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.Login}><View  style={[styles.CompanyLoginWithEmailView, {
+            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onSignup}><View  style={[styles.CompanyLoginWithEmailView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
             }]}><View><Text style={styles.CompanyOppoTalentText}>Signup</Text></View></View></TouchableWithoutFeedback>
