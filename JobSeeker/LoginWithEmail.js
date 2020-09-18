@@ -18,33 +18,33 @@ class LoginWithEmail extends Component {
     }
 
     onLogin = async () => {
-        const { email, password } = this.state;       
-        try {
-          if (email.length > 0 && password.length > 0) {
-            http.POST('api/user/login',  {
-                email : email,
-                password: password
-            }).then((res)=> {
-                if (res['data']['status']){    
-                   //will get data in this    res['data']['result']             
-                   this.props.navigation.navigate('TabScreenJob')
-                } else {
-                   alert(res['data']['message']);
-                }
-            }, err=> alert(JSON.stringify(err)));
-          }
-          else {
-               alert("Required Email Password");
-          }
-        } catch (error) {
-            console.log("error while register"+error);         
-        }
+        const {email, password} = this.state;
+        // try {
+        //   if (email.length > 0 && password.length > 0) {
+        //     http.POST('api/user/login',  {
+        //         email : email,
+        //         password: password
+        //     }).then((res)=> {
+        //         if (res['data']['status']){    
+        //            //will get data in this    res['data']['result']             
+        this.props.navigation.navigate('TabScreenJob')
+    //         } else {
+    //            alert(res['data']['message']);
+    //         }
+    //     }, err=> alert(JSON.stringify(err)));
+    //   }
+    //   else {
+    //        alert("Required Email Password");
+    //   }
+    // } catch (error) {
+    //     console.log("error while register"+error);         
+    // }
     }
 
     forgat = () => {
         this.props.navigation.navigate('JobEmailSend')
     }
-   
+
     create = () => {
         this.props.navigation.navigate('JobNoAccount')
     }

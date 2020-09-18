@@ -113,12 +113,12 @@ class EditWorkExperience extends Component {
             }}>Edit Work Experience</Text></View>
             <View style={{
                 alignItems: "flex-end",
-                right: wp(5),
+                right: wp(10),
                 top: hp(-2)
             }}><CustomButton title={'Add Experience'}
             onPress={() => this.Back}
             containerStyle={{
-                width: '25%',
+                width: '30%',
                 color: 'black',
             // fontFamily: FontRegular
             }}
@@ -131,7 +131,7 @@ class EditWorkExperience extends Component {
             titleStyle={{
                 color: themeWhite,
                 position: 'absolute',
-                fontFamily: FontRegular,
+                fontFamily: FontBold,
                 fontSize: scale(12),
             }}
             /></View>

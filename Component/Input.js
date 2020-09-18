@@ -3,7 +3,7 @@ import { Input, Icon, Image } from 'react-native-elements'
 import { themeColor } from '../Constant/index'
 import { View } from 'react-native'
 import { scale } from '../src/Util'
-
+import { play } from '../src/IconManager'
 
 export default CustomInput = (props) => <Input
     containerStyle={[{
@@ -65,4 +65,15 @@ export default CustomInput = (props) => <Input
         }, props.leftIconContainerStyle]
     } { ...props
     }
-    />
+    rightIcon = {
+    <View style={{
+        marginRight: 10
+    }}>
+    {play(props.iconName ? props.iconName : 'add-outline', scale(20), props.iconColor ? props.iconColor : themeColor)}</View>
+    }
+    rightIconContainerStyle = {[
+        {
+            padding: 0
+        }, props.rightIconContainerStyle]
+    } { ...props
+    }/>

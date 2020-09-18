@@ -3,7 +3,7 @@ import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE, overlayimage, rightWrongBack } from '../Constant/index'
+import { themeColor, themeWhite, Background, sort, filter, TRANLINE, overlayimage, rightWrongBack, rite, FontBold } from '../Constant/index'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { scale } from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
@@ -133,10 +133,17 @@ class CreateJob extends PureComponent {
                     justifyContent: "center",
                     alignItems: "center"
                 }}><TouchableWithoutFeedback>
-                <Text style={{
-                    fontSize: scale(17),
-                    color: this.state.index == 3 ? themeColor : '#000'
-                }}>Go Live</Text></TouchableWithoutFeedback></View>)}
+                    <View style={{
+                    flexDirection: "row"
+                }}><Image source={rite} style={{
+                    height: scale(30),
+                    width: scale(30),
+                    marginRight: scale(5)
+                }} resizeMode={'contain'} /><Text style={{
+                    fontSize: scale(22),
+                    fontFamily: FontBold,
+                    color: themeColor
+                }}>Go Live</Text></View></TouchableWithoutFeedback></View>)}
             </ImageBackground></View>
                 </ImageBackground>
             </View>

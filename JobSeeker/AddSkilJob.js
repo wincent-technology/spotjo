@@ -128,10 +128,12 @@ class AddskilJob extends Component {
                 height: 25,
                 width: 25
             }}
+            iconColor={'#fff'}
+
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  style={{
                 marginTop: '-5%',
-                marginBottom: 20,
+                marginBottom: 40,
                 height: scale(50),
             }} contentContainerStyle={{
                 alignItems: "center",
@@ -146,7 +148,7 @@ class AddskilJob extends Component {
                         justifyContent: "center",
                         marginBottom: scale(2),
                         // marginLeft: '3%',
-                        height: scale(15)
+                        height: scale(18)
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -303,6 +305,12 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
+            iconColor={'#fff'}
+
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
@@ -321,7 +329,7 @@ class AddskilJob extends Component {
                         justifyContent: "center",
                         marginBottom: scale(2),
                         // marginLeft: '3%',
-                        height: scale(15)
+                        height: scale(18)
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -384,6 +392,12 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconStyle={{
+                height: 25,
+                width: 25
+            }}
+            iconColor={'#fff'}
+
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
@@ -402,7 +416,8 @@ class AddskilJob extends Component {
                         justifyContent: "center",
                         marginBottom: scale(2),
                         // marginLeft: '3%',
-                        height: scale(15)
+                        height: scale(18)
+
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",

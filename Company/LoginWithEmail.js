@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -28,27 +27,27 @@ class LoginWithEmail extends Component {
     }
 
     onLogin = async () => {
-        const { email, password } = this.state;       
-        try {
-          if (email.length > 0 && password.length > 0) {
-            http.POST('api/company/login',  {
-                email : email,
-                password: password
-            }).then((res)=> {
-                if (res['data']['status']){    
-                   //will get data in this    res['data']['result']             
-                   this.props.navigation.navigate('TabScreenCompany')
-                } else {
-                   alert(res['data']['message']);
-                }
-            }, err=> alert(JSON.stringify(err)));
-          }
-          else {
-               alert("Required Email Password");
-          }
-        } catch (error) {
-            console.log("error while register"+error);         
-        }
+        const {email, password} = this.state;
+        // try {
+        //   if (email.length > 0 && password.length > 0) {
+        //     http.POST('api/company/login',  {
+        //         email : email,
+        //         password: password
+        //     }).then((res)=> {
+        //         if (res['data']['status']){    
+        //            //will get data in this    res['data']['result']             
+        this.props.navigation.navigate('TabScreenCompany')
+    //         } else {
+    //            alert(res['data']['message']);
+    //         }
+    //     }, err=> alert(JSON.stringify(err)));
+    //   }
+    //   else {
+    //        alert("Required Email Password");
+    //   }
+    // } catch (error) {
+    //     console.log("error while register"+error);         
+    // }
     }
 
     render() {

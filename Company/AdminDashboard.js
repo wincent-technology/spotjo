@@ -11,6 +11,7 @@ import { Rating, NavigationHead } from '../Component/ViewManager.js'
 import ItemMV from '../src/ItemMV'
 import DeviceInfo from 'react-native-device-info';
 import JobListCompany from './JobListCompany';
+import JobMatches from './JobMatches';
 import PostedJobList from './PostedJobList';
 // import styles from './Style'
 var c = 0;
@@ -108,13 +109,13 @@ class AdminDashboard extends PureComponent {
         })
     }
     renderPage = () => {
-        const { flagPosted, flagInterView, flagMatches } = this.state;
+        const {flagPosted, flagInterView, flagMatches} = this.state;
         if (flagPosted)
             return <PostedJobList />
         else if (flagInterView)
             return <JobListCompany />
         else if (flagMatches)
-            return <JobListCompany />
+            return <JobMatches />
     }
     render() {
         console.warn(">>", DeviceInfo.hasNotch())
@@ -123,78 +124,78 @@ class AdminDashboard extends PureComponent {
             <View style={styles.backGround}>
                 <StatusBar hidden={true} />
                 <ImageBackground style={styles.ImageBlue}
-                    source={Background}
-                    resizeMode={'stretch'}>
+            source={Background}
+            resizeMode={'stretch'}>
                     <NavigationHead centerComponent='Admin Dashboard' rightComponent='Exit' onPress={() => this.Back()} onExit={() => this.Exit()} />
                     <View style={{
-                        borderTopColor: 'gray',
-                        marginTop: scale(2),
-                        borderTopWidth: scale(2),
-                        borderBottomWidth: scale(2),
-                        borderBottomColor: 'gray',
-                        flexDirection: 'row',
-                        width: wp('100%'),
-                        backgroundColor: themeWhite,
-                        height: scale(40),
-                        alignItems: 'center',
-                        elevation: 8,
-                    }}>
+                borderTopColor: 'gray',
+                marginTop: scale(2),
+                borderTopWidth: scale(2),
+                borderBottomWidth: scale(2),
+                borderBottomColor: 'gray',
+                flexDirection: 'row',
+                width: wp('100%'),
+                backgroundColor: themeWhite,
+                height: scale(40),
+                alignItems: 'center',
+                elevation: 8,
+            }}>
                         <TouchableWithoutFeedback onPress={this.PostedJob}><View style={{
-                            alignItems: 'center',
-                            width: wp(97) / 3,
-                            height: scale(40),
-                            marginLeft: wp(3),
-                            justifyContent: "center"
-                        }}><ImageBackground source={overlayimage} style={{
-                            height: '100%',
-                            width: '100%',
-                            position: "absolute",
-                            opacity: this.state.flagPosted ? 1 : 0
-                        }} resizeMode={'contain'} /><Text style={{
-                            fontSize: scale(20),
-                            fontFamily: 'Roboto-Regular'
-                        }}>Posted Jobs</Text></View></TouchableWithoutFeedback>
+                alignItems: 'center',
+                width: wp(97) / 3,
+                height: scale(40),
+                marginLeft: wp(3),
+                justifyContent: "center"
+            }}><ImageBackground source={overlayimage} style={{
+                height: '100%',
+                width: '100%',
+                position: "absolute",
+                opacity: this.state.flagPosted ? 1 : 0
+            }} resizeMode={'contain'} /><Text style={{
+                fontSize: scale(20),
+                fontFamily: 'Roboto-Regular'
+            }}>Posted Jobs</Text></View></TouchableWithoutFeedback>
                         <TouchableWithoutFeedback onPress={this.Interviews}><View style={{
-                            alignItems: 'center',
-                            width: wp(95) / 3,
-                            height: scale(40),
-                            justifyContent: "center",
-                            marginHorizontal: wp(1)
-                        }}><ImageBackground source={overlayimage} style={{
-                            height: '100%',
-                            width: '100%',
-                            position: "absolute",
-                            opacity: this.state.flagInterView ? 1 : 0
+                alignItems: 'center',
+                width: wp(95) / 3,
+                height: scale(40),
+                justifyContent: "center",
+                marginHorizontal: wp(1)
+            }}><ImageBackground source={overlayimage} style={{
+                height: '100%',
+                width: '100%',
+                position: "absolute",
+                opacity: this.state.flagInterView ? 1 : 0
 
-                        }} resizeMode={'contain'} /><Text style={{
-                            fontSize: scale(20),
-                            fontFamily: 'Roboto-Regular'
-                        }}>Interviews</Text></View></TouchableWithoutFeedback>
+            }} resizeMode={'contain'} /><Text style={{
+                fontSize: scale(20),
+                fontFamily: 'Roboto-Regular'
+            }}>Interviews</Text></View></TouchableWithoutFeedback>
                         <TouchableWithoutFeedback onPress={this.Matches}><View style={{
-                            alignItems: 'center',
-                            width: wp(85) / 3,
-                            height: scale(40),
-                            justifyContent: "center"
-                        }}><ImageBackground source={overlayimage} style={{
-                            height: '100%',
-                            width: '100%',
-                            position: "absolute",
-                            opacity: this.state.flagMatches ? 1 : 0
+                alignItems: 'center',
+                width: wp(85) / 3,
+                height: scale(40),
+                justifyContent: "center"
+            }}><ImageBackground source={overlayimage} style={{
+                height: '100%',
+                width: '100%',
+                position: "absolute",
+                opacity: this.state.flagMatches ? 1 : 0
 
-                        }} resizeMode={'contain'} /><Text style={{
-                            fontSize: scale(20),
-                            fontFamily: 'Roboto-Regular'
-                        }}>Matches</Text></View></TouchableWithoutFeedback>
+            }} resizeMode={'contain'} /><Text style={{
+                fontSize: scale(20),
+                fontFamily: 'Roboto-Regular'
+            }}>Matches</Text></View></TouchableWithoutFeedback>
                     </View>
                     <View style={{
-                        height: hp(100) - (hp(11) + scale(95))
-                    }}>{this.renderPage()}</View>
+                height: hp(100) - (hp(11) + scale(95))
+            }}>{this.renderPage()}</View>
                     <View style={styles.TranLingImage}>
                         <Image
-                            source={TRANLINE}
-                            style={styles.imageStyle}
-                            resizeMode={'stretch'}
-                        /></View>
+            source={TRANLINE}
+            style={styles.imageStyle}
+            resizeMode={'stretch'}
+            /></View>
                 </ImageBackground>
             </View>
         )

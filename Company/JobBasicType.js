@@ -72,6 +72,7 @@ class JobBasicType extends Component {
             })} inputContainerStyle={{
                 backgroundColor: themeColor,
                 // width: "100%",
+                height: scale(40),
                 borderColor: themeColor,
                 justifyContent: "center",
                 borderWidth: scale(1),

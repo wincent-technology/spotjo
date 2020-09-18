@@ -4,7 +4,7 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from './Style'
 import { left, library, icon, play, leftVid } from './IconManager';
 import { scale, getStatusBarHeight } from './Util'
-import { iconSearch, TRANLINE, switchColor, themeColor, themeWhite, Background, IC_ARR_UP, IC_ARR_DOWN, minimumSalary, salaryType, company, skill, skillCategory, skillLavel, jobType, searchType } from '../Constant/index'
+import { iconSearch, TRANLINE, switchColor, themeColor, themeWhite, Background, IC_ARR_UP, IC_ARR_DOWN, minimumSalary, salaryType, company, skill, skillCategory, skillLavel, Filterjobtype, searchType } from '../Constant/index'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import Slider from '@react-native-community/slider';
 import ToggleSwitch from '../Component/ToggleSwitch'
@@ -191,7 +191,9 @@ class Filter extends Component {
                 height: 25,
                 width: 25
             }}
-            /></View>
+            iconColor={'#fff'}
+            />
+            </View>
             </DropDownItem>
             <DropDownItem
             // key={i}
@@ -229,6 +231,8 @@ class Filter extends Component {
                 height: 25,
                 width: 25
             }}
+            iconColor={'#fff'}
+
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView style={{
                 marginTop: '-5%',
@@ -396,7 +400,7 @@ class Filter extends Component {
             invisibleImage={IC_ARR_DOWN}
             visibleImage={IC_ARR_UP}
             header={
-            <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={jobType} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Job Type</Text>
+            <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={Filterjobtype} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Job Type</Text>
                 </View>
             }
             ><View style={{

@@ -58,7 +58,8 @@ class JobHiddenCritearia extends Component {
 
             }}><Text style={{
                 fontSize: scale(18),
-                fontFamily: "Roboto-Bold"
+                fontFamily: "Roboto-Bold",
+                color: themeWhite
             }}>Hidden Critearia</Text></View>
                     <ScrollView style={{
                 alignSelf: 'stretch',
@@ -227,7 +228,7 @@ class JobHiddenCritearia extends Component {
             }}><Text
             style={{
                 fontSize: scale(16),
-                color: themeColor,
+                color: themeWhite,
                 fontFamily: 'Roboto-Regular',
             }}>
                       Salary Rating

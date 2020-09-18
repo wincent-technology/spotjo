@@ -4,7 +4,7 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, leftVid } from '../src/IconManager';
 import { scale } from '../src/Util'
-import { themeColor, themeWhite, TRANLINE, rightWrongBack } from '../Constant/index'
+import { themeColor, themeWhite, TRANLINE, rightWrongBack, rite, wrong } from '../Constant/index'
 import { Rating, NavigationHeader } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
@@ -272,7 +272,23 @@ class BasicInfoOfCompany extends Component {
                 width: wp(105),
                 left: wp(-2)
             }}>
-            <Image source={rightWrongBack} style={styles.imageStyle} resizeMode={'stretch'}/></View>
+            <ImageBackground source={rightWrongBack} style={styles.imageStyle} resizeMode={'stretch'}>
+                <View style={{
+                flexDirection: 'row',
+                alignItems: "center",
+                justifyContent: "center"
+            }}>
+                <View style={{
+                marginRight: wp(25),
+            }}><Image source={wrong} style={{
+                height: scale(30),
+                width: scale(30),
+            }} resizeMode={'contain'} /></View>
+            <View><Image source={rite} style={{
+                height: scale(35),
+                width: scale(35),
+            }} resizeMode={'contain'} /></View>
+            </View></ImageBackground></View>
                 </ImageBackground></SafeAreaView>
         )
     }

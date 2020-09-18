@@ -90,20 +90,27 @@ class PostedJobList extends PureComponent {
                 flexDirection: 'row',
                 width: wp('100%'),
                 backgroundColor: 'transparent',
-                height: hp(10),
+                height: hp(12),
                 marginTop: hp(1),
                 alignItems: 'center',
             }}>
-            <TouchableWithoutFeedback onPress={this.PostedJob}><View style={{
+            <TouchableWithoutFeedback onPress={this.PostedJob} style={{
                 alignItems: 'center',
                 width: wp(100) / 3,
                 height: hp(10),
-                // marginLeft: wp(1),
-                // justifyContent: "center",
-                flexDirection: "column"
+                borderRadius: scale(20),
+            }}><View style={{
+                alignItems: 'center',
+                width: wp(100) / 3,
+                height: hp(10),
+                borderRadius: scale(100),
+            // marginLeft: wp(1),
+            // justifyContent: "center",
+            // flexDirection: "column"
             }}><ImageBackground source={canvas} style={{
                 height: '100%',
                 width: '100%',
+                borderRadius: scale(100),
                 position: "absolute",
                 alignItems: "center",
                 justifyContent: "center"

@@ -76,7 +76,8 @@ class JobCompanyProfile extends Component {
    <ImageBackground style={{
 
                 width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + scale(25)),
+                height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+
             }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
   <View style={styles.CompanyProfileImageSize}>
     <Image

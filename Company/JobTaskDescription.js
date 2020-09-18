@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
+import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, TextInput, Dimensions, Text, Image, View } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import { scale } from '../src/Util';
 import CustomInput from '../Component/Input'
@@ -47,13 +47,27 @@ class JobTaskDescription extends Component {
             <View style={{
                 alignItems: "center",
                 width: wp(96),
-                marginVertical: hp(4)
-
+                marginTop: hp(4),
+                marginBottom: hp(2),
             }}><Text style={{
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 color: themeWhite
             }}>Task Description</Text></View>
+            <View style={{
+                marginTop: hp(0)
+            }}><TextInput
+            multiline={true}
+            numberOfLines={10}
+            style={{
+                height: hp(60),
+                width: wp(72),
+                borderRadius: scale(10),
+                backgroundColor: 'white',
+                alignSelf: 'center',
+                textAlignVertical: 'top'
+            }}
+            /></View>
            </View>
             </ImageBackground>
         )

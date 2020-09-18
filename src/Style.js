@@ -44,6 +44,7 @@ module.exports = {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: themeWhite,
+        borderRadius: scale(5)
     },
     OppoTalentText: {
         fontSize: scale(18),
@@ -133,7 +134,7 @@ module.exports = {
         justifyContent: 'center',
         borderRadius: scale(18),
         height: scale(18),
-        width: scale(32),
+        width: scale(34),
         top: 2,
         alignSelf: "center"
     },

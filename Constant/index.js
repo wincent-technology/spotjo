@@ -27,6 +27,9 @@ export const skill = require('../Img/skill.png')
 export const skillCategory = require('../Img/skillCategory.png')
 export const skillLavel = require('../Img/skilLevel.png')
 export const jobType = require('../Img/jobType.png')
+export const Filterjobtype = require('../Img/Filterjobtype.png')
+
+
 export const searchType = require('../Img/searchType.png')
 
 //user Edit Profile Icon
@@ -68,3 +71,6 @@ export const overlayimage = require('../Img/overlayimage.png');
 export const canvas = require('../Img/canvas.png');
 export const darkract = require('../Img/darkract.png');
 export const educationCap = require('../Img/educationCap.png');
+
+export const rite = require('../Img/rite.png');
+export const wrong = require('../Img/wrong.png');

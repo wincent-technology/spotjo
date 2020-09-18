@@ -95,28 +95,28 @@ class JobListCompany extends PureComponent {
         return (
             <View>
         <StatusBar hidden={true}/>
-            <View style={{
+             <View style={{
                 flexDirection: 'row',
                 width: wp('100%'),
                 backgroundColor: 'transparent',
-                height: hp(10),
+                height: hp(12),
                 marginTop: hp(1),
                 alignItems: 'center',
             }}>
             <TouchableWithoutFeedback onPress={this.PostedJob}><View style={{
                 alignItems: 'center',
-                width: wp(97) / 3,
+                width: wp(100) / 3,
                 height: hp(10),
-                marginLeft: wp(3),
-                justifyContent: "center",
+                // marginLeft: wp(1),
+                // justifyContent: "center",
                 flexDirection: "column"
             }}><ImageBackground source={canvas} style={{
                 height: '100%',
                 width: '100%',
                 position: "absolute",
                 alignItems: "center",
-                justifyContent: "center"
-            }} resizeMode={'contain'}><Text style={{
+                justifyContent: "center",
+            }} resizeMode={'cover'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
@@ -127,10 +127,10 @@ class JobListCompany extends PureComponent {
             }}>Published</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.Interviews}><View style={{
                 alignItems: 'center',
-                width: wp(95) / 3,
+                width: wp(100) / 3,
                 height: hp(10),
                 justifyContent: "center",
-                marginHorizontal: wp(1),
+                // marginHorizontal: wp(1),
                 flexDirection: "column"
             }}><ImageBackground source={canvas} style={{
                 height: '100%',
@@ -139,7 +139,7 @@ class JobListCompany extends PureComponent {
                 alignItems: "center",
                 justifyContent: "center"
 
-            }} resizeMode={'contain'}><Text style={{
+            }} resizeMode={'cover'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
@@ -150,7 +150,7 @@ class JobListCompany extends PureComponent {
             }}>Expired</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.Matches}><View style={{
                 alignItems: 'center',
-                width: wp(85) / 3,
+                width: wp(100) / 3,
                 height: hp(10),
                 justifyContent: "center",
                 flexDirection: "column"
@@ -161,7 +161,7 @@ class JobListCompany extends PureComponent {
                 alignItems: "center",
                 justifyContent: "center"
 
-            }} resizeMode={'contain'}><Text style={{
+            }} resizeMode={'cover'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
