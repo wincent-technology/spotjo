@@ -74,3 +74,5 @@ export const educationCap = require('../Img/educationCap.png');
 
 export const rite = require('../Img/rite.png');
 export const wrong = require('../Img/wrong.png');
+
+export const url = "http://192.168.0.169:8090/"

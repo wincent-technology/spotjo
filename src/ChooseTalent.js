@@ -7,12 +7,14 @@ import ToggleSwitch from '../Component/ToggleSwitch'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { switchColor, Background, themeColor } from '../Constant/index'
 import styles from './Style';
+import http from '../api';
+import SnackBar from '../Component/SnackBar'
+
 class ChooseTalent extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: '',
             FullTime: false,
             PartTime: false,
             Employed: false,
@@ -22,9 +24,42 @@ class ChooseTalent extends Component {
             Freelancer: false,
         };
     }
-
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
     next = () => {
-        this.props.navigation.navigate('TabScreen')
+        try {
+            http.POST('api/appjob/filter', {
+                Job_Title: global.Job_Title,
+                Company: global.Company,
+                Anywhere: global.Anywhere,
+                Job_Location: global.Job_Location,
+                FullTime: this.state.FullTime,
+                PartTime: this.state.PartTime,
+                Employed: this.state.Employed,
+                Internship: this.state.Internship,
+                StudentJobs: this.state.StudentJobs,
+                HelpingVacancies: this.state.HelpingVacancies,
+                Freelancer: this.state.Freelancer
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('rrrrrrrrr', res['data']['result']);
+                    this.props.navigation.navigate('TabScreen')
+
+                // will get data in this    res['data']['result']             
+                // this.props.navigation.navigate('TabScreenJob')
+                } else {
+                    this.DisplaySnackBar(res['data']['message'])
+
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch ( error ) {
+            this.DisplaySnackBar(error)
+
+        }
+        // this.props.navigation.navigate('TabScreen')
+
+
     }
     back = () => {
         this.props.navigation.goBack();
@@ -40,6 +75,8 @@ class ChooseTalent extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
+            <SnackBar ref="ReactNativeSnackBar" />
+
             <View style={styles.MainFlex}>
         <View style={[{
                 top: scale(30),

@@ -73,7 +73,6 @@ class PostedJobList extends PureComponent {
     }
 
     push = (item) => {
-        console.log("heelo", item);
         global.item = item;
     // this.props.navigation.navigate('CompanyProfile')
     }
@@ -81,8 +80,6 @@ class PostedJobList extends PureComponent {
         // this.props.navigation.navigate('ChooseTalent')
     }
     render() {
-        console.warn(">>", DeviceInfo.hasNotch())
-
         return (
             <View>
         <StatusBar hidden={true}/>

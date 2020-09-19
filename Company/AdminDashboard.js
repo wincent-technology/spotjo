@@ -118,8 +118,6 @@ class AdminDashboard extends PureComponent {
             return <JobMatches />
     }
     render() {
-        console.warn(">>", DeviceInfo.hasNotch())
-
         return (
             <View style={styles.backGround}>
                 <StatusBar hidden={true} />

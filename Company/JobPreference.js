@@ -8,6 +8,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Compon
 import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract } from '../Constant/index'
 import styles from '../src/Style';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import http from '../api';
 
 
 class JobBasicType extends Component {
@@ -15,26 +16,31 @@ class JobBasicType extends Component {
         super(props);
 
         this.state = {
-            name: '',
-            FullTime: false,
-            PartTime: false,
-            Employed: false,
-            Internship: false,
-            StudentJobs: false,
-            HelpingVacancies: false,
-            Freelancer: false,
             show: false,
             show1: false,
             currentDate: Date.now(),
+            Start_date: Date.now(),
+            End_date: Date.now(),
             selectedValue: 'City',
-            selectedValue1: 'Languages'
+            selectedValue1: 'Languages',
+            lang: [],
+            city: [],
 
         };
     }
     onChange = (event, selectedDate) => {
         this.setState({
-            currentDate: selectedDate
+            Start_date: selectedDate
         });
+        global.Start_date = selectedDate
+
+    };
+    onChange1 = (event, selectedDate) => {
+        this.setState({
+            End_date: selectedDate
+        });
+        global.End_date = selectedDate
+
     };
     next = () => {
         this.props.navigation.navigate('TabScreen')
@@ -44,14 +50,68 @@ class JobBasicType extends Component {
         this.setState({
             selectedValue: selectedValue
         })
+        global.city = selectedValue
+
     }
+
+    componentDidMount() {
+        try {
+            http.GET('api/applanguage/get').then((res) => {
+                if (res['data']['status']) {
+                    //            //will get data in this    res['data']['result']             
+                    // console.log('res>>>>>>>>>>>>>>lang', res['data']['result']);
+                    this.setState({
+                        lang: res['data']['result']
+                    })
+                } else {
+                    console.log('res', res);
+                    alert(res['data']['message']['message']);
+                }
+            }, err => alert(JSON.stringify(err)));
+
+            http.GET('api/appcity/get').then((res) => {
+                if (res['data']['status']) {
+                    //            //will get data in this    res['data']['result']             
+                    // console.log('res>>>>>>>>>>>>>>lang', res['data']['result']);
+                    this.setState({
+                        city: res['data']['result']
+                    })
+                } else {
+                    alert(res['data']['message']['message']);
+                }
+            }, err => alert(JSON.stringify(err)));
+
+
+        } catch ( error ) {
+            console.log("error while register" + error);
+        }
+
+
+
+    }
+
     setSelectedValue1 = (selectedValue) => {
         this.setState({
             selectedValue1: selectedValue
         })
+        global.Language = selectedValue
+
     }
     render() {
         const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name, show, show1} = this.state
+        const PickerItem = this.state.lang !== "" ? (
+            this.state.lang.map((item, id) => {
+                return <Picker.Item key = {item.id} label={item.title} value={item.title}/>
+            })) : (
+            <Picker.Item label={item.title} value={item.title}/>
+            )
+        const CityItem = this.state.lang !== "" ? (
+            this.state.city.map((item, id) => {
+                return <Picker.Item key = {item.id} label={item.title} value={item.title}/>
+            })) : (
+            <Picker.Item label={item.title} value={item.title}/>
+            )
+
         return (
 
             <ImageBackground style={{
@@ -76,7 +136,7 @@ class JobBasicType extends Component {
             }}>Job Preferences</Text></View>
             <View style={{
                 marginTop: hp(10)
-            }}><CustomInput placeholder = {'Start date'} textChange = {(text) => this.setState({
+            }}><CustomInput placeholder = {'start Date'} textChange = {(text) => this.setState({
                 name: text
             })} inputContainerStyle={{
                 backgroundColor: themeColor,
@@ -99,8 +159,8 @@ class JobBasicType extends Component {
             }}
             iconName={'calendar-sharp'}
             iconColor={themeWhite}
-            onFocus={() => this.setState({
-                show: !this.state.show
+            onSubmitEditing={() => this.setState({
+                // show: !this.state.show
             })}
             /></View>
              <View style={{
@@ -128,8 +188,8 @@ class JobBasicType extends Component {
             }}
             iconName={'calendar-sharp'}
             iconColor={themeWhite}
-            onFocus={() => this.setState({
-                show1: !this.state.show1
+            onSubmitEditing={() => this.setState({
+                // show1: !this.state.show1
             })}
             /></View>
             {show && (
@@ -148,7 +208,7 @@ class JobBasicType extends Component {
             mode={'date'}
             is24Hour={true}
             display="default"
-            onChange={this.onChange}
+            onChange={this.onChange1}
             />
             )}
              <View style={{
@@ -166,11 +226,7 @@ class JobBasicType extends Component {
             // backgroundColor: themeColor
             }}
             onValueChange={(itemValue, itemIndex) => this.setSelectedValue(itemValue)}
-            >
-        <Picker.Item label="City" value="City" />
-        <Picker.Item label="Bangalore" value="Bangalore" />
-        <Picker.Item label="London" value="London" />
-        <Picker.Item label="Mumbai" value="Mumbai" />
+            >{CityItem}
       </Picker></View>
       <View style={{
                 width: wp(70),
@@ -184,14 +240,9 @@ class JobBasicType extends Component {
             style={{
                 width: wp(75),
                 height: scale(45),
-            // backgroundColor: themeColor
             }}
             onValueChange={(itemValue, itemIndex) => this.setSelectedValue1(itemValue)}
-            >
-        <Picker.Item label="Languages" value="Languages" />
-        <Picker.Item label="Hindi" value="Hindi" />
-        <Picker.Item label="English" value="English" />
-        <Picker.Item label="French" value="French" />
+            >{PickerItem}
       </Picker></View>
            </View>
             </ImageBackground>
@@ -201,3 +252,8 @@ class JobBasicType extends Component {
 ;
 
 export default withNavigationFocus(JobBasicType);
+// {this.state.lang && this.state.lang.map(({item, key}) => {
+//                return (
+//                    <Picker.Item label = {this.state.lang ? item.title : ''} value = {this.state.lang ? item.title : ''} key={key} />
+//                )
+//            })}

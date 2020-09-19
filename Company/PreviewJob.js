@@ -35,7 +35,6 @@ class PreviewJob extends Component {
 
     render() {
         const {Hourly, Monthly, Yearly} = this.state
-        console.log("hello>>>>>>>>>", global.item)
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}

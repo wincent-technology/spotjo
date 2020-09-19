@@ -89,7 +89,6 @@ class JobMatches extends PureComponent {
     }
 
     push = (item) => {
-        console.log("heelo", item);
         global.item = item;
         this.setState({
             dark: !this.state.dark
@@ -105,7 +104,6 @@ class JobMatches extends PureComponent {
         })
     }
     render() {
-        console.warn(">>", DeviceInfo.hasNotch())
         const {show, show1, dark} = this.state
 
         return (

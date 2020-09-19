@@ -27,8 +27,9 @@ class JobBasicType extends Component {
     }
 
     next = () => {
-        this.props.navigation.navigate('TabScreen')
+        console.log("this.state", this.state);
     }
+
 
     render() {
         const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
@@ -67,9 +68,8 @@ class JobBasicType extends Component {
             }}>Please provide all the information mentioned below</Text></View>
             <View style={{
                 marginTop: hp(2)
-            }}><CustomInput placeholder = {'New Job Title'} textChange = {(text) => this.setState({
-                name: text
-            })} inputContainerStyle={{
+            }}><CustomInput placeholder = {'New Job Title'} textChange = {(text) => global.Job_Title = text}
+            inputContainerStyle={{
                 backgroundColor: themeColor,
                 // width: "100%",
                 height: scale(40),
@@ -115,6 +115,8 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 FullTime: toggle
+            }, () => {
+                global.FullTime = this.state.FullTime
             })}
             /></View></View>
             <View style={{
@@ -133,6 +135,8 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 PartTime: toggle
+            }, () => {
+                global.PartTime = this.state.PartTime
             })}
             /></View></View></View>
              <View style={{
@@ -166,6 +170,8 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 Employed: toggle
+            }, () => {
+                global.Employed = this.state.Employed
             })}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
@@ -179,6 +185,8 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 Internship: toggle
+            }, () => {
+                global.Internship = this.state.Internship
             })}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
@@ -192,6 +200,8 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 StudentJobs: toggle
+            }, () => {
+                global.StudentJobs = this.state.StudentJobs
             })}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
@@ -209,6 +219,8 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 HelpingVacancies: toggle
+            }, () => {
+                global.HelpingVacancies = this.state.HelpingVacancies
             })}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
@@ -222,13 +234,16 @@ class JobBasicType extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 Freelancer: toggle
+            }, () => {
+                global.Freelancer = this.state.Freelancer
             })}
             /></View></View></View>
             </View></View>
+           
             </ImageBackground>
         )
     }
 }
 ;
 
-export default withNavigationFocus(JobBasicType);
+export default JobBasicType;

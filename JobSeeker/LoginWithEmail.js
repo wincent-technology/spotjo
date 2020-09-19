@@ -6,6 +6,8 @@ import { scale } from '../src/Util';
 import CustomInput from '../Component/TextInput'
 import { Background } from '../Constant/index'
 import http from '../api';
+import SnackBar from '../Component/SnackBar'
+
 
 class LoginWithEmail extends Component {
     constructor(props) {
@@ -17,28 +19,33 @@ class LoginWithEmail extends Component {
         };
     }
 
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
     onLogin = async () => {
         const {email, password} = this.state;
-        // try {
-        //   if (email.length > 0 && password.length > 0) {
-        //     http.POST('api/user/login',  {
-        //         email : email,
-        //         password: password
-        //     }).then((res)=> {
-        //         if (res['data']['status']){    
-        //            //will get data in this    res['data']['result']             
-        this.props.navigation.navigate('TabScreenJob')
-    //         } else {
-    //            alert(res['data']['message']);
-    //         }
-    //     }, err=> alert(JSON.stringify(err)));
-    //   }
-    //   else {
-    //        alert("Required Email Password");
-    //   }
-    // } catch (error) {
-    //     console.log("error while register"+error);         
-    // }
+        try {
+            if (email.length > 0 && password.length > 0) {
+                http.POST('api/user/login', {
+                    email: email,
+                    password: password
+                }).then((res) => {
+                    if (res['data']['status']) {
+                        // will get data in this    res['data']['result']             
+                        this.props.navigation.navigate('TabScreenJob')
+                    } else {
+                        this.DisplaySnackBar(res['data']['message'])
+
+                    }
+                }, err => alert(JSON.stringify(err)));
+            } else {
+                this.DisplaySnackBar('Required Email Password')
+
+            }
+        } catch ( error ) {
+            this.DisplaySnackBar("error while register" + error)
+
+        }
     }
 
     forgat = () => {
@@ -58,6 +65,7 @@ class LoginWithEmail extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
+               <SnackBar ref="ReactNativeSnackBar" />
          <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}

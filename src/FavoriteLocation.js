@@ -1,28 +1,78 @@
 import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
+import { SafeAreaView, StyleSheet, TouchableWithoutFeedback, StatusBar, ImageBackground, FlatList, Dimensions, Text, Image, View, TextInput } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import { scale } from './Util';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background, themeColor } from '../Constant/index'
 import styles from './Style';
+import http from '../api'
+import SnackBar from '../Component/SnackBar'
 
 
-var c = 0;
+
 class FavoriteLocation extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            name: ''
+            name: 'Place to Work',
+            dataCheck: [],
         };
+        this.arrayholder = [];
+
+    }
+
+    componentDidMount() {
+
+        try {
+            http.GET('api/appcityjson/get').then((res) => {
+                if (res['data']['status']) {
+                    this.setState({
+                        dataCheck: res['data']['result'],
+                    });
+                    this.arrayholder = res['data']['result'];
+                //            //will get data in this    res['data']['result']
+                } else {
+                    this.DisplaySnackBar(res['data']['message'])
+
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch ( error ) {
+            this.DisplaySnackBar(error)
+
+        }
+    }
+
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
+
+    choose = (choose) => {
+        this.setState({
+            name: choose
+        })
     }
 
     next = () => {
+        global.Job_Location = this.state.name;
         this.props.navigation.navigate('FavoriteCompany')
     }
     back = () => {
         this.props.navigation.goBack();
+    }
+    renderItem = (item, index) => {
+        return (
+            <View style={{
+                width: wp(80),
+                marginLeft: scale(34)
+            }}><TouchableWithoutFeedback onPress={() => this.choose(item)}><Text style={{
+                fontWeight: "bold",
+                fontSize: scale(18),
+                color: themeColor
+            }}>{item}</Text></TouchableWithoutFeedback>
+            </View>
+        )
     }
 
     render() {
@@ -34,6 +84,7 @@ class FavoriteLocation extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
+            <SnackBar ref="ReactNativeSnackBar" />
         
             <View style={styles.MainFlex}>
         <View style={[{
@@ -48,21 +99,58 @@ class FavoriteLocation extends Component {
                 textAlign: 'center'
             }, styles.FontSty]}>What's your favorite location?</Text></View><View style={{
                 top: scale(20)
-            }}><CustomInput placeholder = {'Place to Work'} textChange = {(text) => this.setState({
-                name: text
-            })} inputStyle={{
+            }}><CustomInput placeholder = {this.state.name} textChange = {
+            (text) => {
+                const newData = this.arrayholder.filter(item => {
+                    const itemData = `${item.toUpperCase()}   
+                    ${item.toUpperCase()} ${item.toUpperCase()}`;
+                    const textData = text.toUpperCase();
+                    return itemData.indexOf(textData) > -1;
+                });
+                this.setState({
+                    dataCheck: newData
+                })
+            }}
+            inputStyle={{
                 fontWeight: "bold",
-                fontSize: scale(18)
+                fontSize: scale(18),
+                color: themeColor
+
             }}
             iconStyle={{
                 height: 25,
                 width: 25
             }}
-            /></View></View>
+            /></View>
+            <View style={{
+                width: wp(87),
+                borderRadius: scale(5),
+                height: hp(12),
+                backgroundColor: "#fff"
+            }}><FlatList
+            data = {this.state.dataCheck}
+            showsHorizontalScrollIndicator = { false  }
+            removeClippedSubviews={true}
+            renderItem={({item, index}) => this.renderItem(item, index)}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={70}
+            getItemLayout={(data, index) => (
+            {
+                length: hp('1%'),
+                offset: hp('1%') * index,
+                index
+            }
+            )}
+            keyExtractor = {
+            (item, index) => index + ''
+            }
+            /></View>
+            </View>
             <View style={{
                 flexDirection: "row",
                 width: wp(100),
-                top: hp(40)
+                top: hp(28)
             }}>
             <View style={{
                 alignItems: "flex-start",

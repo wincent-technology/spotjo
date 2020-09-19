@@ -16,13 +16,7 @@ class JobTaskDescription extends Component {
 
         this.state = {
             name: '',
-            FullTime: false,
-            PartTime: false,
-            Employed: false,
-            Internship: false,
-            StudentJobs: false,
-            HelpingVacancies: false,
-            Freelancer: false,
+
         };
     }
 
@@ -67,6 +61,12 @@ class JobTaskDescription extends Component {
                 alignSelf: 'center',
                 textAlignVertical: 'top'
             }}
+            onEndEditing ={(text) => this.setState({
+                name: text
+            }, () => {
+                global.Task_Description = this.state.name;
+
+            })}
             /></View>
            </View>
             </ImageBackground>

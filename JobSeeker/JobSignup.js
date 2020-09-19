@@ -1,5 +1,3 @@
-
-
 import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -10,6 +8,8 @@ import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput';
 import { Background } from '../Constant/index';
 import http from '../api';
+import SnackBar from '../Component/SnackBar'
+
 
 class JobSignup extends Component {
     constructor(props) {
@@ -21,26 +21,31 @@ class JobSignup extends Component {
         };
     }
 
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
+
     onSignup = async () => {
-        const { email, password } = this.state;       
+        const {email, password} = this.state;
         try {
-          if (email.length > 0 && password.length > 0) {
-            http.POST('api/user/register',  {
-                email : email,
-                password: password
-            }).then((res)=> {
-                if (res['data']['status']){                    
-                   this.props.navigation.navigate('TabScreenJob')
-                } else {
-                   alert(res['data']['message']);
-                }
-            }, err=> alert(JSON.stringify(err)));
-          }
-          else {
-               alert("Required Email Password");
-          }
-        } catch (error) {
-            console.log("error while register"+error);         
+            if (email.length > 0 && password.length > 0) {
+                http.POST('api/user/register', {
+                    email: email,
+                    password: password
+                }).then((res) => {
+                    if (res['data']['status']) {
+                        this.props.navigation.navigate('TabScreenJob')
+                    } else {
+                        this.DisplaySnackBar(res['data']['message'])
+                    }
+                }, err => alert(JSON.stringify(err)));
+            } else {
+                this.DisplaySnackBar('Required Email Password')
+
+            }
+        } catch ( error ) {
+            this.DisplaySnackBar("error while register" + error)
+
         }
     }
 
@@ -52,6 +57,7 @@ class JobSignup extends Component {
             resizeMode = {
             'stretch'
             }><StatusBar hidden ={true}/>
+               <SnackBar ref="ReactNativeSnackBar" />
          <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}

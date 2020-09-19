@@ -18,6 +18,9 @@ class JobHiddenCritearia extends Component {
 
         this.state = {
             addSkill: ['J2EE', 'SQL,Mysql', 'Java'],
+            Education: ['MBA', 'BE'],
+            Language: ['English', 'Hindi', 'Kannada'],
+
 
         };
     }
@@ -32,8 +35,31 @@ class JobHiddenCritearia extends Component {
         gems.push(i);
         this.setState({
             addSkill: gems
+        }, () => {
+            global.addSkill = this.state.addSkill
         });
-        console.log('adskil', this.state.addSkill);
+    }
+    Education = (text) => {
+        var i = text;
+        let gems = this.state.addSkill
+        // var in =  this.state.addSkill; 
+        gems.push(i);
+        this.setState({
+            Education: gems
+        }, () => {
+            global.Education = this.state.Education
+        });
+    }
+    Language = (text) => {
+        var i = text;
+        let gems = this.state.addSkill
+        // var in =  this.state.addSkill; 
+        gems.push(i);
+        this.setState({
+            Language: gems
+        }, () => {
+            global.LanguageSkill = this.state.Language
+        });
     }
 
 
@@ -285,7 +311,7 @@ class JobHiddenCritearia extends Component {
                 height: 25,
                 width: 25
             }}
-            onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
+            onSubmitEditing={(event) => this.Education(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
                 marginBottom: 40,
@@ -295,7 +321,7 @@ class JobHiddenCritearia extends Component {
                 justifyContent: "center",
                 width: wp(85)
             }} nestedScrollEnabled={true}>
-            {this.state.addSkill.map((item, index) => {
+            {this.state.Education.map((item, index) => {
                 return (
                     <View style={{
                         flexDirection: 'row',
@@ -370,7 +396,7 @@ class JobHiddenCritearia extends Component {
                 height: 25,
                 width: 25
             }}
-            onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
+            onSubmitEditing={(event) => this.Language(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
                 marginBottom: 30,
@@ -380,7 +406,7 @@ class JobHiddenCritearia extends Component {
                 justifyContent: "center",
                 width: wp(85)
             }} nestedScrollEnabled={true}>
-            {this.state.addSkill.map((item, index) => {
+            {this.state.Language.map((item, index) => {
                 return (
                     <View style={{
                         flexDirection: 'row',

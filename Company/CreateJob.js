@@ -16,6 +16,9 @@ import JobTaskDescription from './JobTaskDescription'
 import JobHiddenCritearia from './JobHiddenCritearia';
 import PreviewJob from './PreviewJob'
 import Swiper from 'react-native-swiper';
+import http from '../api'
+import SnackBar from '../Component/SnackBar'
+
 // import PostedJobList from './PostedJobList';
 // import styles from './Style'
 
@@ -36,26 +39,59 @@ class CreateJob extends PureComponent {
     Back = () => {
         this.props.navigation.goBack()
     }
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
     Exit = () => {
         this.props.navigation.navigate('AdminDashboard');
     }
+    next = () => {
+        this.setState({
+            index: this.state.index + 1
+        })
+    }
+    callApi = () => {
+        try {
+            http.POST('api/appjob/add', {
+                Job_title: global.Job_Title,
+                Company: global.Company,
+                Anywhere: global.Anywhere,
+                Job_Location: global.Job_Location,
+                FullTime: global.FullTime,
+                PartTime: global.PartTime,
+                Employed: global.Employed,
+                Internship: global.Internship,
+                StudentJobs: global.StudentJobs,
+                HelpingVacancies: global.HelpingVacancies,
+                Freelancer: global.Freelancer,
+                Start_date: Date.now(),
+                End_date: Date.now(),
+                City: global.City,
+                Language: global.Language,
+                Task_Description: global.Task_Description,
+                Skill: global.addSkill,
+                Education: global.Education,
+                LanguageSkill: global.LanguageSkill
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('rrrrrrrrr', res['data']['result']);
+                    this.props.navigation.navigate('TabScreen')
+                } else {
+                    this.DisplaySnackBar(res['data']['message'])
 
-    // renderPage = () => {
-    //     const {flagPosted, flagInterView, flagMatches} = this.state;
-    //     if (flagPosted)
-    //         return <JobBasicType />
-    //     else if (flagInterView)
-    //         return <JobPreference />
-    //     else if (flagMatches)
-    //         return <TaskDescription />
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch ( error ) {
+            this.DisplaySnackBar(error)
 
-    // }
+        }
+    }
     render() {
-        console.warn(">>", DeviceInfo.hasNotch())
-
+        const {index} = this.state;
         return (
             <View style={styles.backGround}>
                 <StatusBar hidden={true} />
+            <SnackBar ref="ReactNativeSnackBar"/>
                 <ImageBackground style={styles.ImageBlue}
             source={Background}
             resizeMode={'stretch'}>
@@ -66,11 +102,9 @@ class CreateJob extends PureComponent {
                 marginHorizontal: wp(2),
                 top: hp(4)
             }}>
-                    <Swiper onIndexChanged ={(index) => this.setState({
-                changedindex: index == 0 ? 0 : 1
-            })}
+                    <Swiper
             dotColor={themeWhite}
-            index={0}
+            index={index}
             onIndexChanged={(index) => this.setState({
                 index: index
             })}
@@ -78,13 +112,39 @@ class CreateJob extends PureComponent {
                 top: hp(-95),
                 position: "absolute",
             }}>
-                    <View><JobBasicType /></View>
-                    <View><JobPreference /></View>
-                    <View><JobTaskDescription/></View>
-                    <View><JobHiddenCritearia/></View>
-                    <View><PreviewJob/></View>
-
-                    </Swiper>
+            <View><JobBasicType /></View>
+            <View><JobPreference /></View>
+            <View><JobTaskDescription/></View>
+            <View><JobHiddenCritearia/></View>
+            <View><PreviewJob/></View>
+            </Swiper>
+                     <View style={{
+                flexDirection: "row",
+                width: wp(100),
+                top: hp(76) - hp(5),
+                position: "absolute",
+                zIndex: 999
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                justifyContent: "center",
+                width: wp(20),
+                marginLeft: wp(10)
+            }}>
+            <TouchableWithoutFeedback style={styles.Size} onPress={this.back}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableWithoutFeedback>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                // right: wp(7),
+                width: wp(55)
+            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
+                alignItems: 'flex-end'
+            }]}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            </View>
                     </View>
 
                     <View>
@@ -132,7 +192,7 @@ class CreateJob extends PureComponent {
                     width: wp(103),
                     justifyContent: "center",
                     alignItems: "center"
-                }}><TouchableWithoutFeedback>
+                }}><TouchableWithoutFeedback onPress={this.callApi}>
                     <View style={{
                     flexDirection: "row"
                 }}><Image source={rite} style={{

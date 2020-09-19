@@ -27,6 +27,7 @@ import UserProfile from '../Company/UserProfile'
 import AdminDashboard from '../Company/AdminDashboard'
 import PostedJobList from '../Company/PostedJobList'
 import CreateJob from '../Company/CreateJob'
+import JobPreference from '../Company/JobPreference'
 
 import JobLogin from '../JobSeeker/Login';
 import JobLoginWithEmail from '../JobSeeker/LoginWithEmail';
@@ -398,6 +399,7 @@ const AppNavigator = createStackNavigator({
     Companylogo: Companylogo,
     JobSeekerPhoto: JobSeekerPhoto,
     MyProfile: MyProfile,
+
 }, {
     headerMode: 'none',
     animationEnabled: true,
