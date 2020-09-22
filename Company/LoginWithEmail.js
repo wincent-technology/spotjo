@@ -43,7 +43,7 @@ class LoginWithEmail extends Component {
                     } else {
                         this.DisplaySnackBar(res['data']['message'])
                     }
-                }, err => alert(JSON.stringify(err)));
+                }, err => this.DisplaySnackBar(err['message']))
             } else {
                 this.DisplaySnackBar('Required Email Password')
 

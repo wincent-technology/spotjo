@@ -9,6 +9,8 @@ const CustomButton = props => (<Button title={props.title}
         <Image
         style ={styles.fliterIcon}
         source={props.iconName}
+        resizeMethod={'resize'}
+        resizeMode={'contain'}
         containerStyle = {[{
             left: 10,
             position: props.position ? props.position : "absolute"

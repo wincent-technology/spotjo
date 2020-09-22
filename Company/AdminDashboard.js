@@ -151,8 +151,9 @@ class AdminDashboard extends PureComponent {
                 opacity: this.state.flagPosted ? 1 : 0
             }} resizeMode={'contain'} /><Text style={{
                 fontSize: scale(20),
-                fontFamily: 'Roboto-Regular'
-            }}>Posted Jobs</Text></View></TouchableWithoutFeedback>
+                fontFamily: 'Roboto-Regular',
+                width: wp(97) / 3,
+            }} numberOfLines={1}>Posted Jobs</Text></View></TouchableWithoutFeedback>
                         <TouchableWithoutFeedback onPress={this.Interviews}><View style={{
                 alignItems: 'center',
                 width: wp(95) / 3,

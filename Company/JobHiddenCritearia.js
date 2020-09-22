@@ -17,11 +17,35 @@ class JobHiddenCritearia extends Component {
         super(props);
 
         this.state = {
-            addSkill: ['J2EE', 'SQL,Mysql', 'Java'],
-            Education: ['MBA', 'BE'],
-            Language: ['English', 'Hindi', 'Kannada'],
-
-
+            addSkill: [{
+                name: 'J2EE',
+                rating: 1
+            }, {
+                name: 'SQL,Mysql',
+                rating: 1
+            }, {
+                name: 'Java',
+                rating: 1
+            }],
+            Education: [{
+                name: 'MBA',
+                rating: 1
+            }, {
+                name: 'BE',
+                rating: 1
+            }],
+            Language: [{
+                name: 'English',
+                rating: 1
+            }, {
+                name: 'Kannada',
+                rating: 1
+            }, {
+                name: 'Telugu',
+                rating: 1
+            }],
+            salary: 0,
+            salaryrating: 1
         };
     }
 
@@ -32,7 +56,10 @@ class JobHiddenCritearia extends Component {
         var i = text;
         let gems = this.state.addSkill
         // var in =  this.state.addSkill; 
-        gems.push(i);
+        gems.push({
+            name: i,
+            rating: 1
+        });
         this.setState({
             addSkill: gems
         }, () => {
@@ -41,9 +68,12 @@ class JobHiddenCritearia extends Component {
     }
     Education = (text) => {
         var i = text;
-        let gems = this.state.addSkill
+        let gems = this.state.Education
         // var in =  this.state.addSkill; 
-        gems.push(i);
+        gems.push({
+            name: i,
+            rating: 1
+        });
         this.setState({
             Education: gems
         }, () => {
@@ -52,9 +82,12 @@ class JobHiddenCritearia extends Component {
     }
     Language = (text) => {
         var i = text;
-        let gems = this.state.addSkill
+        let gems = this.state.Language
         // var in =  this.state.addSkill; 
-        gems.push(i);
+        gems.push({
+            name: i,
+            rating: 1
+        });
         this.setState({
             Language: gems
         }, () => {
@@ -62,6 +95,51 @@ class JobHiddenCritearia extends Component {
         });
     }
 
+    handleChange = (value, index, item) => {
+
+        console.log("item", value);
+        var arr = [];
+        arr = this.state.addSkill;
+        arr[0].rating = value;
+        this.setState({
+            addSkill: arr
+        }, () => {
+            global.addSkill = this.state.addSkill
+        });
+    }
+
+    handleEducation = (value, index, item) => {
+
+        console.log("item", value);
+        var arr = [];
+        arr = this.state.Education;
+        arr[0].rating = value;
+        this.setState({
+            Education: arr
+        }, () => {
+            global.Education = this.state.addSkill
+        });
+    }
+    handleLanguage = (value, index, item) => {
+
+        console.log("item", value);
+        var arr = [];
+        arr = this.state.Language;
+        arr[0].rating = value;
+        this.setState({
+            Language: arr
+        }, () => {
+            global.LanguageSkill = this.state.addSkill
+        });
+    }
+
+    handlesalary = (value, index, item) => {
+        this.setState({
+            salaryrating: value
+        }, () => {
+            global.salaryrating = this.state.salaryrating
+        });
+    }
 
     render() {
         const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
@@ -128,7 +206,7 @@ class JobHiddenCritearia extends Component {
             /><ScrollView  style={{
                 marginTop: '-5%',
                 marginBottom: 20,
-                height: scale(50),
+                height: scale(100),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -153,7 +231,7 @@ class JobHiddenCritearia extends Component {
                         color: themeWhite,
                         fontFamily: 'Roboto-Regular',
                     }}>
-                      {item}
+                      {item.name}
                     </Text></View><View style={{
                         alignItems: "flex-end",
                         justifyContent: "center",
@@ -163,10 +241,11 @@ class JobHiddenCritearia extends Component {
                     type='custom'
                     imageSize={18}
                     ratingCount={5}
-                    defaultRating={20}
+                    defaultRating={item.rating}
                     readonly={false}
                     ratingBackgroundColor='transparent'
                     startingValue={0}
+                    onFinishRating={(value, index, item) => this.handleChange(value, index, item)}
                     // ratingColor={"#f1ee40"}
                     // tintColor={themeWhite}
                     /></View></View>
@@ -213,7 +292,7 @@ class JobHiddenCritearia extends Component {
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
                 marginBottom: 20,
-                height: scale(50),
+                height: scale(100),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -224,7 +303,7 @@ class JobHiddenCritearia extends Component {
                 height: scale(27),
             }}><View style={styles.FilterMinimumSalaryMin}><Text style={[styles.FilterMinText, {
                 color: themeWhite
-            }]}>0</Text>
+            }]}>{Math.round(this.state.salary)}</Text>
             <Text style={[styles.FilterMaxText, {
                 color: themeWhite
             }]}>150k+</Text></View><Slider
@@ -235,7 +314,12 @@ class JobHiddenCritearia extends Component {
                 alignSelf: 'center',
             }}
             minimumValue={0}
-            maximumValue={1}
+            maximumValue={150}
+            onValueChange={ value => {
+                this.setState({
+                    salary: value,
+                }, () => global.salary = this.state.salary);
+            }}
             minimumTrackTintColor={themeWhite}
             maximumTrackTintColor={themeWhite}
             /></View>
@@ -267,10 +351,12 @@ class JobHiddenCritearia extends Component {
             type='custom'
             imageSize={18}
             ratingCount={5}
-            defaultRating={20}
+            defaultRating={this.state.salaryrating}
             readonly={false}
             ratingBackgroundColor='transparent'
             startingValue={0}
+            onFinishRating={(value, index, item) => this.handlesalary(value, index, item)}
+
             // ratingColor={"#f1ee40"}
             // tintColor={themeWhite}
             /></View></View>
@@ -315,7 +401,7 @@ class JobHiddenCritearia extends Component {
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
                 marginBottom: 40,
-                height: scale(50),
+                height: scale(100),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -340,7 +426,7 @@ class JobHiddenCritearia extends Component {
                         color: themeWhite,
                         fontFamily: 'Roboto-Regular',
                     }}>
-                      {item}
+                      {item.name}
                     </Text></View><View style={{
                         alignItems: "flex-end",
                         justifyContent: "center",
@@ -350,10 +436,12 @@ class JobHiddenCritearia extends Component {
                     type='custom'
                     imageSize={18}
                     ratingCount={5}
-                    defaultRating={20}
+                    defaultRating={item.rating}
                     readonly={false}
                     ratingBackgroundColor='transparent'
                     startingValue={0}
+                    onFinishRating={(value, index, item) => this.handleEducation(value, index, item)}
+
                     // ratingColor={"#f1ee40"}
                     // tintColor={themeWhite}
                     /></View></View>
@@ -400,7 +488,7 @@ class JobHiddenCritearia extends Component {
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
                 marginBottom: 30,
-                height: scale(50),
+                height: scale(100),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -425,7 +513,7 @@ class JobHiddenCritearia extends Component {
                         color: themeWhite,
                         fontFamily: 'Roboto-Regular',
                     }}>
-                      {item}
+                      {item.name}
                     </Text></View><View style={{
                         alignItems: "flex-end",
                         justifyContent: "center",
@@ -435,10 +523,12 @@ class JobHiddenCritearia extends Component {
                     type='custom'
                     imageSize={18}
                     ratingCount={5}
-                    defaultRating={20}
+                    defaultRating={item.rating}
                     readonly={false}
                     ratingBackgroundColor='transparent'
                     startingValue={0}
+                    onFinishRating={(value, index, item) => this.handleLanguage(value, index, item)}
+
                     // ratingColor={"#f1ee40"}
                     // tintColor={themeWhite}
                     /></View></View>

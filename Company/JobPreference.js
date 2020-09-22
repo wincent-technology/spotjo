@@ -9,6 +9,8 @@ import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract }
 import styles from '../src/Style';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import http from '../api';
+import { play } from '../src/IconManager'
+
 
 
 class JobBasicType extends Component {
@@ -29,17 +31,23 @@ class JobBasicType extends Component {
         };
     }
     onChange = (event, selectedDate) => {
+        console.log('select date', new Date(selectedDate).toLocaleDateString());
+        if (selectedDate === undefined)
+            return;
+
         this.setState({
-            Start_date: selectedDate
+            Start_date: new Date(selectedDate).toLocaleDateString()
         });
-        global.Start_date = selectedDate
+        global.Start_date = new Date(selectedDate).toLocaleDateString()
 
     };
     onChange1 = (event, selectedDate) => {
+        if (selectedDate === undefined)
+            return;
         this.setState({
-            End_date: selectedDate
+            End_date: new Date(selectedDate).toLocaleDateString()
         });
-        global.End_date = selectedDate
+        global.End_date = new Date(selectedDate).toLocaleDateString()
 
     };
     next = () => {
@@ -47,10 +55,11 @@ class JobBasicType extends Component {
     }
 
     setSelectedValue = (selectedValue) => {
+        console.log('selectedValue', selectedValue);
         this.setState({
             selectedValue: selectedValue
         })
-        global.city = selectedValue
+        global.City = selectedValue
 
     }
 
@@ -136,66 +145,68 @@ class JobBasicType extends Component {
             }}>Job Preferences</Text></View>
             <View style={{
                 marginTop: hp(10)
-            }}><CustomInput placeholder = {'start Date'} textChange = {(text) => this.setState({
-                name: text
-            })} inputContainerStyle={{
+            }}><View style={{
                 backgroundColor: themeColor,
-                // width: "100%",
+                width: wp(70),
                 height: scale(40),
                 borderColor: themeColor,
-                justifyContent: "center",
+                alignItems: "center",
                 borderWidth: scale(1),
                 borderRadius: scale(5),
-            }} inputStyle={{
+                flexDirection: "row"
+            }} onStartShouldSetResponder={() => this.setState({
+                show: !this.state.show
+            })}><View  style={{
+                marginLeft: 10,
+                width: wp(50),
+                alignItems: "flex-start"
+            }}><Text style={{
                 color: 'white',
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 fontWeight: "bold"
-            }}
-            placeholderTextColor={themeWhite}
-            containerStyle={{
-                width: wp(75),
-                height: scale(45)
-            }}
-            iconName={'calendar-sharp'}
-            iconColor={themeWhite}
-            onSubmitEditing={() => this.setState({
-                // show: !this.state.show
-            })}
-            /></View>
+            }}>{new Date(this.state.Start_date).toLocaleDateString()}</Text></View>
+            <View style={{
+                marginLeft: 10,
+                width: wp(10),
+                alignItems: "flex-end"
+            }}>
+    {play('calendar-sharp', scale(20), themeWhite)}</View>
+            </View></View>
              <View style={{
                 marginTop: hp(2)
-            }}><CustomInput placeholder = {'End Date'} textChange = {(text) => this.setState({
-                name: text
-            })} inputContainerStyle={{
+            }}><View style={{
                 backgroundColor: themeColor,
-                // width: "100%",
+                width: wp(70),
                 height: scale(40),
                 borderColor: themeColor,
-                justifyContent: "center",
+                alignItems: "center",
                 borderWidth: scale(1),
                 borderRadius: scale(5),
-            }} inputStyle={{
+                flexDirection: "row"
+            }} onStartShouldSetResponder={() => this.setState({
+                show1: !this.state.show1
+            })}><View  style={{
+                marginLeft: 10,
+                width: wp(50),
+                alignItems: "flex-start"
+            }}><Text style={{
                 color: 'white',
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 fontWeight: "bold"
-            }}
-            placeholderTextColor={themeWhite}
-            containerStyle={{
-                width: wp(75),
-                height: scale(45)
-            }}
-            iconName={'calendar-sharp'}
-            iconColor={themeWhite}
-            onSubmitEditing={() => this.setState({
-                // show1: !this.state.show1
-            })}
-            /></View>
+            }}>{new Date(this.state.End_date).toLocaleDateString()}</Text></View>
+            <View style={{
+                marginLeft: 10,
+                width: wp(10),
+                alignItems: "flex-end"
+            }}>
+    {play('calendar-sharp', scale(20), themeWhite)}</View>
+            </View></View>
             {show && (
             <DateTimePicker
             testID="dateTimePicker"
-            value={this.state.currentDate}
+            value={new Date(new Date(this.state.Start_date).toLocaleDateString())}
             mode={'date'}
             is24Hour={true}
             display="default"
@@ -204,7 +215,7 @@ class JobBasicType extends Component {
             )}{show1 && (
             <DateTimePicker
             testID="dateTimePicker"
-            value={this.state.currentDate}
+            value={new Date(new Date(this.state.End_date).toLocaleDateString())}
             mode={'date'}
             is24Hour={true}
             display="default"
@@ -221,8 +232,8 @@ class JobBasicType extends Component {
             }}><Picker
             selectedValue={this.state.selectedValue}
             style={{
-                width: wp(75),
-                height: scale(45),
+                width: wp(65),
+                height: scale(40),
             // backgroundColor: themeColor
             }}
             onValueChange={(itemValue, itemIndex) => this.setSelectedValue(itemValue)}
@@ -238,8 +249,8 @@ class JobBasicType extends Component {
             }}><Picker
             selectedValue={this.state.selectedValue1}
             style={{
-                width: wp(75),
-                height: scale(45),
+                width: wp(65),
+                height: scale(40),
             }}
             onValueChange={(itemValue, itemIndex) => this.setSelectedValue1(itemValue)}
             >{PickerItem}

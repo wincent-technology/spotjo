@@ -110,6 +110,7 @@ const TabScreen = createBottomTabNavigator({
     tabBarPosition: 'bottom',
     lazy: false,
     tabBarOptions: {
+        keyboardHidesTabBar: true,
         tabBarBadge: 3,
         activeTintColor: themeWhite,
         inactiveTintColor: themeWhite,
@@ -221,6 +222,7 @@ const TabScreenJob = createBottomTabNavigator({
     tabBarPosition: 'bottom',
     lazy: false,
     tabBarOptions: {
+        keyboardHidesTabBar: true,
         tabBarBadge: 3,
         activeTintColor: themeWhite,
         inactiveTintColor: themeWhite,
@@ -321,6 +323,7 @@ const TabScreenCompany = createBottomTabNavigator({
     tabBarPosition: 'bottom',
     lazy: false,
     tabBarOptions: {
+        keyboardHidesTabBar: true,
         tabBarBadge: 3,
         activeTintColor: themeWhite,
         inactiveTintColor: themeWhite,

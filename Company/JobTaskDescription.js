@@ -24,6 +24,15 @@ class JobTaskDescription extends Component {
         this.props.navigation.navigate('TabScreen')
     }
 
+
+    handleChange = (text) => {
+        // event.persist();
+        console.log("textArea", text);
+        this.setState({
+            name: text
+        })
+        global.Task_Description = this.state.name;
+    }
     render() {
         const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
         return (
@@ -61,12 +70,8 @@ class JobTaskDescription extends Component {
                 alignSelf: 'center',
                 textAlignVertical: 'top'
             }}
-            onEndEditing ={(text) => this.setState({
-                name: text
-            }, () => {
-                global.Task_Description = this.state.name;
+            onChangeText ={(text) => this.handleChange(text)}
 
-            })}
             /></View>
            </View>
             </ImageBackground>

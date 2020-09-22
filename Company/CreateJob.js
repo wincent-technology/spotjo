@@ -51,12 +51,35 @@ class CreateJob extends PureComponent {
         })
     }
     callApi = () => {
+        console.log('total Api call',
+            global.Job_Title,
+            global.Company,
+            global.Anywhere,
+            global.salary,
+            global.Job_Location,
+            global.FullTime,
+            global.PartTime,
+            global.Employed,
+            global.Internship,
+            global.StudentJobs,
+            global.HelpingVacancies,
+            global.Freelancer,
+            new Date(Date.now()).toLocaleDateString(),
+            Date.now(),
+            global.City,
+            global.Language,
+            global.Task_Description,
+            global.addSkill,
+            global.Education,
+            global.LanguageSkill);
         try {
             http.POST('api/appjob/add', {
                 Job_title: global.Job_Title,
                 Company: global.Company,
-                Anywhere: global.Anywhere,
-                Job_Location: global.Job_Location,
+                Anywhere: global.Anywhere || false,
+                Salary: Math.round(global.salary),
+                salRating: global.salaryrating,
+                Job_Location: global.Job_Location || global.City,
                 FullTime: global.FullTime,
                 PartTime: global.PartTime,
                 Employed: global.Employed,
@@ -64,8 +87,8 @@ class CreateJob extends PureComponent {
                 StudentJobs: global.StudentJobs,
                 HelpingVacancies: global.HelpingVacancies,
                 Freelancer: global.Freelancer,
-                Start_date: Date.now(),
-                End_date: Date.now(),
+                Start_date: new Date(Date.now()).toLocaleDateString() || global.Start_date,
+                End_date: new Date(Date.now()).toLocaleDateString() || global.Start_date,
                 City: global.City,
                 Language: global.Language,
                 Task_Description: global.Task_Description,
@@ -75,7 +98,8 @@ class CreateJob extends PureComponent {
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
-                    this.props.navigation.navigate('TabScreen')
+                    this.callPostedJob();
+
                 } else {
                     this.DisplaySnackBar(res['data']['message'])
 
@@ -85,6 +109,31 @@ class CreateJob extends PureComponent {
             this.DisplaySnackBar(error)
 
         }
+    }
+
+    callPostedJob = () => {
+        try {
+            http.GET('api/job/get').then((res) => {
+                if (res['data']['status']) {
+                    console.log(">>>>>>>>>>>>", JSON.stringify(res['data']['result'][3]['description']));
+                // var arr = [];
+                // let i = res['data']['result'][3]['description']
+                // arr = i.split("\n");
+                // console.log("<<<", i.split("\n"));
+                // for (var j = 0; j < arr.length; j++)
+                //     console.log(">>", arr[j]);
+                } else {
+                    console.log('res', res);
+                    alert(res[0]['data']['message']['message']);
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch ( error ) {
+            console.log("error while register" + error);
+        }
+    }
+    componentDidMount() {
+        this.callPostedJob();
+
     }
     render() {
         const {index} = this.state;
