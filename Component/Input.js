@@ -69,7 +69,7 @@ export default CustomInput = (props) => <Input
     <View style={{
         marginRight: 10
     }}>
-    {play(props.iconName ? props.iconName : 'add-outline', scale(20), props.iconColor ? props.iconColor : themeColor)}</View>
+    {play(props.iconNames ? props.iconNames : 'add-outline', scale(20), props.iconColor ? props.iconColor : themeColor)}</View>
     }
     rightIconContainerStyle = {[
         {

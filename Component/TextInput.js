@@ -24,10 +24,10 @@ export default CustomInput = (props) => <Input
         marginBottom: scale(-6)
     }
         , props.inputContainerStyle]}
-    inputStyle={{
+    inputStyle={[{
         fontSize: scale(16),
         color: themeWhite
-    }}
+    }, props.inputStyle]}
     keyboardType = {props.keyboardType ? props.keyboardType : 'default'  }
     placeholder={props.placeholder}
     placeholderTextColor = {themeWhite}

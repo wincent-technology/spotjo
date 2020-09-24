@@ -4,7 +4,7 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale } from '../src/Util';
 import CustomInput from '../Component/TextInput'
-import { Background } from '../Constant/index'
+import { Background, url } from '../Constant/index'
 import http from '../api';
 import SnackBar from '../Component/SnackBar'
 
@@ -31,13 +31,29 @@ class LoginWithEmail extends Component {
                     password: password
                 }).then((res) => {
                     if (res['data']['status']) {
-                        // will get data in this    res['data']['result']             
+                        console.log('responce user', res['data']['result'])
+                        global.Id = res['data']['result']['id'];
+                        // will get data in this    res['data']['result'] 
+                        global.firstName = res['data']['result']['first_name']
+                        global.lastName = res['data']['result']['last_name']
+                        global.UserEmail = res['data']['result']['email']
+                        global.Place = res['data']['result']['place']
+                        global.UserMobile = res['data']['result']['mobile']
+                        global.UserProfile = url + '/images/user/' + res['data']['result']['profile']
+                        global.Video = res['data']['result']['video']
+                        global.UserSkill = res['data']['result']['skills']
+                        global.UserLanguage = res['data']['result']['language']
+                        global.Qualification = res['data']['result']['qualification']
+                        global.UserEducation = res['data']['result']['education']
+                        global.salaryrating = res['data']['result']['salaryrating']
+                        global.salary = res['data']['result']['minSal']
+                        global.Experience = res['data']['result']['experience']
                         this.props.navigation.navigate('TabScreenJob')
                     } else {
                         this.DisplaySnackBar(res['data']['message'])
 
                     }
-                }, err => alert(JSON.stringify(err)));
+                }, err => this.DisplaySnackBar(err['message']))
             } else {
                 this.DisplaySnackBar('Required Email Password')
 

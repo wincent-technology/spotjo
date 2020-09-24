@@ -11,6 +11,7 @@ import Filter from '../src/Filter';
 import CompanyProfile from '../src/CompanyProfile';
 import ScreenMap from '../src/ScreenMap';
 import LoginFirst from '../src/LoginFirst';
+import VideoPlayer from '../src/VideoPlayer'
 
 import CompanyLogin from '../Company/Login';
 import LoginWithEmail from '../Company/LoginWithEmail';
@@ -160,7 +161,9 @@ const jobli = createStackNavigator({
     JobCompanyProfile: JobCompanyProfile,
     BasicInfoOfCompany: BasicInfoOfCompany,
     JobDescription: JobDescription,
-    JobAboutCompany: JobAboutCompany
+    JobAboutCompany: JobAboutCompany,
+
+
 }, {
     headerMode: 'none',
     initialRouteName: 'JobSeekerlist',
@@ -402,6 +405,7 @@ const AppNavigator = createStackNavigator({
     Companylogo: Companylogo,
     JobSeekerPhoto: JobSeekerPhoto,
     MyProfile: MyProfile,
+    VideoPlayer: VideoPlayer
 
 }, {
     headerMode: 'none',

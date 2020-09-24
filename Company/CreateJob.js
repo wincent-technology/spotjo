@@ -79,7 +79,7 @@ class CreateJob extends PureComponent {
                 Anywhere: global.Anywhere || false,
                 Salary: Math.round(global.salary),
                 salRating: global.salaryrating,
-                Job_Location: global.Job_Location || global.City,
+                Job_Location: global.City,
                 FullTime: global.FullTime,
                 PartTime: global.PartTime,
                 Employed: global.Employed,
@@ -87,8 +87,8 @@ class CreateJob extends PureComponent {
                 StudentJobs: global.StudentJobs,
                 HelpingVacancies: global.HelpingVacancies,
                 Freelancer: global.Freelancer,
-                Start_date: new Date(Date.now()).toLocaleDateString() || global.Start_date,
-                End_date: new Date(Date.now()).toLocaleDateString() || global.Start_date,
+                Start_date: global.Start_date,
+                End_date: global.End_date,
                 City: global.City,
                 Language: global.Language,
                 Task_Description: global.Task_Description,
@@ -261,4 +261,4 @@ class CreateJob extends PureComponent {
 }
 ;
 
-export default withNavigationFocus(CreateJob);
+export default CreateJob;

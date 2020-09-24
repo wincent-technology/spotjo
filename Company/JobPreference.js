@@ -32,22 +32,34 @@ class JobBasicType extends Component {
     }
     onChange = (event, selectedDate) => {
         console.log('select date', new Date(selectedDate).toLocaleDateString());
-        if (selectedDate === undefined)
+        if (selectedDate === undefined) {
+            this.setState({
+                show: !this.state.show
+            })
             return;
+        } else {
 
-        this.setState({
-            Start_date: new Date(selectedDate).toLocaleDateString()
-        });
-        global.Start_date = new Date(selectedDate).toLocaleDateString()
+            this.setState({
+                show: !this.state.show,
+                Start_date: new Date(selectedDate).toLocaleDateString()
+            });
+            global.Start_date = new Date(selectedDate).toLocaleDateString()
+        }
 
     };
     onChange1 = (event, selectedDate) => {
-        if (selectedDate === undefined)
+        if (selectedDate === undefined) {
+            this.setState({
+                show1: !this.state.show1
+            })
             return;
-        this.setState({
-            End_date: new Date(selectedDate).toLocaleDateString()
-        });
-        global.End_date = new Date(selectedDate).toLocaleDateString()
+        } else {
+            this.setState({
+                show1: !this.state.show1,
+                End_date: new Date(selectedDate).toLocaleDateString()
+            });
+            global.End_date = new Date(selectedDate).toLocaleDateString()
+        }
 
     };
     next = () => {

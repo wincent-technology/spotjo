@@ -24,16 +24,11 @@ class ItemMV extends PureComponent {
                 // height: hp(4),
                 width: wp('80%')
             }}><Text style={{
-                width: "100%",
-            }} numberOfLines={1}>{this.props.item.heading.map((item, index) => {
-                return (
-                    <Text key={index} style={{
-                        fontFamily: FontBold,
-                        fontSize: scale(18),
-                        color: themeColor
-                    }}>{item}{index > 0 ? (<Text>|</Text>) : (<Text> </Text>)}</Text>
-                )
-            })}</Text><View style={{
+                fontFamily: FontBold,
+                fontSize: scale(18),
+                color: themeColor
+            }}>{this.props.item.heading}</Text>
+            <View style={{
                 flexDirection: 'row',
                 paddingBottom: hp(1),
             }}><Text style={{
@@ -45,7 +40,7 @@ class ItemMV extends PureComponent {
                 fontFamily: FontBold,
                 fontSize: scale(14),
                 color: '#000'
-            }}>{this.props.item.Experience}</Text>
+            }}>{this.props.item.From} - {this.props.item.To}</Text>
                     </View>
                      <View style={{
                 borderBottomWidth: scale(2),

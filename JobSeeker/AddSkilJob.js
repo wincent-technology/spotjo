@@ -13,6 +13,9 @@ import Slider from '@react-native-community/slider';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
 import { FontBold, FontRegular, Background } from '../Constant/index'
 import ItemMV from './ItemMV'
+import http from '../api';
+
+import SnackBar from '../Component/SnackBar'
 
 
 class AddskilJob extends Component {
@@ -20,7 +23,35 @@ class AddskilJob extends Component {
         super(props);
 
         this.state = {
-            addSkill: ['J2EE', 'SQL,Mysql', 'Java'],
+            addSkill: [{
+                name: 'J2EE',
+                rating: 1
+            }, {
+                name: 'SQL,Mysql',
+                rating: 1
+            }, {
+                name: 'Java',
+                rating: 1
+            }],
+            Education: [{
+                name: 'MBA',
+                rating: 1
+            }, {
+                name: 'BE',
+                rating: 1
+            }],
+            Language: [{
+                name: 'English',
+                rating: 1
+            }, {
+                name: 'Kannada',
+                rating: 1
+            }, {
+                name: 'Telugu',
+                rating: 1
+            }],
+            salary: 0,
+            salaryrating: 1
         };
     }
 
@@ -28,27 +59,139 @@ class AddskilJob extends Component {
         tabBarVisible: true,
         animationEnabled: true
     })
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
     Back = () => {
         // console.log("hi");
         this.props.navigation.goBack()
     }
     save = () => {
+        try {
+            http.POST('api/user/editskill', {
+                id: global.Id,
+                skills: global.UserSkill,
+                qualification: global.Qualification,
+                language: global.UserLanguage,
+                salRatting: global.salaryrating,
+                minSal: Math.round(global.salary)
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('responce user', res['data']['result'])
+                    this.props.navigation.navigate('JobEditProfile');
+                } else {
+                    this.DisplaySnackBar(res['data']['message'])
+                }
+            }, err => this.DisplaySnackBar(err['message']))
+        } catch ( error ) {
+            this.DisplaySnackBar("error while updating" + error)
+
+        }
         // alert('video is coming soon');
-        this.props.navigation.navigate('JobEditProfile');
+
     }
     Personal = () => {
         this.props.navigation.navigate('Personal');
+    }
+    componentDidMount() {
+        console.log('this.state', global.UserSkill);
+        this.setState({
+            addSkill: global.UserSkill,
+            Education: global.Qualification,
+            Language: global.UserLanguage,
+            salary: global.salary,
+            salaryrating: global.salaryrating
+        })
     }
     addsSkill = (text) => {
         var i = text;
         let gems = this.state.addSkill
         // var in =  this.state.addSkill; 
-        gems.push(i);
+        gems.push({
+            name: i,
+            rating: 1
+        });
         this.setState({
             addSkill: gems
+        }, () => {
+            global.UserSkill = this.state.addSkill
         });
-        console.log('adskil', this.state.addSkill);
     }
+    Education = (text) => {
+        var i = text;
+        let gems = this.state.Education
+        // var in =  this.state.addSkill; 
+        gems.push({
+            name: i,
+            rating: 1
+        });
+        this.setState({
+            Education: gems
+        }, () => {
+            global.Qualification = this.state.Education
+        });
+    }
+    Language = (text) => {
+        var i = text;
+        let gems = this.state.Language
+        // var in =  this.state.addSkill; 
+        gems.push({
+            name: i,
+            rating: 1
+        });
+        this.setState({
+            Language: gems
+        }, () => {
+            global.UserLanguage = this.state.Language
+        });
+    }
+
+    handleChange = (value, index, item) => {
+
+        console.log("item", value);
+        var arr = [];
+        arr = this.state.addSkill;
+        arr[0].rating = value;
+        this.setState({
+            addSkill: arr
+        }, () => {
+            global.UserSkill = this.state.addSkill
+        });
+    }
+
+    handleEducation = (value, index, item) => {
+
+        console.log("item", value);
+        var arr = [];
+        arr = this.state.Education;
+        arr[0].rating = value;
+        this.setState({
+            Education: arr
+        }, () => {
+            global.Qualification = this.state.Education
+        });
+    }
+    handleLanguage = (value, index, item) => {
+
+        console.log("item", value);
+        var arr = [];
+        arr = this.state.Language;
+        arr[0].rating = value;
+        this.setState({
+            Language: arr
+        }, () => {
+            global.UserLanguage = this.state.Language
+        });
+    }
+
+    handlesalary = (value, index, item) => {
+        this.setState({
+            salaryrating: value
+        }, () => {
+            global.salaryrating = this.state.salaryrating
+        });
+    }
+
 
 
     render() {
@@ -59,6 +202,7 @@ class AddskilJob extends Component {
             source={Background}
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
+               <SnackBar ref="ReactNativeSnackBar" />
             <NavigationHead centerComponent='Skills' rightComponent="Save" onPress={() => this.Back()} onExit={() => this.save()}/>
                     <ImageBackground style={{
                 width: wp('96%'),
@@ -93,18 +237,19 @@ class AddskilJob extends Component {
             }}>Edit Skills</Text></View>
             <ScrollView style={{
                 alignSelf: 'stretch',
+                top: hp(-3),
             }} nestedScrollEnabled={true}>
           <View style={{
                 width: '90%',
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(0),
-                height: hp('19%'),
-                backgroundColor: themeWhite,
+                height: hp('22%'),
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('1%'),
                 borderRadius: scale(20),
             }}>
-           <CustomInput placeholder = {'Add Skill'} textChange = {(text) => this.setState({
+           <CustomInput placeholder = {'Select Skill'} textChange = {(text) => this.setState({
                 name: text
             })} inputContainerStyle={{
                 height: scale(40),
@@ -124,31 +269,29 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconColor={themeWhite}
             iconStyle={{
                 height: 25,
                 width: 25
             }}
-            iconColor={'#fff'}
-
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  style={{
-                marginTop: '-5%',
-                marginBottom: 40,
-                height: scale(50),
+                marginTop: '-7%',
+                marginBottom: 27,
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
+                width: wp(85),
+                flexGrow: 1
             }} nestedScrollEnabled={true}>
             {this.state.addSkill.map((item, index) => {
                 return (
-                    <View style={{
+                    <View key={index} style={{
                         flexDirection: 'row',
                         width: wp(85),
                         justifyContent: "center",
                         marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(18)
+                    // marginLeft: '3%',
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -159,7 +302,7 @@ class AddskilJob extends Component {
                         color: themeColor,
                         fontFamily: 'Roboto-Regular',
                     }}>
-                      {item}
+                      {item.name}
                     </Text></View><View style={{
                         alignItems: "flex-end",
                         justifyContent: "center",
@@ -169,10 +312,11 @@ class AddskilJob extends Component {
                     type='custom'
                     imageSize={18}
                     ratingCount={5}
-                    defaultRating={20}
+                    defaultRating={item.rating}
                     readonly={false}
                     ratingBackgroundColor='transparent'
                     startingValue={0}
+                    onFinishRating={(value, index, item) => this.handleChange(value, index, item)}
                     // ratingColor={"#f1ee40"}
                     // tintColor={themeWhite}
                     /></View></View>
@@ -184,14 +328,14 @@ class AddskilJob extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(-5),
-                height: hp('17%'),
-                backgroundColor: themeWhite,
+                height: hp('22%'),
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
             // elevation: 7,
             }}>
-           <CustomInput placeholder = {'Add Salary Range'} textChange = {(text) => this.setState({
+           <CustomInput placeholder = {'Select Salary Range'} textChange = {(text) => this.setState({
                 name: text
             })} inputContainerStyle={{
                 height: scale(40),
@@ -201,7 +345,7 @@ class AddskilJob extends Component {
                 borderWidth: scale(1),
                 borderRadius: scale(5),
             }} inputStyle={{
-                color: 'white',
+                color: themeWhite,
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 fontWeight: "bold"
@@ -211,29 +355,44 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconColor={themeWhite}
+            iconStyle={{
+                height: 0,
+                width: 0
+            }}
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
-                marginTop: '-5%',
-                marginBottom: 20,
-                height: scale(50),
+                marginTop: '-7%',
+                marginBottom: 15,
+            // height: scale(100),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
+                width: wp(85),
             }} nestedScrollEnabled={true}>
-            <View style={{
+           <View style={{
                 width: wp('85%'),
-                height: scale(27),
-            }}><View style={styles.FilterMinimumSalaryMin}><Text style={styles.FilterMinText}>0</Text>
-            <Text style={styles.FilterMaxText}>150k+</Text></View><Slider
+                height: scale(50),
+            }}><View style={styles.FilterMinimumSalaryMin}><Text style={[styles.FilterMinText, {
+                color: themeColor
+            }]}>{Math.round(this.state.salary)}</Text>
+            <Text style={[styles.FilterMaxText, {
+                color: themeColor
+            }]}>150k+</Text></View><Slider
             style={{
                 width: wp('85%'),
-                height: scale(5),
+                height: scale(10),
                 flex: 1,
                 alignSelf: 'center',
             }}
             minimumValue={0}
-            maximumValue={1}
+            maximumValue={150}
+            onValueChange={ value => {
+                this.setState({
+                    salary: value,
+                }, () => global.salary = this.state.salary);
+            }}
+            thumbTintColor={themeColor}
             minimumTrackTintColor={themeColor}
             maximumTrackTintColor={themeColor}
             /></View>
@@ -241,9 +400,9 @@ class AddskilJob extends Component {
                 flexDirection: 'row',
                 width: wp(85),
                 justifyContent: "center",
-                marginBottom: scale(2),
+                marginTop: scale(-3),
                 // marginLeft: '3%',
-                height: scale(15)
+                height: scale(22)
             }}>
             <View style={{
                 alignItems: "flex-start",
@@ -265,10 +424,12 @@ class AddskilJob extends Component {
             type='custom'
             imageSize={18}
             ratingCount={5}
-            defaultRating={20}
+            defaultRating={this.state.salaryrating}
             readonly={false}
             ratingBackgroundColor='transparent'
             startingValue={0}
+            onFinishRating={(value, index, item) => this.handlesalary(value, index, item)}
+
             // ratingColor={"#f1ee40"}
             // tintColor={themeWhite}
             /></View></View>
@@ -278,14 +439,14 @@ class AddskilJob extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(-7),
-                height: hp('20%'),
-                backgroundColor: themeWhite,
+                height: hp('22%'),
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
             // elevation: 7,
             }}>
-           <CustomInput placeholder = {'Add Education'} textChange = {(text) => this.setState({
+           <CustomInput placeholder = {'Select Education'} textChange = {(text) => this.setState({
                 name: text
             })} inputContainerStyle={{
                 height: scale(40),
@@ -295,7 +456,7 @@ class AddskilJob extends Component {
                 borderWidth: scale(1),
                 borderRadius: scale(5),
             }} inputStyle={{
-                color: 'white',
+                color: themeWhite,
                 fontSize: scale(18),
                 fontFamily: "Roboto-Bold",
                 fontWeight: "bold"
@@ -305,31 +466,30 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconColor={themeWhite}
             iconStyle={{
                 height: 25,
                 width: 25
             }}
-            iconColor={'#fff'}
-
-            onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
+            onSubmitEditing={(event) => this.Education(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
-                marginTop: '-5%',
-                marginBottom: 40,
-                height: scale(50),
+                marginTop: '-7%',
+                marginBottom: 30,
+            // height: scale(200),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
                 width: wp(85)
             }} nestedScrollEnabled={true}>
-            {this.state.addSkill.map((item, index) => {
+            {this.state.Education && this.state.Education.map((item, index) => {
                 return (
-                    <View style={{
+                    <View key={index} style={{
                         flexDirection: 'row',
                         width: wp(85),
                         justifyContent: "center",
                         marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(18)
+                    // marginLeft: '3%',
+                    // height: scale(15)
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -340,7 +500,7 @@ class AddskilJob extends Component {
                         color: themeColor,
                         fontFamily: 'Roboto-Regular',
                     }}>
-                      {item}
+                      {item.name}
                     </Text></View><View style={{
                         alignItems: "flex-end",
                         justifyContent: "center",
@@ -350,10 +510,12 @@ class AddskilJob extends Component {
                     type='custom'
                     imageSize={18}
                     ratingCount={5}
-                    defaultRating={20}
+                    defaultRating={item.rating}
                     readonly={false}
                     ratingBackgroundColor='transparent'
                     startingValue={0}
+                    onFinishRating={(value, index, item) => this.handleEducation(value, index, item)}
+
                     // ratingColor={"#f1ee40"}
                     // tintColor={themeWhite}
                     /></View></View>
@@ -365,14 +527,14 @@ class AddskilJob extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(-12),
-                height: hp('18%'),
-                backgroundColor: themeWhite,
+                height: hp('22%'),
+                backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
             // elevation: 7,
             }}>
-           <CustomInput placeholder = {'Add Languages'} textChange = {(text) => this.setState({
+           <CustomInput placeholder = {'Select Languages'} textChange = {(text) => this.setState({
                 name: text
             })} inputContainerStyle={{
                 height: scale(40),
@@ -392,32 +554,31 @@ class AddskilJob extends Component {
             }}
             placeholderTextColor={themeWhite}
             iconName={iconSearch}
+            iconColor={themeWhite}
             iconStyle={{
                 height: 25,
                 width: 25
             }}
-            iconColor={'#fff'}
-
-            onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
+            onSubmitEditing={(event) => this.Language(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
-                marginTop: '-5%',
-                marginBottom: 30,
-                height: scale(50),
+                marginTop: '-7%',
+                marginBottom: 15,
+            // height: hp(50),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
+                width: wp(85),
+            // height: hp(15),
             }} nestedScrollEnabled={true}>
-            {this.state.addSkill.map((item, index) => {
+            {this.state.Language && this.state.Language.map((item, index) => {
                 return (
-                    <View style={{
+                    <View key={index} style={{
                         flexDirection: 'row',
                         width: wp(85),
                         justifyContent: "center",
                         marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(18)
-
+                    // marginLeft: '3%',
+                    // height: scale(15)
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -428,7 +589,7 @@ class AddskilJob extends Component {
                         color: themeColor,
                         fontFamily: 'Roboto-Regular',
                     }}>
-                      {item}
+                      {item.name}
                     </Text></View><View style={{
                         alignItems: "flex-end",
                         justifyContent: "center",
@@ -438,10 +599,12 @@ class AddskilJob extends Component {
                     type='custom'
                     imageSize={18}
                     ratingCount={5}
-                    defaultRating={20}
+                    defaultRating={item.rating}
                     readonly={false}
                     ratingBackgroundColor='transparent'
                     startingValue={0}
+                    onFinishRating={(value, index, item) => this.handleLanguage(value, index, item)}
+
                     // ratingColor={"#f1ee40"}
                     // tintColor={themeWhite}
                     /></View></View>

@@ -79,6 +79,10 @@ class PostedJobList extends PureComponent {
     Back = () => {
         // this.props.navigation.navigate('ChooseTalent')
     }
+    createJob = () => {
+        console.log('hey');
+        this.props.navigation.navigate('CreateJob');
+    }
     render() {
         return (
             <View>
@@ -197,7 +201,7 @@ class PostedJobList extends PureComponent {
             }
             />
             <View>
-            <TouchableWithoutFeedback onPress={() => this.props.navigation.navigate('CreateJob')}>
+            <TouchableWithoutFeedback onPress={this.createJob}>
             <View style={{
                 bottom: scale(30),
                 position: "absolute",

@@ -11,9 +11,9 @@ import { SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, AppState }
 import Routes from './Constant/Navigation'
 
 global.Job_Title = ''
-global.Company = 'Stepup It Hub'
-global.Anywhere = ''
-global.Job_Location = ''
+global.Company = ''
+global.Branch = ''
+global.Anywhere = false
 global.FullTime = false
 global.PartTime = false
 global.Employed = false
@@ -31,6 +31,26 @@ global.Education = []
 global.LanguageSkill = []
 global.salary = 0
 global.salaryrating = 1
+global.Email = ''
+global.Mobile = '',
+global.Address = ''
+global.CompanyImage = ''
+global.uploadUri = ''
+global.Video = ''
+global.type = ''
+global.Id = ''
+global.WebSite = ''
+global.Experience = [],
+global.firstName = ''
+global.lastName = ''
+global.Place = ''
+global.UserEmail = ''
+global.UserMobile = ''
+global.UserProfile = ''
+global.UserSkill = []
+global.UserEducation = []
+global.UserLanguage = []
+global.Qualification = []
 
 export default class App extends Component {
 

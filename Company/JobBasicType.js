@@ -86,7 +86,7 @@ class JobBasicType extends Component {
             placeholderTextColor={themeWhite}
             containerStyle={{
                 width: wp(75),
-                height: scale(45)
+                height: scale(40)
             }}
             iconName={iconSearch}
             iconStyle={{

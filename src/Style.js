@@ -667,6 +667,7 @@ module.exports = {
         flexDirection: 'column',
         width: wp(80),
         top: hp(3)
+
     },
     PersonalInfoRow: {
         flexDirection: "row",
@@ -755,4 +756,46 @@ module.exports = {
         color: themeWhite,
         fontWeight: 'bold',
     },
+    PersonalCompanyTextInput: {
+
+        width: wp(41),
+        alignItems: 'flex-end',
+        right: wp(-4),
+        height: scale(30)
+
+    },
+    PersonalCompanystyleInput: {
+        height: scale(30),
+        width: '100%',
+        alignSelf: 'center',
+        alignItems: 'flex-end',
+        borderBottomColor: '#fff',
+        borderBottomWidth: 0,
+        borderRadius: scale(5),
+        backgroundColor: "transparent",
+    },
+    TextInputAddExp: {
+        height: scale(40),
+        width: wp(80),
+        borderColor: themeWhite,
+        borderWidth: scale(1),
+        marginTop: scale(5),
+        marginHorizontal: scale(5),
+        color: themeWhite,
+        fontSize: scale(16),
+        fontFamily: FontRegular,
+        fontWeight: '700',
+        borderRadius: scale(5),
+
+    },
+    TextInputAddExpView: {
+        marginVertical: scale(10),
+        width: wp(84),
+        // height: scale(150),
+        marginLeft: wp(1),
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: themeColor,
+        borderRadius: scale(5)
+    }
 };

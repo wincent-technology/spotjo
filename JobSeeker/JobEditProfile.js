@@ -25,8 +25,10 @@ class JobEditProfile extends Component {
         this.props.navigation.goBack()
     }
     Video = () => {
-        alert('feature comming soon')
-    // this.props.navigation.navigate('JobVideoResume');
+        if (global.Video)
+            this.props.navigation.navigate('VideoPlayer')
+        else
+            alert('video coming soon'); // this.props.navigation.navigate('JobVideoResume');
     }
     Personal = () => {
         this.props.navigation.navigate('Personal');

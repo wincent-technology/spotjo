@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { Dimensions, View, Text, SafeAreaView, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { Dimensions, View, Text, SafeAreaView, StatusBar, ImageBackground, Image, PermissionsAndroid, TouchableWithoutFeedback } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale } from '../src/Util';
@@ -15,6 +15,10 @@ import { play } from '../src/IconManager';
 import { widthPercentageToDP as wp } from '../Component/responsive-ratio';
 import CustomButton from '../Component/Button'
 import { themeColor, Background } from '../Constant/index'
+import ImagePicker from 'react-native-image-picker';
+import http from '../api'
+import SnackBar from '../Component/SnackBar'
+
 
 class JobVideoResume extends Component {
     constructor(props) {
@@ -23,9 +27,75 @@ class JobVideoResume extends Component {
     // this.state = {};
     }
 
+    DisplaySnackBar = (msg) => {
+        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
+    };
 
     next = () => {
-        this.props.navigation.navigate('TabScreenJob')
+        try {
+            http.POST('api/user/edit', {
+                id: global.Id,
+                video: global.Video,
+                first_name: global.firstName,
+                last_name: global.lastName,
+                place: global.Place,
+                email: global.UserEmail,
+                mobile: global.UserMobile,
+                profile: global.CompanyImage,
+                type: global.type,
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('rrrrrrrrr>>>>>>', res['data']['result']);
+                    this.props.navigation.navigate('TabScreenJob')
+                } else {
+                    this.DisplaySnackBar(res['data']['message'])
+                }
+            }, err => this.DisplaySnackBar(err['message']));
+        } catch ( error ) {
+            this.DisplaySnackBar(error)
+
+        }
+    }
+
+    OpenImage = () => {
+        let options = {
+            title: 'Select Image',
+            customButtons: [{
+                name: 'customOptionKey',
+                title: 'Choose Photo'
+            },],
+            noData: false,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+            mediaType: 'video'
+        };
+        var permissions = [
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        ];
+        PermissionsAndroid.requestMultiple(permissions).then(granted => {
+            console.log("rs");
+
+            ImagePicker.launchImageLibrary(options, (response) => {
+                if (response.didCancel) {
+                } else if (response.error) {
+                } else if (response.customButton) {
+                } else {
+                    console.log("rs", response);
+                    global.Video = 'file://' + response.path
+
+                    let n1 = Math.floor(Math.random() * 9) + 1,
+                        n2 = Math.floor(Math.random() * 9) + 1,
+                        n3 = Math.floor(Math.random() * 9) + 1,
+                        n4 = Math.floor(Math.random() * 9) + 1,
+                        n5 = Math.floor(Math.random() * 9) + 1,
+                        n6 = Math.floor(Math.random() * 9) + 1;
+                    let randomNumber = n1 + '' + n2 + '' + n3 + '' + n4 + '' + n5 + '' + n6;
+                }
+            });
+        });
     }
 
     render() {
@@ -48,7 +118,7 @@ class JobVideoResume extends Component {
             }
         
        <CustomButton title = {'Upload Video'}
-            onPress = {() => this.Back}
+            onPress = {this.OpenImage}
             containerStyle = {{
                 width: wp('80%'),
                 marginTop: scale(20),

@@ -167,6 +167,7 @@ class JobHiddenCritearia extends Component {
             }}>Hidden Critearia</Text></View>
                     <ScrollView style={{
                 alignSelf: 'stretch',
+                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(22))
             }} nestedScrollEnabled={true}>
           <View style={{
                 width: '90%',
@@ -202,25 +203,25 @@ class JobHiddenCritearia extends Component {
                 height: 25,
                 width: 25
             }}
+            iconColor={themeWhite}
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  style={{
-                marginTop: '-5%',
-                marginBottom: 20,
-                height: scale(100),
+                marginTop: '-7%',
+                marginBottom: 27,
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
+                width: wp(85),
+                flexGrow: 1
             }} nestedScrollEnabled={true}>
             {this.state.addSkill.map((item, index) => {
                 return (
-                    <View style={{
+                    <View key={index} style={{
                         flexDirection: 'row',
                         width: wp(85),
                         justifyContent: "center",
                         marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(15)
+                    // marginLeft: '3%',
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -257,7 +258,7 @@ class JobHiddenCritearia extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(-5),
-                height: hp('17%'),
+                height: hp('22%'),
                 backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
@@ -288,31 +289,28 @@ class JobHiddenCritearia extends Component {
                 height: 0,
                 width: 0
             }}
+
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
                 marginTop: '-5%',
                 marginBottom: 20,
-                height: scale(100),
+            // height: scale(100),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
+                width: wp(85),
             }} nestedScrollEnabled={true}>
-            <View style={{
-                width: wp('85%'),
-                height: scale(27),
-            }}><View style={styles.FilterMinimumSalaryMin}><Text style={[styles.FilterMinText, {
-                color: themeWhite
+            <View style={[styles.FilterMinimumSalary, {
+                width: wp(85)
+            }]}><View style={styles.FilterMinimumSalaryMin}><Text style={[styles.FilterMinText, {
+                color: '#fff'
             }]}>{Math.round(this.state.salary)}</Text>
             <Text style={[styles.FilterMaxText, {
-                color: themeWhite
+                color: '#fff'
             }]}>150k+</Text></View><Slider
-            style={{
-                width: wp('80%'),
-                height: scale(5),
-                flex: 1,
-                alignSelf: 'center',
-            }}
+            style={[styles.FilterMinimumSalarySlider, {
+                width: wp(85)
+            }]}
             minimumValue={0}
             maximumValue={150}
             onValueChange={ value => {
@@ -320,16 +318,18 @@ class JobHiddenCritearia extends Component {
                     salary: value,
                 }, () => global.salary = this.state.salary);
             }}
-            minimumTrackTintColor={themeWhite}
-            maximumTrackTintColor={themeWhite}
+            minimumTrackTintColor={'#fff'}
+            maximumTrackTintColor={'#fff'}
             /></View>
                     <View style={{
                 flexDirection: 'row',
+                flex: 1,
                 width: wp(85),
                 justifyContent: "center",
-                marginBottom: scale(2),
+                marginTop: scale(5),
+
                 // marginLeft: '3%',
-                height: scale(15)
+                height: scale(22)
             }}>
             <View style={{
                 alignItems: "flex-start",
@@ -366,7 +366,7 @@ class JobHiddenCritearia extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(-7),
-                height: hp('20%'),
+                height: hp('22%'),
                 backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
@@ -397,11 +397,13 @@ class JobHiddenCritearia extends Component {
                 height: 25,
                 width: 25
             }}
+            iconColor={themeWhite}
+
             onSubmitEditing={(event) => this.Education(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
-                marginTop: '-5%',
-                marginBottom: 40,
-                height: scale(100),
+                marginTop: '-7%',
+                marginBottom: 30,
+            // height: scale(200),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -409,13 +411,13 @@ class JobHiddenCritearia extends Component {
             }} nestedScrollEnabled={true}>
             {this.state.Education.map((item, index) => {
                 return (
-                    <View style={{
+                    <View key={index} style={{
                         flexDirection: 'row',
                         width: wp(85),
                         justifyContent: "center",
                         marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(15)
+                    // marginLeft: '3%',
+                    // height: scale(15)
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",
@@ -453,7 +455,7 @@ class JobHiddenCritearia extends Component {
                 alignItems: "center",
                 alignSelf: "center",
                 top: hp(-12),
-                height: hp('18%'),
+                height: hp('20%'),
                 backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
@@ -484,25 +486,28 @@ class JobHiddenCritearia extends Component {
                 height: 25,
                 width: 25
             }}
+            iconColor={themeWhite}
+
             onSubmitEditing={(event) => this.Language(event.nativeEvent.text)}
             /><ScrollView  nestedScrollEnabled={true} style={{
-                marginTop: '-5%',
-                marginBottom: 30,
-                height: scale(100),
+                marginTop: '-7%',
+                marginBottom: 15,
+            // height: hp(50),
             }} contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
+                width: wp(85),
+            // height: hp(15),
             }} nestedScrollEnabled={true}>
             {this.state.Language.map((item, index) => {
                 return (
-                    <View style={{
+                    <View key={index} style={{
                         flexDirection: 'row',
                         width: wp(85),
                         justifyContent: "center",
                         marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(15)
+                    // marginLeft: '3%',
+                    // height: scale(15)
                     }}><View style={{
                         alignItems: "flex-start",
                         justifyContent: "center",

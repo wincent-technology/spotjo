@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback, PermissionsAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
@@ -16,17 +16,69 @@ import { left, library, icon, play, leftVid } from '../src/IconManager';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import CustomButton from '../Component/Button'
 import { themeColor, Background } from '../Constant/index'
+import ImagePicker from 'react-native-image-picker';
+
 
 class Companylogo extends Component {
     constructor(props) {
         super(props);
 
-    // this.state = {};
+        this.state = {
+            img: ''
+        };
     }
 
 
     next = () => {
-        this.props.navigation.navigate('VideoResume')
+        this.props.navigation.navigate('PersonalCompany')
+    }
+    OpenImage = () => {
+        let options = {
+            title: 'Select Image',
+            customButtons: [{
+                name: 'customOptionKey',
+                title: 'Choose Photo'
+            },],
+            noData: false,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        var permissions = [
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        ];
+        PermissionsAndroid.requestMultiple(permissions).then(granted => {
+            console.log("rs");
+
+            ImagePicker.launchImageLibrary(options, (response) => {
+                if (response.didCancel) {
+                } else if (response.error) {
+                } else if (response.customButton) {
+                } else {
+                    console.log("rs>>>>>>>", response);
+
+                    // const {uri} = response;
+                    global.uploadUri = 'file://' + response.path
+
+                    let n1 = Math.floor(Math.random() * 9) + 1,
+                        n2 = Math.floor(Math.random() * 9) + 1,
+                        n3 = Math.floor(Math.random() * 9) + 1,
+                        n4 = Math.floor(Math.random() * 9) + 1,
+                        n5 = Math.floor(Math.random() * 9) + 1,
+                        n6 = Math.floor(Math.random() * 9) + 1;
+                    let randomNumber = n1 + '' + n2 + '' + n3 + '' + n4 + '' + n5 + '' + n6;
+                    console.log("res", uploadUri);
+                    this.setState({
+                        img: response.data
+                    }, () => {
+                        global.CompanyImage = `data:` + response.type + `;base64,` + this.state.img
+                        global.type = response.type
+                    });
+                }
+            });
+        });
     }
 
     render() {
@@ -49,7 +101,7 @@ class Companylogo extends Component {
             }
         
        <CustomButton title = {'Upload Company Logo'}
-            onPress = {() => this.Back}
+            onPress = {this.OpenImage}
             containerStyle = {{
                 width: wp('80%'),
                 marginTop: scale(20),

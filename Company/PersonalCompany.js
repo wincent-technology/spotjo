@@ -7,10 +7,11 @@
  */
 
 import React, { Component } from 'react';
-import { StatusBar, SafeAreaView, ImageBackground, Dimensions, Text, Image, View, TouchableWithoutFeedback } from 'react-native';
+import { StatusBar, SafeAreaView, ImageBackground, Dimensions, Text, Image, View, ScrollView, TouchableWithoutFeedback, TextInput } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { scale } from '../src/Util'
+import CustomInput from '../Component/TextInput'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { backgroundCorner, Companyavtar, FontBold, FontRegular, Background } from '../Constant/index'
 
@@ -18,18 +19,38 @@ class PersonalCompany extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            CompanyName: 'Company Name',
+            Branch: 'Automotive',
+            Email: "Enter Email",
+            Address: "Enter Compny Address",
+            Cell: '+9100000-00000',
+            WebSite: ''
+        };
+    }
+
+    profile = () => {
+        this.props.navigation.navigate('Companylogo');
     }
 
     componentDidMount() {
-        // setTimeout(() => {
-        //     this.props.navigation.navigate('MainScreen')
-        // }, 5000)
+        this.setState({
+            CompanyName: global.Company,
+            Branch: global.Branch,
+            Email: global.Email,
+            Address: global.Address,
+            Cell: global.Mobile,
+            WebSite: global.WebSite
+        })
     }
-
     next = () => {
-        this.props.navigation.navigate('Companylogo');
-
+        this.props.navigation.navigate('VideoResume');
+    }
+    handleChange = (text) => {
+        this.setState({
+            Address: text
+        })
+        global.Address = this.state.Address
     }
 
     render() {
@@ -40,74 +61,147 @@ class PersonalCompany extends Component {
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
                     <View style={[{
-                top: scale(30)
+                top: scale(40)
             }, styles.CenterLogo]}><View><Image source={require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={{
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }} /></View>
-                        <ImageBackground style={styles.AvtarView} source={backgroundCorner}><Image source={Companyavtar} style={{
-                height: wp('22'),
-                width: wp('22'),
+                        <ImageBackground style={styles.AvtarView} source={backgroundCorner}><TouchableWithoutFeedback onPress={this.profile}>
+                        <Image source={global.uploadUri ? {
+                uri: global.uploadUri
+            } : Companyavtar} style={{
+                height: wp('29'),
+                width: wp('29'),
             // backgroundColor: "transparent"
-            }} resizeMode={'contain'}/></ImageBackground>
+            }} resizeMode={'cover'}/></TouchableWithoutFeedback></ImageBackground>
+           
                         <View style={styles.PersonalInfo}>
+                         <ScrollView style={{
+                alignSelf: "stretch",
+                height: hp(30)
+            }}>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
             }]}>Company</Text></View>
-                                <View style={styles.PersonalInfoEnd}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoEnd}>
+                                <CustomInput textAlign={'right'} value = {this.state.CompanyName} textChange = {(text) => this.setState({
+                CompanyName: text
+            }, () => {
+                global.Company = this.state.CompanyName
+            })} containerStyle={styles.PersonalCompanyTextInput} inputContainerStyle={styles.PersonalCompanystyleInput}
+            inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
                 fontSize: scale(16)
-            }]}>PORSCHE</Text></View></View>
+            }]}
+            /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
             }]}>Branch</Text></View>
-                                <View style={styles.PersonalInfoEnd}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {this.state.Branch} textChange = {(text) => this.setState({
+                Branch: text
+            }, () => {
+                global.Branch = this.state.Branch
+            })} containerStyle={[styles.PersonalCompanyTextInput, {
+                width: wp(43)
+            }]} inputContainerStyle={styles.PersonalCompanystyleInput}
+            inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
                 fontSize: scale(16)
-            }]}>Automotive</Text></View></View>
+            }]}
+            /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
             }]}>Email</Text></View>
-                                <View style={styles.PersonalInfoEnd}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {this.state.Email} textChange = {(text) => this.setState({
+                Email: text
+            }, () => {
+                global.Email = this.state.Email
+            })} containerStyle={[styles.PersonalCompanyTextInput, {
+                width: wp(60)
+            }]} inputContainerStyle={styles.PersonalCompanystyleInput}
+            inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
                 fontSize: scale(16)
-            }]}>porsche@email.com</Text></View></View>
+            }]}
+            /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
             }]}>Mobile Number</Text></View>
-                                <View style={styles.PersonalInfoEnd}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {this.state.Cell} textChange = {(text) => this.setState({
+                Cell: text
+            }, () => {
+                global.Mobile = this.state.Cell
+            })} containerStyle={styles.PersonalCompanyTextInput} inputContainerStyle={styles.PersonalCompanystyleInput}
+            inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
                 fontSize: scale(16)
-            }]}>+9100000-00000</Text></View></View>
+            }]}
+            keyboardType={'phone-pad'}
+            /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
             }]}>Address</Text></View>
-                                <View style={styles.PersonalInfoEnd}><Text style={[styles.PersonalInfoText, {
-                fontWeight: "bold",
-                fontSize: scale(14)
-            }]}>mohringer street 453 70749, Sttutgart</Text></View></View>
-                        </View>
+                                <View style={styles.PersonalInfoEnd}><TextInput
+            multiline={true}
+            value={this.state.Address}
+            textAlign={'right'}
+            numberOfLines={10}
+            placeholderTextColor={'#fff'}
+            style={[styles.PersonalInfoText, {
+                height: hp(10),
+                width: wp(40),
+                right: wp(-1),
+                marginTop: hp(-1),
+                alignSelf: 'center',
+                textAlignVertical: 'top',
+                fontFamily: FontRegular,
+                fontWeight: '700',
+                fontSize: scale(16)
+            }]}
+            onChangeText ={(text) => this.handleChange(text)}
+
+            /></View></View>
+            <View style={styles.PersonalInfoRow}>
+                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                fontFamily: FontBold,
+                fontSize: scale(18),
+
+            }]}>WebSite</Text></View>
+                                <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {this.state.WebSite} textChange = {(text) => this.setState({
+                WebSite: text
+            }, () => {
+                global.WebSite = this.state.WebSite
+            })} containerStyle={[styles.PersonalCompanyTextInput, {
+                width: wp(48)
+            }]} inputContainerStyle={styles.PersonalCompanystyleInput}
+            inputStyle={[styles.PersonalInfoText, {
+                fontFamily: FontRegular,
+                fontWeight: '700',
+                fontSize: scale(16)
+            }]}
+            /></View></View>
+                        </ScrollView></View>
                         <View style={{
                 top: hp(5),
                 left: wp(30),

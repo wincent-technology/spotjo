@@ -6,7 +6,7 @@ import styles from '../src/Style';
 import { scale } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
-import { BackGround } from '../Constant/index'
+import { Background, url } from '../Constant/index'
 import http from '../api';
 import SnackBar from '../Component/SnackBar'
 
@@ -38,6 +38,16 @@ class LoginWithEmail extends Component {
                     password: password
                 }).then((res) => {
                     if (res['data']['status']) {
+                        console.log("login id ", res['data']['result'])
+                        global.Id = res['data']['result']['id'];
+                        global.Email = res['data']['result']['email']
+                        global.Branch = res['data']['result']['branch']
+                        global.uploadUri = url + '/images/company/' + res['data']['result']['logo']
+                        global.Mobile = res['data']['result']['mobile']
+                        global.Company = res['data']['result']['name']
+                        global.Video = res['data']['result']['video']
+                        global.WebSite = res['data']['result']['website']
+                        global.Address = res['data']['result']['address']
                         //            //will get data in this    res['data']['result']             
                         this.props.navigation.navigate('TabScreenCompany')
                     } else {
@@ -50,8 +60,6 @@ class LoginWithEmail extends Component {
             }
         } catch ( error ) {
             this.DisplaySnackBar("error while register" + error)
-
-
         }
     }
 
@@ -59,10 +67,8 @@ class LoginWithEmail extends Component {
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
-            source = {BackGround}
-            resizeMode = {
-            'stretch'
-            } >
+            source={Background}
+            resizeMode={'stretch'}>
                <StatusBar hidden ={true}/>
                <SnackBar ref="ReactNativeSnackBar" />
          <View style={[{
