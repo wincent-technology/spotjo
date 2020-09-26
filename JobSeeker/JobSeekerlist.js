@@ -116,7 +116,7 @@ const data = [{
 
 },];
 
-global.item = data[0];
+// global.item = data[0];
 
 class JobSeekerlist extends PureComponent {
 
@@ -133,8 +133,8 @@ class JobSeekerlist extends PureComponent {
 
     push = (item) => {
         console.log("heelo", item);
-        global.item = item;
-        this.props.navigation.navigate('JobCompanyProfile');
+    // global.item = item;
+    // this.props.navigation.navigate('JobCompanyProfile');
     }
 
     Back = () => {

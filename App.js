@@ -5,6 +5,10 @@
  * @format
  * @flow strict-local
  */
+if (__DEV__) {
+    console.log = () => {
+    };
+}
 
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, AppState } from 'react-native';
@@ -47,10 +51,12 @@ global.Place = ''
 global.UserEmail = ''
 global.UserMobile = ''
 global.UserProfile = ''
-global.UserSkill = []
-global.UserEducation = []
-global.UserLanguage = []
-global.Qualification = []
+global.UserSkill = ''
+global.UserEducation = ''
+global.UserLanguage = ''
+global.Qualification = ''
+global.CompanyExp = ''
+global.ig = []
 
 export default class App extends Component {
 

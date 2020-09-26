@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
-import { scale } from './Util';
+import { scale, snack } from './Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { switchColor, Background, themeColor } from '../Constant/index'
 import styles from './Style';
 import http from '../api';
-import SnackBar from '../Component/SnackBar'
-
 class ChooseTalent extends Component {
     constructor(props) {
         super(props);
@@ -44,17 +42,19 @@ class ChooseTalent extends Component {
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
-                    this.props.navigation.navigate('TabScreen')
+                    this.props.navigation.navigate('TabScreen', {
+                        otherParam: res['data']['result'],
+                    })
 
                 // will get data in this    res['data']['result']             
                 // this.props.navigation.navigate('TabScreenJob')
                 } else {
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
 
                 }
-            }, err => alert(JSON.stringify(err)));
+            }, err => snack(err['message']));
         } catch ( error ) {
-            this.DisplaySnackBar(error)
+            snack(error)
 
         }
         // this.props.navigation.navigate('TabScreen')
@@ -75,8 +75,6 @@ class ChooseTalent extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
-            <SnackBar ref="ReactNativeSnackBar" />
-
             <View style={styles.MainFlex}>
         <View style={[{
                 top: scale(30),

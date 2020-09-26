@@ -10,7 +10,9 @@ import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, StatusBar, ImageBackground, Text, Image, View } from 'react-native';
 import { withNavigation } from 'react-navigation';
 import styles from './Style'
-import { Background, themeColor } from '../Constant/index'
+import { Background, themeColor, url } from '../Constant/index'
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class Splash extends Component {
     constructor(props) {
@@ -19,9 +21,50 @@ class Splash extends Component {
         this.state = {};
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
+        let navigate = 'MainScreen'
+        let keys = []
+        try {
+            keys = await AsyncStorage.getAllKeys()
+        } catch ( e ) {
+            // read key error
+        }
+        if (keys.indexOf("UserLoggedInData") !== -1) {
+            var result = await AsyncStorage.getItem('UserLoggedInData');
+            result = JSON.parse(result);
+            global.Id = result['id'];
+            global.firstName = result['first_name']
+            global.lastName = result['last_name']
+            global.UserEmail = result['email']
+            global.Place = result['place']
+            global.UserMobile = result['mobile']
+            global.UserProfile = url + '/images/user/' + result['profile']
+            global.Video = result['video']
+            global.UserSkill = result['skills']
+            global.UserLanguage = result['language']
+            global.Qualification = result['qualification']
+            global.UserEducation = result['education']
+            global.salaryrating = result['salaryrating']
+            global.salary = result['minSal']
+            global.Experience = result['workexp']
+            navigate = 'TabScreenJob'
+        } else if (keys.indexOf("CompanyLoggedInData") !== -1) {
+            var result = await AsyncStorage.getItem('CompanyLoggedInData');
+            result = JSON.parse(result);
+            console.log('id>>>>', result['id']);
+            global.Id = result['id'];
+            global.Email = result['email']
+            global.Branch = result['branch']
+            global.uploadUri = url + '/images/company/' + result['logo']
+            global.Mobile = result['mobile']
+            global.Company = result['name']
+            global.Video = result['video']
+            global.WebSite = result['website']
+            global.Address = result['address']
+            navigate = 'TabScreenCompany'
+        }
         setTimeout(() => {
-            this.props.navigation.navigate('MainScreen')
+            this.props.navigation.navigate(navigate)
         }, 5000)
     }
     render() {

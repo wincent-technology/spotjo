@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, FlatList, Image, View, TextInput } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
-import { scale } from './Util';
+import { scale, snack } from './Util';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { switchColor, Background, themeColor } from '../Constant/index'
 import ToggleSwitch from '../Component/ToggleSwitch'
 import styles from './Style';
 import http from '../api';
-import SnackBar from '../Component/SnackBar'
 
 
 
@@ -32,9 +31,7 @@ class FavoriteCompany extends Component {
     back = () => {
         this.props.navigation.goBack();
     }
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
     componentDidMount() {
 
         try {
@@ -46,11 +43,11 @@ class FavoriteCompany extends Component {
                     this.arrayholder = res['data']['result'];
                 //            //will get data in this    res['data']['result']
                 } else {
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
                 }
-            }, err => alert(JSON.stringify(err)));
+            }, err => snack(err['message']));
         } catch ( error ) {
-            this.DisplaySnackBar(error)
+            snack(error)
 
         }
     }
@@ -84,7 +81,6 @@ class FavoriteCompany extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
-            <SnackBar ref="ReactNativeSnackBar" />
             <View style={styles.MainFlex}>
         <View style={[{
                 top: scale(30)

@@ -5,11 +5,12 @@ import styles from '../src/Style'
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import { themeColor, themeWhite, Background, sort, filter, TRANLINE, canvas } from '../Constant/index'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from '../src/Util'
+import { scale, snack } from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import { Rating, NavigationHeader } from '../Component/ViewManager.js'
-import ItemMV from '../src/ItemMV'
+import ItemMV from './ItemMV'
 import DeviceInfo from 'react-native-device-info';
+import http from '../api'
 
 // import styles from './Style'
 var c = 0;
@@ -23,37 +24,7 @@ const data = [{
     work_Experience: '5-6 Years',
     salary: '50000$',
     webSite: 'www.example.com'
-}, {
-    Header: 'Senior Java Devloper',
-    image: 'https://cdn.vox-cdn.com/thumbor/2eZPJ-j9zXm5AIro7TIiEBCgNoc=/0x0:640x427/1200x800/filters:focal(0x0:640x427)/cdn.vox-cdn.com/assets/3218223/google.jpg',
-    ComPany_Name: 'Google',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JAVA DEVELOPER / J2EE',
-    image: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Logo.png',
-    ComPany_Name: 'Amazon',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://di-uploads-pod3.dealerinspire.com/porscheoffremont/uploads/2018/09/porsche-logo.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-},];
+}];
 
 global.item = data[0];
 
@@ -64,8 +35,10 @@ class PostedJobList extends PureComponent {
         super(props);
 
         this.state = {
-
+            dataitem: []
         };
+        this._isMounted = false;
+
     }
 
     Filter = () => {
@@ -73,20 +46,81 @@ class PostedJobList extends PureComponent {
     }
 
     push = (item) => {
-        global.item = item;
+        console.log('ji');
+    // global.item = item;
     // this.props.navigation.navigate('CompanyProfile')
     }
     Back = () => {
         // this.props.navigation.navigate('ChooseTalent')
     }
-    createJob = () => {
-        console.log('hey');
-        this.props.navigation.navigate('CreateJob');
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
+    componentDidUpdate() {
+
+        try {
+            this._isMounted && http.POST('api/applogcom/job', {
+                companyId: global.Id,
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('rrrrrrrrr', res['data']['result']);
+                    this._isMounted = false
+                    this.setState({
+                        dataitem: res['data']['result']
+                    })
+                    // this.props.navigation.navigate('AdminDashboard');
+                    // this.postedJob(res['data']['result']);
+
+                } else {
+                    snack(res['data']['message'])
+
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch ( error ) {
+            snack(error)
+        }
+    }
+
+    componentDidMount() {
+        this._isMounted = true
+        try {
+            this._isMounted && http.POST('api/applogcom/job', {
+                companyId: global.Id,
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('rrrrrrrrr', res['data']['result']);
+                    this.setState({
+                        dataitem: res['data']['result']
+                    })
+                    // this.props.navigation.navigate('AdminDashboard');
+                    // this.postedJob(res['data']['result']);
+
+                } else {
+                    snack(res['data']['message'])
+
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch ( error ) {
+            snack(error)
+        }
+    }
+
+    Video = (item) => {
+        console.log('hels');
+        global.Video = item.video
+        if (global.Video)
+            this.props.navigation.navigate('VideoPlayer')
+        else
+            alert('video coming soon');
+    // this.props.navigation.navigate('VideoResume');
+    }
+
     render() {
         return (
             <View>
         <StatusBar hidden={true}/>
+
             <View style={{
                 flexDirection: 'row',
                 width: wp('100%'),
@@ -119,7 +153,7 @@ class PostedJobList extends PureComponent {
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
-            }}>10</Text><View><Text style={{
+            }}>{this.state.dataitem.length}</Text><View><Text style={{
                 fontSize: scale(16),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
@@ -177,13 +211,14 @@ class PostedJobList extends PureComponent {
                 marginBottom: 50,
                 backgroundColor: 'transparent',
             }}
-            data = {data}
+            data = {this.state.dataitem}
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => <ItemMV
                 item={item}
                 index={index}
                 push={this.push}
+                Video={this.Video}
                 // getAudioTimeString={this.getAudioTimeString}
                 />}
             initialNumToRender={5}
@@ -200,30 +235,7 @@ class PostedJobList extends PureComponent {
             (item, index) => index + ''
             }
             />
-            <View>
-            <TouchableWithoutFeedback onPress={this.createJob}>
-            <View style={{
-                bottom: scale(30),
-                position: "absolute",
-                marginHorizontal: wp(2),
-                // backgroundColor: 'rgba(0,0,0,0.8)',
-                borderRadius: wp(15),
-            // justifyContent: "center",
-            // alignItems: "center"
-            }}><ImageBackground source={require('../Img/create-job.png')} style={{
-                height: scale(60),
-                width: wp(96),
-                justifyContent: "center",
-                alignItems: "center"
-            }} resizeMode={'stretch'}>
-            <Text style={{
-                color: themeWhite,
-                fontSize: scale(20),
-                fontFamily: "Roboto-Bold"
-            }}>Create Job</Text>
-           </ImageBackground></View>
-            </TouchableWithoutFeedback>
-            </View>
+            
         </View>
         )
     }

@@ -366,13 +366,14 @@ module.exports = {
     },
     ItemDetailLabel1: {
         marginLeft: scale(10),
-        fontSize: scale(18),
+        fontSize: scale(16),
         fontFamily: FontRegular,
+        marginTop: scale(-3)
     // justifyContent: "center"
     },
     CompanyProfileDetailLabel100: {
-        top: scale(1),
-        fontSize: scale(14),
+        marginTop: scale(-2),
+        fontSize: scale(16),
         fontFamily: 'Roboto-Regular',
     },
     ItemMVDetailColor: {
@@ -383,7 +384,7 @@ module.exports = {
     },
     ItemMVTimeStamp: {
         flexDirection: 'row',
-        marginTop: scale(10),
+        // marginTop: scale(8),
         marginBottom: scale(20),
     },
     ItemMVTimeStampView: {
@@ -529,7 +530,7 @@ module.exports = {
     },
     CompanyProfileDetail: {
         marginLeft: scale(20),
-        marginTop: scale(10),
+        marginTop: scale(5),
         flexDirection: 'column',
     },
     CompanyLoginOpportunityView: {

@@ -12,6 +12,7 @@ import ItemMVJob from './ItemMVJob'
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 // import styles from './Style'
 var c = 0;
@@ -79,9 +80,47 @@ class JobMatches extends PureComponent {
             currentDate: Date.now(),
             selectedValue: 'City',
             selectedValue1: 'Languages',
-            dark: false
+            dark: false,
+            gestureName: 'none'
 
         };
+    }
+
+    onSwipeUp = (gestureState, item) => {
+        console.log('item', item)
+        alert(' Matched ' + item)
+    }
+
+    onSwipeDown = (gestureState, item) => {
+        alert(' Short Listed ' + item)
+
+    }
+
+    onSwipeLeft = (gestureState, item) => {
+        alert(' Not Interested ' + item)
+
+    }
+
+    onSwipeRight = (gestureState, item) => {
+        alert(' Interested ' + item)
+
+    }
+    onSwipe = (gestureName, gestureState) => {
+        console.log('gesture', gestureName);
+        const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
+        this.setState({
+            gestureName: gestureName
+        });
+        switch (gestureName) {
+        case SWIPE_UP:
+            break;
+        case SWIPE_DOWN:
+            break;
+        case SWIPE_LEFT:
+            break;
+        case SWIPE_RIGHT:
+            break;
+        }
     }
 
     Filter = () => {
@@ -198,6 +237,11 @@ class JobMatches extends PureComponent {
                 item={item}
                 index={index}
                 push={this.push}
+                onSwipe={this.onSwipe}
+                onSwipeUp={this.onSwipeUp}
+                onSwipeDown={this.onSwipeDown}
+                onSwipeLeft={this.onSwipeLeft}
+                onSwipeRight={this.onSwipeRight}
                 // getAudioTimeString={this.getAudioTimeString}
                 />}
             initialNumToRender={5}

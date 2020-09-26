@@ -4,19 +4,18 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, leftVid } from '../src/IconManager';
 import { scale } from '../src/Util'
-import { themeColor, themeWhite, TRANLINE, rightWrongBack } from '../Constant/index'
+import { themeColor, themeWhite, TRANLINE, rightWrongBack, Companyavtar } from '../Constant/index'
 import { Rating, NavigationHeader } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
 import { FontBold, FontRegular, Background, darkract } from '../Constant/index'
-
-
+var m = ''
 class PreviewJob extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-
+            def: ''
         };
     }
 
@@ -32,6 +31,13 @@ class PreviewJob extends Component {
         this.props.navigation.navigate('Personal');
     }
 
+    dateDiffInDays() {
+        const a = new Date(global.Start_date).getFullYear()
+        const b = new Date(global.End_date).getFullYear()
+        global.CompanyExp = Math.floor(b - a)
+        return Math.floor(b - a)
+
+    }
 
     render() {
         const {Hourly, Monthly, Yearly} = this.state
@@ -65,9 +71,9 @@ class PreviewJob extends Component {
                 // borderRadius: scale(20),
                 overflow: 'hidden',
             }}><Image
-            source={{
-                uri: global.item.image,
-            }}
+            source={!global.uploadUri ? {
+                uri: global.uploadUri,
+            } : Companyavtar}
             style={styles.imageStyle}
             resizeMode={'stretch'}
             /></View>
@@ -104,7 +110,7 @@ class PreviewJob extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.ComPany_Name}</Text>
+            }}>{global.Company}</Text>
             </View>
             </View>
             <View style={{
@@ -136,8 +142,8 @@ class PreviewJob extends Component {
                 color: '#000',
                 fontSize: scale(16),
                 fontFamily: FontBold,
-
-            }}>{global.item.Address}</Text>
+                width: wp(85),
+            }} numberOfLines={1}>{global.Address}</Text>
             </View>
             </View>
             <View style={{
@@ -170,13 +176,13 @@ class PreviewJob extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.skill.map((item, index) => {
+            }}>{global.addSkill.map((item, index) => {
                 return (
                     <Text key={index} style={{
                         fontFamily: FontBold,
                         fontSize: scale(16),
                         color: '#000'
-                    }}>{item},</Text>
+                    }}>{item.name},</Text>
                 )
             })}</Text>
             </View>
@@ -211,7 +217,7 @@ class PreviewJob extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.work_Experience}</Text>
+            }}>{global.CompanyExp - 1}-{this.dateDiffInDays()} Years</Text>
             </View>
             </View>
             <View style={{
@@ -238,13 +244,20 @@ class PreviewJob extends Component {
             </View>
              <View style={{
                 alignItems: "flex-start",
+                flexDirection: "row"
             }}>
             <Text style={{
                 color: '#000',
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.work_Type}</Text>
+            }}>{global.FullTime ? <Text>FullTime</Text> : ''}</Text>
+            <Text style={{
+                color: '#000',
+                fontSize: scale(16),
+                fontFamily: FontBold,
+
+            }}>{global.PartTime ? <Text> , PartTime</Text> : ''}</Text>
             </View>
             </View>
             <View style={{

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, StatusBar, ScrollView, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View, } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import { withNavigationFocus, NavigationEvents } from 'react-navigation';
 import styles from './Style';
 import { left, library, icon, play, leftVid } from './IconManager';
-import { themeColor, themeWhite, home, place, screen, edit, earth, dollor, user, bag, Background, sort, filter, TRANLINE } from '../Constant/index';
+import { themeColor, themeWhite, home, place, screen, edit, earth, dollor, user, bag, Background, sort, filter, TRANLINE, url, Companyavtar, FontBold } from '../Constant/index';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
 import { scale } from './Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
@@ -15,23 +15,35 @@ import { Rating, NavigationHeader } from '../Component/ViewManager.js';
 class CompanyProfile extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            data: ''
+        }
     }
 
+    checking = () => {
+        console.log('hey')
+        const {params} = this.props.navigation.state;
+        const item = params ? params.item : null;
+        console.log('other item', item);
+        this.setState({
+            data: item != undefined || '' ? item : ''
+        })
+    }
     Back = () => {
         this.props.navigation.goBack();
     };
 
     render() {
-        // const {item} = global.item
-        return global.item ? (
+        const {data} = this.state
+        return data != '' ? (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode={'stretch'}>
-            <NavigationHeader onPress={() => this.Back()} text='Fresher Java Devloper'/>
+            <NavigationHeader onPress={() => this.Back()} text={data.title}/>
        <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - 200</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {data.length}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{
@@ -64,18 +76,22 @@ class CompanyProfile extends Component {
             }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
   <View style={styles.CompanyProfileImageSize}>
     <Image
-            source={{
-                uri: global.item.image,
-            }}
+            source = {data.logo ? {
+                uri: url + 'images/company/' + data.logo
+            } :
+                Companyavtar
+            }
             style={styles.imageStyle}
             resizeMode={'stretch'}
             />
   </View>
   <View style={styles.CompanyProfileSecongImage}>
     <Image
-            source={{
-                uri: global.item.image,
-            }}
+            source = {data.logo ? {
+                uri: url + 'images/company/' + data.logo
+            } :
+                Companyavtar
+            }
             style={styles.imageStyle}
             resizeMode={'stretch'}
             />
@@ -86,20 +102,20 @@ class CompanyProfile extends Component {
         <Image source={home} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
       <Text style={styles.ItemDetailLabel1}>
-        {global.item.ComPany_Name}
+        {data.name}
       </Text>
     </View>
     <View style={styles.CompanyDetailIcon}>
       <View style={styles.CompanyDetailProfileIcon}>
         <Image source={user} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.Working}</Text>
+      <Text style={styles.ItemDetailLabel1}>{data.isEmployed ? <Text>Employed</Text> : <Text>Fresher</Text>}</Text>
     </View>
     <View style={styles.CompanyDetailIcon}>
       <View style={styles.CompanyDetailProfileIcon}>
         <Image source={screen} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.Header}</Text>
+      <Text style={styles.ItemDetailLabel1}>{data.title}</Text>
     </View>
     <View style={styles.CompanyDetailIcon}>
       <View style={styles.CompanyDetailProfileIcon}>
@@ -109,14 +125,11 @@ class CompanyProfile extends Component {
             style={{
                 marginLeft: scale(10),
             }}>
-        {global.item.skill.map((item, index) => {
+        {data != '' && data.skills.map((item, index) => {
                 return (
                     <Text key={index}
-                    style={{
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Regular',
-                    }}>
-              {item} /
+                    style={styles.ItemDetailLabel1}>
+              {item.name} /
             </Text>
                 );
             })}
@@ -128,7 +141,7 @@ class CompanyProfile extends Component {
          <Image source={bag} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
       <Text style={styles.ItemDetailLabel1}>
-        {global.item.work_Experience} / 
+        {data.totalExp - 1} - {data.totalExp} Years / 
       </Text>
       <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
     </View>
@@ -137,7 +150,7 @@ class CompanyProfile extends Component {
         <Image source={place} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
       <Text style={styles.ItemDetailLabel1}>
-        {global.item.Address} /
+        Fhguj Guggjj /
       </Text>
       <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
     </View>
@@ -145,21 +158,17 @@ class CompanyProfile extends Component {
       <View style={styles.CompanyDetailProfileIcon}>
         <Image source={dollor} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.salary}</Text>
+      <Text style={styles.ItemDetailLabel1}>{data.salMin},000$</Text>
     </View>
     <View style={styles.CompanyDetailIcon}>
       <View style={styles.CompanyDetailProfileIcon}>
         <Image source={earth} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.webSite}</Text>
+      <Text style={styles.ItemDetailLabel1}>{data.website}</Text>
     </View>
   </View>
 </ImageBackground>
         </ScrollView>
-
-      
-        
-        
         </View>
          <View style={styles.TranLingImage}>
              <Image
@@ -169,7 +178,25 @@ class CompanyProfile extends Component {
             /></View>
         </ImageBackground>
       </SafeAreaView>
-            ) : null;
+            ) : <SafeAreaView style={styles.backGround}>
+            <ImageBackground style={[styles.ImageBlue, {
+                justifyContent: "center",
+                alignItems: "center"
+            }]}
+            source = {Background}
+            resizeMode={'stretch'}><Text style={{
+                textAlign: 'center',
+                fontFamily: FontBold,
+                color: themeWhite,
+                fontSize: scale(18),
+                width: wp(60)
+            }}>Please Select any Company Profile from List</Text><NavigationEvents onDidFocus={this.checking}/>
+            <View style={styles.TranLingImage}>
+             <Image
+            source={TRANLINE}
+            style={styles.imageStyle}
+            resizeMode={'stretch'}
+            /></View></ImageBackground></SafeAreaView>;
     }
 }
 

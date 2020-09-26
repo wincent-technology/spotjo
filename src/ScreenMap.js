@@ -29,42 +29,13 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 
 var flag = false;
-const data = [{
-    Header: 'JavaDevloper(M/W)',
-    image: 'https://turbologo.com/articles/wp-content/uploads/2019/11/Porsche-logo-cover-1280x720.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['java', 'j2me', 'sql'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'Senior JavaDevloper',
-    image: 'https://cdn.vox-cdn.com/thumbor/2eZPJ-j9zXm5AIro7TIiEBCgNoc=/0x0:640x427/1200x800/filters:focal(0x0:640x427)/cdn.vox-cdn.com/assets/3218223/google.jpg',
-    ComPany_Name: 'Google',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['java', 'j2me', 'sql'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JavaDevloper / j2me',
-    image: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Logo.png',
-    ComPany_Name: 'Amazon',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['java', 'j2me', 'sql'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}];
+
 class ScreenMap extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
+            data: [],
             radius: 5000,
             region: {
                 latitude: LATITUDE,
@@ -127,8 +98,13 @@ class ScreenMap extends PureComponent {
     //         LONGITUDE = info.coords.longitude
     //     })
     // }
-    componentWillMount() {
+    componentDidMount() {
         const {radius} = this.state;
+        const {params} = this.props.navigation.state;
+        const otherParam = params ? params.otherParam : null;
+        this.setState({
+            data: otherParam || []
+        })
         // this.map.animateToRegion({
         //     latitude: LATITUDE,
         //     longitude: LONGITUDE,
@@ -141,9 +117,10 @@ class ScreenMap extends PureComponent {
         this.props.navigation.navigate('Filter')
     }
     push = (item) => {
-        console.log("heelo", item);
-        global.item = item;
-        this.props.navigation.navigate('CompanyProfile')
+        // console.log("heelo", item);
+        this.props.navigation.navigate('CompanyProfile', {
+            item: item
+        })
     }
     Back = () => {
         this.props.navigation.goBack()
@@ -161,7 +138,7 @@ class ScreenMap extends PureComponent {
             <NavigationHeader onPress={() => this.Back()} text='Search Location'/>
              <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - 200</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {this.state.data.length}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{
@@ -208,6 +185,7 @@ class ScreenMap extends PureComponent {
            
             {this.state.markers.map(marker => (
                 <Marker
+                key={marker.index}
                 coordinate={marker.coordinate}
                 title={marker.title}
                 description={marker.description}
@@ -256,7 +234,7 @@ class ScreenMap extends PureComponent {
             /></View>
             <FlatList
             style={styles.MapVerticalList}
-            data = {data}
+            data = {this.state.data}
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => <ItemMV

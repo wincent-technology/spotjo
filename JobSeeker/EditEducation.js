@@ -3,7 +3,7 @@ import { SafeAreaView, StatusBar, ImageBackground, FlatList, Text, Image, View, 
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, leftVid } from '../src/IconManager';
-import { scale } from '../src/Util'
+import { scale, snack } from '../src/Util'
 import { themeColor, themeWhite, TRANLINE, educationCap } from '../Constant/index'
 import { Rating, NavigationHead } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
@@ -13,7 +13,6 @@ import ItemMV from './ItemMV'
 import Modal from "react-native-modal";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import http from '../api';
-import SnackBar from '../Component/SnackBar'
 
 
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -44,10 +43,9 @@ class EditEducation extends Component {
         // console.log("hi");
         this.props.navigation.goBack()
     }
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
     componentDidMount() {
+        console.log(UserEducation);
         this.setState({
             sum: global.UserEducation || []
         });
@@ -63,11 +61,11 @@ class EditEducation extends Component {
                     console.log('responce user', res['data']['result'])
                     this.props.navigation.navigate('JobEditProfile');
                 } else {
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
                 }
-            }, err => this.DisplaySnackBar(err['message']))
+            }, err => snack(err['message']))
         } catch ( error ) {
-            this.DisplaySnackBar("error while updating" + error)
+            snack(error)
         }
     // alert('video is coming soon');
     // alert('video is coming soon');
@@ -286,7 +284,7 @@ class EditEducation extends Component {
     }
 
     AddValueData = () => {
-        console.log('hello');
+        // console.log('hello')
         let inputData = this.state.inputData;
         let textCompany = this.state.textCompany;
         let fromDate = this.state.fromDate;

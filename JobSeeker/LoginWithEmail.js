@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
-import { scale } from '../src/Util';
+import { scale, snack } from '../src/Util';
 import CustomInput from '../Component/TextInput'
 import { Background, url } from '../Constant/index'
 import http from '../api';
-import SnackBar from '../Component/SnackBar'
+import AsyncStorage from '@react-native-community/async-storage';
 
 
 class LoginWithEmail extends Component {
@@ -19,9 +19,6 @@ class LoginWithEmail extends Component {
         };
     }
 
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
     onLogin = async () => {
         const {email, password} = this.state;
         try {
@@ -47,19 +44,21 @@ class LoginWithEmail extends Component {
                         global.UserEducation = res['data']['result']['education']
                         global.salaryrating = res['data']['result']['salaryrating']
                         global.salary = res['data']['result']['minSal']
-                        global.Experience = res['data']['result']['experience']
+                        global.Experience = res['data']['result']['workexp']
+                        AsyncStorage.setItem('UserLoggedInData', JSON.stringify(res['data']['result']));
+
                         this.props.navigation.navigate('TabScreenJob')
                     } else {
-                        this.DisplaySnackBar(res['data']['message'])
+                        snack(res['data']['message'])
 
                     }
-                }, err => this.DisplaySnackBar(err['message']))
+                }, err => snack(err['message']))
             } else {
-                this.DisplaySnackBar('Required Email Password')
+                snack('Required Email Password')
 
             }
         } catch ( error ) {
-            this.DisplaySnackBar("error while register" + error)
+            snack(error)
 
         }
     }
@@ -81,7 +80,6 @@ class LoginWithEmail extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
-               <SnackBar ref="ReactNativeSnackBar" />
          <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}

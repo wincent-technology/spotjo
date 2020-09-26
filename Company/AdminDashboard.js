@@ -76,14 +76,20 @@ class AdminDashboard extends PureComponent {
         this.props.navigation.navigate('Filter')
     }
 
-    push = (item) => {
-        console.log("heelo", item);
-        global.item = item;
-        this.props.navigation.navigate('CompanyProfile')
-    }
+    // push = (item) => {
+    //     console.log("heelo", item);
+    // // global.item = item;
+    // // this.props.navigation.navigate('CompanyProfile')
+    // }
     Back = () => {
         this.props.navigation.navigate('ChooseTalent')
     }
+    createJob = () => {
+        console.log('hey');
+
+        this.props.navigation.navigate('CreateJob');
+    }
+
     PostedJob = () => {
         this.setState({
             flagPosted: true,
@@ -189,6 +195,30 @@ class AdminDashboard extends PureComponent {
                     <View style={{
                 height: hp(100) - (hp(11) + scale(95))
             }}>{this.renderPage()}</View>
+            {this.state.flagPosted && <View style={{
+                bottom: scale(-70)
+            }}>
+            <TouchableWithoutFeedback onPress={this.createJob}>
+            <View style={{
+                bottom: scale(30),
+                position: "absolute",
+                marginHorizontal: wp(2),
+                borderRadius: wp(15),
+            }}><ImageBackground source={require('../Img/create-job.png')} style={{
+                height: scale(60),
+                width: wp(96),
+                justifyContent: "center",
+                alignItems: "center"
+            }} resizeMode={'stretch'}>
+            <Text style={{
+                color: themeWhite,
+                fontSize: scale(20),
+                fontFamily: "Roboto-Bold"
+            }}>Create Job</Text>
+           </ImageBackground></View>
+            </TouchableWithoutFeedback>
+            
+            </View>}
                     <View style={styles.TranLingImage}>
                         <Image
             source={TRANLINE}

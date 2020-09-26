@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, TouchableWithoutFeedback, StatusBar, ImageBackground, FlatList, Dimensions, Text, Image, View, TextInput } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
-import { scale } from './Util';
+import { scale, snack } from './Util';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background, themeColor } from '../Constant/index'
 import styles from './Style';
 import http from '../api'
-import SnackBar from '../Component/SnackBar'
 
 
 
@@ -34,19 +33,15 @@ class FavoriteLocation extends Component {
                     this.arrayholder = res['data']['result'];
                 //            //will get data in this    res['data']['result']
                 } else {
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
 
                 }
-            }, err => alert(JSON.stringify(err)));
+            }, err => snack(err['message']));
         } catch ( error ) {
-            this.DisplaySnackBar(error)
+            snack(error)
 
         }
     }
-
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
 
     choose = (choose) => {
         this.setState({
@@ -84,8 +79,6 @@ class FavoriteLocation extends Component {
             'stretch'
             } >
         <StatusBar hidden ={true}/>
-            <SnackBar ref="ReactNativeSnackBar" />
-        
             <View style={styles.MainFlex}>
         <View style={[{
                 top: scale(30)

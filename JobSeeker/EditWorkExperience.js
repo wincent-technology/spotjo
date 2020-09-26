@@ -3,7 +3,7 @@ import { SafeAreaView, StatusBar, ImageBackground, FlatList, Text, Image, TextIn
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style'
 import { left, leftVid, play, library } from '../src/IconManager';
-import { scale } from '../src/Util'
+import { scale, snack } from '../src/Util'
 import { themeColor, themeWhite, TRANLINE } from '../Constant/index'
 import { Rating, NavigationHead } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
@@ -12,6 +12,7 @@ import { FontBold, FontRegular, Background } from '../Constant/index'
 import ItemMV from './ItemMV'
 import Modal from "react-native-modal";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import http from '../api';
 
 
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -50,11 +51,25 @@ class EditWorkExperience extends Component {
         this.props.navigation.goBack()
     }
     save = () => {
-        // alert('video is coming soon');
         global.Experience = this.state.sum;
-        this.props.navigation.navigate('JobEditProfile');
 
+        try {
+            http.POST('api/user/editworkexp', {
+                id: global.Id,
+                workexp: global.Experience
+            }).then((res) => {
+                if (res['data']['status']) {
+                    console.log('responce user', res['data']['result'])
+                    this.props.navigation.navigate('JobEditProfile');
+                } else {
+                    snack(res['data']['message'])
+                }
+            }, err => snack(err['message']))
+        } catch ( error ) {
+            snack(error)
+        }
     }
+
     componentDidMount() {
         this.setState({
             sum: global.Experience
@@ -147,7 +162,7 @@ class EditWorkExperience extends Component {
     }
     onChange = (event, selectedDate) => {
 
-        console.log('select date', new Date(selectedDate).toLocaleDateString());
+        // console.log('select date', new Date(selectedDate).toLocaleDateString());
         if (selectedDate === undefined) {
             this.setState({
                 from: !this.state.from
@@ -304,7 +319,7 @@ class EditWorkExperience extends Component {
     // }
 
     AddValueData = () => {
-        console.log('hello');
+        // console.log('hello');
         let inputData = this.state.inputData;
         let textCompany = this.state.textCompany;
         let fromDate = this.state.fromDate;
@@ -340,7 +355,7 @@ class EditWorkExperience extends Component {
     }
 
     render() {
-        console.log("sum", this.state.sum)
+        // console.log("sum", this.state.sum)
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}

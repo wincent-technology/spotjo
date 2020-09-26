@@ -5,7 +5,7 @@ import styles from '../src/Style'
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import { themeColor, themeWhite, Background, sort, filter, TRANLINE, overlayimage, rightWrongBack, rite, FontBold } from '../Constant/index'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from '../src/Util'
+import { scale, snack } from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import { Rating, NavigationHead } from '../Component/ViewManager.js'
 import ItemMV from '../src/ItemMV'
@@ -17,7 +17,6 @@ import JobHiddenCritearia from './JobHiddenCritearia';
 import PreviewJob from './PreviewJob'
 import Swiper from 'react-native-swiper';
 import http from '../api'
-import SnackBar from '../Component/SnackBar'
 
 // import PostedJobList from './PostedJobList';
 // import styles from './Style'
@@ -39,9 +38,7 @@ class CreateJob extends PureComponent {
     Back = () => {
         this.props.navigation.goBack()
     }
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
     Exit = () => {
         this.props.navigation.navigate('AdminDashboard');
     }
@@ -74,6 +71,8 @@ class CreateJob extends PureComponent {
             global.LanguageSkill);
         try {
             http.POST('api/appjob/add', {
+                companyId: global.Id,
+                totalExp: global.CompanyExp,
                 Job_title: global.Job_Title,
                 Company: global.Company,
                 Anywhere: global.Anywhere || false,
@@ -98,15 +97,16 @@ class CreateJob extends PureComponent {
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
-                    this.callPostedJob();
+                    this.props.navigation.navigate('AdminDashboard');
+                    // this.callPostedJob();
 
                 } else {
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
 
                 }
-            }, err => alert(JSON.stringify(err)));
+            }, err => snack(err['message']));
         } catch ( error ) {
-            this.DisplaySnackBar(error)
+            snack(error)
 
         }
     }
@@ -140,7 +140,6 @@ class CreateJob extends PureComponent {
         return (
             <View style={styles.backGround}>
                 <StatusBar hidden={true} />
-            <SnackBar ref="ReactNativeSnackBar"/>
                 <ImageBackground style={styles.ImageBlue}
             source={Background}
             resizeMode={'stretch'}>

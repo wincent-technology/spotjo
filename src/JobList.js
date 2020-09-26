@@ -12,50 +12,8 @@ import CompanyProfile from './CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 
 // import styles from './Style'
-var c = 0;
-const data = [{
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://turbologo.com/articles/wp-content/uploads/2019/11/Porsche-logo-cover-1280x720.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'Senior Java Devloper',
-    image: 'https://cdn.vox-cdn.com/thumbor/2eZPJ-j9zXm5AIro7TIiEBCgNoc=/0x0:640x427/1200x800/filters:focal(0x0:640x427)/cdn.vox-cdn.com/assets/3218223/google.jpg',
-    ComPany_Name: 'Google',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JAVA DEVELOPER / J2EE',
-    image: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Logo.png',
-    ComPany_Name: 'Amazon',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://di-uploads-pod3.dealerinspire.com/porscheoffremont/uploads/2018/09/porsche-logo.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-},];
 
-global.item = data[0];
+
 
 class JobList extends PureComponent {
 
@@ -64,8 +22,19 @@ class JobList extends PureComponent {
         super(props);
 
         this.state = {
-
+            data: []
         };
+    }
+    componentDidMount() {
+        const {params} = this.props.navigation.state;
+        const otherParam = params ? params.otherParam : null;
+        console.log('other', otherParam)
+        this.setState({
+            data: otherParam || []
+        })
+        // console.log('console>>>', otherParam[0].skills);
+
+
     }
 
     Filter = () => {
@@ -73,26 +42,27 @@ class JobList extends PureComponent {
     }
 
     push = (item) => {
-        console.log("heelo", item);
-        global.item = item;
-        this.props.navigation.navigate('CompanyProfile')
+        // console.log("heelo", item);
+        // global.ig = item
+        this.props.navigation.navigate('CompanyProfile', {
+            item: item
+        })
     }
     Back = () => {
         this.props.navigation.navigate('ChooseTalent')
     }
     render() {
-        console.warn(">>", DeviceInfo.hasNotch())
-
+        const {data} = this.state;
         return (
             <View style={styles.backGround}>
         <StatusBar hidden={true}/>
         <ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode={'stretch'}>
-            <NavigationHeader onPress={() => this.Back()} text='Fresher Java Developer'/>
+            <NavigationHeader onPress={() => this.Back()} text={global.Job_Title}/>
             <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - 200</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {data.length}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{

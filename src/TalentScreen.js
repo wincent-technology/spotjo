@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { SafeAreaView, StyleSheet, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput, FlatList } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
-import { scale } from './Util';
+import { scale, snack } from './Util';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, vw, vh } from '../Component/responsive-ratio';
 import { Background, themeColor } from '../Constant/index'
 import http from '../api';
 import styles from './Style'
-import SnackBar from '../Component/SnackBar'
 
 
 
@@ -25,9 +24,6 @@ class TalentScreen extends Component {
         global.Job_Title = this.state.name;
         this.props.navigation.navigate('FavoriteLocation')
     }
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
 
     back = () => {
         this.props.navigation.goBack();
@@ -59,16 +55,14 @@ class TalentScreen extends Component {
                     this.setState({
                         dataCheck: res['data']['result'],
                     });
-
                     this.arrayholder = res['data']['result'];
                 //            //will get data in this    res['data']['result']
                 } else {
-                    // console.log('res', res);
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
                 }
-            }, err => alert(JSON.stringify(err)));
+            }, err => snack(err['message']));
         } catch ( error ) {
-            this.DisplaySnackBar(error)
+            snack(error)
 
         }
     }
@@ -82,7 +76,6 @@ class TalentScreen extends Component {
             <View style={{
                 flex: 1
             }}>
-            <SnackBar ref="ReactNativeSnackBar" />
         <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}

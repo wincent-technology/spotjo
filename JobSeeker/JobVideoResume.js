@@ -10,14 +10,13 @@ import React, { Component } from 'react';
 import { Dimensions, View, Text, SafeAreaView, StatusBar, ImageBackground, Image, PermissionsAndroid, TouchableWithoutFeedback } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
-import { scale } from '../src/Util';
+import { scale, snack } from '../src/Util';
 import { play } from '../src/IconManager';
 import { widthPercentageToDP as wp } from '../Component/responsive-ratio';
 import CustomButton from '../Component/Button'
 import { themeColor, Background } from '../Constant/index'
 import ImagePicker from 'react-native-image-picker';
 import http from '../api'
-import SnackBar from '../Component/SnackBar'
 
 
 class JobVideoResume extends Component {
@@ -27,9 +26,7 @@ class JobVideoResume extends Component {
     // this.state = {};
     }
 
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
 
     next = () => {
         try {
@@ -48,11 +45,11 @@ class JobVideoResume extends Component {
                     console.log('rrrrrrrrr>>>>>>', res['data']['result']);
                     this.props.navigation.navigate('TabScreenJob')
                 } else {
-                    this.DisplaySnackBar(res['data']['message'])
+                    snack(res['data']['message'])
                 }
-            }, err => this.DisplaySnackBar(err['message']));
+            }, err => snack(err['message']));
         } catch ( error ) {
-            this.DisplaySnackBar(error)
+            snack(error)
 
         }
     }

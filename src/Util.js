@@ -1,4 +1,7 @@
 import { Dimensions, Platform } from 'react-native'
+import Snackbar from 'react-native-snackbar'
+import { themeColor, FontBold } from '../Constant/index'
+
 
 const deviceW = Dimensions.get('window').width
 const basePx = 375
@@ -25,5 +28,15 @@ function isIphoneX() {
     );
 }
 
+function snack(text) {
+    return Snackbar.show({
+        text: text,
+        duration: Snackbar.LENGTH_SHORT,
+        backgroundColor: '#fff',
+        textColor: themeColor,
+        fontFamily: FontBold
+    });
+}
 
-export { scale, screenWidth, getStatusBarHeight }
+
+export { scale, screenWidth, getStatusBarHeight, snack }

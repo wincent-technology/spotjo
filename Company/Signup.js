@@ -11,7 +11,7 @@ import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
-import { scale } from '../src/Util';
+import { scale, snack } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
 import { Background } from '../Constant/index'
@@ -28,9 +28,7 @@ class Signup extends Component {
         };
     }
 
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
 
     onSignup = async () => {
         const {email, password} = this.state;
@@ -43,16 +41,16 @@ class Signup extends Component {
                     if (res['data']['status']) {
                         this.props.navigation.navigate('TabScreenCompany')
                     } else {
-                        this.DisplaySnackBar(res['data']['message'])
+                        snack(res['data']['message'])
 
                     }
-                }, err => alert(JSON.stringify(err)));
+                }, err => snack(err['message']))
             } else {
-                this.DisplaySnackBar('Required Email Password')
+                snack('Required Email Password')
 
             }
         } catch ( error ) {
-            this.DisplaySnackBar("error while register" + error)
+            snack("error while register" + error)
 
         }
     }
@@ -71,8 +69,6 @@ class Signup extends Component {
             resizeMode = {
             'stretch'
             }><StatusBar hidden ={true}/>
-               <SnackBar ref="ReactNativeSnackBar" />
-               
          <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}

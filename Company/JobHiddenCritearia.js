@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput, ScrollView } from 'react-native';
+import { SafeAreaView, TouchableWithoutFeedback, StatusBar, FlatList, ImageBackground, Dimensions, Text, Image, View, TextInput, ScrollView } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import { scale } from '../src/Util';
 import CustomInput from '../Component/Input'
@@ -9,7 +9,7 @@ import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract }
 import styles from '../src/Style';
 import Slider from '@react-native-community/slider';
 import { Rating, NavigationHead, DropDownItem } from '../Component/ViewManager'
-
+import Items from './Items'
 
 
 class JobHiddenCritearia extends Component {
@@ -17,37 +17,14 @@ class JobHiddenCritearia extends Component {
         super(props);
 
         this.state = {
-            addSkill: [{
-                name: 'J2EE',
-                rating: 1
-            }, {
-                name: 'SQL,Mysql',
-                rating: 1
-            }, {
-                name: 'Java',
-                rating: 1
-            }],
-            Education: [{
-                name: 'MBA',
-                rating: 1
-            }, {
-                name: 'BE',
-                rating: 1
-            }],
-            Language: [{
-                name: 'English',
-                rating: 1
-            }, {
-                name: 'Kannada',
-                rating: 1
-            }, {
-                name: 'Telugu',
-                rating: 1
-            }],
+            addSkill: [],
+            Education: [],
+            Language: [],
             salary: 0,
             salaryrating: 1
         };
     }
+
 
     next = () => {
         this.props.navigation.navigate('TabScreen')
@@ -95,12 +72,11 @@ class JobHiddenCritearia extends Component {
         });
     }
 
-    handleChange = (value, index, item) => {
+    handleChange = (value, index) => {
 
-        console.log("item", value);
         var arr = [];
         arr = this.state.addSkill;
-        arr[0].rating = value;
+        arr[index].rating = value;
         this.setState({
             addSkill: arr
         }, () => {
@@ -108,28 +84,26 @@ class JobHiddenCritearia extends Component {
         });
     }
 
-    handleEducation = (value, index, item) => {
+    handleEducation = (value, index) => {
 
-        console.log("item", value);
         var arr = [];
         arr = this.state.Education;
-        arr[0].rating = value;
+        arr[index].rating = value;
         this.setState({
             Education: arr
         }, () => {
-            global.Education = this.state.addSkill
+            global.Education = this.state.Education
         });
     }
-    handleLanguage = (value, index, item) => {
+    handleLanguage = (value, index) => {
 
-        console.log("item", value);
         var arr = [];
         arr = this.state.Language;
-        arr[0].rating = value;
+        arr[index].rating = value;
         this.setState({
             Language: arr
         }, () => {
-            global.LanguageSkill = this.state.addSkill
+            global.LanguageSkill = this.state.Language
         });
     }
 
@@ -205,54 +179,44 @@ class JobHiddenCritearia extends Component {
             }}
             iconColor={themeWhite}
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
-            /><ScrollView  style={{
+            />
+            <FlatList
+            nestedScrollEnabled={true}
+            style={{
+                backgroundColor: 'transparent',
                 marginTop: '-7%',
                 marginBottom: 27,
-            }} contentContainerStyle={{
+            }}
+            contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
                 width: wp(85),
                 flexGrow: 1
-            }} nestedScrollEnabled={true}>
-            {this.state.addSkill.map((item, index) => {
-                return (
-                    <View key={index} style={{
-                        flexDirection: 'row',
-                        width: wp(85),
-                        justifyContent: "center",
-                        marginBottom: scale(2),
-                    // marginLeft: '3%',
-                    }}><View style={{
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        width: '35%'
-                    }}><Text key={index}
-                    style={{
-                        fontSize: scale(16),
-                        color: themeWhite,
-                        fontFamily: 'Roboto-Regular',
-                    }}>
-                      {item.name}
-                    </Text></View><View style={{
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        width: '35%'
-
-                    }}><Rating
-                    type='custom'
-                    imageSize={18}
-                    ratingCount={5}
-                    defaultRating={item.rating}
-                    readonly={false}
-                    ratingBackgroundColor='transparent'
-                    startingValue={0}
-                    onFinishRating={(value, index, item) => this.handleChange(value, index, item)}
-                    // ratingColor={"#f1ee40"}
-                    // tintColor={themeWhite}
-                    /></View></View>
-                )
-            })}
-            </ScrollView></View>
+            }}
+            data = {this.state.addSkill}
+            extraData={this.state.addSkill}
+            showsHorizontalScrollIndicator = { false  }
+            removeClippedSubviews={true}
+            renderItem={({item, index}) => <Items
+                item={item}
+                index={index}
+                handleChange={this.handleChange}
+                />}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={70}
+            getItemLayout={(data, index) => (
+            {
+                length: hp('4%'),
+                offset: hp('4%') * index,
+                index
+            }
+            )}
+            keyExtractor = {
+            (item, index) => index + ''
+            }
+            />
+            </View>
             <View style={{
                 width: '90%',
                 alignItems: "center",
@@ -400,56 +364,43 @@ class JobHiddenCritearia extends Component {
             iconColor={themeWhite}
 
             onSubmitEditing={(event) => this.Education(event.nativeEvent.text)}
-            /><ScrollView  nestedScrollEnabled={true} style={{
+            />
+            <FlatList
+            nestedScrollEnabled={true}
+            style={{
                 marginTop: '-7%',
                 marginBottom: 30,
-            // height: scale(200),
-            }} contentContainerStyle={{
+            }}
+            contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
-            }} nestedScrollEnabled={true}>
-            {this.state.Education.map((item, index) => {
-                return (
-                    <View key={index} style={{
-                        flexDirection: 'row',
-                        width: wp(85),
-                        justifyContent: "center",
-                        marginBottom: scale(2),
-                    // marginLeft: '3%',
-                    // height: scale(15)
-                    }}><View style={{
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        width: '35%'
-                    }}><Text key={index}
-                    style={{
-                        fontSize: scale(16),
-                        color: themeWhite,
-                        fontFamily: 'Roboto-Regular',
-                    }}>
-                      {item.name}
-                    </Text></View><View style={{
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        width: '35%'
-
-                    }}><Rating
-                    type='custom'
-                    imageSize={18}
-                    ratingCount={5}
-                    defaultRating={item.rating}
-                    readonly={false}
-                    ratingBackgroundColor='transparent'
-                    startingValue={0}
-                    onFinishRating={(value, index, item) => this.handleEducation(value, index, item)}
-
-                    // ratingColor={"#f1ee40"}
-                    // tintColor={themeWhite}
-                    /></View></View>
-                )
-            })}
-            </ScrollView></View>
+                width: wp(85),
+                flexGrow: 1
+            }}
+            data = {this.state.Education}
+            extraData={this.state.Education}
+            showsHorizontalScrollIndicator = { false  }
+            removeClippedSubviews={true}
+            renderItem={({item, index}) => <Items
+                item={item}
+                index={index}
+                handleChange={this.handleEducation}
+                />}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={70}
+            getItemLayout={(data, index) => (
+            {
+                length: hp('4%'),
+                offset: hp('4%') * index,
+                index
+            }
+            )}
+            keyExtractor = {
+            (item, index) => index + ''
+            }
+            />
+            </View>
             <View style={{
                 width: '90%',
                 alignItems: "center",
@@ -489,57 +440,42 @@ class JobHiddenCritearia extends Component {
             iconColor={themeWhite}
 
             onSubmitEditing={(event) => this.Language(event.nativeEvent.text)}
-            /><ScrollView  nestedScrollEnabled={true} style={{
+            />
+            <FlatList
+            nestedScrollEnabled={true}
+            style={{
                 marginTop: '-7%',
                 marginBottom: 15,
-            // height: hp(50),
-            }} contentContainerStyle={{
+            }}
+            contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
                 width: wp(85),
-            // height: hp(15),
-            }} nestedScrollEnabled={true}>
-            {this.state.Language.map((item, index) => {
-                return (
-                    <View key={index} style={{
-                        flexDirection: 'row',
-                        width: wp(85),
-                        justifyContent: "center",
-                        marginBottom: scale(2),
-                    // marginLeft: '3%',
-                    // height: scale(15)
-                    }}><View style={{
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        width: '35%'
-                    }}><Text key={index}
-                    style={{
-                        fontSize: scale(16),
-                        color: themeWhite,
-                        fontFamily: 'Roboto-Regular',
-                    }}>
-                      {item.name}
-                    </Text></View><View style={{
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        width: '35%'
-
-                    }}><Rating
-                    type='custom'
-                    imageSize={18}
-                    ratingCount={5}
-                    defaultRating={item.rating}
-                    readonly={false}
-                    ratingBackgroundColor='transparent'
-                    startingValue={0}
-                    onFinishRating={(value, index, item) => this.handleLanguage(value, index, item)}
-
-                    // ratingColor={"#f1ee40"}
-                    // tintColor={themeWhite}
-                    /></View></View>
-                )
-            })}
-            </ScrollView></View></ScrollView>
+                flexGrow: 1
+            }}
+            data = {this.state.Language}
+            extraData={this.state.Language}
+            showsHorizontalScrollIndicator = { false  }
+            removeClippedSubviews={true}
+            renderItem={({item, index}) => <Items
+                item={item}
+                index={index}
+                handleChange={this.handleLanguage}
+                />}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={70}
+            getItemLayout={(data, index) => (
+            {
+                length: hp('4%'),
+                offset: hp('4%') * index,
+                index
+            }
+            )}
+            keyExtractor = {
+            (item, index) => index + ''
+            }
+            /></View></ScrollView>
            </View>
             </ImageBackground>
         )

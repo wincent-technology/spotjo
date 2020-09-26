@@ -8,6 +8,7 @@ import { themeColor, themeWhite, place, edit, user, bag } from '../Constant/inde
 import styles from '../src/Style'
 const {height, width} = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 
 class ItemMVJob extends PureComponent {
     // title, href, total_time, total_listen, image
@@ -15,8 +16,20 @@ class ItemMVJob extends PureComponent {
         super(props);
     }
     render() {
+        const config = {
+            velocityThreshold: 0.3,
+            directionalOffsetThreshold: 80
+        };
         return (
             <TouchableWithoutFeedback onPress={() => this.props.push(this.props.item)}>
+            <GestureRecognizer
+            onSwipe={(direction, state) => this.props.onSwipe(direction, state)}
+            onSwipeUp={(state) => this.props.onSwipeUp(state, this.props.item.name)}
+            onSwipeDown={(state) => this.props.onSwipeDown(state, this.props.item.name)}
+            onSwipeLeft={(state) => this.props.onSwipeLeft(state, this.props.item.name)}
+            onSwipeRight={(state) => this.props.onSwipeRight(state, this.props.item.name)}
+            config={config}
+            style={styles.ItemMVMainView}>
             <LinearGradient colors={['#fff', '#f3f2f2']} style={styles.ItemMVMainView}><View style={styles.ItemMVSecondView}><View>
             <Text style={styles.ItemMVHeader}>{this.props.item.name}</Text></View><View style={styles.ItemMVPlayNowView}>
             <Text style={styles.ItemMVPlayNowText}>Play Now</Text><View style={styles.ItemMVPlayIcon}>
@@ -75,7 +88,7 @@ class ItemMVJob extends PureComponent {
             // tintColor={themeWhite}
             /></View>
             </View>
-            </LinearGradient>
+            </LinearGradient></GestureRecognizer>
             </TouchableWithoutFeedback>
         )
     }
