@@ -38,7 +38,7 @@ export default CustomInput = (props) => <Input
     props.secureTextEntry
     }
     onChangeText = {
-    (text) => props.textChange ? props.textChange(text) : null
+    (text) => props.textChange(text)
     }
     errorStyle = {
     {

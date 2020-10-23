@@ -1,15 +1,51 @@
-import React, { Component } from 'react';
-import { SafeAreaView, TouchableWithoutFeedback, StatusBar, FlatList, ImageBackground, Dimensions, Text, Image, View, TextInput, ScrollView } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
-import { scale } from '../src/Util';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    TouchableWithoutFeedback,
+    StatusBar,
+    FlatList,
+    ImageBackground,
+    Dimensions,
+    Text,
+    Image,
+    View,
+    TextInput,
+    ScrollView
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
+import {
+    scale
+} from '../src/Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    switchColor,
+    Background,
+    themeColor,
+    themeWhite,
+    iconSearch,
+    darkract,
+    blanks,
+    Fulls
+} from '../Constant/index'
 import styles from '../src/Style';
-import Slider from '@react-native-community/slider';
-import { Rating, NavigationHead, DropDownItem } from '../Component/ViewManager'
+import Slider from 'rn-range-slider';
+import {
+    Rating,
+    NavigationHead,
+    DropDownItem
+} from '../Component/ViewManager'
 import Items from './Items'
+import StarRating from 'react-native-star-rating';
+import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 
 
 class JobHiddenCritearia extends Component {
@@ -21,6 +57,7 @@ class JobHiddenCritearia extends Component {
             Education: [],
             Language: [],
             salary: 0,
+            salaryMax: 150,
             salaryrating: 1
         };
     }
@@ -30,7 +67,7 @@ class JobHiddenCritearia extends Component {
         this.props.navigation.navigate('TabScreen')
     }
     addsSkill = (text) => {
-        var i = text;
+        var i = text.toUpperCase();
         let gems = this.state.addSkill
         // var in =  this.state.addSkill; 
         gems.push({
@@ -44,7 +81,7 @@ class JobHiddenCritearia extends Component {
         });
     }
     Education = (text) => {
-        var i = text;
+        var i = text.toUpperCase();
         let gems = this.state.Education
         // var in =  this.state.addSkill; 
         gems.push({
@@ -58,10 +95,10 @@ class JobHiddenCritearia extends Component {
         });
     }
     Language = (text) => {
-        var i = text;
+        var i = text.toUpperCase();
         let gems = this.state.Language
         // var in =  this.state.addSkill; 
-        gems.push({
+        this.state.Language && gems.push({
             name: i,
             rating: 1
         });
@@ -73,11 +110,11 @@ class JobHiddenCritearia extends Component {
     }
 
     handleChange = (value, index) => {
-
+        console.log('value', value, index);
         var arr = [];
         arr = this.state.addSkill;
         arr[index].rating = value;
-        this.setState({
+        return this.setState({
             addSkill: arr
         }, () => {
             global.addSkill = this.state.addSkill
@@ -114,9 +151,49 @@ class JobHiddenCritearia extends Component {
             global.salaryrating = this.state.salaryrating
         });
     }
+    remove = (item, index) => {
+        console.log(index, item);
+        const {
+            addSkill,
+            Education,
+            Language
+        } = this.state;
+        let m = addSkill
+        let j = Education
+        let n = Language
+        for (let i in m) {
+            if (m[i].name == item) {
+                m.splice(i, 1)
+            }
+        }
+        for (let i in j) {
+            if (j[i].name == item) {
+                j.splice(i, 1)
+            }
+        }
+        for (let i in n) {
+            if (n[i].name == item) {
+                n.splice(i, 1)
+            }
+        }
+        this.setState({
+            addSkill: m,
+            Education: j,
+            Language: n
+        })
+    }
 
     render() {
-        const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
+        const {
+            FullTime,
+            PartTime,
+            Employed,
+            Internship,
+            StudentJobs,
+            HelpingVacancies,
+            Freelancer,
+            name
+        } = this.state
         return (
 
             <ImageBackground style={{
@@ -180,42 +257,36 @@ class JobHiddenCritearia extends Component {
             iconColor={themeWhite}
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
             />
-            <FlatList
-            nestedScrollEnabled={true}
-            style={{
-                backgroundColor: 'transparent',
-                marginTop: '-7%',
-                marginBottom: 27,
-            }}
-            contentContainerStyle={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: wp(85),
-                flexGrow: 1
-            }}
-            data = {this.state.addSkill}
-            extraData={this.state.addSkill}
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => <Items
-                item={item}
-                index={index}
-                handleChange={this.handleChange}
-                />}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('4%'),
-                offset: hp('4%') * index,
-                index
+             <ScrollView nestedScrollEnabled={true}
+            style={styles.itemsHiddenViewScr}
+            contentContainerStyle={styles.itemsHiddenViewCont}>
+             { this.state.addSkill.map((item, index) => {
+                console.log('index', index);
+                return (<View style={styles.itemsHiddenView}>
+                    <View style={styles.itemsHiddenSView}>
+                    <Icon2 name={'highlight-off'} size={scale(20)} color={themeWhite} onPress={() => {
+                        this.remove(item.name, index)
+                    }}/></View><View style={styles.itemsHiddenTView}><Text
+                    style={styles.itemsHiddenFont} numberOfLines={1}>
+                      {item.name}
+                    </Text></View>
+                    <View style={styles.itemsHiddenViewRate}>
+            <StarRating
+                   emptyStar={blanks}
+            fullStar={Fulls}
+                    halfStar={'star-half'}
+                    iconSet={'MaterialIcons'}
+                    disabled={false}
+                    maxStars={5}
+                    starSize={scale(20)}
+                    rating={item.rating}
+                    selectedStar={(rating) => this.handleChange(rating, index)}
+                    fullStarColor={'orange'}
+                    />
+            </View></View>)
             }
             )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            />
+            </ScrollView>
             </View>
             <View style={{
                 width: '90%',
@@ -271,19 +342,26 @@ class JobHiddenCritearia extends Component {
             }]}>{Math.round(this.state.salary)}</Text>
             <Text style={[styles.FilterMaxText, {
                 color: '#fff'
-            }]}>150k+</Text></View><Slider
+            }]}>{this.state.salaryMax}k+</Text></View><Slider
             style={[styles.FilterMinimumSalarySlider, {
-                width: wp(85)
+                width: wp(75)
             }]}
-            minimumValue={0}
-            maximumValue={150}
-            onValueChange={ value => {
+            gravity={'center'}
+            min={0}
+            max={150}
+            step={1}
+            selectionColor={themeWhite}
+            blankColor="#B0b0b0"
+            labelBackgroundColor={themeColor}
+            labelBorderColor={'#b0b0b0'}
+            onValueChanged={(low, high, fromUser) => {
+                global.minSalary = low;
+                global.maxSalary = high;
                 this.setState({
-                    salary: value,
-                }, () => global.salary = this.state.salary);
+                    salary: low,
+                    salaryMax: high
+                })
             }}
-            minimumTrackTintColor={'#fff'}
-            maximumTrackTintColor={'#fff'}
             /></View>
                     <View style={{
                 flexDirection: 'row',
@@ -304,26 +382,26 @@ class JobHiddenCritearia extends Component {
                 fontSize: scale(16),
                 color: themeWhite,
                 fontFamily: 'Roboto-Regular',
-            }}>
+            }} numberOfLines={1}>
                       Salary Rating
                     </Text></View><View style={{
                 alignItems: "flex-end",
                 justifyContent: "center",
                 width: '35%'
 
-            }}><Rating
-            type='custom'
-            imageSize={18}
-            ratingCount={5}
-            defaultRating={this.state.salaryrating}
-            readonly={false}
-            ratingBackgroundColor='transparent'
-            startingValue={0}
-            onFinishRating={(value, index, item) => this.handlesalary(value, index, item)}
-
-            // ratingColor={"#f1ee40"}
-            // tintColor={themeWhite}
-            /></View></View>
+            }}><StarRating
+           emptyStar={blanks}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(18)}
+            rating={this.state.salaryrating}
+            selectedStar={(rating, index) => this.handlesalary(rating, index)}
+            fullStarColor={'orange'}
+            />
+            </View></View>
             </ScrollView></View>
             <View style={{
                 width: '90%',
@@ -335,7 +413,6 @@ class JobHiddenCritearia extends Component {
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
-            // elevation: 7,
             }}>
            <CustomInput placeholder = {'Select Education'} textChange = {(text) => this.setState({
                 name: text
@@ -364,42 +441,39 @@ class JobHiddenCritearia extends Component {
             iconColor={themeWhite}
 
             onSubmitEditing={(event) => this.Education(event.nativeEvent.text)}
-            />
-            <FlatList
-            nestedScrollEnabled={true}
+            /><ScrollView nestedScrollEnabled={true}
             style={{
                 marginTop: '-7%',
                 marginBottom: 30,
             }}
-            contentContainerStyle={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: wp(85),
-                flexGrow: 1
-            }}
-            data = {this.state.Education}
-            extraData={this.state.Education}
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => <Items
-                item={item}
-                index={index}
-                handleChange={this.handleEducation}
-                />}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('4%'),
-                offset: hp('4%') * index,
-                index
+            contentContainerStyle={styles.itemsHiddenViewCont}>
+             { this.state.Education.map((item, index) => {
+                console.log('index', index);
+                return (<View style={styles.itemsHiddenView}>
+                    <View style={styles.itemsHiddenSView}>
+                    <Icon2 name={'highlight-off'} size={scale(20)} color={themeWhite} onPress={() => {
+                        this.remove(item.name, index)
+                    }}/></View><View style={styles.itemsHiddenTView}><Text
+                    style={styles.itemsHiddenFont} numberOfLines={1}>
+                      {item.name}
+                    </Text></View>
+                    <View style={styles.itemsHiddenViewRate}>
+            <StarRating
+                   emptyStar={blanks}
+            fullStar={Fulls}
+                    halfStar={'star-half'}
+                    iconSet={'MaterialIcons'}
+                    disabled={false}
+                    maxStars={5}
+                    starSize={scale(20)}
+                    rating={item.rating}
+                    selectedStar={(rating) => this.handleEducation(rating, index)}
+                    fullStarColor={'orange'}
+                    />
+            </View></View>)
             }
             )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            />
+            </ScrollView>
             </View>
             <View style={{
                 width: '90%',
@@ -441,46 +515,44 @@ class JobHiddenCritearia extends Component {
 
             onSubmitEditing={(event) => this.Language(event.nativeEvent.text)}
             />
-            <FlatList
-            nestedScrollEnabled={true}
+            <ScrollView nestedScrollEnabled={true}
             style={{
                 marginTop: '-7%',
                 marginBottom: 15,
             }}
-            contentContainerStyle={{
-                alignItems: "center",
-                justifyContent: "center",
-                width: wp(85),
-                flexGrow: 1
-            }}
-            data = {this.state.Language}
-            extraData={this.state.Language}
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => <Items
-                item={item}
-                index={index}
-                handleChange={this.handleLanguage}
-                />}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('4%'),
-                offset: hp('4%') * index,
-                index
+            contentContainerStyle={styles.itemsHiddenViewCont}>
+             { this.state.Language.map((item, index) => {
+                console.log('index', index);
+                return (<View style={styles.itemsHiddenView}>
+                    <View style={styles.itemsHiddenSView}>
+                    <Icon2 name={'highlight-off'} size={scale(20)} color={themeWhite} onPress={() => {
+                        this.remove(item.name, index)
+                    }}/></View><View style={styles.itemsHiddenTView}><Text
+                    style={styles.itemsHiddenFont} numberOfLines={1}>
+                      {item.name}
+                    </Text></View>
+                    <View style={styles.itemsHiddenViewRate}>
+            <StarRating
+                    emptyStar={blanks}
+                    fullStar={Fulls}
+                    halfStar={'star-half'}
+                    iconSet={'MaterialIcons'}
+                    disabled={false}
+                    maxStars={5}
+                    starSize={scale(20)}
+                    rating={item.rating}
+                    selectedStar={(rating) => this.handleLanguage(rating, index)}
+                    fullStarColor={'orange'}
+                    />
+            </View></View>)
             }
             )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            /></View></ScrollView>
+            </ScrollView>
+            </View></ScrollView>
            </View>
             </ImageBackground>
         )
     }
-}
-;
+};
 
 export default withNavigationFocus(JobHiddenCritearia);

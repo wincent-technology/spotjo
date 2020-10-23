@@ -36,15 +36,18 @@ class LoginWithEmail extends Component {
                         global.UserEmail = res['data']['result']['email']
                         global.Place = res['data']['result']['place']
                         global.UserMobile = res['data']['result']['mobile']
-                        global.UserProfile = url + '/images/user/' + res['data']['result']['profile']
-                        global.Video = res['data']['result']['video']
+                        global.UserProfile = url + 'images/user/' + res['data']['result']['profile']
+                        global.Video = url + 'images/user/' + res['data']['result']['video']
                         global.UserSkill = res['data']['result']['skills']
                         global.UserLanguage = res['data']['result']['language']
                         global.Qualification = res['data']['result']['qualification']
                         global.UserEducation = res['data']['result']['education']
                         global.salaryrating = res['data']['result']['salaryrating']
-                        global.salary = res['data']['result']['minSal']
+                        global.minSalary = res['data']['result']['minSal']
+                        global.maxSalary = res['data']['result']['maxSal']
                         global.Experience = res['data']['result']['workexp']
+                        global.let = parseFloat(res['data']['result']['latitude'])
+                        global.long = parseFloat(res['data']['result']['longitude'])
                         AsyncStorage.setItem('UserLoggedInData', JSON.stringify(res['data']['result']));
 
                         this.props.navigation.navigate('TabScreenJob')
@@ -102,10 +105,10 @@ class LoginWithEmail extends Component {
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
                 email: text
             })} />
-       <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
+       <CustomInput placeholder = {'Password'} secureTextEntry={true} textChange = {(text) => this.setState({
                 password: text
             })}/>
-       <TouchableWithoutFeedback onPress={this.forgat}><Text style={{
+        <TouchableWithoutFeedback onPress={this.forgat}><Text style={{
                 marginTop: scale(-8),
                 marginLeft: scale(115),
                 marginBottom: scale(40),

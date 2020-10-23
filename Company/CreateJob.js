@@ -1,13 +1,54 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE, overlayimage, rightWrongBack, rite, FontBold } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale, snack } from '../src/Util'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    sort,
+    filter,
+    TRANLINE,
+    overlayimage,
+    rightWrongBack,
+    rite,
+    FontBold
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale,
+    snack
+} from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHead } from '../Component/ViewManager.js'
+import {
+    Rating,
+    NavigationHead
+} from '../Component/ViewManager.js'
 import ItemMV from '../src/ItemMV'
 import DeviceInfo from 'react-native-device-info';
 import JobBasicType from './JobBasicType';
@@ -35,48 +76,33 @@ class CreateJob extends PureComponent {
         };
     }
 
+    back = () => {
+        console.log('hey back')
+        if (this.state.index > 0)
+            this.refs.swiper.scrollBy(-1);
+    }
     Back = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
 
     Exit = () => {
         this.props.navigation.navigate('AdminDashboard');
     }
     next = () => {
-        this.setState({
-            index: this.state.index + 1
-        })
+        if (this.state.index < 4)
+            this.refs.swiper.scrollBy(1);
     }
     callApi = () => {
-        console.log('total Api call',
-            global.Job_Title,
-            global.Company,
-            global.Anywhere,
-            global.salary,
-            global.Job_Location,
-            global.FullTime,
-            global.PartTime,
-            global.Employed,
-            global.Internship,
-            global.StudentJobs,
-            global.HelpingVacancies,
-            global.Freelancer,
-            new Date(Date.now()).toLocaleDateString(),
-            Date.now(),
-            global.City,
-            global.Language,
-            global.Task_Description,
-            global.addSkill,
-            global.Education,
-            global.LanguageSkill);
         try {
             http.POST('api/appjob/add', {
                 companyId: global.Id,
-                totalExp: global.CompanyExp,
+                minExp: global.minYear,
+                maxExp: global.maxYear,
                 Job_title: global.Job_Title,
                 Company: global.Company,
                 Anywhere: global.Anywhere || false,
-                Salary: Math.round(global.salary),
+                salMin: global.minSalary,
+                salMax: global.maxSalary,
                 salRating: global.salaryrating,
                 Job_Location: global.City,
                 FullTime: global.FullTime,
@@ -86,14 +112,14 @@ class CreateJob extends PureComponent {
                 StudentJobs: global.StudentJobs,
                 HelpingVacancies: global.HelpingVacancies,
                 Freelancer: global.Freelancer,
-                Start_date: global.Start_date,
-                End_date: global.End_date,
+                jobEnd: global.End_date,
                 City: global.City,
-                Language: global.Language,
                 Task_Description: global.Task_Description,
                 Skill: global.addSkill,
                 Education: global.Education,
-                LanguageSkill: global.LanguageSkill
+                LanguageSkill: global.LanguageSkill,
+                latitude: global.let,
+                longitude: global.long
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
@@ -105,7 +131,7 @@ class CreateJob extends PureComponent {
 
                 }
             }, err => snack(err['message']));
-        } catch ( error ) {
+        } catch (error) {
             snack(error)
 
         }
@@ -116,18 +142,12 @@ class CreateJob extends PureComponent {
             http.GET('api/job/get').then((res) => {
                 if (res['data']['status']) {
                     console.log(">>>>>>>>>>>>", JSON.stringify(res['data']['result'][3]['description']));
-                // var arr = [];
-                // let i = res['data']['result'][3]['description']
-                // arr = i.split("\n");
-                // console.log("<<<", i.split("\n"));
-                // for (var j = 0; j < arr.length; j++)
-                //     console.log(">>", arr[j]);
                 } else {
                     console.log('res', res);
                     alert(res[0]['data']['message']['message']);
                 }
             }, err => alert(JSON.stringify(err)));
-        } catch ( error ) {
+        } catch (error) {
             console.log("error while register" + error);
         }
     }
@@ -136,7 +156,9 @@ class CreateJob extends PureComponent {
 
     }
     render() {
-        const {index} = this.state;
+        const {
+            index
+        } = this.state;
         return (
             <View style={styles.backGround}>
                 <StatusBar hidden={true} />
@@ -151,6 +173,8 @@ class CreateJob extends PureComponent {
                 top: hp(4)
             }}>
                     <Swiper
+            // showsButtons={true}
+            ref={'swiper'}
             dotColor={themeWhite}
             index={index}
             onIndexChanged={(index) => this.setState({
@@ -179,25 +203,28 @@ class CreateJob extends PureComponent {
                 width: wp(20),
                 marginLeft: wp(10)
             }}>
-            <TouchableWithoutFeedback style={styles.Size} onPress={this.back}><View  style={styles.Size}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableWithoutFeedback>
+            <TouchableOpacity style={styles.Size} onPress={this.back} hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(18),
+            }, styles.FontSty]}>{this.state.index == 4 ? '' : <Text>Back</Text>}</Text></View></TouchableOpacity>
             </View>
             <View style={{
                 alignItems: 'flex-end',
                 // right: wp(7),
                 width: wp(55)
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
+            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}><View  style={[styles.Size, {
                 alignItems: 'flex-end'
             }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+                fontSize: scale(18),
+            }, styles.FontSty]} numberOfLines={1}>{this.state.index == 3 ? <Text numberOfLines={1}>Preview</Text> : this.state.index == 4 ? '' : <Text>Next</Text>}</Text></View></TouchableOpacity></View>
             </View>
                     </View>
-
                     <View>
-                    
-            <View style={styles.TranLingImage}>
+            <View style={{
+                bottom: 47,
+                height: 5,
+                width: '100%',
+                position: "absolute"
+            }}>
              <Image
             source={TRANLINE}
             style={styles.imageStyle}
@@ -205,7 +232,7 @@ class CreateJob extends PureComponent {
             /></View>
                  </View>
                  <View style={{
-                bottom: scale(46) + hp(6),
+                bottom: scale(50) + hp(6),
                 height: hp(6),
                 width: wp(105),
                 left: wp(-2)
@@ -217,24 +244,84 @@ class CreateJob extends PureComponent {
                 width: wp(103),
                 justifyContent: "center",
                 alignItems: "center"
-            }}><TouchableWithoutFeedback><Text style={{
-                fontSize: scale(17),
+            }}><TouchableWithoutFeedback><View style={{
+                flexDirection: 'column',
+            // width: wp(20)
+            }}><View style={{
+                flexDirection: "row",
+
+            }}><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
                 color: this.state.index == 0 ? themeColor : '#000',
-                textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
-            }}>Type {'>'}</Text></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback><Text style={{
-                fontSize: scale(17),
+            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
+            }}>Type </Text><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
+            }}>{'>'}</Text></View><View style={{
+                height: scale(1),
+                marginTop: scale(1),
+                width: 'auto',
+                backgroundColor: this.state.index == 0 ? '#000' : '#fff',
+            }} /></View></TouchableWithoutFeedback>
+            <TouchableWithoutFeedback><View style={{
+                flexDirection: 'column',
+            // width: wp(20)
+            }}><View style={{
+                flexDirection: "row",
+
+            }}><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
                 color: this.state.index == 1 ? themeColor : '#000',
-                textDecorationLine: this.state.index == 1 ? 'underline' : 'none'
-            }}>Preferences {'>'}</Text></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback><Text style={{
-                fontSize: scale(17),
-                color: this.state.index == 2 ? themeColor : '#000'
-            }}>Description {'>'}</Text></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback><Text style={{
-                fontSize: scale(17),
-                color: this.state.index == 3 ? themeColor : '#000'
-            }}>Criteria</Text></TouchableWithoutFeedback></View>) : (
+            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
+            }}>Preferences </Text><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
+            }}>{'>'}</Text></View><View style={{
+                height: scale(1),
+                marginTop: scale(1),
+                width: 'auto',
+                backgroundColor: this.state.index == 1 ? '#000' : '#fff',
+            }} /></View></TouchableWithoutFeedback>
+            <TouchableWithoutFeedback><View style={{
+                flexDirection: 'column',
+            // width: wp(20)
+            }}><View style={{
+                flexDirection: "row",
+
+            }}><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
+                color: this.state.index == 2 ? themeColor : '#000',
+            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
+            }}>Description </Text><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
+            }}>{'>'}</Text></View><View style={{
+                height: scale(1),
+                marginTop: scale(1),
+                width: 'auto',
+                backgroundColor: this.state.index == 2 ? '#000' : '#fff',
+            }} /></View></TouchableWithoutFeedback>
+            <TouchableWithoutFeedback><View style={{
+                flexDirection: 'column',
+            // width: wp(20)
+            }}><View style={{
+                flexDirection: "row",
+
+            }}><Text style={{
+                fontSize: scale(16),
+                fontWeight: "bold",
+                color: this.state.index == 3 ? themeColor : '#000',
+            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
+            }}>Criteria</Text></View><View style={{
+                height: scale(1),
+                marginTop: scale(1),
+                width: 'auto',
+                backgroundColor: this.state.index == 3 ? '#000' : '#fff',
+            }} /></View></TouchableWithoutFeedback>
+            </View>) : (
                 <View style={{
                     height: hp(6),
                     width: wp(103),
@@ -257,7 +344,6 @@ class CreateJob extends PureComponent {
             </View>
         )
     }
-}
-;
+};
 
 export default CreateJob;

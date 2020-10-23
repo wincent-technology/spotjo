@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, PermissionsAndroid, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
@@ -8,6 +8,8 @@ import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput';
 import { Background } from '../Constant/index';
 import http from '../api';
+import Geolocation from '@react-native-community/geolocation';
+
 
 
 class JobSignup extends Component {
@@ -21,14 +23,20 @@ class JobSignup extends Component {
     }
 
     onSignup = async () => {
+
+
         const {email, password} = this.state;
         try {
             if (email.length > 0 && password.length > 0) {
                 http.POST('api/user/register', {
                     email: email,
-                    password: password
+                    password: password,
+                    latitude: global.let || 0,
+                    longitude: global.long || 0
                 }).then((res) => {
                     if (res['data']['status']) {
+                        global.Id = res['data']['result']
+                        global.UserEmail = this.state.email
                         this.props.navigation.navigate('TabScreenJob')
                     } else {
                         snack(res['data']['message'])

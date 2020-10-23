@@ -6,14 +6,42 @@
  * @flow strict-local
  */
 
-import React, { Component } from 'react';
-import { StatusBar, SafeAreaView, ImageBackground, Dimensions, Text, Image, View, ScrollView, TouchableWithoutFeedback, TextInput } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    StatusBar,
+    SafeAreaView,
+    ImageBackground,
+    Dimensions,
+    Text,
+    Image,
+    View,
+    PermissionsAndroid,
+    ScrollView,
+    TouchableOpacity,
+    TextInput
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { scale } from '../src/Util'
+import {
+    scale
+} from '../src/Util'
 import CustomInput from '../Component/TextInput'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { backgroundCorner, Companyavtar, FontBold, FontRegular, Background } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    backgroundCorner,
+    Companyavtar,
+    FontBold,
+    FontRegular,
+    Background
+} from '../Constant/index'
+import ImagePicker from 'react-native-image-picker';
 
 class PersonalCompany extends Component {
     constructor(props) {
@@ -25,12 +53,57 @@ class PersonalCompany extends Component {
             Email: "Enter Email",
             Address: "Enter Compny Address",
             Cell: '+9100000-00000',
-            WebSite: ''
+            WebSite: '',
+            img: ''
+
         };
     }
 
     profile = () => {
-        this.props.navigation.navigate('Companylogo');
+        // this.props.navigation.navigate('Companylogo');
+        let options = {
+            title: 'Select Image',
+            customButtons: [{
+                name: 'customOptionKey',
+                title: 'Choose Photo'
+            }, ],
+            noData: false,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        var permissions = [
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        ];
+        PermissionsAndroid.requestMultiple(permissions).then(granted => {
+            console.log("rs");
+
+            ImagePicker.launchImageLibrary(options, (response) => {
+                if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+                    console.log("rs>>>>>>>", response);
+
+                    // const {uri} = response;
+                    global.uploadUri = 'file://' + response.path
+
+                    let n1 = Math.floor(Math.random() * 9) + 1,
+                        n2 = Math.floor(Math.random() * 9) + 1,
+                        n3 = Math.floor(Math.random() * 9) + 1,
+                        n4 = Math.floor(Math.random() * 9) + 1,
+                        n5 = Math.floor(Math.random() * 9) + 1,
+                        n6 = Math.floor(Math.random() * 9) + 1;
+                    let randomNumber = n1 + '' + n2 + '' + n3 + '' + n4 + '' + n5 + '' + n6;
+                    console.log("res", uploadUri);
+                    this.setState({
+                        img: response.data
+                    }, () => {
+                        global.CompanyImage = `data:` + response.type + `;base64,` + this.state.img
+                        global.type = response.type
+                    });
+                }
+            });
+        });
     }
 
     componentDidMount() {
@@ -51,6 +124,11 @@ class PersonalCompany extends Component {
             Address: text
         })
         global.Address = this.state.Address
+    }
+
+    back = () => {
+        console.log('dfgdg');
+        this.props.navigation.goBack();
     }
 
     render() {
@@ -78,7 +156,7 @@ class PersonalCompany extends Component {
             }} resizeMode={'cover'}/></TouchableWithoutFeedback></ImageBackground>
            
                         <View style={styles.PersonalInfo}>
-                         <ScrollView style={{
+                         <ScrollView showsVerticalScrollIndicator={true} style={{
                 alignSelf: "stretch",
                 height: hp(30)
             }}>
@@ -152,35 +230,9 @@ class PersonalCompany extends Component {
             inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16)
+                fontSize: scale(16) 
             }]}
             keyboardType={'phone-pad'}
-            /></View></View>
-                            <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
-                fontFamily: FontBold,
-                fontSize: scale(18),
-
-            }]}>Address</Text></View>
-                                <View style={styles.PersonalInfoEnd}><TextInput
-            multiline={true}
-            value={this.state.Address}
-            textAlign={'right'}
-            numberOfLines={10}
-            placeholderTextColor={'#fff'}
-            style={[styles.PersonalInfoText, {
-                height: hp(10),
-                width: wp(40),
-                right: wp(-1),
-                marginTop: hp(-1),
-                alignSelf: 'center',
-                textAlignVertical: 'top',
-                fontFamily: FontRegular,
-                fontWeight: '700',
-                fontSize: scale(16)
-            }]}
-            onChangeText ={(text) => this.handleChange(text)}
-
             /></View></View>
             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
@@ -188,7 +240,9 @@ class PersonalCompany extends Component {
                 fontSize: scale(18),
 
             }]}>WebSite</Text></View>
-                                <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {this.state.WebSite} textChange = {(text) => this.setState({
+                                <View style={styles.PersonalInfoEnd}>
+                                <CustomInput textAlign={'right'} value = {this.state.WebSite} 
+                                textChange = {(text) => this.setState({
                 WebSite: text
             }, () => {
                 global.WebSite = this.state.WebSite
@@ -201,21 +255,58 @@ class PersonalCompany extends Component {
                 fontSize: scale(16)
             }]}
             /></View></View>
+                            <View style={styles.PersonalInfoRow}>
+                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                fontFamily: FontBold,
+                fontSize: scale(18),
+            }]}>Address</Text></View>
+                                <View style={styles.PersonalInfoEnd}><TextInput
+            multiline={true}
+            value={this.state.Address}
+            textAlign={'right'}
+            numberOfLines={10}
+            placeholderTextColor={'#fff'}
+            style={[styles.PersonalInfoText, {
+                height: hp(10),
+                width: wp(40),
+                right: wp(1),
+                marginTop: hp(-1),
+                alignSelf: 'center',
+                textAlignVertical: 'top',
+                fontFamily: FontRegular,
+                fontWeight: '700',
+                fontSize: scale(16)
+            }]}
+            onChangeText ={(text) => this.handleChange(text)}
+            /></View></View>
                         </ScrollView></View>
                         <View style={{
-                top: hp(5),
-                left: wp(30),
-            // position: "absolute"
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}>
-                                <View style={[styles.Size, {
-                alignItems: "flex-end"
+                flexDirection: "row",
+                width: wp(90),
+                top: hp(6),
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                width: wp(40),
+                marginLeft: wp(5)
+            }}>
+            <TouchableOpacity style={styles.Size} onPress={() => this.back()} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                right: wp(7),
+                width: wp(47)
+            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
+                alignItems: 'flex-end'
             }]}><Text style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
+            </View>
                     </View>
                 </ImageBackground></SafeAreaView>
         );
     }
-}
-;
+};
 export default withNavigationFocus(PersonalCompany)

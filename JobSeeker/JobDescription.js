@@ -1,14 +1,49 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, ImageBackground, FlatList, Text, Image, View, ScrollView } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StatusBar,
+    ImageBackground,
+    FlatList,
+    Text,
+    Image,
+    View,
+    ScrollView
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, leftVid } from '../src/IconManager';
-import { scale } from '../src/Util'
-import { themeColor, themeWhite, TRANLINE, rightWrongBack, rite, wrong } from '../Constant/index'
-import { Rating, NavigationHeader } from '../Component/ViewManager'
+import {
+    left,
+    leftVid
+} from '../src/IconManager';
+import {
+    scale
+} from '../src/Util'
+import {
+    themeColor,
+    themeWhite,
+    TRANLINE,
+    rightWrongBack,
+    rite,
+    wrong
+} from '../Constant/index'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { FontBold, FontRegular, Background } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
+import {
+    FontBold,
+    FontRegular,
+    Background
+} from '../Constant/index'
 import JobDescriptionItemMV from './JobDescriptionItemMV'
 
 
@@ -17,7 +52,8 @@ class JobDescription extends Component {
         super(props);
 
         this.state = {
-
+            data: '',
+            date: ''
         };
     }
 
@@ -32,10 +68,23 @@ class JobDescription extends Component {
     Personal = () => {
         this.props.navigation.navigate('Personal');
     }
+    componentDidMount() {
+        const {
+            params
+        } = this.props.navigation.state;
+        const item = global.item;
+        // console.log('other item', item);
+        this.setState({
+            data: item != undefined || '' ? item.description.split('\n') : ''
+        })
+    }
+
 
 
     render() {
-        const {Hourly, Monthly, Yearly} = this.state
+        const {
+            data
+        } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -45,7 +94,7 @@ class JobDescription extends Component {
                     <ImageBackground style={{
                 width: wp('96%'),
                 marginHorizontal: wp(2),
-                height: hp('100%') - (StatusBar.currentHeight + 150 + hp(5)),
+                height: hp('100%') - (StatusBar.currentHeight + 120 + hp(7)),
                 top: wp(14)
             }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
             <View style={{
@@ -63,7 +112,7 @@ class JobDescription extends Component {
                 marginBottom: 50,
                 backgroundColor: 'transparent',
             }}
-            data = {global.item.Description}
+            data = {global.item.description && global.item.description.split('\n')}
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => <JobDescriptionItemMV
@@ -92,7 +141,7 @@ class JobDescription extends Component {
             resizeMode={'stretch'}
             /></View>
             <View style={{
-                top: hp(7),
+                top: hp(6),
                 // zIndex: 5,
                 height: hp(6),
                 width: wp(105),

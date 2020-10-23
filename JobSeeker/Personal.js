@@ -6,13 +6,42 @@
  * @flow strict-local
  */
 
-import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, ImageBackground, Dimensions, Text, Image, View, TouchableWithoutFeedback, ScrollView } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StatusBar,
+    ImageBackground,
+    Dimensions,
+    Text,
+    Image,
+    View,
+    PermissionsAndroid,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ScrollView
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { scale } from '../src/Util'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { backgroundCorner, avtar, FontBold, FontRegular, Background } from '../Constant/index'
+import {
+    scale
+} from '../src/Util'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    backgroundCorner,
+    avtar,
+    FontBold,
+    FontRegular,
+    Background
+} from '../Constant/index'
+import ImagePicker from 'react-native-image-picker';
+
 class Personal extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +52,8 @@ class Personal extends Component {
             Email: '',
             Place: '',
             Mobile: '',
+            img: ''
+
         };
     }
 
@@ -40,11 +71,64 @@ class Personal extends Component {
     next = () => {
         this.props.navigation.navigate('JobVideoResume');
     }
+    back = () => {
+        console.log('dfgdg');
+        this.props.navigation.goBack();
+    }
+
     profile = () => {
-        this.props.navigation.navigate('JobSeekerPhoto');
+        let options = {
+            title: 'Select Image',
+            customButtons: [{
+                name: 'customOptionKey',
+                title: 'Choose Photo'
+            }, ],
+            noData: false,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        var permissions = [
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+        ];
+        PermissionsAndroid.requestMultiple(permissions).then(granted => {
+            console.log("rs");
+
+            ImagePicker.launchImageLibrary(options, (response) => {
+                if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+                    console.log("rs>>>>>>>", response);
+
+                    // const {uri} = response;
+                    global.UserProfile = 'file://' + response.path
+
+                    let n1 = Math.floor(Math.random() * 9) + 1,
+                        n2 = Math.floor(Math.random() * 9) + 1,
+                        n3 = Math.floor(Math.random() * 9) + 1,
+                        n4 = Math.floor(Math.random() * 9) + 1,
+                        n5 = Math.floor(Math.random() * 9) + 1,
+                        n6 = Math.floor(Math.random() * 9) + 1;
+                    let randomNumber = n1 + '' + n2 + '' + n3 + '' + n4 + '' + n5 + '' + n6;
+                    console.log("res", UserProfile);
+                    this.setState({
+                        img: response.data
+                    }, () => {
+                        global.CompanyImage = `data:` + response.type + `;base64,` + this.state.img
+                        global.type = response.type
+                    });
+                }
+            });
+        });
     }
     render() {
-        const {firstName, lastName, Email, Place, Mobile} = this.state;
+        const {
+            firstName,
+            lastName,
+            Email,
+            Place,
+            Mobile
+        } = this.state;
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -170,19 +254,32 @@ class Personal extends Component {
                         </ScrollView>
                         </View>
                         <View style={{
-                top: hp(5),
-                left: wp(30),
-            // position: "absolute"
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}>
-                                <View style={[styles.Size, {
-                alignItems: "flex-end"
+                flexDirection: "row",
+                width: wp(90),
+                top: hp(6),
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                width: wp(40),
+                marginLeft: wp(5)
+            }}>
+            <TouchableOpacity style={styles.Size} onPress={() => this.back()} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                right: wp(7),
+                width: wp(47)
+            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
+                alignItems: 'flex-end'
             }]}><Text style={[{
-                fontSize: scale(24),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+                fontSize: scale(20),
+            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
+            </View>
                     </View>
                 </ImageBackground></SafeAreaView>
         );
     }
-}
-;
+};
 export default withNavigationFocus(Personal)

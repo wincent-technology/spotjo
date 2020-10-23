@@ -1,13 +1,50 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, ImageBackground, Text, Image, ScrollView, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StatusBar,
+    ImageBackground,
+    Text,
+    Image,
+    ScrollView,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, } from '../src/IconManager';
-import { scale } from '../src/Util'
-import { TRANLINE, themeColor, themeWhite, Background, Dashboard, skill, workExp, education, personalInfo, jobType, languages, qualification } from '../Constant/index'
-import { Rating, NavigationHead } from '../Component/ViewManager'
+import {
+    left,
+} from '../src/IconManager';
+import {
+    scale
+} from '../src/Util'
+import {
+    TRANLINE,
+    themeColor,
+    themeWhite,
+    Background,
+    Dashboard,
+    skill,
+    blanks,
+    Fulls,
+    workExp,
+    education,
+    personalInfo,
+    jobType,
+    languages,
+    qualification
+} from '../Constant/index'
+import {
+    StarRating,
+    NavigationHead
+} from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
 
 
 
@@ -26,7 +63,9 @@ class JobEditProfile extends Component {
     }
     Video = () => {
         if (global.Video)
-            this.props.navigation.navigate('VideoPlayer')
+            this.props.navigation.navigate('VideoPlayer', {
+                vid: global.Video
+            })
         else
             alert('video coming soon'); // this.props.navigation.navigate('JobVideoResume');
     }
@@ -44,9 +83,16 @@ class JobEditProfile extends Component {
     addEducation = () => {
         this.props.navigation.navigate('EditEducation');
     }
-
+    Dashboard = () => {
+        console.log('hi');
+        this.props.navigation.navigate('UserAd')
+    }
     render() {
-        const {Hourly, Monthly, Yearly} = this.state
+        const {
+            Hourly,
+            Monthly,
+            Yearly
+        } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -80,18 +126,19 @@ class JobEditProfile extends Component {
                 fontFamily: "Roboto-Bold"
             }}>Video Resume</Text></View>
                                 <View style={[{
-                marginTop: scale(10)
-            }, styles.JobEditProfileResumeVideo]}><Rating
-            type='custom'
-            imageSize={22}
-            ratingCount={5}
-            defaultRating={20}
-            readonly={false}
-            ratingColor={'transparent'}
-            // ratingImage={'../Img/up.png'}
-            ratingBackgroundColor='transparent'
-            startingValue={3}
-            // tintColor={'#f3f2f2'}
+                marginTop: scale(5)
+            }, styles.JobEditProfileResumeVideo]}>
+            <StarRating
+            emptyStar={blanks}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(22)}
+            rating={5}
+            // selectedStar={(rating) => this.handleChange(rating, index)}
+            fullStarColor={'orange'}
             /></View>
                             </ImageBackground>
                         </View>
@@ -101,7 +148,7 @@ class JobEditProfile extends Component {
                 marginTop: scale(-1)
             }}><CustomButton title={'Dashboard'}
             iconName={Dashboard}
-            onPress={() => this.Back}
+            onPress={() => this.Dashboard()}
             containerStyle={styles.buttonContainerStyle}
             buttonStyle={styles.ButtonStyle}
             titleStyle={styles.titleStyle}
@@ -135,24 +182,6 @@ class JobEditProfile extends Component {
             style={{
                 color: 'blue'
             }}
-            /><CustomButton title={'Languages'}
-            iconName={languages}
-            onPress={() => this.addskills()}
-            containerStyle={styles.buttonContainerStyle}
-            buttonStyle={styles.ButtonStyle}
-            titleStyle={styles.titleStyle}
-            style={{
-                color: 'blue'
-            }}
-            /><CustomButton title={'Qualification'}
-            iconName={qualification}
-            onPress={() => this.addskills()}
-            containerStyle={styles.buttonContainerStyle}
-            buttonStyle={styles.ButtonStyle}
-            titleStyle={styles.titleStyle}
-            style={{
-                color: 'blue'
-            }}
             /><CustomButton title={'Personal Information'}
             iconName={jobType}
             onPress={this.Personal}
@@ -162,8 +191,7 @@ class JobEditProfile extends Component {
             style={{
                 color: 'blue'
             }}
-            />
-                        </View></ScrollView>
+            /></View></ScrollView>
                     </ImageBackground></View>
                     <View style={styles.TranLingImage}>
              <Image

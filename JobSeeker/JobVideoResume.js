@@ -6,24 +6,59 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { Dimensions, View, Text, SafeAreaView, StatusBar, ImageBackground, Image, PermissionsAndroid, TouchableWithoutFeedback } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    Dimensions,
+    View,
+    Text,
+    SafeAreaView,
+    StatusBar,
+    ActivityIndicator,
+    ImageBackground,
+    Image,
+    PermissionsAndroid,
+    TouchableOpacity
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import { scale, snack } from '../src/Util';
-import { play } from '../src/IconManager';
-import { widthPercentageToDP as wp } from '../Component/responsive-ratio';
+import {
+    scale,
+    snack
+} from '../src/Util';
+import {
+    play
+} from '../src/IconManager';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
 import CustomButton from '../Component/Button'
-import { themeColor, Background } from '../Constant/index'
+import {
+    themeColor,
+    Background,
+    url
+} from '../Constant/index'
 import ImagePicker from 'react-native-image-picker';
 import http from '../api'
+import RNFS from 'react-native-fs';
+import AsyncStorage from '@react-native-community/async-storage';
+import Video from 'react-native-video';
+
 
 
 class JobVideoResume extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            show: false,
+            letdue: 0
 
-    // this.state = {};
+        }
+        // this.state = {};
     }
 
 
@@ -40,33 +75,42 @@ class JobVideoResume extends Component {
                 mobile: global.UserMobile,
                 profile: global.CompanyImage,
                 type: global.type,
-            }).then((res) => {
+            }).then(async (res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr>>>>>>', res['data']['result']);
+                    global.Video = url + 'images/user/' + res['data']['result'][0]['video']
+                    global.UserProfile = url + 'images/user/' + res['data']['result'][0]['profile']
+                    await AsyncStorage.removeItem('UserLoggedInData');
+                    await AsyncStorage.setItem('UserLoggedInData', JSON.stringify(res['data']['result'][0]));
                     this.props.navigation.navigate('TabScreenJob')
                 } else {
                     snack(res['data']['message'])
                 }
             }, err => snack(err['message']));
-        } catch ( error ) {
+        } catch (error) {
             snack(error)
 
         }
     }
 
+    back = () => {
+        console.log('dfgdg');
+        this.props.navigation.goBack();
+    }
     OpenImage = () => {
         let options = {
             title: 'Select Image',
             customButtons: [{
                 name: 'customOptionKey',
                 title: 'Choose Photo'
-            },],
+            }, ],
             noData: false,
             storageOptions: {
                 skipBackup: true,
                 path: 'images',
             },
-            mediaType: 'video'
+            mediaType: 'video',
+            // durationLimit: 30
         };
         var permissions = [
             PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
@@ -75,27 +119,90 @@ class JobVideoResume extends Component {
         PermissionsAndroid.requestMultiple(permissions).then(granted => {
             console.log("rs");
 
-            ImagePicker.launchImageLibrary(options, (response) => {
-                if (response.didCancel) {
-                } else if (response.error) {
-                } else if (response.customButton) {
-                } else {
-                    console.log("rs", response);
-                    global.Video = 'file://' + response.path
+            ImagePicker.launchImageLibrary(options, async (response) => {
+                if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
+                    console.log(response);
+                    const maxTime = 300000; // 5 min
 
-                    let n1 = Math.floor(Math.random() * 9) + 1,
-                        n2 = Math.floor(Math.random() * 9) + 1,
-                        n3 = Math.floor(Math.random() * 9) + 1,
-                        n4 = Math.floor(Math.random() * 9) + 1,
-                        n5 = Math.floor(Math.random() * 9) + 1,
-                        n6 = Math.floor(Math.random() * 9) + 1;
-                    let randomNumber = n1 + '' + n2 + '' + n3 + '' + n4 + '' + n5 + '' + n6;
+                    // global.Video = 'file://' + response.path
+                    this.setState({
+                        letdue: response
+                    })
+                    try {
+                        const data = await MediaMeta.get(response.path);
+                        console.log(data);
+                        if (data.duration <= 30000)
+                            this.maggi(response.path)
+                        else
+                            Alert.alert(
+                                'Sorry',
+                                'Video must be less then 30 Seconds', [{
+                                    text: 'OK',
+                                    onPress: () => console.log('OK Pressed')
+                                }], {
+                                    cancelable: false
+                                }
+                            );
+                    } catch (error) {
+                        console.log(error);
+                    }
                 }
             });
         });
     }
 
+
+    onLoad = (data) => {
+        console.log('durationVideo', data.duration);
+        if (data.duration <= 30)
+            this.maggi(this.state.letdue.path)
+        else
+            Alert.alert(
+                'Sorry',
+                'Video must be less then 30 Seconds', [{
+                    text: 'OK',
+                    onPress: () => console.log('OK Pressed')
+                }], {
+                    cancelable: false
+                }
+            );
+
+    }
+    maggi = async (file) => {
+        var data = await RNFS.readFile(`file://${file}`, 'base64').then(async (res1) => {
+            RNFS.stat(`file://${file}`)
+                .then((stats) => {
+                    let videoType = stats.path.split('.').pop()
+                    try {
+                        this.setState({
+                            show: true
+                        })
+                        http.POST('api/user/upload/video', {
+                            Id: global.Id,
+                            video: res1,
+                            type: videoType
+                        }).then((res) => {
+                            if (res['data']['status']) {
+                                this.setState({
+                                    show: false
+                                })
+                                snack('Video uploaded')
+                            } else {
+                                snack(res['data']['message'])
+                            }
+                        }, err => snack(err['message']));
+                    } catch (error) {
+                        snack(error)
+                    }
+                })
+                .catch((err) => {})
+        });
+    }
     render() {
+        const {
+            show
+        } = this.state;
+
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -134,18 +241,50 @@ class JobVideoResume extends Component {
             }}
             />
         </View>
-        <View style={[styles.Next, {
-                right: wp('10%'),
-                marginTop: scale(-20)
-            }]}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
-                alignItems: "flex-end"
+        {
+            show && <View style={{
+                height: scale(50),
+                width: scale(50),
+                marginTop: scale(50),
+                marginLeft: wp(50) - 25
+            }}><ActivityIndicator size="large" color="#fff" /></View>
+            }
+        {!show && <View style={{
+                flexDirection: "row",
+                width: wp(90),
+                top: hp(20),
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                width: wp(40),
+                marginLeft: wp(10)
+            }}>
+             <Video
+            onLoad={this.onLoad}
+            paused={true}
+            ref={videoPlayer => (this.videoPlayer = videoPlayer)}
+            source={{
+                uri: this.state.letdue.uri
+            }}
+            volume={0}
+            />
+            <TouchableOpacity style={styles.Size} onPress={() => this.back()} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
+            </View>
+            <View style={{
+                alignItems: 'flex-end',
+                right: wp(7),
+                width: wp(47)
+            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
+                alignItems: 'flex-end'
             }]}><Text style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
+            </View> }
        </ImageBackground></SafeAreaView>
 
         );
     }
-}
-;
+};
 export default withNavigationFocus(JobVideoResume);

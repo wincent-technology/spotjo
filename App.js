@@ -5,13 +5,22 @@
  * @format
  * @flow strict-local
  */
-if (__DEV__) {
-    console.log = () => {
-    };
-}
+// if (__DEV__) {
+//     console.log = () => {};
+// }
 
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, ScrollView, View, Text, StatusBar, AppState } from 'react-native';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    ScrollView,
+    View,
+    Text,
+    StatusBar,
+    AppState
+} from 'react-native';
 import Routes from './Constant/Navigation'
 
 global.Job_Title = ''
@@ -26,18 +35,19 @@ global.StudentJobs = false
 global.HelpingVacancies = false
 global.Freelancer = false
 global.Start_date = '',
-global.End_date = '',
-global.City = '',
-global.Language = ''
+    global.End_date = '',
+    global.City = '',
+    global.Language = ''
 global.Task_Description = ''
 global.addSkill = []
 global.Education = []
 global.LanguageSkill = []
-global.salary = 0
+global.minSalary = 0
+global.maxSalary = 0
 global.salaryrating = 1
 global.Email = ''
 global.Mobile = '',
-global.Address = ''
+    global.Address = ''
 global.CompanyImage = ''
 global.uploadUri = ''
 global.Video = ''
@@ -45,7 +55,7 @@ global.type = ''
 global.Id = ''
 global.WebSite = ''
 global.Experience = [],
-global.firstName = ''
+    global.firstName = ''
 global.lastName = ''
 global.Place = ''
 global.UserEmail = ''
@@ -56,7 +66,16 @@ global.UserEducation = ''
 global.UserLanguage = ''
 global.Qualification = ''
 global.CompanyExp = ''
-global.ig = []
+global.ig = [],
+    global.let;
+global.long;
+global.all = [];
+global.minYear;
+global.maxYear;
+global.Service;
+global.role;
+global.item;
+
 
 export default class App extends Component {
 
@@ -78,5 +97,4 @@ export default class App extends Component {
         </View>)
 
     }
-}
-;
+};

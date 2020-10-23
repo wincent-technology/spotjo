@@ -1,14 +1,52 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, ImageBackground, FlatList, Text, Image, View, ScrollView } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StatusBar,
+    ImageBackground,
+    FlatList,
+    Text,
+    Image,
+    View,
+    ScrollView
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, leftVid } from '../src/IconManager';
-import { scale } from '../src/Util'
-import { themeColor, themeWhite, TRANLINE, rightWrongBack, rite, wrong } from '../Constant/index'
-import { Rating, NavigationHeader } from '../Component/ViewManager'
+import {
+    left,
+    leftVid
+} from '../src/IconManager';
+import {
+    scale
+} from '../src/Util'
+import {
+    themeColor,
+    themeWhite,
+    TRANLINE,
+    rightWrongBack,
+    rite,
+    wrong,
+    Companyavtar,
+    url
+} from '../Constant/index'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { FontBold, FontRegular, Background } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
+import {
+    FontBold,
+    FontRegular,
+    Background
+} from '../Constant/index'
 
 
 class BasicInfoOfCompany extends Component {
@@ -16,7 +54,7 @@ class BasicInfoOfCompany extends Component {
         super(props);
 
         this.state = {
-
+            data: ''
         };
     }
 
@@ -31,13 +69,28 @@ class BasicInfoOfCompany extends Component {
     Personal = () => {
         this.props.navigation.navigate('Personal');
     }
+    componentDidMount() {
+        this.checking();
+    }
 
-
+    checking = () => {
+        console.log('sfsfsfsfsffffffffffffffffffffffffffffffff>>>>>>>>>>>>>>>>>....');
+        const {
+            params
+        } = this.props.navigation.state;
+        const item = global.item;
+        // console.log('other item', item);
+        this.setState({
+            data: global.item
+        })
+    }
     render() {
-        const {Hourly, Monthly, Yearly} = this.state
-        console.log("hello>>>>>>>>>", global.item)
+        const {
+            data
+        } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
+            <NavigationEvents onDidFocus={this.checking}/>
             <ImageBackground style={styles.ImageBlue}
             source={Background}
             resizeMode={'stretch'}>
@@ -45,7 +98,7 @@ class BasicInfoOfCompany extends Component {
                     <ImageBackground style={{
                 width: wp('96%'),
                 marginHorizontal: wp(2),
-                height: hp('100%') - (StatusBar.currentHeight + 150 + hp(5)),
+                height: hp('100%') - (StatusBar.currentHeight + 120 + hp(7)),
                 top: wp(14)
             }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
             <View style={{
@@ -67,11 +120,13 @@ class BasicInfoOfCompany extends Component {
                 // borderRadius: scale(20),
                 overflow: 'hidden',
             }}><Image
-            source={{
-                uri: global.item.image,
-            }}
+            source = {data && global.item.logo ? {
+                uri: url + 'images/company/' + global.item.logo
+            } :
+                Companyavtar
+            }
             style={styles.imageStyle}
-            resizeMode={'stretch'}
+            resizeMode={'cover'}
             /></View>
           <View style={{
                 width: '90%',
@@ -106,7 +161,7 @@ class BasicInfoOfCompany extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.ComPany_Name}</Text>
+            }}>{data && global.item.name}</Text>
             </View>
             </View>
             <View style={{
@@ -139,7 +194,7 @@ class BasicInfoOfCompany extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.Address}</Text>
+            }} numberOfLines={1}>{data && global.item.address}</Text>
             </View>
             </View>
             <View style={{
@@ -172,13 +227,13 @@ class BasicInfoOfCompany extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.skill.map((item, index) => {
+            }}>{data && global.item.skills && global.item.skills.map((item, index) => {
                 return (
                     <Text key={index} style={{
                         fontFamily: FontBold,
                         fontSize: scale(16),
                         color: '#000'
-                    }}>{item},</Text>
+                    }}>{item.name},</Text>
                 )
             })}</Text>
             </View>
@@ -213,7 +268,7 @@ class BasicInfoOfCompany extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.work_Experience}</Text>
+            }}>{data && global.item.minExp}-{data && global.item.maxExp} Years</Text>
             </View>
             </View>
             <View style={{
@@ -246,7 +301,7 @@ class BasicInfoOfCompany extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.item.work_Type}</Text>
+            }}>{data && global.item.isFullTime && <Text>FullTime</Text>}</Text>
             </View>
             </View>
             <View style={{
@@ -266,7 +321,7 @@ class BasicInfoOfCompany extends Component {
             resizeMode={'stretch'}
             /></View>
             <View style={{
-                top: hp(7),
+                top: hp(6),
                 // zIndex: 5,
                 height: hp(6),
                 width: wp(105),

@@ -45,6 +45,10 @@ class Items extends PureComponent {
             onFinishRating={(value, index) => this.props.handleChange(value, this.props.index)}
             // ratingColor={"#f1ee40"}
             // tintColor={themeWhite}
+            // ratingBackgroundColor='gray'
+
+            tintColor={'#f3f2f2'}
+
             /></View></View>
         )
     }

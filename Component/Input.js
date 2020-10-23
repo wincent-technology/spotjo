@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Input, Icon, Image } from 'react-native-elements'
-import { themeColor } from '../Constant/index'
+import { themeColor, cal, clock } from '../Constant/index'
 import { View } from 'react-native'
 import { scale } from '../src/Util'
 import { play } from '../src/IconManager'
@@ -69,11 +69,20 @@ export default CustomInput = (props) => <Input
     <View style={{
         marginRight: 10
     }}>
-    {play(props.iconNames ? props.iconNames : 'add-outline', scale(20), props.iconColor ? props.iconColor : themeColor)}</View>
+     {props.RightIcon && <Image
+    source = {props.RightIcon ? cal : props.RightIcon}
+    style={[{
+        width: props.width ? props.width : 25,
+        height: props.height ? props.height : 25
+    }], props.righticonStyle}
+    resizeMode={'contain'}
+    />}</View>
     }
     rightIconContainerStyle = {[
         {
             padding: 0
         }, props.rightIconContainerStyle]
-    } { ...props
-    }/>
+    }
+    { ...props
+    }
+    />

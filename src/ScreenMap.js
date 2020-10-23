@@ -1,29 +1,75 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, Platform, Dimensions, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    Platform,
+    Dimensions,
+    FlatList,
+    PermissionsAndroid,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
 import styles from './Style'
-import { left, library, icon, play, leftVid } from './IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from './Util'
-import { NavigationHeader } from '../Component/ViewManager'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from './IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    sort,
+    filter,
+    TRANLINE,
+    FontBold,
+    url
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale,
+    snack
+} from './Util'
+import {
+    NavigationHeader
+} from '../Component/ViewManager'
 import Slider from '@react-native-community/slider';
 import ItemMV from './ItemMV'
-import MapView, { PROVIDER_GOOGLE, Circle, Marker } from 'react-native-maps';
+import MapView, {
+    PROVIDER_GOOGLE,
+    Circle,
+    Marker,
+    AnimatedRegion
+} from 'react-native-maps';
 import flagBlueImg from '../Img/circle-16.png'
 import Geolocation from '@react-native-community/geolocation';
-
-
+import http from '../api'
+// import Svg, { Circle } from 'react-native-svg';
 const SPACE = 0.01;
-let LATITUDE = 37.78825;
-let LONGITUDE = -122.4324;
-const LATITUDE_DELTA = 0.0922;
+
+// let LATITUDE_DELTA = 0.0922;
 // const LONGITUDE_DELTA = 0.0421;
 
-const {width, height} = Dimensions.get('window');
-const ASPECT_RATIO = width / height;
-// const LATITUDE_DELTA = (Platform.OS === global.platformIOS ? 1.5 : 0.5);
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+// const {width, height} = Dimensions.get('window');
+const ASPECT_RATIO = wp(96) / wp(65);
+const LATITUDE_DELTA = (Platform.OS === 'ios' ? 1.5 : 0.5);
+let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 // Use the below code to zoom to particular location with radius.
 
@@ -37,59 +83,31 @@ class ScreenMap extends PureComponent {
         this.state = {
             data: [],
             radius: 5000,
+            zoom: 0,
             region: {
-                latitude: LATITUDE,
-                longitude: LONGITUDE,
+                latitude: global.let,
+                longitude: global.long,
                 latitudeDelta: LATITUDE_DELTA,
                 longitudeDelta: LONGITUDE_DELTA,
             },
+            coordi: {
+                latitude: global.let,
+                longitude: global.long,
+            },
             markers: [{
                 coordinate: {
-                    latitude: LATITUDE + SPACE,
-                    longitude: LONGITUDE + SPACE,
+                    latitude: global.let+SPACE,
+                    longitude: global.long + SPACE,
                 },
             }, {
                 coordinate: {
-                    latitude: LATITUDE + SPACE,
-                    longitude: LONGITUDE - SPACE,
+                    latitude: global.let+SPACE,
+                    longitude: global.long - SPACE,
                 },
 
-            }, {
-                coordinate: {
-                    latitude: LATITUDE,
-                    longitude: LONGITUDE,
-                },
-
-            }, {
-                coordinate: {
-                    latitude: LATITUDE,
-                    longitude: LONGITUDE - SPACE / 2,
-                },
-                coordinate: {
-                    latitude: LATITUDE - SPACE,
-                    longitude: LONGITUDE + SPACE,
-                },
-
-            }, {
-                coordinate: {
-                    latitude: LATITUDE - SPACE,
-                    longitude: LONGITUDE - SPACE,
-                },
-
-            }, {
-                coordinate: {
-                    latitude: LATITUDE,
-                    longitude: LONGITUDE,
-                },
-
-            }, {
-                coordinate: {
-                    latitude: LATITUDE,
-                    longitude: LONGITUDE - SPACE / 3,
-                },
-
-            },],
+            }, ],
         }
+        this.watchId = ''
     }
 
     // componentWillMount() {
@@ -98,26 +116,142 @@ class ScreenMap extends PureComponent {
     //         LONGITUDE = info.coords.longitude
     //     })
     // }
-    componentDidMount() {
-        const {radius} = this.state;
-        const {params} = this.props.navigation.state;
-        const otherParam = params ? params.otherParam : null;
-        this.setState({
-            data: otherParam || []
-        })
-        // this.map.animateToRegion({
-        //     latitude: LATITUDE,
-        //     longitude: LONGITUDE,
-        //     latitudeDelta: LATITUDE_DELTA * Number(radius / 15),
-        //     longitudeDelta: LONGITUDE_DELTA * Number(radius / 15)
-        // }, 2000);
 
+    componentWillUnmount() {
+        // Geolocation.clearWatch(this.watchID);
+    }
+
+    async componentDidMount() {
+        try {
+            var granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                // this.watchID = Geolocation.watchPosition(info => {
+                //     console.log('inf', info);
+                //     global.let = info.coords.latitude;
+                //     global.long = info.coords.longitude;
+                //     this.setState({
+                //         region: {
+                //             latitude: info.coords.latitude,
+                //             longitude: info.coords.longitude,
+                //             latitudeDelta: LATITUDE_DELTA,
+                //             longitudeDelta: LONGITUDE_DELTA,
+                //         },
+                //         coordi: {
+                //             latitude: info.coords.latitude,
+                //             longitude: info.coords.longitude
+                //         }
+                //     });
+
+                // }, (error) => alert(error.message), {
+                //     enableHighAccuracy: true,
+                //     timeout: 20000,
+                //     maximumAge: 1000
+                // })
+                Geolocation.getCurrentPosition((info) => {
+                    console.log('inf', info)
+                    global.let = info.coords.latitude
+                    global.long = info.coords.longitude
+                    this.setState({
+                        region: {
+                            latitude: info.coords.latitude,
+                            longitude: info.coords.longitude,
+                            latitudeDelta: LATITUDE_DELTA,
+                            longitudeDelta: LONGITUDE_DELTA,
+                        },
+                        coordi: {
+                            latitude: info.coords.latitude,
+                            longitude: info.coords.longitude
+                        }
+                    });
+                });
+            } else {
+                alert("Location permission denied")
+            }
+        } catch (err) {
+            console.warn(err)
+        }
+        const {
+            radius,
+            zoom
+        } = this.state;
+        this.checking();
+        // this.map.animateToRegion({
+        //     latitude: global.let,
+        //     longitude: global.long,
+        //     latitudeDelta: this.state.region.latitudeDelta,
+        //     longitudeDelta: this.state.region.longitudeDelta
+        // }, 500);
+
+    }
+    call = () => {
+        try {
+            http.POST('api/location/radius', {
+                kilometer: this.state.radius / 1000,
+                latitude: this.state.region.latitude,
+                longitude: this.state.region.longitude
+            }).then((res) => {
+                if (res['data']['status']) {
+                    // console.log('rrrrrrrrr >>>>>>>>>>>> 210', res['data']['result']);
+                    // global.all = res['data']['result'];
+                    this.setState({
+                        data: res['data']['result']
+                    })
+                    let array = []
+                    for (let i in res['data']['result']) {
+                        array.push({
+                            coordinate: {
+                                latitude: parseFloat(res['data']['result'][i]['latitude'] || 0),
+                                longitude: parseFloat(res['data']['result'][i]['longitude'] || 0),
+                            }
+                        })
+                    }
+                    array && this.setState({
+                        markers: array
+                    })
+                    // global.all = res['data']['result']
+                    // will get data in this    res['data']['result']             
+                } else {
+                    snack(res['data']['message'])
+
+                }
+            }, err => snack(err['message']));
+        } catch (error) {
+            snack(error)
+
+        }
+    }
+    checking = () => {
+        // console.log('hey - 159 map', global.all)
+        const {
+            params
+        } = this.props.navigation.state;
+        const otherParam = params ? params.otherParam : null;
+        // console.log('other item', otherParam);
+        this.setState({
+            data: global.all
+        })
+        this.call()
+    }
+
+    Video = (item) => {
+        // console.log('hels');
+        let m = url + '/images/company/' + item.video
+        if (item)
+            this.props.navigation.navigate('VideoPlayer', {
+                vid: m
+            })
+        else
+            alert('not uploaded');
+        // this.props.navigation.navigate('VideoResume');
     }
     Filter = () => {
         this.props.navigation.navigate('Filter')
     }
     push = (item) => {
         // console.log("heelo", item);
+        // global.ig = item
         this.props.navigation.navigate('CompanyProfile', {
             item: item
         })
@@ -125,12 +259,91 @@ class ScreenMap extends PureComponent {
     Back = () => {
         this.props.navigation.goBack()
     }
+    change = async (value) => {
+
+        let given = await this.map.getCamera();
+        console.log('given', given);
+
+
+
+        // this.setState({
+        //     zoom: given.zoom,
+        // })
+        // console.log('zoom', this.state.zoom);
+        // const {
+        //     zoom,
+        //     radius
+        // } = this.state
+        // console.log('zoom', zoom);
+        // if (value < (radius / 1000)) {
+        //     this.setState({
+        //         radius: Math.round(value) * 1000
+        //     }, () => {
+        //         let reg = {
+        //             latitude: this.state.region.latitude,
+        //             longitude: this.state.region.longitude,
+        //             latitudeDelta: this.state.region.latitudeDelta / zoom,
+        //             longitudeDelta: this.state.region.longitudeDelta / zoom
+        //         }
+        //         console.log('reg <<<<<<', reg);
+        //         this.setState({
+        //             region: reg
+        //         }, () => this.map.animateToRegion(this.state.region, 500))
+        //         this.call();
+        //     })
+
+        // } else {
+        //     this.setState({
+        //         radius: Math.round(value) * 1000
+        //     }, () => {
+        //         let reg = {
+        //             latitude: this.state.region.latitude,
+        //             longitude: this.state.region.longitude,
+        //             latitudeDelta: this.state.region.latitudeDelta * zoom,
+        //             longitudeDelta: this.state.region.longitudeDelta * zoom
+        //         }
+        //         console.log('reg >>>>>>>', reg);
+        //         this.setState({
+        //             region: reg
+        //         }, () => this.map.animateToRegion(this.state.region, 500))
+        //         this.call();
+        //     })
+        // }
+        console.log('longi', this.state.region);
+        var circum = 40075
+        var ond = 111.32 * 1000
+        var distance = value * 1000
+        var angle = distance / circum
+
+        var latitudeDelta = distance / ond
+        var longitudeDelta = Math.abs(Math.atan(
+            Math.sin(angle) * Math.cos(this.state.region.latitude),
+            Math.cos(angle) - Math.sin(this.state.region.latitude) * Math.sin(this.state.region.latitude)
+        ))
+
+        var result = {
+            latitude: this.state.region.latitude,
+            longitude: this.state.region.longitude,
+            latitudeDelta: latitudeDelta + 0.7,
+            longitudeDelta: longitudeDelta + 0.7
+        }
+        this.setState({
+            region: result,
+            radius: Math.round(distance)
+        }, () => this.map.animateToRegion(this.state.region, 500))
+        this.call();
+
+    }
 
     render() {
-        const {region, redius, markers} = this.state
+        const {
+            region,
+            radius,
+            markers
+        } = this.state
         return (
-        (global.item ?
-            <View style={styles.backGround}><ImageBackground style={styles.ImageBlue}
+            (this.state.data ?
+                <View style={styles.backGround}><ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode = {
             'stretch'
@@ -138,7 +351,7 @@ class ScreenMap extends PureComponent {
             <NavigationHeader onPress={() => this.Back()} text='Search Location'/>
              <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - {this.state.data.length}</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {this.state.data ? this.state.data.length : 0}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{
@@ -166,56 +379,82 @@ class ScreenMap extends PureComponent {
                 width: wp('100%'),
                 height: wp('65%'),
             }}>
- <MapView
+ <MapView.Animated
             ref={ref => {
                 this.map = ref;
             }}
             style={styles.MapViewStyle}
             provider={PROVIDER_GOOGLE}
-            showsUserLocation
-            onRegionChange = {(region) => this.setState({
-                region
-            })}
-            onRegionChangeComplete = {(region) => {
-                console.log(" region", region)
+            onMapReady={() => {
+                 this.map.animateToRegion({
+                    latitude: global.let,
+                    longitude: global.long,
+                    latitudeDelta: this.state.region.latitudeDelta,
+                    longitudeDelta: this.state.region.longitudeDelta
+                }, 1000);
             }}
-            // initialRegion={region}
+            onRegionChange={(region) => {
+                this.setState({
+                    region,
+                     coordi: {
+                    latitude: region.latitude,
+                    longitude: region.longitude
+                }
+                })
+            }}
+            onRegionChangeComplete = {async(region) => {
+                 let given = await this.map.getCamera();
+                 console.log('this.state',this.state.region)
+                this.setState({
+                    region,
+                    zoom:given.zoom,
+                     coordi: {
+                    latitude: region.latitude,
+                    longitude: region.longitude
+                }
+                })
+            }}
+            initialRegion={region}
             showsUserLocation={true}
             >
-           
+           <MapView.Marker.Animated
+            draggable
+            coordinate={this.state.coordi}
+            ref={marker => {
+                this.marker = marker;
+            }}
+            />
             {this.state.markers.map(marker => (
-                <Marker
+                <Marker.Animated
                 key={marker.index}
+                onDragEnd={(e) => {
+                    console.log('dragEnd', e.nativeEvent.coordinate)
+                }}
                 coordinate={marker.coordinate}
-                title={marker.title}
-                description={marker.description}
                 pinColor={"#000"}
                 image={flagBlueImg}
-                />
-            ))}
+                />  )
+            )}
            <Circle  center=
             {region}
-            radius={redius ? redius : 5000}
+            radius={this.state.radius}
             strokeColor={themeColor}
             strokeWidth={2}
             fillColor='rgba(255,255,255,0.3)'
             // zIndex={2}
-            /></MapView>
+            /></MapView.Animated>
    </View>
    <View style={styles.MapSliderText}><View style={styles.FilterMinimumSalaryMin}><Text style={[{
                 fontWeight: "bold",
                 color: themeWhite
-            }, styles.FilterMinText]}>0 KM</Text>
+            }, styles.FilterMinText]}>{Math.round(this.state.radius) / 1000} KM</Text>
             <Text style={[{
                 fontWeight: "bold",
                 color: themeWhite
             }, styles.FilterMaxText]}>200 KM</Text></View><Slider
             style={{
                 width: wp('90%'),
-                marginTop: scale(-5)
-            }}
-            onSlidingStart={() => {
-
+                marginTop: scale(5)
             }}
             onSlidingComplete={() => {
 
@@ -223,16 +462,14 @@ class ScreenMap extends PureComponent {
             maximumTrackTintColor={themeWhite}
             thumbTintColor={themeWhite}
             onValueChange={ value => {
-                this.setState({
-                    redius: value * 1000
-                })
+                this.change(value)
             }}
             minimumValue={1}
             maximumValue={200}
             minimumTrackTintColor={themeWhite}
             maximumTrackTintColor={themeWhite}
             /></View>
-            <FlatList
+            {this.state.data != '' ? (<FlatList
             style={styles.MapVerticalList}
             data = {this.state.data}
             showsHorizontalScrollIndicator = { false  }
@@ -241,22 +478,36 @@ class ScreenMap extends PureComponent {
                 item={item}
                 index={index}
                 push={this.push}
-                // getAudioTimeString={this.getAudioTimeString}
+                Video={this.Video}
                 />}
             initialNumToRender={5}
             maxToRenderPerBatch={10}
             updateCellsBatchingPeriod={70}
             getItemLayout={(data, index) => (
             {
-                length: hp('33%'),
-                offset: hp('33%') * index,
+                length: hp('28%'),
+                offset: hp('28%') * index,
                 index
             }
             )}
             keyExtractor = {
             (item, index) => index + ''
             }
-            />
+            />) : (
+                <View  style = {{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flex: 1
+                }}>
+            <Text style={{
+                    textAlign: 'center',
+                    fontFamily: FontBold,
+                    color: themeWhite,
+                    fontSize: scale(18),
+                    width: wp(60)
+                }}>No Data found 😞</Text><NavigationEvents onDidFocus={this.checking}/>
+            </View>
+                )}
             <View style={styles.TranLingImage}>
              <Image
             source={TRANLINE}

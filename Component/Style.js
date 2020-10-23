@@ -60,6 +60,7 @@ var Style = StyleSheet.create({
     },
     starsWrapper: {
         flexDirection: 'row',
+        backgroundColor: "transparent",
         justifyContent: 'center',
         alignItems: 'center',
     },

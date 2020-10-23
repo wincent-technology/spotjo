@@ -1,12 +1,51 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
 import styles from './Style'
-import { left, library, icon, play, leftVid } from './IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from './Util'
-import { Rating, NavigationHeader } from '../Component/ViewManager.js'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from './IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    sort,
+    filter,
+    TRANLINE,
+    FontBold,
+    url
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale
+} from './Util'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager.js'
 import ItemMV from './ItemMV'
 import CompanyProfile from './CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
@@ -26,33 +65,48 @@ class JobList extends PureComponent {
         };
     }
     componentDidMount() {
-        const {params} = this.props.navigation.state;
-        const otherParam = params ? params.otherParam : null;
-        console.log('other', otherParam)
-        this.setState({
-            data: otherParam || []
-        })
-        // console.log('console>>>', otherParam[0].skills);
-
-
+        this.checking();
     }
-
+    checking = () => {
+        console.log('hey', global.all.length)
+        const {
+            params
+        } = this.props.navigation.state;
+        const otherParam = params ? params.otherParam : null;
+        this.setState({
+            data: global.all
+        })
+    }
     Filter = () => {
         this.props.navigation.navigate('Filter')
     }
 
-    push = (item) => {
+    push = (item, index) => {
         // console.log("heelo", item);
         // global.ig = item
+        console.log('item', item);
         this.props.navigation.navigate('CompanyProfile', {
             item: item
         })
+    }
+    Video = (item) => {
+        console.log('hels');
+        let m = url + 'images/company/' + item.video
+        if (item)
+            this.props.navigation.navigate('VideoPlayer', {
+                vid: m
+            })
+        else
+            alert('not uploaded');
+        // this.props.navigation.navigate('VideoResume');
     }
     Back = () => {
         this.props.navigation.navigate('ChooseTalent')
     }
     render() {
-        const {data} = this.state;
+        const {
+            data
+        } = this.state;
         return (
             <View style={styles.backGround}>
         <StatusBar hidden={true}/>
@@ -62,7 +116,7 @@ class JobList extends PureComponent {
             <NavigationHeader onPress={() => this.Back()} text={global.Job_Title}/>
             <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - {data.length}</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {data && data.length}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{
@@ -87,7 +141,7 @@ class JobList extends PureComponent {
             </TouchableWithoutFeedback>
    </View></View>
    
-   <FlatList
+        {this.state.data != '' ? (<FlatList
             style={{
                 marginTop: 4,
                 marginBottom: 50,
@@ -100,7 +154,7 @@ class JobList extends PureComponent {
                 item={item}
                 index={index}
                 push={this.push}
-                // getAudioTimeString={this.getAudioTimeString}
+                Video={this.Video}
                 />}
             initialNumToRender={5}
             maxToRenderPerBatch={10}
@@ -115,7 +169,20 @@ class JobList extends PureComponent {
             keyExtractor = {
             (item, index) => index + ''
             }
-            />
+            />)
+                : (<View  style = {{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flex: 1
+                }}>
+            <Text style={{
+                    textAlign: 'center',
+                    fontFamily: FontBold,
+                    color: themeWhite,
+                    fontSize: scale(18),
+                    width: wp(60)
+                }}>No Data found 😞</Text><NavigationEvents onDidFocus={this.checking}/>
+            </View>) }
             <View style={styles.TranLingImage}>
              <Image
             source={TRANLINE}
@@ -126,8 +193,7 @@ class JobList extends PureComponent {
         </View>
         )
     }
-}
-;
+};
 
 
 // class CompanyProfile extends Component {

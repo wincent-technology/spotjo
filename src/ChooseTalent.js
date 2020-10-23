@@ -1,13 +1,41 @@
-import React, { Component } from 'react';
-import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
-import { scale, snack } from './Util';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    StatusBar,
+    ImageBackground,
+    Dimensions,
+    Text,
+    Image,
+    View,
+    TextInput
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
+import {
+    scale,
+    snack
+} from './Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { switchColor, Background, themeColor } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    switchColor,
+    Background,
+    themeColor
+} from '../Constant/index'
 import styles from './Style';
 import http from '../api';
+
+
 class ChooseTalent extends Component {
     constructor(props) {
         super(props);
@@ -22,9 +50,31 @@ class ChooseTalent extends Component {
             Freelancer: false,
         };
     }
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
+
+    componentDidMount() {
+        this.setState({
+            FullTime: global.FullTime,
+            PartTime: global.PartTime,
+            Employed: global.Employed,
+            Internship: global.Internship,
+            StudentJobs: global.StudentJobs,
+            HelpingVacancies: global.HelpingVacancies,
+            Freelancer: global.Freelancer,
+        })
+    }
+    checking = () => {
+        this.setState({
+            FullTime: global.FullTime,
+            PartTime: global.PartTime,
+            Employed: global.Employed,
+            Internship: global.Internship,
+            StudentJobs: global.StudentJobs,
+            HelpingVacancies: global.HelpingVacancies,
+            Freelancer: global.Freelancer,
+        })
+    }
+
     next = () => {
         try {
             http.POST('api/appjob/filter', {
@@ -42,18 +92,19 @@ class ChooseTalent extends Component {
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
+                    global.all = res['data']['result']
                     this.props.navigation.navigate('TabScreen', {
                         otherParam: res['data']['result'],
                     })
 
-                // will get data in this    res['data']['result']             
-                // this.props.navigation.navigate('TabScreenJob')
+                    // will get data in this    res['data']['result']             
+                    // this.props.navigation.navigate('TabScreenJob')
                 } else {
                     snack(res['data']['message'])
 
                 }
             }, err => snack(err['message']));
-        } catch ( error ) {
+        } catch (error) {
             snack(error)
 
         }
@@ -66,9 +117,19 @@ class ChooseTalent extends Component {
     }
 
     render() {
-        const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
+        const {
+            FullTime,
+            PartTime,
+            Employed,
+            Internship,
+            StudentJobs,
+            HelpingVacancies,
+            Freelancer,
+            name
+        } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
+            <NavigationEvents onDidFocus={this.checking}/>
             <ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode = {
@@ -104,7 +165,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 FullTime: toggle
-            })}
+            },() => global.FullTime = toggle)}
             /></View></View>
             <View style={[styles.PersonalInfoEndChoose, {
                 flexDirection: "row"
@@ -119,7 +180,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 PartTime: toggle
-            })}
+            },() => global.PartTime = toggle)}
             /></View></View></View>
              <View style={{
                 top: hp(4)
@@ -145,7 +206,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 Employed: toggle
-            })}
+            },() => global.Employed = toggle)}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
                                 <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
@@ -158,7 +219,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 Internship: toggle
-            })}
+            },() => global.Internship = toggle)}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
                                 <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
@@ -171,7 +232,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 StudentJobs: toggle
-            })}
+            },() => global.StudentJobs = toggle)}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
                                 <View style={[styles.PersonalInfoStartEmp, {
@@ -188,7 +249,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 HelpingVacancies: toggle
-            })}
+            },() => global.HelpingVacancies = toggle)}
             /></View></View></View>
             <View style={styles.PersonalInfoRowChoose}>
                                 <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
@@ -201,7 +262,7 @@ class ChooseTalent extends Component {
             size="small"
             onToggle={toggle => this.setState({
                 Freelancer: toggle
-            })}
+            },() => global.Freelancer = toggle)}
             /></View></View></View>
             <View style={{
                 flexDirection: "row",
@@ -214,19 +275,19 @@ class ChooseTalent extends Component {
                 width: wp(20),
                 marginLeft: wp(-6)
             }}>
-            <TouchableWithoutFeedback style={styles.Size} onPress={this.back}><View  style={styles.Size}><Text style={[{
+            <TouchableOpacity style={styles.Size} onPress={this.back} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableWithoutFeedback>
+            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
             </View>
             <View style={{
                 alignItems: 'flex-end',
                 // right: wp(7),
                 width: wp(62)
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.next}><View  style={[styles.Size, {
+            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
                 alignItems: 'flex-end'
             }]}><Text style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableWithoutFeedback></View>
+            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
             </View>
             </View>
             </View>
@@ -234,7 +295,6 @@ class ChooseTalent extends Component {
         </ImageBackground></SafeAreaView>
         )
     }
-}
-;
+};
 
 export default withNavigationFocus(ChooseTalent);

@@ -31,13 +31,13 @@ class PreviewJob extends Component {
         this.props.navigation.navigate('Personal');
     }
 
-    dateDiffInDays() {
-        const a = new Date(global.Start_date).getFullYear()
-        const b = new Date(global.End_date).getFullYear()
-        global.CompanyExp = Math.floor(b - a)
-        return Math.floor(b - a)
+    // dateDiffInDays() {
+    //     const a = new Date(global.Start_date).getFullYear()
+    //     const b = new Date(global.End_date).getFullYear()
+    //     global.CompanyExp = Math.floor(b - a)
+    //     return Math.floor(b - a)
 
-    }
+    // }
 
     render() {
         const {Hourly, Monthly, Yearly} = this.state
@@ -71,7 +71,7 @@ class PreviewJob extends Component {
                 // borderRadius: scale(20),
                 overflow: 'hidden',
             }}><Image
-            source={!global.uploadUri ? {
+            source={global.uploadUri ? {
                 uri: global.uploadUri,
             } : Companyavtar}
             style={styles.imageStyle}
@@ -217,7 +217,7 @@ class PreviewJob extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.CompanyExp - 1}-{this.dateDiffInDays()} Years</Text>
+            }}>{global.minYear}-{global.maxYear} Years</Text>
             </View>
             </View>
             <View style={{

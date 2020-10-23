@@ -11,11 +11,12 @@ import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
-import { scale } from '../src/Util';
+import { scale, snack } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background } from '../Constant/index'
+import http from '../api'
 
 class EmailSend extends Component {
     constructor(props) {
@@ -33,7 +34,28 @@ class EmailSend extends Component {
         // this.props.navigation.navigate('CompanyLogin')
     }
     Reset = () => {
-        this.props.navigation.navigate('ForgatPass')
+        const {name} = this.state;
+
+        try {
+            if (name.length > 0) {
+                http.POST('api/company/forgotpass', {
+                    email: name,
+                }).then((res) => {
+                    if (res['data']['status']) {
+                        alert('please kindly check your mail')
+                        this.props.navigation.navigate('ForgatPass')
+                    } else {
+                        snack(res['data']['message'])
+                    }
+                }, err => snack(err['message']))
+            } else {
+                snack('Required Email Password')
+
+            }
+        } catch ( error ) {
+            snack("error while register" + error)
+        }
+    // this.props.navigation.navigate('ForgatPass')
     }
 
     render() {

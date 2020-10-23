@@ -1,12 +1,39 @@
-import React, { Component } from 'react';
-import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    Dimensions,
+    StyleSheet,
+    Platform,
+    View,
+    Text,
+    StatusBar,
+    ImageBackground,
+    Image,
+    TouchableWithoutFeedback
+} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { withNavigationFocus } from 'react-navigation';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import { scale, snack } from '../src/Util';
-import { left, library, icon, play, leftVid } from '../src/IconManager';
+import {
+    scale,
+    snack
+} from '../src/Util';
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
-import { Background, url } from '../Constant/index'
+import {
+    Background,
+    url
+} from '../Constant/index'
 import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -26,41 +53,68 @@ class LoginWithEmail extends Component {
     forgat = () => {
         this.props.navigation.navigate('EmailSend')
     }
-    DisplaySnackBar = (msg) => {
-        this.refs.ReactNativeSnackBar.ShowSnackBarFunction(msg);
-    };
+
     onLogin = async () => {
-        const {email, password} = this.state;
+        const {
+            email,
+            password
+        } = this.state;
         try {
             if (email.length > 0 && password.length > 0) {
                 http.POST('api/company/login', {
                     email: email,
                     password: password
                 }).then((res) => {
+                    console.log('sdf', res['data']['result'])
                     if (res['data']['status']) {
-                        //            //will get data in this    res['data']['result']             
+                        if (res['data']['result']['role'] == 'Super Admin') {
+                            console.log("login id ", res['data']['result'])
+                            global.role = res['data']['result']['role'];
+                            global.Service = res['data']['result']['services'];
+                            global.Id = res['data']['result']['id'];
+                            global.Email = res['data']['result']['email']
+                            global.Branch = res['data']['result']['branch']
+                            global.uploadUri = url + 'images/company/' + res['data']['result']['logo']
+                            global.Mobile = res['data']['result']['mobile']
+                            global.Company = res['data']['result']['name']
+                            global.Video = url + 'images/company/' + res['data']['result']['video']
+                            global.WebSite = res['data']['result']['website']
+                            global.Address = res['data']['result']['address']
+                            global.Service = res['data']['result']['services']
+                            global.let = parseFloat(res['data']['result']['latitude'])
+                            global.long = parseFloat(res['data']['result']['longitude'])
+                            console.log('glo', global.let, global.long)
+                            AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
+                            this.props.navigation.navigate('TalentCom')
+                        } else {
+                            console.log("login id ", res['data']['result'])
+                            global.role = res['data']['result']['role'];
+                            global.Service = res['data']['result']['services'];
+                            global.Id = res['data']['result']['companyId'];
+                            global.Email = res['data']['result']['email']
+                            global.Branch = res['data']['result']['branch']
+                            global.uploadUri = url + 'images/company/' + res['data']['result']['logo']
+                            global.Mobile = res['data']['result']['mobile']
+                            global.Company = res['data']['result']['name']
+                            global.Video = url + 'images/company/' + res['data']['result']['video']
+                            global.WebSite = res['data']['result']['website']
+                            global.Address = res['data']['result']['address']
+                            global.let = parseFloat(res['data']['result']['latitude'])
+                            global.long = parseFloat(res['data']['result']['longitude'])
+                            console.log('glo', global.let, global.long)
+                            // AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
+                            this.props.navigation.navigate('TalentCom')
 
-                        console.log("login id ", res['data']['result'])
-                        global.Id = res['data']['result']['id'];
-                        global.Email = res['data']['result']['email']
-                        global.Branch = res['data']['result']['branch']
-                        global.uploadUri = url + '/images/company/' + res['data']['result']['logo']
-                        global.Mobile = res['data']['result']['mobile']
-                        global.Company = res['data']['result']['name']
-                        global.Video = res['data']['result']['video']
-                        global.WebSite = res['data']['result']['website']
-                        global.Address = res['data']['result']['address']
-                        AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
-                        this.props.navigation.navigate('TabScreenCompany')
+                        }
+
                     } else {
                         snack(res['data']['message'])
                     }
                 }, err => snack(err['message']))
             } else {
                 snack('Required Email Password')
-
             }
-        } catch ( error ) {
+        } catch (error) {
             snack("error while register" + error)
         }
     }
@@ -94,7 +148,7 @@ class LoginWithEmail extends Component {
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
                 email: text
             })}/>
-       <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
+       <CustomInput placeholder = {'Password'} secureTextEntry={true} textChange = {(text) => this.setState({
                 password: text
             })}/>
        <TouchableWithoutFeedback onPress={this.forgat}><Text style={{
@@ -125,6 +179,5 @@ class LoginWithEmail extends Component {
 
         );
     }
-}
-;
+};
 export default withNavigationFocus(LoginWithEmail);

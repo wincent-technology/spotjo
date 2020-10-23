@@ -1,63 +1,55 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE, overlayimage } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from '../src/Util'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    sort,
+    filter,
+    TRANLINE,
+    overlayimage
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale
+} from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHead } from '../Component/ViewManager.js'
+import {
+    Rating,
+    NavigationHead
+} from '../Component/ViewManager.js'
 import ItemMV from '../src/ItemMV'
 import DeviceInfo from 'react-native-device-info';
 import JobListCompany from './JobListCompany';
 import JobMatches from './JobMatches';
 import PostedJobList from './PostedJobList';
-// import styles from './Style'
-var c = 0;
-const data = [{
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://turbologo.com/articles/wp-content/uploads/2019/11/Porsche-logo-cover-1280x720.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'Senior Java Devloper',
-    image: 'https://cdn.vox-cdn.com/thumbor/2eZPJ-j9zXm5AIro7TIiEBCgNoc=/0x0:640x427/1200x800/filters:focal(0x0:640x427)/cdn.vox-cdn.com/assets/3218223/google.jpg',
-    ComPany_Name: 'Google',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JAVA DEVELOPER / J2EE',
-    image: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Logo.png',
-    ComPany_Name: 'Amazon',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}, {
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://di-uploads-pod3.dealerinspire.com/porscheoffremont/uploads/2018/09/porsche-logo.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-},];
-
-global.item = data[0];
 
 class AdminDashboard extends PureComponent {
 
@@ -82,7 +74,7 @@ class AdminDashboard extends PureComponent {
     // // this.props.navigation.navigate('CompanyProfile')
     // }
     Back = () => {
-        this.props.navigation.navigate('ChooseTalent')
+        this.props.navigation.navigate('ComEdit')
     }
     createJob = () => {
         console.log('hey');
@@ -111,11 +103,14 @@ class AdminDashboard extends PureComponent {
             flagMatches: true,
             flagInterView: false,
             flagPosted: false,
-
         })
     }
     renderPage = () => {
-        const {flagPosted, flagInterView, flagMatches} = this.state;
+        const {
+            flagPosted,
+            flagInterView,
+            flagMatches
+        } = this.state;
         if (flagPosted)
             return <PostedJobList />
         else if (flagInterView)
@@ -149,16 +144,19 @@ class AdminDashboard extends PureComponent {
                 width: wp(97) / 3,
                 height: scale(40),
                 marginLeft: wp(3),
-                justifyContent: "center"
+                justifyContent: "center",
+                alignItems:"center"
             }}><ImageBackground source={overlayimage} style={{
                 height: '100%',
                 width: '100%',
                 position: "absolute",
                 opacity: this.state.flagPosted ? 1 : 0
             }} resizeMode={'contain'} /><Text style={{
-                fontSize: scale(20),
+                fontSize: scale(18),
                 fontFamily: 'Roboto-Regular',
-                width: wp(97) / 3,
+                width:wp(97) / 3,
+                textAlign:"center"
+                // width: wp(97) / 3,
             }} numberOfLines={1}>Posted Jobs</Text></View></TouchableWithoutFeedback>
                         <TouchableWithoutFeedback onPress={this.Interviews}><View style={{
                 alignItems: 'center',
@@ -173,7 +171,7 @@ class AdminDashboard extends PureComponent {
                 opacity: this.state.flagInterView ? 1 : 0
 
             }} resizeMode={'contain'} /><Text style={{
-                fontSize: scale(20),
+                fontSize: scale(18),
                 fontFamily: 'Roboto-Regular'
             }}>Interviews</Text></View></TouchableWithoutFeedback>
                         <TouchableWithoutFeedback onPress={this.Matches}><View style={{
@@ -188,20 +186,20 @@ class AdminDashboard extends PureComponent {
                 opacity: this.state.flagMatches ? 1 : 0
 
             }} resizeMode={'contain'} /><Text style={{
-                fontSize: scale(20),
+                fontSize: scale(18),
                 fontFamily: 'Roboto-Regular'
             }}>Matches</Text></View></TouchableWithoutFeedback>
                     </View>
                     <View style={{
-                height: hp(100) - (hp(11) + scale(95))
+                height: hp(100.6) - ((wp(100) / 3) + scale(80))
             }}>{this.renderPage()}</View>
             {this.state.flagPosted && <View style={{
-                bottom: scale(-70)
+                bottom: scale(30),
+                position: "absolute",
+
             }}>
             <TouchableWithoutFeedback onPress={this.createJob}>
             <View style={{
-                bottom: scale(30),
-                position: "absolute",
                 marginHorizontal: wp(2),
                 borderRadius: wp(15),
             }}><ImageBackground source={require('../Img/create-job.png')} style={{
@@ -229,7 +227,6 @@ class AdminDashboard extends PureComponent {
             </View>
         )
     }
-}
-;
+};
 
 export default withNavigationFocus(AdminDashboard);

@@ -19,9 +19,9 @@ export default class ToggleSwitch extends React.Component {
             return {
                 width: scale(30),
                 padding: scale(8),
-                circleWidth: scale(15),
-                circleHeight: scale(15),
-                translateX: scale(21)
+                circleWidth: scale(14),
+                circleHeight: scale(14),
+                translateX: scale(14.5)
             };
         case "large":
             return {
@@ -83,7 +83,7 @@ export default class ToggleSwitch extends React.Component {
     createInsideCircleStyle = () => ({
         alignItems: "center",
         justifyContent: "center",
-        margin: 4,
+        // marginHorizontal: 1,
         position: "absolute",
         backgroundColor: "white",
         transform: [{

@@ -7,6 +7,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Compon
 import { themeColor, themeWhite } from '../Constant/index'
 // import styles from './Style'
 const {height, width} = Dimensions.get('window')
+import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 
 import { FontBold, FontRegular } from '../Constant/index'
 
@@ -18,6 +19,15 @@ class ItemMV extends PureComponent {
     }
     render() {
         return (
+            <View style={{
+                flexDirection: "row",
+                alignItems: "center"
+            }}>
+            <View style={{
+                marginHorizontal: scale(5)
+            }}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
+                this.props.remove(this.props.item.heading, this.props.index)
+            }}/></View>
             <View style={{
                 flexDirection: "column",
                 paddingTop: hp(1),
@@ -47,7 +57,7 @@ class ItemMV extends PureComponent {
                 borderBottomColor: '#eee',
                 width: wp(78),
                 alignItems: "center"
-            }}/></View>
+            }}/></View></View>
         )
     }
 }

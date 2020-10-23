@@ -4,6 +4,7 @@ import { themeColor, themeWhite } from '../Constant/index'
 import styles from '../src/Style'
 import { TouchableOpacity, Text, View, Image } from 'react-native'
 import { scale } from '../src/Util';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 
 const NavigationHeader = ({onPress, text = '', ...props}) => (
     <View style={styles.JoblistMainView}>
@@ -20,8 +21,13 @@ const NavigationHeader = ({onPress, text = '', ...props}) => (
     style={styles.JoblistLogoImageSize}
     resizeMode={'contain'}
     /></View>
-            <View style={styles.JoblistMainViewHeading}>
-    <Text style={styles.JoblistMainViewHeadingText}>{text}</Text></View></View>
+            <View style={[styles.JoblistMainViewHeading], {
+        width: wp(70),
+        marginLeft: scale(30),
+        justifyContent: "center",
+        alignItems: "center"
+    }}>
+    <Text style={styles.JoblistMainViewHeadingText} numberOfLines={1}>{text}</Text></View></View>
             </View>
 )
 

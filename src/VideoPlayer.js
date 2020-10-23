@@ -1,13 +1,16 @@
 /*Example of React Native Video*/
 import React, { Component } from 'react';
 //Import React
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View, TouchableWithoutFeedback } from 'react-native';
 //Import Basic React Native Component
 import Video from 'react-native-video';
 //Import React Native Video to play video
 import MediaControls, { PLAYER_STATES } from 'react-native-media-controls';
 //Media Controls to control Play/Pause/Seek and full screen
 import { themeColor } from '../Constant/index'
+import { scale } from './Util'
+import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
+
 class VideoPlayer extends Component {
     videoPlayer;
 
@@ -21,13 +24,24 @@ class VideoPlayer extends Component {
             paused: false,
             playerState: PLAYER_STATES.PLAYING,
             screenType: 'contain',
+            data: ''
         };
+
     }
 
     onSeek = seek => {
         //Handler for change in seekbar
         this.videoPlayer.seek(seek);
     };
+
+    componentDidMount() {
+        const {params} = this.props.navigation.state;
+        const vid = params ? params.vid : null;
+        console.log('other', vid)
+        this.setState({
+            data: vid || ''
+        })
+    }
 
     onPaused = playerState => {
         //Handler for Video Pause
@@ -98,6 +112,27 @@ class VideoPlayer extends Component {
     render() {
         return (
             <View style={styles.container}>
+            <View style={{
+                zIndex: 1,
+                top: scale(15),
+                right: scale(15),
+                height: scale(25),
+                width: scale(25),
+                position: "absolute",
+            }}><TouchableWithoutFeedback onPress={() => this.props.navigation.goBack()}>
+            <View style={{
+                height: scale(25),
+                width: scale(25),
+                zIndex: 1
+            }}  hitSlop={{
+                top: 15,
+                bottom: 15,
+                left: 15,
+                right: 15
+            }}>
+            <Icon2 name={'clear'} size={scale(20)} color={'#fff'}/></View>
+            </TouchableWithoutFeedback>
+            </View>
         <Video
             onEnd={this.onEnd}
             onLoad={this.onLoad}
@@ -108,7 +143,7 @@ class VideoPlayer extends Component {
             resizeMode={this.state.screenType}
             onFullScreen={this.state.isFullScreen}
             source={{
-                uri: global.Video || 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
+                uri: this.state.data || 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4'
             }}
             style={styles.mediaPlayer}
             volume={10}

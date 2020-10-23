@@ -1,32 +1,59 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE, canvas } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale, snack } from '../src/Util'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    sort,
+    filter,
+    TRANLINE,
+    canvas,
+    url,
+    FontBold
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale,
+    snack
+} from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHeader } from '../Component/ViewManager.js'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager.js'
 import ItemMV from './ItemMV'
 import DeviceInfo from 'react-native-device-info';
 import http from '../api'
 
 // import styles from './Style'
-var c = 0;
-const data = [{
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://turbologo.com/articles/wp-content/uploads/2019/11/Porsche-logo-cover-1280x720.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com'
-}];
-
-global.item = data[0];
 
 class PostedJobList extends PureComponent {
 
@@ -35,7 +62,13 @@ class PostedJobList extends PureComponent {
         super(props);
 
         this.state = {
-            dataitem: []
+            dataitem: [],
+            Active: [],
+            act: false,
+            exp: false,
+            pub: false,
+            Expired: [],
+            Published: []
         };
         this._isMounted = false;
 
@@ -46,9 +79,9 @@ class PostedJobList extends PureComponent {
     }
 
     push = (item) => {
-        console.log('ji');
-    // global.item = item;
-    // this.props.navigation.navigate('CompanyProfile')
+        console.log('ji', item);
+        // global.item = item;
+        // this.props.navigation.navigate('CompanyProfile')
     }
     Back = () => {
         // this.props.navigation.navigate('ChooseTalent')
@@ -57,41 +90,73 @@ class PostedJobList extends PureComponent {
     componentWillUnmount() {
         this._isMounted = false;
     }
-    componentDidUpdate() {
+    // componentDidUpdate() {
 
-        try {
-            this._isMounted && http.POST('api/applogcom/job', {
-                companyId: global.Id,
-            }).then((res) => {
-                if (res['data']['status']) {
-                    console.log('rrrrrrrrr', res['data']['result']);
-                    this._isMounted = false
-                    this.setState({
-                        dataitem: res['data']['result']
-                    })
-                    // this.props.navigation.navigate('AdminDashboard');
-                    // this.postedJob(res['data']['result']);
+    //     try {
+    //         this._isMounted && http.POST('api/applogcom/job', {
+    //             companyId: global.Id,
+    //         }).then((res) => {
+    //             if (res['data']['status']) {
+    //                 console.log('rrrrrrrrr', res['data']['result']);
+    //                 this._isMounted = false
+    //                 this.setState({
+    //                     dataitem: res['data']['result']
+    //                 })
+    //                 // this.props.navigation.navigate('AdminDashboard');
+    //                 // this.postedJob(res['data']['result']);
 
-                } else {
-                    snack(res['data']['message'])
+    //             } else {
+    //                 snack(res['data']['message'])
 
-                }
-            }, err => alert(JSON.stringify(err)));
-        } catch ( error ) {
-            snack(error)
-        }
-    }
+    //             }
+    //         }, err => alert(JSON.stringify(err)));
+    //     } catch ( error ) {
+    //         snack(error)
+    //     }
+    // }
 
     componentDidMount() {
+        this._isMounted = true
+        this.checking();
+    }
+    Active = () => {
+        console.log('active')
+        this.setState({
+            pub: false,
+            act: true,
+            exp: false,
+            dataitem: this.state.Active
+        })
+    }
+    Expired = () => {
+        console.log('expired')
+        this.setState({
+            pub: false,
+            act: false,
+            exp: true,
+            dataitem: this.state.Expired
+        })
+    }
+    Published = () => {
+        console.log('Published')
+        this.setState({
+            pub: true,
+            act: false,
+            exp: false,
+            dataitem: this.state.Published
+        })
+    }
+    checking = () => {
         this._isMounted = true
         try {
             this._isMounted && http.POST('api/applogcom/job', {
                 companyId: global.Id,
             }).then((res) => {
                 if (res['data']['status']) {
-                    console.log('rrrrrrrrr', res['data']['result']);
                     this.setState({
-                        dataitem: res['data']['result']
+                        dataitem: res['data']['result'],
+                        Published: res['data']['result'],
+                        pub: true
                     })
                     // this.props.navigation.navigate('AdminDashboard');
                     // this.postedJob(res['data']['result']);
@@ -101,111 +166,126 @@ class PostedJobList extends PureComponent {
 
                 }
             }, err => alert(JSON.stringify(err)));
-        } catch ( error ) {
+        } catch (error) {
+            snack(error)
+        }
+        try {
+            this._isMounted && http.POST('api/get/activeJob', {
+                companyId: global.Id,
+            }).then((res) => {
+                if (res['data']['status']) {
+                    // console.log('126', res['data']['result']);
+                    this.setState({
+                        Active: res['data']['result']
+                    })
+                    // this.props.navigation.navigate('AdminDashboard');
+                    // this.postedJob(res['data']['result']);
+
+                } else {
+                    snack(res['data']['message'])
+
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch (error) {
+            snack(error)
+        }
+        try {
+            this._isMounted && http.POST('api/get/expireJob', {
+                companyId: global.Id,
+            }).then((res) => {
+                if (res['data']['status']) {
+                    // console.log('146', res['data']['result']);
+                    this.setState({
+                        Expired: res['data']['result']
+                    })
+                    // this.props.navigation.navigate('AdminDashboard');
+                    // this.postedJob(res['data']['result']);
+
+                } else {
+                    snack(res['data']['message'])
+
+                }
+            }, err => alert(JSON.stringify(err)));
+        } catch (error) {
             snack(error)
         }
     }
 
     Video = (item) => {
-        console.log('hels');
-        global.Video = item.video
-        if (global.Video)
-            this.props.navigation.navigate('VideoPlayer')
+        console.log('hels', item.video);
+        let m = url + '/images/company/' + item.video
+        if (item)
+            this.props.navigation.navigate('VideoPlayer', {
+                vid: m
+            })
         else
-            alert('video coming soon');
-    // this.props.navigation.navigate('VideoResume');
+            alert('not uploaded');
+        // this.props.navigation.navigate('VideoResume');
     }
 
     render() {
         return (
             <View>
         <StatusBar hidden={true}/>
-
+        <NavigationEvents onDidFocus={this.checking}/>
             <View style={{
                 flexDirection: 'row',
-                width: wp('100%'),
+                width: wp('100%') - scale(35),
+                marginHorizontal:scale(5),
                 backgroundColor: 'transparent',
-                height: hp(12),
-                marginTop: hp(1),
-                alignItems: 'center',
-            }}>
-            <TouchableWithoutFeedback onPress={this.PostedJob} style={{
-                alignItems: 'center',
-                width: wp(100) / 3,
-                height: hp(10),
-                borderRadius: scale(20),
-            }}><View style={{
-                alignItems: 'center',
-                width: wp(100) / 3,
-                height: hp(10),
-                borderRadius: scale(100),
-            // marginLeft: wp(1),
-            // justifyContent: "center",
-            // flexDirection: "column"
-            }}><ImageBackground source={canvas} style={{
-                height: '100%',
+                height: (wp(100) / 3) - scale(5),
+                marginTop: hp(0.6),
+                marginBottom: hp(-0.3),
+                alignItems:"center"
+            // marginTop: hp(1),
+            // alignItems: 'center',
+            }}><TouchableWithoutFeedback onPress={() => this.Published()}><View style={[
+                {borderWidth:this.state.pub ? scale(2):0},styles.postedJoblist]}><ImageBackground source={canvas} style={{
                 width: '100%',
-                borderRadius: scale(100),
-                position: "absolute",
+                height: '100%',
                 alignItems: "center",
                 justifyContent: "center"
-            }} resizeMode={'cover'}><Text style={{
+            }} resizeMode={'stretch'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
-            }}>{this.state.dataitem.length}</Text><View><Text style={{
+            }}>{this.state.Published.length}</Text><View><Text style={{
                 fontSize: scale(16),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
             }}>Published</Text></View></ImageBackground></View></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={this.Interviews}><View style={{
-                alignItems: 'center',
-                width: wp(100) / 3,
-                height: hp(10),
-                justifyContent: "center",
-                // marginHorizontal: wp(1),
-                flexDirection: "column"
-            }}><ImageBackground source={canvas} style={{
+            <TouchableWithoutFeedback onPress={() => this.Expired()}><View style={[
+                {borderWidth:this.state.exp ? scale(2):0,marginHorizontal:scale(5)},styles.postedJoblist]}><ImageBackground source={canvas} style={{
                 height: '100%',
                 width: '100%',
-                position: "absolute",
                 alignItems: "center",
                 justifyContent: "center"
-
-            }} resizeMode={'cover'}><Text style={{
+            }} resizeMode={'stretch'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
-            }}>15</Text><View><Text style={{
+            }}>{this.state.Expired.length}</Text><View><Text style={{
                 fontSize: scale(16),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
             }}>Expired</Text></View></ImageBackground></View></TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={this.Matches}><View style={{
-                alignItems: 'center',
-                width: wp(100) / 3,
-                height: hp(10),
-                justifyContent: "center",
-                flexDirection: "column"
-            }}><ImageBackground source={canvas} style={{
+            <TouchableWithoutFeedback onPress={() => this.Active()}><View style={[
+                {borderWidth:this.state.act ? scale(2):0},styles.postedJoblist]}><ImageBackground source={canvas} style={{
                 height: '100%',
                 width: '100%',
-                position: "absolute",
                 alignItems: "center",
                 justifyContent: "center"
-
-            }} resizeMode={'cover'}><Text style={{
+            }} resizeMode={'stretch'}><Text style={{
                 fontSize: scale(20),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
-            }}>3</Text><View><Text style={{
+            }}>{this.state.Active.length}</Text><View><Text style={{
                 fontSize: scale(16),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
             }}>Active</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             </View>
-       
-   <FlatList
+           {this.state.dataitem != '' ? ( <FlatList
             style={{
                 marginTop: 4,
                 marginBottom: 50,
@@ -234,8 +314,21 @@ class PostedJobList extends PureComponent {
             keyExtractor = {
             (item, index) => index + ''
             }
-            />
-            
+            /> )
+                : (<View  style = {{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: hp(50),
+                    width: wp(100)
+                }}>
+            <Text style={{
+                    textAlign: 'center',
+                    fontFamily: FontBold,
+                    color: themeWhite,
+                    fontSize: scale(18),
+                    width: wp(60)
+                }}>No Data found 😞</Text>
+            </View>) }
         </View>
         )
     }

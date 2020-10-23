@@ -1,42 +1,102 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, ScrollView, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View, } from 'react-native';
-import { withNavigationFocus, NavigationEvents } from 'react-navigation';
+import React, {
+  Component
+} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  StatusBar,
+  ScrollView,
+  FlatList,
+  TouchableWithoutFeedback,
+  TouchableOpacity,
+  ImageBackground,
+  Text,
+  Image,
+  View,
+  ActivityIndicator
+} from 'react-native';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from './Style';
-import { left, library, icon, play, leftVid } from './IconManager';
-import { themeColor, themeWhite, home, place, screen, edit, earth, dollor, user, bag, Background, sort, filter, TRANLINE, url, Companyavtar, FontBold } from '../Constant/index';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { scale } from './Util';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from './IconManager';
+import {
+  themeColor,
+  themeWhite,
+  home,
+  place,
+  screen,
+  edit,
+  earth,
+  dollor,
+  user,
+  bag,
+  Background,
+  sort,
+  filter,
+  TRANLINE,
+  url,
+  Companyavtar,
+  FontBold
+} from '../Constant/index';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
+import {
+  scale
+} from './Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHeader } from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 // import ItemMV from './ItemMV'
+import Swipers from 'react-native-swiper';
 
 
 
 class CompanyProfile extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: ''
-        }
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: ''
     }
+  }
 
-    checking = () => {
-        console.log('hey')
-        const {params} = this.props.navigation.state;
-        const item = params ? params.item : null;
-        console.log('other item', item);
-        this.setState({
-            data: item != undefined || '' ? item : ''
-        })
-    }
-    Back = () => {
-        this.props.navigation.goBack();
-    };
+  checking = () => {
+    // console.log('hey')
+    const {
+      params
+    } = this.props.navigation.state;
+    const item = params ? params.item : null;
+    // console.log('other item', item);
+    this.setState({
+      data: item != undefined || '' ? item : ''
+    })
+  }
+  Back = () => {
+    console.log('global.all>>>>>>>>>>>>', global.all)
+    this.props.navigation.goBack();
+  };
 
-    render() {
-        const {data} = this.state
-        return data != '' ? (
-            <SafeAreaView style={styles.backGround}>
+
+  render() {
+    const {
+      data
+    } = this.state
+    return data != '' ? (
+      <SafeAreaView style={styles.backGround}>
+
+            <NavigationEvents onDidFocus={this.checking}/>
+          
             <ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode={'stretch'}>
@@ -67,12 +127,21 @@ class CompanyProfile extends Component {
             </View>
             </TouchableWithoutFeedback>
    </View></View><View style={styles.CompanyProfileMainImage1}>
-
+  <Swipers
+            scrollEnabled={true}
+            showsPagination={false}
+            onIndexChanged ={(index) => console.log('index',index)}
+            ref={'swiper'}
+            index={this.state.changedindex}
+           >
    <ScrollView>
+   
+            <View>
    <ImageBackground style={{
 
                 width: wp('96%'),
                 height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+                overflow: 'hidden'
             }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
   <View style={styles.CompanyProfileImageSize}>
     <Image
@@ -93,7 +162,7 @@ class CompanyProfile extends Component {
                 Companyavtar
             }
             style={styles.imageStyle}
-            resizeMode={'stretch'}
+            resizeMode={'cover'}
             />
   </View>
   <View style={styles.CompanyProfileDetail}>
@@ -124,6 +193,7 @@ class CompanyProfile extends Component {
       <Text
             style={{
                 marginLeft: scale(10),
+                marginTop:scale(-2)
             }}>
         {data != '' && data.skills.map((item, index) => {
                 return (
@@ -141,7 +211,7 @@ class CompanyProfile extends Component {
          <Image source={bag} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
       <Text style={styles.ItemDetailLabel1}>
-        {data.totalExp - 1} - {data.totalExp} Years / 
+        {data.minExp} - {data.maxExp} Years / 
       </Text>
       <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
     </View>
@@ -150,7 +220,7 @@ class CompanyProfile extends Component {
         <Image source={place} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
       <Text style={styles.ItemDetailLabel1}>
-        Fhguj Guggjj /
+        {data.city} /
       </Text>
       <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
     </View>
@@ -158,7 +228,7 @@ class CompanyProfile extends Component {
       <View style={styles.CompanyDetailProfileIcon}>
         <Image source={dollor} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{data.salMin},000$</Text>
+      <Text style={styles.ItemDetailLabel1}>{data.salMin} - {data.salMax},000$</Text>
     </View>
     <View style={styles.CompanyDetailIcon}>
       <View style={styles.CompanyDetailProfileIcon}>
@@ -168,7 +238,23 @@ class CompanyProfile extends Component {
     </View>
   </View>
 </ImageBackground>
+</View>
         </ScrollView>
+        <View  style = {{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    // flex: 1,
+                  height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+                }}>
+            <Text style={{
+                    textAlign: 'center',
+                    fontFamily: FontBold,
+                    color: themeWhite,
+                    fontSize: scale(18),
+                    width: wp(60)
+                }}>Please login to our app</Text>
+            </View>
+        </Swipers>
         </View>
          <View style={styles.TranLingImage}>
              <Image
@@ -177,27 +263,22 @@ class CompanyProfile extends Component {
             resizeMode={'stretch'}
             /></View>
         </ImageBackground>
+        
       </SafeAreaView>
-            ) : <SafeAreaView style={styles.backGround}>
+    ) : <SafeAreaView style={styles.backGround}>
             <ImageBackground style={[styles.ImageBlue, {
                 justifyContent: "center",
                 alignItems: "center"
             }]}
             source = {Background}
-            resizeMode={'stretch'}><Text style={{
-                textAlign: 'center',
-                fontFamily: FontBold,
-                color: themeWhite,
-                fontSize: scale(18),
-                width: wp(60)
-            }}>Please Select any Company Profile from List</Text><NavigationEvents onDidFocus={this.checking}/>
+            resizeMode={'stretch'}><ActivityIndicator size="large" color="#fff" /><NavigationEvents onDidFocus={this.checking}/>
             <View style={styles.TranLingImage}>
              <Image
             source={TRANLINE}
             style={styles.imageStyle}
             resizeMode={'stretch'}
             /></View></ImageBackground></SafeAreaView>;
-    }
+  }
 }
 
 export default withNavigationFocus(CompanyProfile);

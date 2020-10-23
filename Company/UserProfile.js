@@ -1,13 +1,71 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, ScrollView, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View, } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    ScrollView,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View,
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, building, placetheme, screentheme, edit, mailtheme, notheme, employedtheme, bagtheme, Background, WhiteVideo, settingTab, sort, filter, TRANLINE, transparentImage, male, backgroundCorner, Companyavtar, linkedin, whatsapp, facebook } from '../Constant/index';
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { scale } from '../src/Util';
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    building,
+    placetheme,
+    screentheme,
+    edit,
+    mailtheme,
+    notheme,
+    employedtheme,
+    bagtheme,
+    Background,
+    WhiteVideo,
+    settingTab,
+    sort,
+    filter,
+    TRANLINE,
+    transparentImage,
+    male,
+    backgroundCorner,
+    Companyavtar,
+    linkedin,
+    whatsapp,
+    facebook,
+    blanks,
+    Fulls,
+    web
+} from '../Constant/index';
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
+import {
+    scale
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHead } from '../Component/ViewManager.js';
+import {
+    Rating,
+    NavigationHead,
+    StarRating
+} from '../Component/ViewManager';
 // import ItemMV from './ItemMV'
 
 
@@ -15,15 +73,31 @@ import { Rating, NavigationHead } from '../Component/ViewManager.js';
 class UserProfile extends Component {
     constructor(props) {
         super(props);
+        // console.log('global', global.Company);
     }
 
     Back = () => {
         this.props.navigation.goBack();
     };
+    Edit = () => {
+        this.props.navigation.navigate('ComEdit')
+    }
+    // Video = (item) => {
+    //     console.log('hels');
+    //     let m = url + 'images/user/' + item.video
+    //     if (item)
+    //         this.props.navigation.navigate('VideoPlayer', {
+    //             vid: m
+    //         })
+    //     else
+    //         alert('not uploaded');
+    // // this.props.navigation.navigate('VideoResume');
+    // }
 
     render() {
+        console.log('globa', global.Company)
         // const {item} = global.item
-        return global.item ? (
+        return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
             source = {Background}
@@ -35,7 +109,7 @@ class UserProfile extends Component {
    <ImageBackground style={{
 
                 width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
+                height: hp('100%') - (StatusBar.currentHeight + 40 + hp(5)),
             }} source={transparentImage} resizeMode={'stretch'}>
   <View style={{
                 top: hp(4),
@@ -44,7 +118,7 @@ class UserProfile extends Component {
                 color: themeWhite,
                 fontSize: scale(23),
                 fontFamily: "Roboto-Bold"
-            }}>{global.item.name}</Text></View>
+            }}>{global.Company}</Text></View>
 <View style={{
                 flexDirection: "row",
                 alignItems: "flex-start",
@@ -58,9 +132,12 @@ class UserProfile extends Component {
                 alignItems: "center",
                 zIndex: 5
             }}
-            source={backgroundCorner}><Image source={global.item.image} style={{
-                height: wp('22'),
-                width: wp('22'),
+            source={backgroundCorner}><Image source={global.uploadUri ? {
+                uri: global.uploadUri
+            } : Companyavtar}
+            style={{
+                height: wp('29'),
+                width: wp('29'),
             // alignItems: "stretch",
             // backgroundColor: "transparent"
             }} resizeMode={'contain'}/></ImageBackground>
@@ -85,7 +162,9 @@ class UserProfile extends Component {
                 fontFamily: "Roboto-Regular",
                 fontSize: scale(12)
             }}>Settings</Text></View></View>
-            <View style={{
+            <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
+                vid: global.Video
+            })}><View style={{
                 flexDirection: "column",
                 height: hp(6),
                 width: wp(26),
@@ -99,7 +178,7 @@ class UserProfile extends Component {
                 fontFamily: "Roboto-Regular",
                 fontSize: scale(12)
             }}>Video Resume</Text></View>
-            </View>
+            </View></TouchableWithoutFeedback>
             </View>
             </View>
             <View style={{
@@ -131,17 +210,20 @@ class UserProfile extends Component {
             </View>
             <View style={{
                 marginTop: hp(-7),
-                marginLeft: wp(32)
-            }}><Rating
-            type='custom'
-            imageSize={22}
-            ratingCount={5}
-            defaultRating={20}
-            readonly={false}
-            ratingBackgroundColor='transparent'
-            startingValue={0}
-            // ratingColor={"#f1ee40"}
-            // tintColor={themeWhite}
+                marginLeft: wp(50),
+                height: scale(20),
+                width: scale(100)
+            }}><StarRating
+            emptyStar={blanks}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(20)}
+            rating={3}
+            // selectedStar={(rating) => this.handleLanguage(rating, index)}
+            fullStarColor={'orange'}
             /></View>
   <View style={{
                 marginLeft: wp(8),
@@ -149,80 +231,52 @@ class UserProfile extends Component {
                 flexDirection: 'column',
             }}>
     <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
+                alignItems: "center",marginLeft:scale(23)
             }]}>
       <View style={styles.myProfileIconImageBuilding}>
         <Image source={building} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
       <Text style={{
-                marginLeft: scale(15),
+                marginLeft: scale(5),
                 fontSize: scale(18),
                 fontFamily: "Roboto-Regular",
             }}>
-        {global.item.ComPany_Name}
+        {global.Branch}
       </Text>
     </View>
     <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
-            }]}>
-      <View style={styles.myProfileIconImage}>
-        <Image source={employedtheme} style={styles.imageStyle} resizeMode={'contain'}/>
-      </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.Working}</Text>
-    </View>
-    <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
-            }]}>
-      <View style={styles.myProfileIconImage}>
-        <Image source={screentheme} style={styles.imageStyle} resizeMode={'contain'}/>
-      </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.Header}</Text>
-    </View>
-    <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
-            }]}>
-      <View style={styles.myProfileIconImage}>
-         <Image source={bagtheme} style={styles.imageStyle} resizeMode={'contain'}/>
-      </View>
-      <Text style={styles.ItemDetailLabel1}>
-        {global.item.work_Experience} / 
-      </Text>
-      <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-    </View>
-    <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
-            }]}>
-      <View style={styles.myProfileIconImage}>
-        <Image source={placetheme} style={styles.imageStyle} resizeMode={'contain'}/>
-      </View>
-      <Text style={styles.ItemDetailLabel1}>
-        {global.item.Address} /
-      </Text>
-      <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-    </View>
-    <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
+                alignItems: "center"
             }]}>
       <View style={styles.myProfileIconImage}>
         <Image source={notheme} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.cell}</Text>
+      <Text style={styles.ItemDetailLabel1}>{global.Mobile}</Text>
     </View>
     <View style={[styles.CompanyDetailIcon, {
-                alignItems: "flex-end"
+                alignItems: "center"
             }]}>
       <View style={styles.myProfileIconImage}>
         <Image source={mailtheme} style={styles.imageStyle} resizeMode={'contain'}/>
       </View>
-      <Text style={styles.ItemDetailLabel1}>{global.item.email}</Text>
+      <Text style={styles.ItemDetailLabel1}>{global.Email}</Text>
+    </View>
+    <View style={[styles.CompanyDetailIcon, {
+                alignItems: "center"
+            }]}>
+      <View style={styles.myProfileIconImage}>
+        <Image source={web} style={styles.imageStyle} resizeMode={'contain'}/>
+      </View>
+      <Text style={styles.ItemDetailLabel1}>{global.WebSite}</Text>
+    </View>
+    <View style={styles.CompanyDetailIcon}>
+      <View style={styles.myProfileIconImage}>
+        <Image source={placetheme} style={styles.imageStyle} resizeMode={'contain'}/>
+      </View>
+      <Text style={styles.ItemDetailLabel1}>{global.Address}</Text>
     </View>
   </View>
 </ImageBackground>
         </ScrollView>
-
-      
-        
-        
         </View>
          <View style={styles.TranLingImage}>
              <Image
@@ -232,19 +286,8 @@ class UserProfile extends Component {
             /></View>
         </ImageBackground>
       </SafeAreaView>
-            ) : null;
+        )
     }
 }
 
 export default withNavigationFocus(UserProfile);
-
-// <View style={{
-//                 marginTop: scale(100),
-//                 backgroundColor: "#fff",
-//                 width: wp('90%'),
-//                 left: wp(2.4),
-//                 height: hp('100%') - (StatusBar.currentHeight + scale(25) + scale(170)),
-//                 borderBottomLeftRadius: scale(10),
-//                 borderBottomRightRadius: scale(10),
-//                 overflow: 'hidden'
-//             }}>

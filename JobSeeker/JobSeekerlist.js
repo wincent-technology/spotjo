@@ -1,120 +1,70 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, ScrollView, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    ScrollView,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, TRANLINE, home, place, screen, edit, earth, dollor, user, bag, sort, filter, } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from '../src/Util'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    TRANLINE,
+    home,
+    place,
+    screen,
+    edit,
+    earth,
+    dollor,
+    user,
+    bag,
+    sort,
+    filter,
+    url
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale,
+    snack
+} from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHeader } from '../Component/ViewManager.js'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager.js'
 import ItemMV from '../src/ItemMV'
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
-import JobCompanyProfile from './JobCompanyProfile';
-import { NavigationEvents } from 'react-navigation';
+// import JobCompanyProfile from './JobCompanyProfile';
+import http from '../api'
 
 global.back = false
 // import styles from './Style'
-var c = 0;
-const data = [{
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://turbologo.com/articles/wp-content/uploads/2019/11/Porsche-logo-cover-1280x720.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com',
-    work_Type: "Full Time",
-    Description: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-    About_Company: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-}, {
-    Header: 'Senior Java Devloper',
-    image: 'https://cdn.vox-cdn.com/thumbor/2eZPJ-j9zXm5AIro7TIiEBCgNoc=/0x0:640x427/1200x800/filters:focal(0x0:640x427)/cdn.vox-cdn.com/assets/3218223/google.jpg',
-    ComPany_Name: 'Google',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com',
-    work_Type: "Half Time",
-    Description: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-    About_Company: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
 
-}, {
-    Header: 'JAVA DEVELOPER / J2EE',
-    image: 'https://logos-world.net/wp-content/uploads/2020/04/Amazon-Logo.png',
-    ComPany_Name: 'Amazon',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com',
-    work_Type: "Full Time",
-    Description: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-    About_Company: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-
-}, {
-    Header: 'JAVA DEVELOPER(M/W)',
-    image: 'https://di-uploads-pod3.dealerinspire.com/porscheoffremont/uploads/2018/09/porsche-logo.jpg',
-    ComPany_Name: 'Porsche AG',
-    Working: 'Employed',
-    Address: 'Stuttgart',
-    skill: ['JAVA', 'J2EE', 'SQL'],
-    work_Experience: '5-6 Years',
-    salary: '50000$',
-    webSite: 'www.example.com',
-    work_Type: "Half Time",
-    Description: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-    About_Company: ['Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'As our vehicle Technician you will be responsible for the service, fault diagnosis and repair of a variety',
-        'Discover more and how to apply.',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team',
-        'Porsche Centre Guildford therefore seek the best in class vehicle technicians to join our service team'
-    ],
-
-},];
 
 // global.item = data[0];
 
@@ -124,19 +74,62 @@ class JobSeekerlist extends PureComponent {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {
+            userdata: ''
+        };
     }
 
     Filter = () => {
-        this.props.navigation.navigate('Filter')
+        this.props.navigation.navigate('JobSeekerFilter')
     }
+    componentDidMount() {
+        try {
+            http.GET('api/appjob/get').then((res) => {
+                if (res['data']['status']) {
+                    console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.42', res['data']['result']);
+                    global.all = res['data']['result']
+                    this.setState({
+                        userdata: res['data']['result'],
+                    });
+                } else {
+                    snack(res['data']['message'])
+                }
+            }, err => alert(JSON.stringify(err['message'])));
+        } catch (error) {
+            alert(error)
 
-    push = (item) => {
-        console.log("heelo", item);
-    // global.item = item;
-    // this.props.navigation.navigate('JobCompanyProfile');
+        }
     }
+    checking = () => {
+        // console.log('hey - 159 map', global.all)
+        // const {params} = this.props.navigation.state;
+        // const otherParam = params ? params.otherParam : null;
+        // console.log('other item', otherParam);
+        this.setState({
+            userdata: global.all
+        })
+    }
+    push = (item, index) => {
+        console.log("heelo", item, index);
 
+        this.props.navigation.navigate('JobCompanyProfile', {
+            item: item,
+            index: index
+        })
+        // global.item = item;
+        // this.props.navigation.navigate('JobCompanyProfile');
+    }
+    Video = (item) => {
+        console.log('hels');
+        let m = url + '/images/company/' + item.video
+        if (item)
+            this.props.navigation.navigate('VideoPlayer', {
+                vid: m
+            })
+        else
+            alert('not uploaded');
+        // this.props.navigation.navigate('VideoResume');
+    }
     Back = () => {
         this.props.navigation.navigate('ChooseTalent')
     }
@@ -147,13 +140,14 @@ class JobSeekerlist extends PureComponent {
 
             <View style={styles.backGround}>
         <StatusBar hidden={true}/>
+        <NavigationEvents onDidFocus={this.checking}/>
            <ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode={'stretch'}>
             <NavigationHeader onPress={() => this.Back()} text='Fresher Java Developer'/>
             <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - 200</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {this.state.userdata.length}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{
@@ -184,14 +178,14 @@ class JobSeekerlist extends PureComponent {
                 marginBottom: 50,
                 backgroundColor: 'transparent',
             }}
-            data = {data}
+            data = {this.state.userdata}
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => <ItemMV
                 item={item}
                 index={index}
                 push={this.push}
-                // getAudioTimeString={this.getAudioTimeString}
+                Video={this.Video}
                 />}
             initialNumToRender={5}
             maxToRenderPerBatch={10}
@@ -217,8 +211,7 @@ class JobSeekerlist extends PureComponent {
         </View>
         )
     }
-}
-;
+};
 
 
 // class CompanyProfile extends Component {

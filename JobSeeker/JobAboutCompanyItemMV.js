@@ -27,14 +27,13 @@ class JobAboutCompanyItemMv extends PureComponent {
                 flexDirection: "row",
                 width: wp(96),
                 justifyContent: "center",
-
             }}><View style={{
             }}><Text style={{
                 fontFamily: FontRegular,
                 fontSize: scale(18),
                 color: '#000',
                 width: wp(80)
-            }}>{this.props.item}</Text></View></View></View>
+            }}>     {this.props.item}</Text></View></View></View>
         )
     }
 }

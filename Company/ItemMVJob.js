@@ -1,14 +1,50 @@
-import React, { PureComponent } from 'react'
-import { View, Image, Dimensions, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
-import { scale } from '../src/Util'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { Rating } from '../Component/ViewManager.js'
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, place, edit, user, bag } from '../Constant/index'
+import React, {
+    PureComponent
+} from 'react'
+import {
+    View,
+    Image,
+    Dimensions,
+    Text,
+    StyleSheet,
+    TouchableWithoutFeedback
+} from 'react-native'
+import {
+    scale
+} from '../src/Util'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    StarRating
+} from '../Component/ViewManager'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    place,
+    edit,
+    user,
+    bag,
+    blanks,
+    Fulls
+} from '../Constant/index'
 import styles from '../src/Style'
-const {height, width} = Dimensions.get('window')
+const {
+    height,
+    width
+} = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import GestureRecognizer, {
+    swipeDirections
+} from 'react-native-swipe-gestures';
 
 class ItemMVJob extends PureComponent {
     // title, href, total_time, total_listen, image
@@ -76,17 +112,20 @@ class ItemMVJob extends PureComponent {
                 fontFamily: 'Roboto-Regular',
                 fontSize: scale(12)
             }}>1 hr ago</Text></View>
-            <View style={styles.ItemMVRatingView}><Rating
-            type='custom'
-            imageSize={18}
-            ratingCount={5}
-            defaultRating={20}
-            readonly={false}
-            ratingBackgroundColor='transparent'
-            startingValue={0}
-            // ratingColor={"#f1ee40"}
-            // tintColor={themeWhite}
-            /></View>
+            <View style={styles.ItemMVRatingView}>
+            <StarRating
+            emptyStar={blanks}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(20)}
+            rating={5}
+            // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+            fullStarColor={'orange'}
+            />
+            </View>
             </View>
             </LinearGradient></GestureRecognizer>
             </TouchableWithoutFeedback>

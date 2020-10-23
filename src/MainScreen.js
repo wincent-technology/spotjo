@@ -6,31 +6,107 @@
  * @flow
  */
 
-import React, { Component } from 'react';
-import { Dimensions, StyleSheet, Platform, View, SafeAreaView, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import React, {
+    Component
+} from 'react';
+import {
+    Dimensions,
+    StyleSheet,
+    Platform,
+    View,
+    SafeAreaView,
+    Text,
+    StatusBar,
+    PermissionsAndroid,
+    ImageBackground,
+    Image,
+    TouchableWithoutFeedback
+} from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
-import { withNavigationFocus } from 'react-navigation';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from './Style';
-import { scale } from './Util';
-import { play } from '../src/IconManager';
-import { Background, themeColor } from '../Constant/index'
+import {
+    scale
+} from './Util';
+import {
+    play
+} from '../src/IconManager';
+import {
+    Background,
+    themeColor
+} from '../Constant/index'
+import Geolocation from '@react-native-community/geolocation';
 
 
 class MainScreen extends Component {
     constructor(props) {
         super(props);
 
-    // this.state = {};
+        // this.state = {};
     }
 
-    talent = () => {
-        this.props.navigation.navigate('TalentScreen')
+
+
+    talent = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            )
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                Geolocation.getCurrentPosition((info) => {
+                    console.log('inf', info)
+                    global.let = info.coords.latitude
+                    global.long = info.coords.longitude
+                });
+                this.props.navigation.navigate('TalentScreen')
+            } else {
+                alert("Location permission denied")
+            }
+        } catch (err) {
+            console.log('>>>>>>>', err)
+        }
     }
-    Opportunities = () => {
-        this.props.navigation.navigate('TalentScreen')
+    Opportunities = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            )
+            console.log('???', granted);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                Geolocation.getCurrentPosition((info) => {
+                    console.log('inf', info)
+                    global.let = info.coords.latitude
+                    global.long = info.coords.longitude
+                });
+                this.props.navigation.navigate('TalentScreen')
+            } else {
+                alert("Location permission denied")
+            }
+        } catch (err) {
+            console.log('>>>>>>>', err)
+        }
     }
-    Login = () => {
-        this.props.navigation.navigate('LoginFirst')
+    Login = async () => {
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
+            )
+            console.log('???', granted);
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                Geolocation.getCurrentPosition((info) => {
+                    console.log('inf', info)
+                    global.let = info.coords.latitude
+                    global.long = info.coords.longitude
+                });
+                this.props.navigation.navigate('LoginFirst')
+            } else {
+                alert("Location permission denied")
+            }
+        } catch (err) {
+            console.log('>>>>>>>', err)
+        }
     }
 
     render() {
@@ -66,8 +142,7 @@ class MainScreen extends Component {
        </ImageBackground></SafeAreaView>
         );
     }
-}
-;
+};
 
 
 export default withNavigationFocus(MainScreen);

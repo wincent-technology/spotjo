@@ -1,4 +1,6 @@
-import React, { Fragment } from 'react';
+import React, {
+	Fragment
+} from 'react';
 
 export const themeColor = '#37c0d3'
 export const themeWhite = '#fff'
@@ -53,6 +55,7 @@ export const TRANLINE = require('../Img/TRANLINE.png')
 export const transparentImage = require('../Img/trans.png')
 export const WhiteVideo = require('../Img/videotheme.png');
 export const settingTab = require('../Img/settingTab.png');
+export const setting = require('../Img/setting-profile.png');
 export const whiteEdit = require('../Img/whiteEdit.png');
 export const facebook = require('../Img/facebook.png');
 export const linkedin = require('../Img/linkedin.png');
@@ -71,8 +74,32 @@ export const overlayimage = require('../Img/overlayimage.png');
 export const canvas = require('../Img/canvas.png');
 export const darkract = require('../Img/darkract.png');
 export const educationCap = require('../Img/educationCap.png');
+export const cal = require('../Img/cal.png')
+export const clock = require('../Img/clock.png')
+export const web = require('../Img/web.png')
 
+export const actHome = require('../Img/icons-home-active.png');
+export const actUser = require('../Img/icons-person-active.png');
+export const actChat = require('../Img/icons-chat-active.png');
+export const actSet = require('../Img/icons-setting-active.png');
+
+
+export const interViewBack = require('../Img/popup.png');
 export const rite = require('../Img/rite.png');
 export const wrong = require('../Img/wrong.png');
 
-export const url = "http://192.168.0.169:8090/"
+// export const blanks = require('../Img/star2.png');
+// export const Fulls = require('../Img/star1.png');
+
+export const blanks = require('../Img/icons-star-blank.png');
+export const Fulls = require('../Img/icons-star.png');
+
+export const splashVid = require('../Img/01.mp4')
+// export const url = "https://sportjo.herokuapp.com/" //http://192.168.0.169:8090/"
+export const url = "http://192.168.0.169:8091/"
+// export const url = "http://192.168.43.166:8091/"
+// export const url = "http://178.128.118.157:8091/"
+
+
+
+// http://192.168.0.169:8091/images/user/lpbihogc9a.jpg

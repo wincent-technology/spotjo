@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { View, Text, Animated, PanResponder, Image, StyleSheet, Platform } from 'react-native';
 import styles from './Style'
 // RATING IMAGES WITH STATIC BACKGROUND COLOR (white)
-const STAR_IMAGE = require('../Img/star1.png');
+const STAR_IMAGE = require('../Img/star.png');
 import LinearGradient from 'react-native-linear-gradient'
 
 const TYPES = {
@@ -20,7 +20,7 @@ const TYPES = {
 export default class SwipeRating extends Component {
     static defaultProps = {
         type: 'star',
-        ratingImage: require('../Img/star1.png'),
+        ratingImage: require('../Img/star.png'),
         ratingColor: '#f1ee40',
         ratingBackgroundColor: 'white',
         ratingCount: 5,
@@ -76,7 +76,7 @@ export default class SwipeRating extends Component {
 
     async componentDidMount() {
         try {
-            const STAR_IMAGE = await require('../Img/star1.png');
+            const STAR_IMAGE = await require('../Img/star.png');
             // const HEART_IMAGE = await require('../Img/heart.png');
             // const ROCKET_IMAGE = await require('./images/rocket.png');
             // const BELL_IMAGE = await require('./images/bell.png');
@@ -151,7 +151,7 @@ export default class SwipeRating extends Component {
         <Image source={source} style={{
                 width: imageSize,
                 height: imageSize,
-                tintColor
+                tintColor: 'white'
             }} />
       </View>
         ));

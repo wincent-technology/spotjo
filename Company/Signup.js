@@ -7,7 +7,7 @@
  */
 
 import React, { Component } from 'react';
-import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, Dimensions, StyleSheet, Platform, View, Text, StatusBar, PermissionsAndroid, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
@@ -17,6 +17,9 @@ import CustomInput from '../Component/TextInput'
 import { Background } from '../Constant/index'
 import http from '../api';
 import SnackBar from '../Component/SnackBar'
+import Geolocation from '@react-native-community/geolocation';
+import AsyncStorage from '@react-native-community/async-storage';
+
 
 class Signup extends Component {
     constructor(props) {
@@ -26,6 +29,7 @@ class Signup extends Component {
             email: '',
             password: ''
         };
+        console.log('global', global.let, global.long)
     }
 
 
@@ -36,22 +40,26 @@ class Signup extends Component {
             if (email.length > 0 && password.length > 0) {
                 http.POST('api/company/register', {
                     email: email,
-                    password: password
+                    password: password,
+                    latitude: global.let || 0,
+                    longitude: global.long || 0
                 }).then((res) => {
                     if (res['data']['status']) {
-                        this.props.navigation.navigate('TabScreenCompany')
+                        console.log('response', res['data']['result'], res['data']['result']);
+                        global.Id = res['data']['result'][0]['id']
+                        global.Email = res['data']['result'][0]['email']
+                        global.role = res['data']['result'][0]['role']
+                        AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
+                        this.props.navigation.navigate('ComEdit')
                     } else {
                         snack(res['data']['message'])
-
                     }
                 }, err => snack(err['message']))
             } else {
                 snack('Required Email Password')
-
             }
         } catch ( error ) {
             snack("error while register" + error)
-
         }
     }
 
@@ -91,7 +99,7 @@ class Signup extends Component {
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
                 email: text
             })} />
-       <CustomInput placeholder = {'Password'} textChange = {(text) => this.setState({
+       <CustomInput secureTextEntry={true} placeholder = {'Password'} textChange = {(text) => this.setState({
                 password: text
             })} />
             <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onSignup}><View  style={[styles.CompanyLoginWithEmailView, {

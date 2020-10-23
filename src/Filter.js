@@ -1,15 +1,74 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, ScrollView, ImageBackground, TouchableWithoutFeedback, Text, Image, View } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    ScrollView,
+    ImageBackground,
+    TouchableWithoutFeedback,
+    FlatList,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from './Style'
-import { left, library, icon, play, leftVid } from './IconManager';
-import { scale, getStatusBarHeight } from './Util'
-import { iconSearch, TRANLINE, switchColor, themeColor, themeWhite, Background, IC_ARR_UP, IC_ARR_DOWN, minimumSalary, salaryType, company, skill, skillCategory, skillLavel, Filterjobtype, searchType } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import Slider from '@react-native-community/slider';
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from './IconManager';
+import {
+    scale,
+    snack
+} from './Util'
+import {
+    FontBold,
+    iconSearch,
+    TRANLINE,
+    switchColor,
+    themeColor,
+    themeWhite,
+    Background,
+    IC_ARR_UP,
+    IC_ARR_DOWN,
+    minimumSalary,
+    salaryType,
+    company,
+    skill,
+    skillCategory,
+    skillLavel,
+    Filterjobtype,
+    searchType,
+    blanks,
+    Fulls
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
 import ToggleSwitch from '../Component/ToggleSwitch'
 import CustomInput from '../Component/Input'
-import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel, CheckBox, DropDownItem, NavigationHead, Rating } from '../Component/ViewManager.js'
+import RadioForm, {
+    RadioButton,
+    RadioButtonInput,
+    RadioButtonLabel,
+    CheckBox,
+    DropDownItem,
+    NavigationHead,
+    StarRating
+} from '../Component/ViewManager.js'
+import http from '../api'
+import Items from './Items'
+import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
+// import Slider from 'react-native-range-slider'
+import Slider from 'rn-range-slider';
 
 var radio_props = [{
     label: '  By Distance',
@@ -19,6 +78,7 @@ var radio_props = [{
     value: 1
 }];
 
+var mg = []
 
 
 class Filter extends Component {
@@ -33,25 +93,76 @@ class Filter extends Component {
             ByLocation: false,
             flag: true,
             name: '',
-            addSkill: ['J2EE', 'SQL,Mysql', 'Java'],
+            company: '',
+            addSkill: [],
             FullTime: false,
             PartTime: false,
-            // Employed: false,
-            // Internship: false,
-            // StudentJobs: false,
-            // HelpingVacancies: false,
-            // Freelancer: false,
+            salary: 0,
+            salaryMax: 0,
             Employed: false,
             Internship: false,
             StudentJobs: false,
             HelpingVacancies: false,
-            Freelancer: false
+            Freelancer: false,
+            dataCheck: [],
+            Trainee: false,
+            Novice: false,
+            Proficient: false,
+            Expert: false,
+            suggesion: [],
+            show: false,
+
+
 
         };
+        this.arrayholder = [];
+
     }
 
+    save = () => {
+        mg = [...new Set(this.state.suggesion)]
+        console.log('mg', mg)
+        try {
+            http.POST('api/json/filter', {
+                Hourly: this.state.Hourly,
+                Monthly: this.state.Monthly,
+                Yearly: this.state.Yearly,
+                ByDistance: this.state.ByDistance,
+                ByLocation: this.state.ByLocation,
+                Company: mg,
+                skill: this.state.addSkill,
+                FullTime: this.state.FullTime,
+                PartTime: this.state.PartTime,
+                salary: this.state.salary,
+                salaryMax: this.state.salaryMax,
+                Employed: this.state.Employed,
+                Internship: this.state.Internship,
+                StudentJobs: this.state.StudentJobs,
+                HelpingVacancies: this.state.HelpingVacancies,
+                Freelancer: this.state.Freelancer,
+                location: global.Job_Location,
+                Trainee: this.state.Trainee,
+                Novice: this.state.Novice,
+                Proficient: this.state.Proficient,
+                Expert: this.state.Expert
+            }).then(res => {
+                console.log('ress', res['data']);
+                if (res['data']['status']) {
+                    console.log('nwe api >>>>>>', res['data']['result']);
+                    global.all = res['data']['result'];
+                    this.props.navigation.navigate('TabScreen', {
+                        otherParam: res['data']['result'],
+                    })
+                    this.props.navigation.goBack()
+                } else {
+                    snack('Data Not Found')
+                }
+            }, err => snack(err['message']));
+        } catch (error) {
+            snack(error)
 
-
+        }
+    }
     Back = () => {
         console.log("hi");
         this.props.navigation.goBack()
@@ -61,20 +172,180 @@ class Filter extends Component {
 
     }
     addsSkill = (text) => {
-        var i = text;
+        var i = text.toUpperCase();
         let gems = this.state.addSkill
         // var in =  this.state.addSkill; 
-        gems.push(i);
+        gems.push({
+            name: i,
+            rating: 1
+        });
         this.setState({
             addSkill: gems
         });
-        console.log('adskil', this.state.addSkill);
+    }
+    handleChange = (value, index) => {
+
+        var arr = [];
+        arr = this.state.addSkill;
+        arr[index].rating = value;
+        this.setState({
+            addSkill: arr
+        });
     }
 
+    componentDidMount() {
+        let data = []
+        try {
+            http.GET('api/appcomjson/get').then((res) => {
+                if (res['data']['status']) {
+                    // for (let i in res['data']['result']) {
+                    //     data.push({
+                    //         'name': res['data']['result'][i],
+                    //         'backGround': 'white'
+                    //     })
+                    // }
+                    // console.log('data', data)
+                    this.setState({
+                        dataCheck: res['data']['result'],
+                    });
+                    this.arrayholder = res['data']['result'];
+                    //            //will get data in this    res['data']['result']
+                } else {
+                    snack(res['data']['message'])
+                }
+            }, err => snack(err['message']));
+        } catch (error) {
+            snack(error)
 
+        }
+    }
+    choose = (choose) => {
+        console.log('choose')
+        mg.push(choose)
+        mg = [...new Set(mg)]
+        console.log('sfdsff', mg)
+        let mni = []
+        for (let i in mg) {
+            if (mg[i] != choose || mg[i] != '')
+                mni.push(mg[i])
+        }
+        this.setState({
+            suggesion: mni,
+            company: '',
+            show: !this.state.show
+        })
+    }
+    cheks = (text) => {
+        var data = []
+        const newData = this.arrayholder && this.arrayholder.filter(item => {
+            console.log('item', item);
+            const itemData = item != null && `${item.toUpperCase()}   
+                    ${item.toUpperCase()} ${item.toUpperCase()}`;
+            const textData = text.toUpperCase();
+            return itemData != null && itemData.toString().indexOf(textData) > -1;
+        });
+        // for (let i in newData) {
+        //     data.push({
+        //         'name': newData[i],
+        //         'backGround': 'white'
+        //     })
+        // }
+        if (newData != '') {
+            this.setState({
+                dataCheck: newData,
+                company: text
+            })
+        } else {
+            newData.push(text)
+            this.setState({
+                dataCheck: newData,
+                company: text
+            })
+        }
+    }
+    suggestionTag = (elements, index) => {
+        const {
+            suggesion,
+            dataCheck
+        } = this.state;
+        let m = suggesion
+        for (let i in suggesion) {
+            if (m[i] == elements) {
+                m.splice(i, 1),
+                    mg.splice(i, 1)
+            }
+        }
+        this.setState({
+            suggesion: m
+        })
+    }
+    remove = (item, index) => {
+        console.log(index, item);
+        const {
+            addSkill
+        } = this.state;
+        let m = addSkill
+        for (let i in m) {
+            if (m[i].name == item) {
+                m.splice(i, 1)
+            }
+        }
+        this.setState({
+            addSkill: m
+        })
+    }
+    renderItem = () => {
+        let result;
+        result = this.state.dataCheck.map((item, index) => <View style={{
+                width: wp(70),
+                marginLeft: scale(44),
+            }}>
+            <TouchableWithoutFeedback onPress={() => this.choose(item)}>
+            <View style={{
+                flexDirection: 'row',
+                alignItems: "center"
+            }}>
+            <View style={{
+                alignItems: "flex-start",
+                width: wp(60)
+            }}><Text style={{
+                fontWeight: "bold",
+                fontSize: scale(18),
+                color: themeWhite
+            }}>{item}</Text></View>
+            </View>
+            </TouchableWithoutFeedback>
+            </View>)
+
+        return result;
+
+    }
 
     render() {
-        const {Hourly, Monthly, Yearly, ByDistance, ByLocation, name, addSkill, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, skillCategorylist, FullTime, PartTime} = this.state
+        const {
+            suggesion,
+            dataCheck,
+            show,
+            Trainee,
+            Novice,
+            Proficient,
+            Expert,
+            Hourly,
+            Monthly,
+            Yearly,
+            ByDistance,
+            ByLocation,
+            name,
+            addSkill,
+            Employed,
+            Internship,
+            StudentJobs,
+            HelpingVacancies,
+            Freelancer,
+            skillCategorylist,
+            FullTime,
+            PartTime
+        } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -98,16 +369,39 @@ class Filter extends Component {
             invisibleImage={IC_ARR_DOWN}
             visibleImage={IC_ARR_UP}
             header={
-            <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={minimumSalary} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Minimum Salary</Text>
+            <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}>
+            <Image source={minimumSalary} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Minimum Salary</Text>
                 </View>
             }
-            ><View style={styles.FilterMinimumSalary}><View style={styles.FilterMinimumSalaryMin}><Text style={styles.FilterMinText}>0</Text>
-            <Text style={styles.FilterMaxText}>150k+</Text></View><Slider
+            ><View style={styles.FilterMinimumSalary}><View style={styles.FilterMinimumSalaryMin}>
+            <Text style={styles.FilterMinText}>{this.state.salary}</Text>
+            <Text style={styles.FilterMaxText}>{this.state.salaryMax}k+</Text></View>
+            <Slider
             style={styles.FilterMinimumSalarySlider}
-            minimumValue={0}
-            maximumValue={1}
-            minimumTrackTintColor={themeColor}
-            maximumTrackTintColor={themeColor}
+            gravity={'center'}
+            min={0}
+            max={150}
+            step={1}
+            selectionColor={themeColor}
+            blankColor="#B0b0b0"
+            labelBackgroundColor={themeColor}
+            labelBorderColor={'#b0b0b0'}
+            onValueChanged={(low, high, fromUser) => {
+                this.setState({
+                    salary: low,
+                    salaryMax: high
+                })
+            }}
+            // style={styles.FilterMinimumSalarySlider}
+            // minimumValue={0}
+            // maximumValue={150}
+            // onValueChange={ value => {
+            //     this.setState({
+            //         salary: Math.round(value),
+            //     });
+            // }}
+            // minimumTrackTintColor={themeColor}
+            // maximumTrackTintColor={themeColor}
             /></View>
             </DropDownItem>
            <DropDownItem
@@ -166,9 +460,12 @@ class Filter extends Component {
             <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={company} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Company</Text>
                 </View>
             }
-            ><View><CustomInput placeholder = {'Select Company'} textChange = {(text) => this.setState({
-                name: text
-            })} inputContainerStyle={{
+            ><View><CustomInput value = {this.state.company} placeholder={'Select Company'}textChange = {(text) => {
+                this.setState({
+                    show: text != '' ? true : false
+                })
+                this.cheks(text)
+            }} inputContainerStyle={{
                 backgroundColor: themeColor,
                 // width: "100%",
                 height: scale(40),
@@ -184,7 +481,9 @@ class Filter extends Component {
             }}
             placeholderTextColor={themeWhite}
             containerStyle={{
-                width: wp(85)
+                width: wp(85),
+                marginBottom: scale(-17)
+            // position: "absolute"
             }}
             iconName={iconSearch}
             iconStyle={{
@@ -193,6 +492,59 @@ class Filter extends Component {
             }}
             iconColor={'#fff'}
             />
+            <View style={{
+                alignItems: "flex-start",
+                flexDirection: "row",
+                flexWrap: 'wrap',
+                width: wp(80),
+                marginHorizontal: wp(2.5),
+                height: suggesion != [] ? scale(70) : 0
+            }}><ScrollView contentContainerStyle={{
+                flexDirection: 'row',
+                flexWrap: 'wrap',
+            }}>{suggesion != [] && suggesion.map((elements, index) => <TouchableWithoutFeedback onPress = {() => this.suggestionTag(elements, index)}><View style={{
+                    flexDirection: 'row',
+                    height: scale(30),
+                    borderRadius: scale(5),
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginLeft: scale(3),
+                    backgroundColor: "rgba(55,192,211,0.8)",
+                    padding: scale(5),
+                    marginBottom: scale(2)
+                }}><View style={{
+                    justifyContent: "center",
+                    alignItems: 'center',
+                    paddingLeft: scale(10)
+                }}><Text style={{
+                    color: themeWhite,
+                    fontFamily: FontBold
+                }}>{elements}</Text></View>
+                <View style={{
+                    top: scale(-7),
+                    left: scale(5)
+                }}>
+                {
+                library('highlight-off', scale(14), themeWhite)
+                }
+                </View>
+                    </View></TouchableWithoutFeedback>
+            )}
+            </ScrollView>
+            </View>
+            { show && <View style={{
+                width: wp(80),
+                marginHorizontal: wp(2.5),
+                borderRadius: scale(5),
+                height: show && dataCheck.length != 1 ? hp(12) : hp(6),
+                top: scale(42),
+                position: "absolute",
+                backgroundColor: themeColor
+            }}>
+            <ScrollView>
+            {this.renderItem()}
+            </ScrollView>
+            </View> }
             </View>
             </DropDownItem>
             <DropDownItem
@@ -234,53 +586,49 @@ class Filter extends Component {
             iconColor={'#fff'}
 
             onSubmitEditing={(event) => this.addsSkill(event.nativeEvent.text)}
-            /><ScrollView style={{
+            />
+            <ScrollView style={{
+                backgroundColor: 'transparent',
                 marginTop: '-5%',
                 marginBottom: 20,
                 height: scale(50),
-            }} contentContainerStyle={{
+
+            }}
+            contentContainerStyle={{
                 alignItems: "center",
                 justifyContent: "center",
-                width: wp(85)
-            }} nestedScrollEnabled={true}>
+                width: wp(80)
+            }}>
             {this.state.addSkill.map((item, index) => {
                 return (
-                    <View style={{
-                        flexDirection: 'row',
-                        width: wp(85),
-                        justifyContent: "center",
-                        marginBottom: scale(2),
-                        // marginLeft: '3%',
-                        height: scale(15)
-                    }}><View style={{
-                        alignItems: "flex-start",
-                        justifyContent: "center",
-                        width: '35%'
-                    }}><Text key={index}
-                    style={{
-                        fontSize: scale(16),
-                        color: themeColor,
-                        fontFamily: 'Roboto-Regular',
-                    }}>
-                      {item}
-                    </Text></View><View style={{
-                        alignItems: "flex-end",
-                        justifyContent: "center",
-                        width: '35%'
-
-                    }}><Rating
-                    type='custom'
-                    imageSize={18}
-                    ratingCount={5}
-                    defaultRating={20}
-                    readonly={false}
-                    ratingBackgroundColor='transparent'
-                    startingValue={0}
-                    // ratingColor={"#f1ee40"}
-                    // tintColor={themeWhite}
-                    /></View></View>
+                    <View style={styles.itemsHiddenView}>
+                    <View style={[styles.itemsHiddenSView],{marginLeft:scale(15)}}>
+                    <Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
+                        this.remove(item.name, index)
+                    }}/></View><View style={styles.itemsHiddenTView}><Text
+                    style={styles.addSkillFont} numberOfLines={1}>
+                      {item.name}
+                    </Text></View>
+                    <View style={styles.itemsHiddenViewRate}>
+            <StarRating
+                    emptyStar={blanks}
+                    fullStar={Fulls}
+                    // halfStar={'star-half'}
+                    iconSet={'MaterialIcons'}
+                    disabled={false}
+                    maxStars={5}
+                    starSize={scale(20)}
+                    rating={item.rating}
+                    selectedStar={(rating) => this.handleChange(rating, index)}
+                fullStarColor = {
+                    'orange'
+                }
+                    />
+            </View></View>
                 )
-            })}</ScrollView>
+            })
+            }
+            </ScrollView>
             </View>
             </DropDownItem>
             <DropDownItem
@@ -295,82 +643,120 @@ class Filter extends Component {
             }
             ><View style={{
                 marginHorizontal: '1%',
-                top: 10
+                top: 10,
             }}><ScrollView style={{
                 marginTop: '-5%',
                 marginBottom: 20,
             // height: scale(50),
             }} contentContainerStyle={{
+                flex: 1,
                 alignItems: "center",
                 justifyContent: "center"
             }} nestedScrollEnabled={true}>
             <View Style={{
+                flex: 1,
                 flexDirection: "column",
             }}><View style={{
                 flexDirection: 'row',
-                alignItems: 'flex-start',
-                justifyContent: 'center',
-                marginBottom: scale(10),
-            }}><CheckBox
-            selected={Employed}
-            style={styles.CheckBoxLabel}
-            textStyle={styles.CheckBoxLabelFontSc}
-            onPress={() => {
-                this.setState({
-                    Employed: !Employed
-                })
-            }}
-            text='Employed'
-            /><CheckBox
-            selected={Internship}
-            textStyle={styles.CheckBoxLabelFontSc}
-            style={styles.CheckBoxLabel}
-            onPress={() => {
-                this.setState({
-                    Internship: !Internship
-                })
-            }}
-            text='Internship'
-            />  
+                width: wp(80),
+            }}><View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Employed</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Employed ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Employed: !this.state.Employed
+            })}/></View></View>
+                <View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Internship</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Internship ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Internship: !this.state.Internship
+            })}/></View></View>
             </View>
             <View style={{
                 flexDirection: 'row',
-                alignItems: 'flex-start',
-                flexWrap: "wrap",
-                marginBottom: scale(10),
-            }}>
-            <CheckBox
-            selected={StudentJobs}
-            textStyle={styles.CheckBoxLabelFontSc}
-            style={styles.CheckBoxLabel}
-            onPress={() => {
-                this.setState({
-                    StudentJobs: !StudentJobs
-                })
-            }}
-            text='StudentJobs'
-            /><CheckBox
-            selected={Freelancer}
-            textStyle={styles.CheckBoxLabelFontSc}
-            style={styles.CheckBoxLabel}
-            onPress={() => {
-                this.setState({
-                    Freelancer: !Freelancer
-                })
-            }}
-            text='Freelancer'
-            />
-            <CheckBox
-            selected={HelpingVacancies}
-            style={styles.CheckBoxLabel}
-            textStyle={styles.CheckBoxLabelFontSc}
-            onPress={() => {
-                this.setState({
-                    HelpingVacancies: !HelpingVacancies
-                })
-            }}
-            text='HelpingVacancies'
-            /></View>
+                width: wp(80),
+            }}><View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }} numberOfLines={1}>StudentJobs</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={StudentJobs ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                StudentJobs: !this.state.StudentJobs
+            })}/></View></View>
+                <View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Freelancer</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Freelancer ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Freelancer: !this.state.Freelancer
+            })}/></View></View>
+            </View>
+            <View style={{
+                flexDirection: 'row',
+                width: wp(80),
+            }}><View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }} numberOfLines={1}>HelpingVacancies</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={HelpingVacancies ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                HelpingVacancies: !this.state.HelpingVacancies
+            })}/></View></View></View>
             </View>
             </ScrollView></View>
             </DropDownItem>
@@ -384,14 +770,90 @@ class Filter extends Component {
             <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={skillLavel} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Skill Level</Text>
                 </View>
             }
-            ><Text style={[
-                styles.txt,
-                {
-                    fontSize: 20,
-                }
-            ]}>
-                hi
-              </Text>
+            ><View Style={{
+                flex: 1,
+                flexDirection: "column",
+            }}><View style={{
+                flexDirection: 'row',
+                width: wp(80),
+            }}><View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Trainee</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Trainee ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Trainee: !this.state.Trainee
+            })}/></View></View>
+                <View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Novice</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Novice ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Novice: !this.state.Novice
+            })}/></View></View>
+            </View>
+            <View style={{
+                flexDirection: 'row',
+                width: wp(80),
+            }}><View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Proficient</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Proficient ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Proficient: !this.state.Proficient
+            })}/></View></View>
+                <View style={{
+                flexDirection: "row",
+                width: wp(35),
+                marginLeft: wp(5)
+            }}><View style={{
+                alignItems: "flex-start",
+                width: wp(25)
+            }}><Text style={{
+                fontSize: scale(16)
+            }}>Expert</Text>
+                </View>
+                <View style={{
+                alignItems: 'flex-end',
+                width: wp(10)
+            }}><Icon2 name={Expert ? 'check-box' : 'check-box-outline-blank'} size={scale(20)} color={themeColor}
+            onPress={() => this.setState({
+                Expert: !this.state.Expert
+            })}/></View></View>
+            </View>
+            </View>
             </DropDownItem>
              <DropDownItem
             // key={i}
@@ -490,7 +952,7 @@ class Filter extends Component {
             }, styles.SaveFilterButton]}>
         <TouchableWithoutFeedback style={[{
                 width: wp('80%')
-            }, styles.SaveFilterButton]} onPress={this.talent}><View  style={[
+            }, styles.SaveFilterButton]} onPress={this.save}><View  style={[
                 styles.SaveFilterButtonView, styles.SaveFilterButton]}><Text style={[{
                 fontSize: scale(20)
             }, styles.FontSty]}>Save Filter</Text></View></TouchableWithoutFeedback>
@@ -508,7 +970,6 @@ class Filter extends Component {
         </ImageBackground></SafeAreaView>
         )
     }
-}
-;
+};
 
 export default withNavigationFocus(Filter);

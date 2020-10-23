@@ -10,11 +10,11 @@ import React, { Component } from 'react';
 import { SafeAreaView, Dimensions, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
-import { scale } from '../src/Util';
+import { scale, snack } from '../src/Util';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background } from '../Constant/index'
-
+import http from '../api'
 class EmailSend extends Component {
     constructor(props) {
         super(props);
@@ -31,7 +31,29 @@ class EmailSend extends Component {
         // this.props.navigation.navigate('CompanyLogin')
     }
     Reset = () => {
-        this.props.navigation.navigate('JobForgatPass')
+        const {name} = this.state;
+
+        try {
+            if (name.length > 0) {
+                http.POST('api/user/forgotpass', {
+                    email: name,
+                }).then((res) => {
+                    if (res['data']['status']) {
+                        alert('please kindly check your mail')
+                        this.props.navigation.navigate('JobForgatPass')
+                    } else {
+                        snack(res['data']['message'])
+                    }
+                }, err => snack(err['message']))
+            } else {
+                snack('Required Email Password')
+
+            }
+        } catch ( error ) {
+            snack("error while register" + error)
+        }
+    // this.props.navigation.navigate('ForgatPass')
+    // this.props.navigation.navigate('JobForgatPass')
     }
 
     render() {

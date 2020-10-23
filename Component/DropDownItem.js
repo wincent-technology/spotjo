@@ -3,14 +3,14 @@ import React, { Component } from 'react';
 import { TouchableOpacity, Image, Text, View, StyleSheet, InteractionManager, Platform, Dimensions, Animated, } from 'react-native';
 
 import PropTypes from 'prop-types';
-
+var initialValue = 0;
+var finalValue = 0;
+var content = 0;
 const styles = StyleSheet.create({
     Dropcontainer: {
         flex: 1,
         flexDirection: 'column',
         overflow: 'hidden',
-        // elevation: 2,
-
     },
     Dropicons: {
         width: 20,
@@ -19,12 +19,12 @@ const styles = StyleSheet.create({
         right: 16,
         top: 15
     },
-    // Dropunderline: {
-    //     width: '100%',
-    //     height: 1,
-    //     position: 'absolute',
-    //     top: 0,
-    // },
+    Dropunderline: {
+        width: '100%',
+        height: 1,
+        position: 'absolute',
+        top: 0,
+    },
     Dropcontent: {
         flex: 1,
         flexDirection: 'column',
@@ -36,25 +36,25 @@ const styles = StyleSheet.create({
         padding: 5,
 
     },
-    // DropcontentView: {
-    //     flexDirection: 'row',
-    //     alignItems: 'center',
-    //     height: '100%',
+    DropcontentView: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: '100%',
 
-// },
-// DropcontentTxt: {
-//     color: 'black',
-//     marginLeft: 8,
-//     fontSize: 12,
-// },
-// DropcontentFooter: {
-//     flex: 1,
-//     flexDirection: 'row',
-//     justifyContent: 'flex-start',
-//     alignItems: 'center',
-//     height: 48,
-//     paddingHorizontal: 12,
-// },
+    },
+    DropcontentTxt: {
+        color: 'black',
+        marginLeft: 8,
+        fontSize: 12,
+    },
+    DropcontentFooter: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        height: 48,
+        paddingHorizontal: 12,
+    },
 });
 
 class DropDownItem extends Component {
@@ -132,16 +132,17 @@ class DropDownItem extends Component {
     }
 
     runAnimation = () => {
-        const initialValue = this.state.contentVisible ?
+        console.log('this.state', this.state)
+        initialValue = this.state.contentVisible ?
             this.state.headerHeight + this.state.contentHeight : this.state.headerHeight;
-        const finalValue = this.state.contentVisible ?
+        finalValue = this.state.contentVisible ?
             this.state.headerHeight : this.state.contentHeight + this.state.headerHeight;
-
+        this.animated.setValue(initialValue);
+        console.log('sfsfsfsfsfintial', initialValue, finalValue)
         this.setState({
             contentVisible: !this.state.contentVisible,
         });
 
-        this.animated.setValue(initialValue);
         Animated.spring(
             this.animated, {
                 toValue: finalValue,
@@ -172,10 +173,20 @@ class DropDownItem extends Component {
     }
 
     onLayout = (evt) => {
+        console.log('sdfsf>>>>>>>', evt.nativeEvent.layout.height, this.state.contentHeight);
         const contentHeight = evt.nativeEvent.layout.height;
-        this.setState({
-            contentHeight
-        });
+        if (content == 0)
+            content = contentHeight
+
+        if (contentHeight != 0) {
+            this.setState({
+                contentHeight
+            });
+        } else {
+            this.setState({
+                contentHeight: content + content
+            });
+        }
     }
 
     onPress = () => {
