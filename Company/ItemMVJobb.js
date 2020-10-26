@@ -93,7 +93,7 @@ class ItemMVJobb extends PureComponent {
 
     render() {
         return (
-            <TouchableWithoutFeedback onPress={() => this.props.push(this.props.item)}>
+            <TouchableWithoutFeedback onPress={() => this.props.push(this.props.item,this.props.index)}>
             <LinearGradient colors={['#fff', '#f3f2f2']} style={styles.ItemMVMainView}>
             <View style={styles.ItemMVSecondView}>
             <View style={{
@@ -163,7 +163,7 @@ class ItemMVJobb extends PureComponent {
             <Text style={{
                 marginLeft: scale(6),
                 marginTop: scale(-1),
-                width: this.props.item.skills != null && this.props.item.skills.length > 1 ? wp(30) : 'auto'
+                width: this.props.item.skills != null && this.props.item.skills.length > 3 ? wp(30) : 'auto'
             }} numberOfLines={1}>{this.props.item.skills != null && this.props.item.skills.map((item, index) => {
                 return (
                     <Text  key={index} style={{
@@ -181,8 +181,9 @@ class ItemMVJobb extends PureComponent {
                 alignItems: 'center',
             }}><Image source ={bag} style={styles.imageStyle} resizeMode={'contain'} /></View>
                 
-                <Text style={styles.ItemDetailLabel}>{this.props.item.totalExp != '' && this.props.item.totalExp == 1 ? 0 :
-                this.props.item.totalExp - 1} - {this.props.item.totalExp != '' && this.props.item.totalExp} Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
+                <Text style={styles.ItemDetailLabel}>
+                {this.props.item.totalExp != '' && this.props.item.totalExp <= 1 ? 0 :
+                this.props.item.totalExp -1} - {this.props.item.totalExp != '' && this.props.item.totalExp} Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
    
       </View>
             <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}><Text style={{

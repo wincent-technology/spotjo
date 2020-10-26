@@ -128,24 +128,6 @@ class JobVideoResume extends Component {
                     this.setState({
                         letdue: response
                     })
-                    try {
-                        const data = await MediaMeta.get(response.path);
-                        console.log(data);
-                        if (data.duration <= 30000)
-                            this.maggi(response.path)
-                        else
-                            Alert.alert(
-                                'Sorry',
-                                'Video must be less then 30 Seconds', [{
-                                    text: 'OK',
-                                    onPress: () => console.log('OK Pressed')
-                                }], {
-                                    cancelable: false
-                                }
-                            );
-                    } catch (error) {
-                        console.log(error);
-                    }
                 }
             });
         });
@@ -187,6 +169,7 @@ class JobVideoResume extends Component {
                                     show: false
                                 })
                                 snack('Video uploaded')
+                                this.next()
                             } else {
                                 snack(res['data']['message'])
                             }

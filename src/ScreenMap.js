@@ -107,7 +107,7 @@ class ScreenMap extends PureComponent {
 
             }, ],
         }
-        this.watchId = ''
+        this.Mount = false
     }
 
     // componentWillMount() {
@@ -118,6 +118,8 @@ class ScreenMap extends PureComponent {
     // }
 
     componentWillUnmount() {
+        this.Mount = false
+
         // Geolocation.clearWatch(this.watchID);
     }
 
@@ -149,7 +151,8 @@ class ScreenMap extends PureComponent {
                 //     timeout: 20000,
                 //     maximumAge: 1000
                 // })
-                Geolocation.getCurrentPosition((info) => {
+                this.Mount = true;
+                this.Mount && Geolocation.getCurrentPosition((info) => {
                     console.log('inf', info)
                     global.let = info.coords.latitude
                     global.long = info.coords.longitude
@@ -170,7 +173,7 @@ class ScreenMap extends PureComponent {
                 alert("Location permission denied")
             }
         } catch (err) {
-            console.warn(err)
+            console.warn('err', err)
         }
         const {
             radius,

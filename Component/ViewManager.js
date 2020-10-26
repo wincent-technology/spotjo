@@ -8,6 +8,9 @@ import DropDownItem from './DropDownItem'
 import Rating from './SwipeRating';
 import NavigationHeader from './NavigationHeader'
 import NavigationHead from './NavigationHead'
+import MapInut from './MapInut'
+
+
 // Local file imports
 import StarRating from './StarRating';
 
@@ -22,5 +25,6 @@ export {
 	DropDownItem,
 	Rating,
 	NavigationHeader,
-	NavigationHead
+	NavigationHead,
+	MapInut
 }

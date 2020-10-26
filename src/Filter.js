@@ -452,6 +452,7 @@ class Filter extends Component {
             </DropDownItem>
              <DropDownItem
             // key={i}
+            flag={false}
             style={styles.FilterDropDown}
             contentVisible={false}
             invisibleImage={IC_ARR_DOWN}
@@ -549,6 +550,7 @@ class Filter extends Component {
             </DropDownItem>
             <DropDownItem
             // key={i}
+            flag={false}
             style={styles.FilterDropDown}
             contentVisible={false}
             invisibleImage={IC_ARR_DOWN}
@@ -633,6 +635,8 @@ class Filter extends Component {
             </DropDownItem>
             <DropDownItem
             // key={i}
+            flag={false}
+
             style={styles.FilterDropDown}
             contentVisible={false}
             invisibleImage={IC_ARR_DOWN}
@@ -762,6 +766,8 @@ class Filter extends Component {
             </DropDownItem>
            <DropDownItem
             // key={i}
+            flag={false}
+
             style={styles.FilterDropDown}
             contentVisible={false}
             invisibleImage={IC_ARR_DOWN}
@@ -862,7 +868,9 @@ class Filter extends Component {
             invisibleImage={IC_ARR_DOWN}
             visibleImage={IC_ARR_UP}
             header={
-            <View  style={styles.FilterDropDownInnerView}><View style={styles.fliterIcon}><Image source={Filterjobtype} style={styles.imageStyle} resizeMode={'contain'}/></View><Text style={styles.DropDownHeader}>Job Type</Text>
+            <View  style={styles.FilterDropDownInnerView}>
+            <View style={styles.fliterIcon}><Image source={Filterjobtype} style={styles.imageStyle} resizeMode={'contain'}/>
+            </View><Text style={styles.DropDownHeader}>Job Type</Text>
                 </View>
             }
             ><View style={{
@@ -912,6 +920,8 @@ class Filter extends Component {
             </DropDownItem>
             <DropDownItem
             // key={i}
+            flag={false}
+            
             style={styles.FilterDropDown}
             contentVisible={false}
             invisibleImage={IC_ARR_DOWN}

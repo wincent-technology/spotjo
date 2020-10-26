@@ -49,6 +49,7 @@ class ItemMV extends PureComponent {
     // title, href, total_time, total_listen, image
     constructor(props) {
         super(props);
+        console.log('this.props.item.skills', this.props.item.skills)
     }
 
     dateDiffInDays(dt) {
@@ -161,7 +162,7 @@ class ItemMV extends PureComponent {
             <Text style={{
                 marginLeft: scale(6),
                 marginTop: scale(-1),
-                width: this.props.item.skills.length > 1 ? wp(30) : 'auto'
+                width: this.props.item.skills.length > 2 ? wp(30) : 'auto'
             }} numberOfLines={1}>{this.props.item.skills.map((item, index) => {
                 return (
                     <Text  key={index} style={{

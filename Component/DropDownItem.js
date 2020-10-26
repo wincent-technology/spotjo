@@ -1,6 +1,18 @@
-import React, { Component } from 'react';
+import React, {
+    Component
+} from 'react';
 
-import { TouchableOpacity, Image, Text, View, StyleSheet, InteractionManager, Platform, Dimensions, Animated, } from 'react-native';
+import {
+    TouchableOpacity,
+    Image,
+    Text,
+    View,
+    StyleSheet,
+    InteractionManager,
+    Platform,
+    Dimensions,
+    Animated,
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 var initialValue = 0;
@@ -67,6 +79,7 @@ class DropDownItem extends Component {
         underlineColor: '#d3d3d3',
         visibleImage: false,
         invisibleImage: false,
+        flag: true
     };
 
     static propTypes = {
@@ -77,6 +90,7 @@ class DropDownItem extends Component {
         underlineColor: PropTypes.string,
         visibleImage: PropTypes.any,
         invisibleImage: PropTypes.any,
+        flag: PropTypes.bool
     };
 
     constructor(props) {
@@ -190,7 +204,11 @@ class DropDownItem extends Component {
     }
 
     onPress = () => {
-        this.runAnimation();
+        const {
+            flag
+        } = this.props
+        if (flag)
+            this.runAnimation();
     }
 }
 

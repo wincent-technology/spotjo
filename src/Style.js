@@ -185,7 +185,7 @@ module.exports = {
         width: wp('100%'),
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: hasNotch ? StatusBar.currentHeight + hp(3.5) : hp(2),
+        marginTop: hasNotch ? StatusBar.currentHeight + hp(3.5) : hp(1),
     },
     FilterLeft: {
         left: scale(10),
@@ -431,7 +431,7 @@ module.exports = {
         width: wp('100%'),
         backgroundColor: 'transparent',
         alignItems: "center",
-        marginTop: hasNotch ? StatusBar.currentHeight + hp(3.5) : hp(2)
+        marginTop: hasNotch ? StatusBar.currentHeight : hp(1)
     },
     JoblistLogo: {
         marginLeft: scale(10),
@@ -499,8 +499,8 @@ module.exports = {
         alignItems: 'center',
     },
     CompanyProfileIcon: {
-        height: scale(13),
-        width: scale(13),
+        height: scale(18),
+        width: scale(18),
         justifyContent: 'center',
         alignItems: 'flex-start',
     },

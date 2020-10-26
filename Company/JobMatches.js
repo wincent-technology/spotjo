@@ -247,17 +247,17 @@ class JobMatches extends PureComponent {
                     // })
                     for (let i in res['data']['result']) {
                         if (res['data']['result'][i]['status'] == 'Matched') {
-                            Matched.push(res['data']['result'][i])
+                            // Matched.push(res['data']['result'][i])
                         } else if (res['data']['result'][i]['status'] == 'Shortlisted') {
                             Shortlisted.push(res['data']['result'][i])
                         } else if (res['data']['result'][i]['status'] == 'Interested') {
-                            Interested.push(res['data']['result'][i])
+                            // Interested.push(res['data']['result'][i])
                         } else if (res['data']['result'][i]['status'] == 'Not Interested') {
-                            NotInterested.push(res['data']['result'][i])
+                            // NotInterested.push(res['data']['result'][i])
                         } else if (res['data']['result'][i]['status'] == 'Rejected') {
                             Rejected.push(res['data']['result'][i])
                         } else {
-                            Applied.push(res['data']['result'][i])
+                            Matched.push(res['data']['result'][i])
                         }
                     }
                     this.setState({
@@ -293,7 +293,9 @@ class JobMatches extends PureComponent {
             not: false,
             app: true,
             rej: false,
-            data: this.state.Applied,
+            data: [],
+            // data: this.state.Applied,
+
         });
         console.log('>>>>>', this.state.Applied);
     }
@@ -332,7 +334,8 @@ class JobMatches extends PureComponent {
             not: false,
             app: false,
             rej: false,
-            data: this.state.Interested
+            data: [],
+            // data: this.state.Interested
         })
     }
     NotInterested = () => {
@@ -345,7 +348,8 @@ class JobMatches extends PureComponent {
             not: true,
             app: false,
             rej: false,
-            data: this.state.NotInterested
+            data: [],
+            // data: this.state.NotInterested
         })
     }
     Rejected = () => {
@@ -367,7 +371,7 @@ class JobMatches extends PureComponent {
         this.props.navigation.navigate('UserPro', {
             item: item,
             index: index,
-            status: item.status
+            status: item.status == 'NULL' ? null : item.status
         })
     }
     Video = (item) => {

@@ -268,6 +268,8 @@ class LocationCom extends Component {
                 top: scale(290)
             }}><FlatList
             data = {this.state.dataCheck}
+            keyboardShouldPersistTaps='always'
+            
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => this.renderItem(item, index)}

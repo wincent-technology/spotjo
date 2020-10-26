@@ -63,8 +63,7 @@ class JobBasicType extends Component {
             currentDate: Date.now(),
             End_date: 'End Date',
             From_date: 'From Date',
-            selectedValue: [],
-            selectedValue1: 'Languages',
+            selectedValue: 'Limited',
             minYear: '0',
             maxYear: '20',
             lang: [],
@@ -111,14 +110,14 @@ class JobBasicType extends Component {
         this.props.navigation.navigate('TabScreen')
     }
 
-    // setSelectedValue = (selectedValue) => {
-    //     console.log('selectedValue', selectedValue);
-    //     this.setState({
-    //         selectedValue: selectedValue
-    //     })
-    //     global.City = selectedValue
+    setSelectedValue = (selectedValue) => {
+        console.log('selectedValue', selectedValue);
+        this.setState({
+            selectedValue: selectedValue
+        })
+        // global.City = selectedValue
 
-    // }
+    }
 
     choose(choose) {
         console.log('choose')
@@ -126,7 +125,6 @@ class JobBasicType extends Component {
         mg = [...new Set(mg)]
         console.log('sfdsff', mg)
         global.City = mg
-
         let mni = []
         for (let i in mg) {
             if (mg[i] != choose || mg[i] != '')
@@ -276,19 +274,7 @@ class JobBasicType extends Component {
             show1,
             suggesion
         } = this.state
-        const PickerItem = this.state.lang !== "" ? (
-            this.state.lang.map((item, id) => {
-                return <Picker.Item key = {item.id} label={item.title} value={item.title}/>
-            })) : (
-            <Picker.Item label={item.title} value={item.title}/>
-        )
-        const CityItem = this.state.lang !== "" ? (
-            this.state.city.map((item, id) => {
 
-                return <Picker.Item key = {item.id} label={item.title} value={item.title}/>
-            })) : (
-            <Picker.Item label={item.title} value={item.title}/>
-        )
 
         return (
 
@@ -318,6 +304,35 @@ class JobBasicType extends Component {
              <View style={{
                 marginTop: hp(2)
             }}>
+            <View style={{flexDirection:"row",height:scale(40),alignItems:"center",backgroundColor:themeColor,marginBottom: hp(2)}}>
+            <View style={{alignItems:"center",marginLeft:scale(10)}}><Text style={{color: themeWhite,
+                fontSize: scale(18),
+                fontWeight: "bold",
+                fontFamily: FontRegular,}}>Job Type</Text></View>
+            <View style={{alignItems:"center",justifyContent:"center"}}><Picker
+            selectedValue={this.state.selectedValue}
+            style={{
+                width: wp(30),
+                height: scale(40),
+                color: themeWhite,
+                fontSize: scale(22),
+                fontWeight: "bold",
+                fontFamily: FontRegular,
+                left: scale(36),
+                transform: [
+                    {
+                        scaleX: 1.1
+                    },
+                    {
+                        scaleY: 1.1
+                    },
+                ]
+            }}
+            onValueChange={(itemValue, itemIndex) => this.setSelectedValue(itemValue)}
+            >
+            <Picker.Item label={'Limited'} value={'Limited'}/>
+            <Picker.Item label={'Unlimited'} value={'Unlimited'}/>
+      </Picker></View></View>
             <View style={{
                 backgroundColor: themeColor,
                 width: wp(70),
@@ -352,7 +367,7 @@ class JobBasicType extends Component {
                 width: scale(20)
             }}resizeMode={'contain'} /></View>
             </View>
-            <View style={{
+           {selectedValue == 'Limited' && (<View style={{
                 backgroundColor: themeColor,
                 width: wp(70),
                 height: scale(40),
@@ -386,7 +401,8 @@ class JobBasicType extends Component {
                 height: scale(20),
                 width: scale(20)
             }}resizeMode={'contain'} /></View>
-            </View></View>
+            </View> )}
+            </View>
              {show && (
             <DateTimePicker
             testID="dateTimePicker"
@@ -521,7 +537,7 @@ class JobBasicType extends Component {
       <View style={{
                 width: wp(70),
                 height: scale(60),
-                marginTop: scale(15),
+                marginTop: hp(1),
                 borderRadius: scale(5),
                 backgroundColor: themeColor
             }}><View style={styles.FilterMinimumSalaryMin}>

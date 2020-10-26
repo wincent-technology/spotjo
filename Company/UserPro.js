@@ -46,7 +46,9 @@ import {
     FontBold,
     cal,
     clock,
-    interViewBack
+    interViewBack,
+    Listed,
+    detailed
 } from '../Constant/index';
 import {
     widthPercentageToDP as wp,
@@ -67,6 +69,7 @@ import http from '../api'
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input'
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Share from 'react-native-share';
 
 
 
@@ -94,15 +97,19 @@ class UserPro extends Component {
             params
         } = this.props.navigation.state;
         const item = params ? params.item : null;
-        // console.log('other item', item.workexp[0].heading);
+        console.log('other item', params);
         this.setState({
             data: global.ig,
-            id: params.index,
+            id: params.index || 0,
             status: params.status
         })
     }
     Back = () => {
-        this.props.navigation.navigate('Admin');
+        if (this.state.status == 'undefined')
+            this.props.navigation.navigate('FirstJobList');
+        else
+            this.props.navigation.navigate('Admin');
+
     };
 
 
@@ -159,7 +166,8 @@ class UserPro extends Component {
                 userId: userId,
                 jobId: jobId,
                 intDate: interviewDate,
-                intTime: interviewTime
+                intTime: interviewTime,
+                status: 'Interview'
             }).then((res) => {
                 if (res['data']['status']) {
                     snack(res['message'])
@@ -174,6 +182,32 @@ class UserPro extends Component {
         this.setState({
             dark: !this.state.dark
         })
+    }
+
+    InterviewOperation = (status) => {
+        console.log('0000000000000000', status)
+        const {
+            jobId,
+            comId,
+            userId,
+        } = this.state;
+
+        try {
+            http.POST('api/schedule/interview', {
+                companyId: global.Id,
+                userId: userId,
+                jobId: jobId,
+                status: status
+            }).then((res) => {
+                if (res['data']['status']) {
+                    snack(res['message'])
+                } else {
+                    snack(res['data']['message'])
+                }
+            }, err => snack(err['message']))
+        } catch (error) {
+            snack("error while register" + error)
+        }
     }
 
     jaaveda = (status, item) => {
@@ -203,15 +237,15 @@ class UserPro extends Component {
 
     onSwiped = (type, index) => {
         console.log(`on swiped ${type}`, index)
-        console.log(global.ig[index])
-        const status = global.ig[index]['status']
+        console.log(",,,,", this.state.status)
+        const {
+            status
+        } = this.state;
         const item = global.ig[index]['appid'];
         this.setState({
             id: index
         })
-        console.log('index', index, status);
         if (index >= global.ig.length - 1) {
-            console.log('hey');
             this.setState({
                 fleg: !this.state.fleg
             })
@@ -223,21 +257,24 @@ class UserPro extends Component {
                 // this.setState({
                 //   left: true
                 // })
-                this.jaaveda('Not Interested', item);
-            } else if (status == 'Matched') {
-                // alert('rejected')
-                // this.setState({
-                //   left: false
-                // })
                 this.jaaveda('Rejected', item);
+            } else if (status == 'Interview') {
+                for (let i in this.state.data) {
+                    if (item == this.state.data[i].appid)
+                        console.log('dfsdf inter 262', this.state.data[i])
+                    // console.log('dfsdf', this.state.data)
+                    this.setState({
+                        jobId: this.state.data[i].jobId,
+                        comId: this.state.data[i].comId,
+                        userId: this.state.data[i].userId,
+                    }, () => this.InterviewOperation('Rejected'));
+                }
             }
         } else if (type == 'right') {
             if (status == null) {
-                this.jaaveda('Interested', item);
-            } else if (status == 'Matched') {
                 for (let i in this.state.data) {
                     if (item == this.state.data[i].appid)
-                        console.log('dfsdf', this.state.data)
+                        console.log('dfsdf null ', this.state.data[i])
                     this.setState({
                         jobId: this.state.data[i].jobId,
                         comId: this.state.data[i].comId,
@@ -245,24 +282,50 @@ class UserPro extends Component {
                         dark: !this.state.dark
                     });
                 }
+            } else if (status == 'Interview') {
+                for (let i in this.state.data) {
+                    if (item == this.state.data[i].appid)
+                        console.log('dfsdf', this.state.data[i])
+                    this.setState({
+                        jobId: this.state.data[i].jobId,
+                        comId: this.state.data[i].comId,
+                        userId: this.state.data[i].userId,
+                    }, () => this.InterviewOperation('Selected'));
+                }
             }
         } else if (type == 'top') {
-            if (status == null) {
-                this.jaaveda('Matched', item);
-            } else if (status == 'Matched') {
-                this.jaaveda('Shortlisted', item);
-            } else if (status == 'Shortlisted') {
-                this.jaaveda('Matched', item);
+            if (status == null || status == 'undefined') {
+                this.setState({
+                    id: index
+                }, () => this.Sharing())
             }
         } else if (type == 'bottom') {
-            if (status == 'Matched')
-                this.jaaveda('Selected', item);
+            if (status == null)
+                this.jaaveda('Shortlisted', item);
             // alert(' Short Listed ' + item)    }
 
         }
     }
+
+    Sharing = async () => {
+
+        let path = url + 'images/user/';
+        console.log("path", global.ig[this.state.id].profile);
+        let pt = path + global.ig[this.state.id].profile;
+        const shareOptions = {
+            title: 'Share via',
+            subject: 'Spotjo',
+            message: `Hey there \n I wish you are interesed in this job please check it \n Name: -${global.ig[this.state.id].first_name}  ${global.ig[this.state.id].last_name}\n Email: -${global.ig[this.state.id].email}\n City: -${global.ig[this.state.id].place}\n Mobile: -${global.ig[this.state.id].mobile}\n Salary: -${global.ig[this.state.id].minSal} - ${global.ig[this.state.id].maxSal},000 \n`,
+            url: pt,
+            failOnCancel: false,
+        };
+        try {
+            await Share.open(shareOptions);
+        } catch (err) {
+            console.log(err)
+        }
+    }
     renderCard = (data, index) => {
-        console.log('data>>>>>>>>?????????', data);
         return <ScrollView style={{
                 alignSelf: "stretch",
             }}>
@@ -324,7 +387,6 @@ class UserPro extends Component {
                 marginLeft: scale(10),
             }}>
         {data.skills != null && data.skills.map((item, index) => {
-                console.log('item', item.name)
                 return (
                     <Text key={index}
                     style={styles.ItemDetailLabel1}>
@@ -380,16 +442,15 @@ class UserPro extends Component {
             id,
             left
         } = this.state
-        console.log('this.state', this.state.status)
         return <SafeAreaView style={styles.backGround}>
             <NavigationEvents onDidFocus={this.checking}/>
             <ImageBackground style={styles.ImageBlue}
             source = {Background}
             resizeMode={'stretch'}>
-            <NavigationHeader onPress={() => this.Back()} text={data.heading}/>
+            <NavigationHeader onPress={() => this.Back()} text={global.ig && data.heading}/>
        <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
-            <Text style={styles.JoblistSecondViewHeadingText}>Results - {data.length}</Text>
+            <Text style={styles.JoblistSecondViewHeadingText}>Results - {global.ig && data.length}</Text>
            </View>
             <View style={styles.JobListUpperButtonView}><TouchableWithoutFeedback>
             <View style={[{
@@ -412,7 +473,28 @@ class UserPro extends Component {
             <Text style={styles.JoblistUpperButton}>Filter</Text>
             </View>
             </TouchableWithoutFeedback>
-   </View></View><View style={styles.CompanyProfileMainImage1}>
+            <View style={{marginLeft:scale(5),flexDirection:"row"}}>
+            <TouchableWithoutFeedback onPress={() => this.Back()}>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={Listed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2),
+                marginHorizontal:scale(10)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={detailed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback></View>
+   </View></View>
+  {global.ig ? (<View style={styles.CompanyProfileMainImage1}>
        {!this.state.fleg ? (<Swiper
             ref={swiper => {
                 this.swiper = swiper
@@ -440,50 +522,8 @@ class UserPro extends Component {
             animateCardOpacity
             swipeBackCard
             overlayLabels={this.state.status == null ? {
-                left: {
-                    title:'Not Interested',
-                    style: {
-                        label: {
-                            borderColor: 'red', color: 'red', borderWidth: 5,
-                             fontSize: 32, borderRadius: 5, textAlign: 'center'
-                        },
-                        wrapper: {
-                            flexDirection: 'column', alignItems: 'center',
-                             justifyContent: 'center',
-                        }
-                    }
-                },
-                right: {
-                    title: 'Interested',
-                    style: {
-                        label: {
-                            borderColor: 'green', color: 'green', borderWidth: 5,
-                             fontSize: 32, borderRadius: 5, textAlign: 'center'
-                        },
-                        wrapper: {
-                            flexDirection: 'column', alignItems: 'center',
-                             justifyContent: 'center',
-                        }
-                    }
-                },
-                top: {
-                    title: 'Matched',
-                    style: {
-                        label: {
-                            borderColor: '#fcba03', color: '#fcba03', borderWidth: 5,
-                             fontSize: 32, borderRadius: 5, textAlign: 'center'
-                        },
-                        wrapper: {
-                            flexDirection: 'column', alignItems: 'center',
-                             justifyContent: 'center',
-                             // marginTop: (hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)))/2,
-                              // marginLeft: -48, 
-                        }
-                    }
-                }
-            } : this.state.status =='Matched' ? {
-              bottom: {
-                    title: 'Selected',
+                 bottom: {
+                    title: 'Shortlisted',
                     style: {
                         label: {
                             borderColor: themeColor, color: themeColor, borderWidth: 5,
@@ -496,7 +536,7 @@ class UserPro extends Component {
                     }
                 },
                 left: {
-                    title:'Rejected',
+                    title:'rejected',
                     style: {
                         label: {
                             borderColor: 'red', color: 'red', borderWidth: 5,
@@ -509,7 +549,7 @@ class UserPro extends Component {
                     }
                 },
                 right: {
-                    title: 'interview',
+                    title: 'Interview',
                     style: {
                         label: {
                             borderColor: 'green', color: 'green', borderWidth: 5,
@@ -522,7 +562,7 @@ class UserPro extends Component {
                     }
                 },
                 top: {
-                    title: 'Shortlisted',
+                    title: 'Share',
                     style: {
                         label: {
                             borderColor: '#fcba03', color: '#fcba03', borderWidth: 5,
@@ -536,9 +576,9 @@ class UserPro extends Component {
                         }
                     }
                 }
-            }: this.state.status =='Shortlisted' ? {
+            }: this.state.status == 'undefined' ?{
                 top: {
-                    title: 'Matched',
+                    title: 'Share',
                     style: {
                         label: {
                             borderColor: '#fcba03', color: '#fcba03', borderWidth: 5,
@@ -552,7 +592,34 @@ class UserPro extends Component {
                         }
                     }
                 }
-            } : {}}
+            } :{
+                left: {
+                    title:'rejected',
+                    style: {
+                        label: {
+                            borderColor: 'red', color: 'red', borderWidth: 5,
+                             fontSize: 32, borderRadius: 5, textAlign: 'center'
+                        },
+                        wrapper: {
+                            flexDirection: 'column', alignItems: 'center',
+                             justifyContent: 'center',
+                        }
+                    }
+                },
+                right: {
+                    title: 'Selected',
+                    style: {
+                        label: {
+                            borderColor: 'green', color: 'green', borderWidth: 5,
+                             fontSize: 32, borderRadius: 5, textAlign: 'center'
+                        },
+                        wrapper: {
+                            flexDirection: 'column', alignItems: 'center',
+                             justifyContent: 'center',
+                        }
+                    }
+                },
+            }}
             /> ) :(<View  style = {{
                     justifyContent: "center",
                     alignItems: "center",
@@ -720,7 +787,23 @@ class UserPro extends Component {
             </TouchableWithoutFeedback></View>
            </View>
             </ImageBackground>)}
-        </View>
+        </View>) : (
+        <View  style = {{
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flex: 1
+                }}>
+            <Text style={{
+                    textAlign: 'center',
+                    fontFamily: FontBold,
+                    color: themeWhite,
+                    fontSize: scale(18),
+                    width: wp(60)
+                }}>No Data found 😞</Text>
+            </View>
+        )
+
+}
          <View style={styles.TranLingImage}>
              <Image
             source={TRANLINE}

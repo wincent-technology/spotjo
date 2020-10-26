@@ -17,7 +17,8 @@ import {
     heightPercentageToDP as hp
 } from '../Component/responsive-ratio';
 import {
-    Rating
+    Rating,
+    StarRating
 } from '../Component/ViewManager.js'
 import {
     left,
@@ -46,7 +47,6 @@ const {
     width
 } = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
-import StarRating from 'react-native-star-rating';
 
 class User extends PureComponent {
     // title, href, total_time, total_listen, image

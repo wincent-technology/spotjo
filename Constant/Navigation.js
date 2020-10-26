@@ -158,7 +158,7 @@ const TabScreen = createBottomTabNavigator({
         },
     },
     ScreenMap: {
-        screen: ScreenMap,
+        screen: Filter,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: ({
@@ -323,7 +323,7 @@ const TabScreenJob = createBottomTabNavigator({
         },
     },
     ScreenMap: {
-        screen: ScreenMap,
+        screen: Join,
         navigationOptions: {
             tabBarColor: 'transparent',
             tabBarIcon: ({

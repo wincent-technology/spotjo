@@ -273,6 +273,7 @@ class TalentScreen extends Component {
             }}>
             <FlatList
             data = {dataCheck}
+            keyboardShouldPersistTaps='always'
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => this.renderItem(item, index)}

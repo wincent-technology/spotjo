@@ -1,68 +1,63 @@
-import React, { PureComponent } from 'react';
-import { SafeAreaView, StyleSheet, StatusBar, FlatList, TouchableWithoutFeedback, TouchableOpacity, ImageBackground, Text, Image, View } from 'react-native';
-import { withNavigationFocus, NavigationEvents } from 'react-navigation';
+import React, {
+    PureComponent
+} from 'react';
+import {
+    SafeAreaView,
+    StyleSheet,
+    StatusBar,
+    FlatList,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    ImageBackground,
+    Text,
+    Image,
+    View
+} from 'react-native';
+import {
+    withNavigationFocus,
+    NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, library, icon, play, leftVid } from '../src/IconManager';
-import { themeColor, themeWhite, Background, sort, filter, TRANLINE, male, female, canvas, FontBold, url } from '../Constant/index'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { scale } from '../src/Util'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+} from '../src/IconManager';
+import {
+    themeColor,
+    themeWhite,
+    Background,
+    sort,
+    filter,
+    TRANLINE,
+    male,
+    female,
+    canvas,
+    FontBold,
+    url,
+    Listed,
+    detailed
+} from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    scale
+} from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import { Rating, NavigationHeader } from '../Component/ViewManager.js'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager.js'
 import ItemMVJobb from './ItemMVJobb'
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 
 // import styles from './Style'
 var c = 0;
-// const data = [{
-//     name: 'Suresh Kumar',
-//     Header: 'JAVA DEVELOPER(M/W)',
-//     image: male,
-//     ComPany_Name: 'Porsche AG',
-//     Working: 'Employed',
-//     Address: 'Stuttgart',
-//     skill: ['JAVA', 'J2EE', 'SQL'],
-//     work_Experience: '5-6 Years',
-//     salary: '50000$',
-//     cell: '00-00-000',
-//     email: 'Email@email.com'
-// }, {
-//     name: 'Kusuma Kulkarni',
-//     Header: 'JAVA DEVELOPER(M/W)',
-//     image: female,
-//     ComPany_Name: 'Google',
-//     Working: 'Employed',
-//     Address: 'Stuttgart',
-//     skill: ['JAVA', 'J2EE', 'SQL'],
-//     work_Experience: '5-6 Years',
-//     salary: '50000$',
-//     cell: '00-00-000',
-//     email: 'Email@email.com'
-// }, {
-//     name: 'Ramya Priya',
-//     Header: 'JAVA DEVELOPER(M/W)',
-//     image: female,
-//     ComPany_Name: 'Amazon',
-//     Working: 'Employed',
-//     Address: 'Stuttgart',
-//     skill: ['JAVA', 'J2EE', 'SQL'],
-//     work_Experience: '5-6 Years',
-//     salary: '50000$',
-//     cell: '00-00-000',
-//     email: 'Email@email.com'
-// }, {
-//     name: 'Suresh Kumar',
-//     Header: 'JAVA DEVELOPER(M/W)',
-//     image: male,
-//     ComPany_Name: 'Porsche AG',
-//     Working: 'Employed',
-//     Address: 'Stuttgart',
-//     skill: ['JAVA', 'J2EE', 'SQL'],
-//     work_Experience: '5-6 Years',
-//     salary: '50000$',
-//     cell: '00-00-000',
-//     email: 'Email@email.com'
-// },];
 
 
 class FirstJobList extends PureComponent {
@@ -80,12 +75,23 @@ class FirstJobList extends PureComponent {
         this.props.navigation.navigate('FilterUser')
     }
 
-    push = (item) => {
+    push = (item, index) => {
 
-        // global.item = item;
+        global.ig = global.all;
+        console.log('hi', global.ig);
 
         this.props.navigation.navigate('UserPro', {
-            item: item
+            item: item,
+            index: index,
+            status: "undefined"
+        })
+
+    }
+    pushy = () => {
+        global.ig = global.all;
+        this.props.navigation.navigate('UserPro', {
+            item: global.all || [],
+            status: "undefined"
         })
 
     }
@@ -105,7 +111,7 @@ class FirstJobList extends PureComponent {
             })
         else
             alert('not uploaded');
-    // this.props.navigation.navigate('VideoResume');
+        // this.props.navigation.navigate('VideoResume');
     }
     checking = () => {
         console.log('hey', global.all)
@@ -118,7 +124,9 @@ class FirstJobList extends PureComponent {
         })
     }
     render() {
-        const {data} = this.state
+        const {
+            data
+        } = this.state
         return (
             <View style={styles.backGround}>
             <NavigationEvents onDidFocus={this.checking}/>
@@ -152,6 +160,26 @@ class FirstJobList extends PureComponent {
             <Text style={styles.JoblistUpperButton}>Filter</Text>
             </View>
             </TouchableWithoutFeedback>
+            <View style={{marginLeft:scale(5),flexDirection:"row"}}>
+            <TouchableWithoutFeedback>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={Listed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2),
+                marginHorizontal:scale(10)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={this.pushy}>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={detailed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback></View>
    </View></View>
    
         {this.state.data != '' ? ( <FlatList
@@ -194,7 +222,7 @@ class FirstJobList extends PureComponent {
                     color: themeWhite,
                     fontSize: scale(18),
                     width: wp(60)
-                }}>No Data found 😞</Text><NavigationEvents onDidFocus={this.checking}/>
+                }}>No Data found...😞</Text><NavigationEvents onDidFocus={this.checking}/>
             </View>) }
             <View style={styles.TranLingImage}>
              <Image
@@ -206,8 +234,7 @@ class FirstJobList extends PureComponent {
         </View>
         )
     }
-}
-;
+};
 
 
 // class CompanyProfile extends Component {

@@ -81,7 +81,7 @@ class ChooseTalent extends Component {
                 Job_Title: global.Job_Title,
                 Company: global.Company,
                 Anywhere: global.Anywhere,
-                Job_Location: global.Job_Location,
+                City: global.Job_Location,
                 FullTime: this.state.FullTime,
                 PartTime: this.state.PartTime,
                 Employed: this.state.Employed,

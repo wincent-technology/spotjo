@@ -89,6 +89,14 @@ class JobList extends PureComponent {
             item: item
         })
     }
+    // pushy = () => {
+    //     // console.log("heelo", item);
+    //     // global.ig = item
+    //     // console.log('item', item);
+    //     this.props.navigation.navigate('CompanyProfile', {
+    //         item: item
+    //     })
+    // }
     Video = (item) => {
         console.log('hels');
         let m = url + 'images/company/' + item.video

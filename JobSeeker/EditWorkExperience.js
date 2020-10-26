@@ -60,6 +60,7 @@ import CustomInput from '../Component/Input'
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
 ];
+let numOfLinesCompany = 0;
 class EditWorkExperience extends Component {
     constructor(props) {
         super(props);
@@ -74,6 +75,7 @@ class EditWorkExperience extends Component {
             to: false,
             EduTitle: '',
             EduUni: '',
+            exp: ''
         }
     }
 
@@ -135,6 +137,7 @@ class EditWorkExperience extends Component {
             toDate: '',
             EduTitle: '',
             EduUni: '',
+            exp: ''
         })
 
     }
@@ -255,16 +258,18 @@ class EditWorkExperience extends Component {
             {show && (<ImageBackground style={{
                 width: wp('91%'),
                 marginHorizontal: wp(2.3),
+                // marginTop: hp(-10),
                 height: hp('100%') - (StatusBar.currentHeight + 100 + hp(7)),
-                position: "absolute",zIndex:scale(50)
+                position: "absolute",
+                zIndex:scale(50)
             }} source={interViewBack} resizeMode={'stretch'}>
             <View style={{
                 zIndex: 1,
-                top: scale(15),
-                right: scale(15),
+                top: scale(40),
+                left: wp('80%'),
                 height: scale(25),
                 width: scale(25),
-                position: "absolute",
+                // position: "absolute",
             }}><TouchableWithoutFeedback onPress={() => this.setState({
                 show: !this.state.show
             })}>
@@ -281,6 +286,9 @@ class EditWorkExperience extends Component {
             <Icon2 name={'clear'} size={scale(20)} color={'#fff'}/></View>
             </TouchableWithoutFeedback>
             </View>
+            <ScrollView nestedScrollEnabled={true}
+            style={{marginBottom:scale(20)
+        }}>
             <View style={{
                 justifyContent: "center",
                 alignItems: "center"
@@ -297,7 +305,7 @@ class EditWorkExperience extends Component {
             }}>Add Experience</Text></View>
             <View style={{
                 marginTop: hp(6)
-            }}><CustomInput placeholder = {'Work Experience'} value={this.state.EduTitle} textChange = {(text) => this.setState({
+            }}><CustomInput multiLine={true} numberOfLines={2} placeholder = {'Role'} value={this.state.EduTitle} textChange = {(text) => this.setState({
                 EduTitle: text
             })} inputContainerStyle={{
                 backgroundColor: themeColor,
@@ -319,6 +327,38 @@ class EditWorkExperience extends Component {
                 height: scale(45)
             }}
             /></View>
+            <View style={{
+                marginTop: hp(2)
+            }}>
+            <TextInput
+            multiline={true}
+            numberOfLines={2}
+            placeholderTextColor={'white'}
+            placeholder = {'Work Experience'}
+            style={{
+                backgroundColor: themeColor,
+               width: wp(70),
+                height: numOfLinesCompany || scale(40),
+                borderColor: themeColor,
+                justifyContent: "center",
+                borderWidth: scale(1),
+                borderRadius: scale(5),
+                textAlignVertical: 'top',
+                marginHorizontal:wp(2.5),
+                color: 'white',
+                fontSize: scale(18),
+                fontFamily: "Roboto-Bold",
+                fontWeight: "bold",
+                paddingLeft:scale(20)
+            }}
+            onChangeText ={(text) => this.setState({
+                exp: text
+            })}
+             onContentSizeChange={(e) => {
+                 numOfLinesCompany = e.nativeEvent.contentSize.height;
+             }}
+            />
+            </View>
              <View style={{
                 marginTop: hp(2)
             }}><CustomInput placeholder = {'Company'} value={this.state.EduUni}textChange = {(text) => this.setState({
@@ -437,7 +477,8 @@ class EditWorkExperience extends Component {
             />
             )}
             <View style={{
-                top: hp(5)
+                top: hp(5),
+                marginBottom:scale(30)
             }}><TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.ads}>
             <View  style={{
                 height: scale(40),
@@ -453,7 +494,7 @@ class EditWorkExperience extends Component {
                 fontWeight: 'bold',
             }}>Add Now</Text></View>
             </TouchableWithoutFeedback></View>
-           </View>
+           </View></ScrollView>
             </ImageBackground>)}
             <View style={{
                 alignItems: "flex-end",

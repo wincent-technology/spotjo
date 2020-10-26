@@ -280,6 +280,7 @@ class FavoriteLocation extends Component {
                 marginTop: scale(2)
             }}
             data = {this.state.dataCheck}
+            keyboardShouldPersistTaps='always'
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => this.renderItem(item, index)}

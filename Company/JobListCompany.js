@@ -210,7 +210,9 @@ class JobListCompany extends PureComponent {
 
     componentDidMount() {
         let Shortlisted = [],
-            Selected = [];
+            Selected = [],
+            InterView = [],
+            Rejected = [];
         try {
             http.POST('api/get/cominterview', {
                 companyId: global.Id
@@ -218,9 +220,21 @@ class JobListCompany extends PureComponent {
                 if (res['data']['status']) {
                     //            //will get data in this    res['data']['result']             
                     console.log("data", res['data']['result'])
+                    for (let i in res['data']['result']) {
+                        if (res['data']['result'][i]['status'] == 'Selected') {
+                            Selected.push(res['data']['result'][i])
+                            InterView.push(res['data']['result'][i])
+                        } else if (res['data']['result'][i]['status'] == 'Rejected') {
+                            Rejected.push(res['data']['result'][i])
+                        } else {
+                            InterView.push(res['data']['result'][i])
+                        }
+                    }
+
                     this.setState({
-                        data: res['data']['result'],
-                        InterView: res['data']['result']
+                        data: InterView,
+                        InterView,
+                        Selected
                     });
 
                 } else {
@@ -241,14 +255,11 @@ class JobListCompany extends PureComponent {
                         })
                         if (res['data']['result'][i]['status'] == 'Shortlisted') {
                             Shortlisted.push(res['data']['result'][i])
-                        } else if (res['data']['result'][i]['status'] == 'Selected') {
-                            Selected.push(res['data']['result'][i])
                         }
                     }
                     this.setState({
                         Shortlisted,
                         data: Shortlisted,
-                        Selected,
                         short: !this.state.short
                     })
                 } else {
@@ -270,18 +281,30 @@ class JobListCompany extends PureComponent {
             int: true,
             sel: false,
         })
+        let InterView = [],
+            Rejected = [];
+
         try {
             http.POST('api/get/cominterview', {
                 companyId: global.Id
             }).then((res) => {
                 if (res['data']['status']) {
+
                     //            //will get data in this    res['data']['result']             
                     // console.log("data", res['data']['result'])
+                    for (let i in res['data']['result']) {
+                        if (res['data']['result'][i]['status'] == 'Selected') {
+                            InterView.push(res['data']['result'][i])
+                        } else if (res['data']['result'][i]['status'] == 'Rejected') {
+                            Rejected.push(res['data']['result'][i])
+                        } else {
+                            InterView.push(res['data']['result'][i])
+                        }
+                    }
                     this.setState({
-                        data: res['data']['result'],
-                        InterView: res['data']['result'],
+                        data: InterView,
+                        InterView,
                     });
-
                 } else {
                     snack(res['data']['message'])
                 }
@@ -320,6 +343,26 @@ class JobListCompany extends PureComponent {
     //         data: this.state.NotInterested
     //     })
     // }
+    push = (item, index) => {
+        console.log('item', item, this.state.data);
+        global.ig = this.state.data
+        this.props.navigation.navigate('UserPro', {
+            item: item,
+            index: index,
+            status: item.status
+        })
+    }
+    Video = (item) => {
+        console.log('hels');
+        let m = url + 'images/user/' + item.video
+        if (item)
+            this.props.navigation.navigate('VideoPlayer', {
+                vid: m
+            })
+        else
+            alert('not uploaded');
+        // this.props.navigation.navigate('VideoResume');
+    }
     Selected = () => {
         console.log('Selected', this.state.Selected);
         this.setState({
@@ -483,12 +526,7 @@ class JobListCompany extends PureComponent {
                 item={item}
                 index={index}
                 push={this.push}
-                onSwipe={this.onSwipe}
-                onSwipeUp={this.onSwipeUp}
-                onSwipeDown={this.onSwipeDown}
-                onSwipeLeft={this.onSwipeLeft}
-                onSwipeRight={this.onSwipeRight}
-                // getAudioTimeString={this.getAudioTimeString}
+                Video={this.Video}
                 />}
             initialNumToRender={5}
             maxToRenderPerBatch={10}

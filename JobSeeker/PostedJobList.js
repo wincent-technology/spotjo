@@ -80,7 +80,7 @@ class PostedJobList extends PureComponent {
 
     push = (item, index) => {
         console.log('ji');
-        if (item.jsstatus == 'Interested') {
+        if (item.jsstatus == 'Save') {
             global.all = this.state.Expired
             this.props.navigation.navigate('JobCompanyProfile', {
                 item: item,
@@ -131,7 +131,7 @@ class PostedJobList extends PureComponent {
         this.checking();
     }
     Active = () => {
-        console.log('active')
+        console.log('active', this.state.Active)
         this.setState({
             pub: false,
             act: true,
@@ -190,7 +190,7 @@ class PostedJobList extends PureComponent {
                 if (res['data']['status']) {
                     // console.log('146', res['data']['result']);
                     for (let i in res['data']['result']) {
-                        if (res['data']['result'][i]['jsstatus'] == 'Interested') {
+                        if (res['data']['result'][i]['jsstatus'] == 'Save') {
                             Interested.push(res['data']['result'][i])
                         } else {
                             Not.push(res['data']['result'][i])
@@ -231,6 +231,20 @@ class PostedJobList extends PureComponent {
             <View>
         <StatusBar hidden={true}/>
         <NavigationEvents onDidFocus={this.checking}/>
+        <View style={{
+                borderTopColor: 'gray',
+                borderTopWidth: scale(2),
+                borderBottomWidth: scale(2),
+                borderBottomColor: 'gray',
+                width: wp('100%'),
+                backgroundColor: themeWhite,
+                height: scale(40),
+                alignItems: 'center',
+                justifyContent: "center",
+                elevation: 8,
+            }}>
+            <Text style={styles.JoblistSecondViewHeadingText}>User List</Text>
+            </View>
             <View style={{
                  flexDirection: 'row',
                 width: wp('100%') - scale(35),
@@ -275,7 +289,7 @@ class PostedJobList extends PureComponent {
                 fontSize: scale(16),
                 fontFamily: 'Roboto-Regular',
                 color: themeWhite
-            }}>Interested</Text></View></ImageBackground></View></TouchableWithoutFeedback>
+            }}>Saved</Text></View></ImageBackground></View></TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => this.Active()}><View style={[
                 {borderWidth:this.state.act ? scale(2):0},styles.postedJoblist]}><ImageBackground source={canvas} style={{
                 height: '100%',
@@ -297,7 +311,7 @@ class PostedJobList extends PureComponent {
            {this.state.dataitem != '' ? ( <FlatList
             style={{
                 marginTop: 4,
-                marginBottom: 50,
+                marginBottom: 50 + scale(30),
                 backgroundColor: 'transparent',
             }}
             data = {this.state.dataitem}

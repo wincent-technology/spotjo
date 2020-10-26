@@ -55,12 +55,15 @@ class MainScreen extends Component {
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
             )
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+
+                console.log('???', granted);
                 Geolocation.getCurrentPosition((info) => {
                     console.log('inf', info)
                     global.let = info.coords.latitude
                     global.long = info.coords.longitude
+                    this.props.navigation.navigate('TalentScreen')
+
                 });
-                this.props.navigation.navigate('TalentScreen')
             } else {
                 alert("Location permission denied")
             }
@@ -75,6 +78,8 @@ class MainScreen extends Component {
             )
             console.log('???', granted);
             if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log('???', granted);
+
                 Geolocation.getCurrentPosition((info) => {
                     console.log('inf', info)
                     global.let = info.coords.latitude

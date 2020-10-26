@@ -44,7 +44,9 @@ import {
     filter,
     TRANLINE,
     Companyavtar,
-    FontBold
+    FontBold,
+    Listed,
+    detailed
 } from '../Constant/index';
 import {
     widthPercentageToDP as wp,
@@ -128,7 +130,7 @@ class JobCompanyProfile extends Component {
 
     onSwiped = (type, index) => {
         console.log(`on swiped ${type}`, index)
-        console.log(global.all[index])
+        console.log('thanthan', global.all[index])
         this.setState({
             id: index
         })
@@ -157,13 +159,13 @@ class JobCompanyProfile extends Component {
             } catch (error) {
                 snack(error)
             }
-        } else if (type == 'right') {
+        } else if (type == 'bottom') {
             try {
                 http.POST('api/jobseeker/add', {
                     userId: global.Id,
                     comId: global.all[index].comapyId,
                     jobId: global.all[index].id,
-                    status: 'Interested'
+                    status: 'Save'
                 }).then(async (res) => {
                     if (res['data']['status']) {
                         console.log('rrrrrrrrr>>>>>><<<<<<<<<<', res['data']['result']);
@@ -174,7 +176,7 @@ class JobCompanyProfile extends Component {
             } catch (error) {
                 snack(error)
             }
-        } else if (type == 'top') {
+        } else if (type == 'right') {
             try {
                 http.POST('api/apply/job', {
                     userId: global.Id,
@@ -190,7 +192,7 @@ class JobCompanyProfile extends Component {
             } catch (error) {
                 snack(error)
             }
-        } else if (type == 'bottom') {
+        } else if (type == 'top') {
             this.Sharing();
         }
 
@@ -366,6 +368,26 @@ class JobCompanyProfile extends Component {
             <Text style={styles.JoblistUpperButton}>Filter</Text>
             </View>
             </TouchableWithoutFeedback>
+            <View style={{marginLeft:scale(5),flexDirection:"row"}}>
+            <TouchableWithoutFeedback onPress={this.Back}>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={Listed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2),
+                marginHorizontal:scale(10)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={detailed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback></View>
    </View></View><View style={styles.CompanyProfileMainImage1}>
              {!this.state.fleg ?(<Swiper
             ref={swiper => {
@@ -395,7 +417,7 @@ class JobCompanyProfile extends Component {
             swipeBackCard
             overlayLabels={{
                 bottom: {
-                    title: 'Share',
+                    title: 'Save',
                     style: {
                         label: {
                             borderColor: themeColor, color: themeColor, borderWidth: 5,
@@ -422,7 +444,7 @@ class JobCompanyProfile extends Component {
                     }
                 },
                 right: {
-                    title: 'Interested',
+                    title: 'Applied',
                     style: {
                         label: {
                             borderColor: 'green', color: 'green', borderWidth: 5,
@@ -435,7 +457,7 @@ class JobCompanyProfile extends Component {
                     }
                 },
                 top: {
-                    title: 'Applied',
+                    title: 'Share',
                     style: {
                         label: {
                             borderColor: '#fcba03', color: '#fcba03', borderWidth: 5,

@@ -127,7 +127,6 @@ class VideoResume extends Component {
             ImagePicker.launchImageLibrary(options, (response) => {
                 if (response.didCancel) {} else if (response.error) {} else if (response.customButton) {} else {
                     console.log(response);
-                    alert('gone')
                     // this.maggi(response.path)
                     this.setState({
                         letdue: response
@@ -187,6 +186,7 @@ class VideoResume extends Component {
                                     show: false
                                 })
                                 snack('Video Uploaded')
+                                this.next();
                             } else {
                                 console.log(res['data']['message']);
                                 snack(res['data']['message'])

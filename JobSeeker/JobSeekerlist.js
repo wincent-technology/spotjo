@@ -41,7 +41,9 @@ import {
     bag,
     sort,
     filter,
-    url
+    url,
+    Listed,
+    detailed
 } from '../Constant/index'
 import {
     widthPercentageToDP as wp,
@@ -119,6 +121,16 @@ class JobSeekerlist extends PureComponent {
         // global.item = item;
         // this.props.navigation.navigate('JobCompanyProfile');
     }
+    pushy = () => {
+        console.log("heelo");
+
+        this.props.navigation.navigate('JobCompanyProfile', {
+            item: global.all[0],
+            index: 0
+        })
+        // global.item = item;
+        // this.props.navigation.navigate('JobCompanyProfile');
+    }
     Video = (item) => {
         console.log('hels');
         let m = url + '/images/company/' + item.video
@@ -170,6 +182,26 @@ class JobSeekerlist extends PureComponent {
             <Text style={styles.JoblistUpperButton}>Filter</Text>
             </View>
             </TouchableWithoutFeedback>
+            <View style={{marginLeft:scale(5),flexDirection:"row"}}>
+            <TouchableWithoutFeedback>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={Listed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2),
+                marginHorizontal:scale(10)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={this.pushy}>
+            <View style={styles.JobListUpperButtonIcon}>
+            <Image source ={detailed} style={{
+                height: scale(22),
+                width: scale(22),
+                marginTop: scale(2)
+            }} resizeMode={'contain'}/>
+            </View>
+            </TouchableWithoutFeedback></View>
    </View></View>
    
    <FlatList

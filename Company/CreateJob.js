@@ -113,7 +113,7 @@ class CreateJob extends PureComponent {
                 HelpingVacancies: global.HelpingVacancies,
                 Freelancer: global.Freelancer,
                 jobEnd: global.End_date,
-                City: global.City,
+                City: global.City || [],
                 Task_Description: global.Task_Description,
                 Skill: global.addSkill,
                 Education: global.Education,
@@ -123,6 +123,7 @@ class CreateJob extends PureComponent {
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
+                    global.City = []
                     this.props.navigation.navigate('AdminDashboard');
                     // this.callPostedJob();
 

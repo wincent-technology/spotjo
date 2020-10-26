@@ -18,6 +18,7 @@ import {
     Image,
     View,
     PermissionsAndroid,
+    TouchableWithoutFeedback,
     ScrollView,
     TouchableOpacity,
     TextInput

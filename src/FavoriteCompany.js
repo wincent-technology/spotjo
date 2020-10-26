@@ -277,6 +277,7 @@ class FavoriteCompany extends Component {
                 top: scale(260)
             }}><FlatList
             data = {this.state.dataCheck}
+            keyboardShouldPersistTaps='always'
             showsHorizontalScrollIndicator = { false  }
             removeClippedSubviews={true}
             renderItem={({item, index}) => this.renderItem(item, index)}

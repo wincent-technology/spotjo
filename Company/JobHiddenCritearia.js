@@ -41,10 +41,10 @@ import Slider from 'rn-range-slider';
 import {
     Rating,
     NavigationHead,
-    DropDownItem
+    DropDownItem,
+    StarRating
 } from '../Component/ViewManager'
 import Items from './Items'
-import StarRating from 'react-native-star-rating';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 
 
@@ -342,7 +342,7 @@ class JobHiddenCritearia extends Component {
             }]}>{Math.round(this.state.salary)}</Text>
             <Text style={[styles.FilterMaxText, {
                 color: '#fff'
-            }]}>{this.state.salaryMax}k+</Text></View><Slider
+            }]}>{this.state.salaryMax},000+</Text></View><Slider
             style={[styles.FilterMinimumSalarySlider, {
                 width: wp(75)
             }]}
@@ -363,21 +363,8 @@ class JobHiddenCritearia extends Component {
                 })
             }}
             /></View>
-                    <View style={{
-                flexDirection: 'row',
-                flex: 1,
-                width: wp(85),
-                justifyContent: "center",
-                marginTop: scale(5),
-
-                // marginLeft: '3%',
-                height: scale(22)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-                justifyContent: "center",
-                width: '35%'
-            }}><Text
+                    <View style={styles.itemsHiddenView}>
+            <View style={styles.itemsHiddenTView}><Text
             style={{
                 fontSize: scale(16),
                 color: themeWhite,

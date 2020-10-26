@@ -70,7 +70,10 @@ const SPACE = 0.01;
 const ASPECT_RATIO = wp(96) / wp(65);
 const LATITUDE_DELTA = (Platform.OS === 'ios' ? 1.5 : 0.5);
 let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+import PlacesInput from '../Component/PlacesInput'
+import DeviceInfo from 'react-native-device-info';
 
+let hasNotch = DeviceInfo.hasNotch();
 // Use the below code to zoom to particular location with radius.
 
 
@@ -216,11 +219,13 @@ class UserScreenMap extends PureComponent {
     Filter = () => {
         this.props.navigation.navigate('FilterUser')
     }
-    push = (item) => {
+    push = (item, index) => {
         // console.log("heelo", item);
-        // global.ig = item
+        global.ig = global.all
         this.props.navigation.navigate('UserPro', {
-            item: item
+            item: item,
+            index: index,
+            status: "undefined"
         })
     }
     Back = () => {
@@ -314,8 +319,84 @@ class UserScreenMap extends PureComponent {
             resizeMode = {
             'stretch'
             }>
-            <NavigationHeader onPress={() => this.Back()} text='Search Location'/>
-             <View style={styles.JoblistSecondViewHeading}>
+            <View  style={{height:scale(40), flexDirection: 'row',
+        width: wp('100%'),
+        backgroundColor: 'transparent',
+        alignItems: "center",
+        marginTop: hasNotch ? StatusBar.currentHeight : hp(2)}}>
+             <TouchableOpacity style={{
+        backgroundColor: 'transparent',
+        alignItems: "flex-start",
+        marginTop:scale(7),
+        zIndex:10
+    }} onPress={() => this.Back()}>
+            {
+    left(scale(30), themeWhite)
+    }</TouchableOpacity>
+            <View style={{ 
+                // justifyContent: 'center',
+                    marginTop:scale(7),
+
+                // alignItems: 'flex-start',
+            }}>
+    <Image
+    source = {require('../Img/search.png')}
+    style={styles.JoblistLogoImageSize}
+    resizeMode={'contain'}
+    /></View>
+</View>
+           <PlacesInput
+                    googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
+                    placeHolder={"Seach Place"}
+                    language={"en-US"}
+                    onSelect={place => {
+                        console.log('place',place.result.geometry.location);
+                        this.setState({
+                            region: {
+                                    latitude: place.result.geometry.location.lat,
+                                    longitude: place.result.geometry.location.lng,
+                                    latitudeDelta: this.state.region.latitudeDelta,
+                                    longitudeDelta: this.state.region.longitudeDelta,
+                                    },
+                            coordi: {
+                                    latitude: place.result.geometry.location.lat,
+                                    longitude: place.result.geometry.location.lng,
+                                    },
+                        },()=>{
+                            this.map.animateToRegion(this.state.region, 500)
+                            this.call();
+                        })
+                    }}
+                    stylesList={{
+                        marginTop:scale(40),
+                        width: wp('100%'),
+                    }}
+                    stylesInput={{
+                        backgroundColor:'transparent',
+                        // alignItems:"center",
+                        marginLeft:scale(10),
+                        justifyContent:"center",
+                        fontSize: scale(17),
+                        height:scale(40),
+                        width: wp(80),
+                        fontFamily: FontBold,
+                        fontWeight: 'bold',
+                        color: '#fff'
+                    }}
+                    stylesContainer={{
+                        alignItems: "center",
+                        backgroundColor: "rgba(255,255,255,0.4)",
+                        width: wp(86),
+                        borderRadius: wp(10),
+                        marginBottom: scale(2),
+                        height:scale(40),
+                        marginLeft:wp(7),
+                        marginTop:scale(5),
+                        justifyContent: "center",
+                        marginTop: hasNotch ? StatusBar.currentHeight : hp(2)
+                    }}
+                />
+             <View style={[{marginTop:scale(5)},styles.JoblistSecondViewHeading]}>
             <View style={styles.JoblistSecondViewHeadingResult}>
             <Text style={styles.JoblistSecondViewHeadingText}>Results - {this.state.data ? this.state.data.length : 0}</Text>
            </View>
