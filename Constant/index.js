@@ -98,9 +98,9 @@ export const Fulls = require('../Img/icons-star.png');
 
 export const splashVid = require('../Img/01.mp4')
 // export const url = "https://sportjo.herokuapp.com/" //http://192.168.0.169:8090/"
-export const url = "http://192.168.0.169:8091/"
+// export const url = "http://192.168.0.169:8091/"
 // export const url = "http://192.168.43.166:8091/"
-// export const url = "http://178.128.118.157:8091/"
+export const url = "http://178.128.118.157:8091/"
 
 
 
