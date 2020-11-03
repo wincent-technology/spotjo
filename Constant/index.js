@@ -84,7 +84,7 @@ export const interViewBack = require('../Img/popup.png');
 export const rite = require('../Img/rite.png');
 export const wrong = require('../Img/wrong.png');
 export const Listed = require('../Img/list.png');
-export const detailed = require('../Img/detail.jpeg');
+export const detailed = require('../Img/detail.png');
 
 // export const blanks = require('../Img/star2.png');
 // export const Fulls = require('../Img/star1.png');

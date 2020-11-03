@@ -50,7 +50,7 @@ class MainScreen extends Component {
             this.props.navigation.navigate('TalentScreen');
           },
           (err) => {
-            snack('Enable Location');
+            snack('Please Enable Location');
           },
         );
       } else {
@@ -77,7 +77,7 @@ class MainScreen extends Component {
             this.props.navigation.navigate('TalentScreen');
           },
           (err) => {
-            snack('Enable Location');
+            snack('Please Enable Location');
           },
         );
       } else {

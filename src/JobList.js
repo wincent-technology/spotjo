@@ -63,12 +63,18 @@ class JobList extends PureComponent {
   };
 
   push = (item, index) => {
-    alert('sss');
     // console.log("heelo", item);
     // global.ig = item
-    console.log('item', item);
+    console.log('item>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', item);
     this.props.navigation.navigate('CompanyProfile', {
       item: item,
+    });
+  };
+
+  pushy = () => {
+    console.log('gggggg', global.all[0]);
+    this.props.navigation.navigate('CompanyProfile', {
+      item: global.all[0],
     });
   };
   // pushy = () => {
@@ -146,7 +152,7 @@ class JobList extends PureComponent {
                 </View>
               </TouchableWithoutFeedback>
               <View style={{marginLeft: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback onPress={this.Back}>
+                <TouchableWithoutFeedback>
                   <View style={styles.JobListUpperButtonIcon}>
                     <Image
                       source={Listed}
@@ -160,7 +166,7 @@ class JobList extends PureComponent {
                     />
                   </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={this.pushy}>
                   <View style={styles.JobListUpperButtonIcon}>
                     <Image
                       source={detailed}
