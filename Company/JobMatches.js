@@ -218,7 +218,6 @@ class JobMatches extends PureComponent {
         .then(
           (res) => {
             if (res['data']['status']) {
-              res['data']['result'].reverse();
               console.log("res['data']['result']", res['data']['result']);
 
               // this.setState({

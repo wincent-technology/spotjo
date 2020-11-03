@@ -190,7 +190,6 @@ class JobListCompany extends PureComponent {
         .then(
           (res) => {
             if (res['data']['status']) {
-              res['data']['result'].reverse();
               //            //will get data in this    res['data']['result']
               console.log('data', res['data']['result']);
               for (let i in res['data']['result']) {
@@ -226,7 +225,6 @@ class JobListCompany extends PureComponent {
         .then(
           (res) => {
             if (res['data']['status']) {
-              res['data']['result'].reverse();
               for (let i in res['data']['result']) {
                 this.setState({
                   data: res['data']['result'],
@@ -271,7 +269,6 @@ class JobListCompany extends PureComponent {
         .then(
           (res) => {
             if (res['data']['status']) {
-              res['data']['result'].reverse();
               //            //will get data in this    res['data']['result']
               // console.log("data", res['data']['result'])
               for (let i in res['data']['result']) {

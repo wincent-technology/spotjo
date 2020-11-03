@@ -152,7 +152,6 @@ class PostedJobList extends PureComponent {
           .then(
             (res) => {
               if (res['data']['status']) {
-                res['data']['result'].reverse();
                 this.setState({
                   dataitem: res['data']['result'],
                   Published: res['data']['result'],
@@ -179,7 +178,6 @@ class PostedJobList extends PureComponent {
             (res) => {
               console.log('res', res['data']['result']);
               if (res['data']['status']) {
-                res['data']['result'].reverse();
                 // console.log('146', res['data']['result']);
                 for (let i in res['data']['result']) {
                   if (res['data']['result'][i]['jsstatus'] == 'Save') {

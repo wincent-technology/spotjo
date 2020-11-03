@@ -50,10 +50,9 @@ class JobList extends PureComponent {
     this.checking();
   }
   checking = () => {
-    console.log('hey', global.all.length);
-    global.all.reverse();
     const {params} = this.props.navigation.state;
     const otherParam = params ? params.otherParam : null;
+
     this.setState({
       data: global.all,
     });

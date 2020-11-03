@@ -37,6 +37,7 @@ global.End_date = '';
 global.City = '';
 global.Language = '';
 global.Task_Description = '';
+global.Task_Description_Req = '';
 global.addSkill = [];
 global.Education = [];
 global.LanguageSkill = [];
