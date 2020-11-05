@@ -171,7 +171,7 @@ class ScreenMapJS extends PureComponent {
           });
         });
       } else {
-        alert('Location permission denied');
+        snack('Location permission denied');
       }
     } catch (err) {
       console.warn(err);

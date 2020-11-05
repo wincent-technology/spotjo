@@ -54,7 +54,7 @@ class MainScreen extends Component {
           },
         );
       } else {
-        alert('Location permission denied');
+        snack('Location permission denied');
       }
     } catch (err) {
       console.log('>>>>>>>', err);
@@ -81,7 +81,7 @@ class MainScreen extends Component {
           },
         );
       } else {
-        alert('Location permission denied');
+        snack('Location permission denied');
       }
     } catch (err) {
       console.log('>>>>>>>', err);
@@ -101,7 +101,7 @@ class MainScreen extends Component {
         });
         this.props.navigation.navigate('LoginFirst');
       } else {
-        alert('Location permission denied');
+        snack('Location permission denied');
       }
     } catch (err) {
       console.log('>>>>>>>', err);
