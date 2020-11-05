@@ -10,8 +10,9 @@ import {
 } from 'react-native';
 import {withNavigationFocus} from 'react-navigation';
 import styles from '../src/Style';
-import {left} from '../src/IconManager';
+import {left, play} from '../src/IconManager';
 import {scale} from '../src/Util';
+
 import {
   TRANLINE,
   themeColor,
@@ -103,11 +104,7 @@ class JobEditProfile extends Component {
                     <View
                       style={styles.VideoIconSize}
                       onStartShouldSetResponder={this.Video}>
-                      <Image
-                        source={require('../Img/VIDEO.png')}
-                        resizeMode={'contain'}
-                        style={styles.VideoIconSize}
-                      />
+                      <View>{play('videocam', scale(40), themeColor)}</View>
                     </View>
                   </View>
                   <View

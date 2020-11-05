@@ -126,11 +126,7 @@ class CompanyEditProfile extends Component {
                     <View
                       style={styles.VideoIconSize}
                       onStartShouldSetResponder={this.Video}>
-                      <Image
-                        source={require('../Img/JoblistPlayNow.png')}
-                        resizeMode={'contain'}
-                        style={styles.VideoIconSize}
-                      />
+                      <View>{play('videocam', scale(40), themeColor)}</View>
                     </View>
                   </View>
                   <View
