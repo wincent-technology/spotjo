@@ -27,6 +27,7 @@ import {
   darkract,
 } from '../Constant/index';
 import styles from '../src/Style';
+import {color} from 'react-native-reanimated';
 
 class JobTaskDescription extends Component {
   constructor(props) {
@@ -118,6 +119,7 @@ class JobTaskDescription extends Component {
                 borderTopRightRadius: scale(10),
                 backgroundColor: 'white',
                 alignSelf: 'center',
+                fontWeight: 'bold',
                 textAlignVertical: 'top',
               }}
               onChangeText={(text) => this.handleChange(text)}
@@ -134,6 +136,7 @@ class JobTaskDescription extends Component {
                 backgroundColor: 'white',
                 alignSelf: 'center',
                 textAlignVertical: 'top',
+                fontWeight: 'bold',
               }}
               onChangeText={(text) => this.handleChange1(text)}
             />
@@ -143,4 +146,5 @@ class JobTaskDescription extends Component {
     );
   }
 }
+
 export default withNavigationFocus(JobTaskDescription);

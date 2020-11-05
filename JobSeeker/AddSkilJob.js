@@ -479,6 +479,7 @@ class AddskilJob extends Component {
                     style={{
                       width: wp('85%'),
                       height: scale(50),
+                      marginTop: 20,
                     }}>
                     <View style={styles.FilterMinimumSalaryMin}>
                       <Text

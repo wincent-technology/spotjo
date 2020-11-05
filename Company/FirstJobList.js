@@ -120,6 +120,35 @@ class FirstJobList extends PureComponent {
               </Text>
             </View>
             <View style={styles.JobListUpperButtonView}>
+              <View style={{marginRight: scale(5), flexDirection: 'row'}}>
+                <TouchableWithoutFeedback>
+                  <View style={styles.JobListUpperButtonIcon}>
+                    <Image
+                      source={Listed}
+                      style={{
+                        height: scale(22),
+                        width: scale(22),
+                        marginTop: scale(2),
+                        marginHorizontal: scale(10),
+                      }}
+                      resizeMode={'contain'}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={this.pushy}>
+                  <View style={styles.JobListUpperButtonIcon}>
+                    <Image
+                      source={detailed}
+                      style={{
+                        height: scale(22),
+                        width: scale(22),
+                        marginTop: scale(2),
+                      }}
+                      resizeMode={'contain'}
+                    />
+                  </View>
+                </TouchableWithoutFeedback>
+              </View>
               <TouchableWithoutFeedback>
                 <View
                   style={[
@@ -153,35 +182,6 @@ class FirstJobList extends PureComponent {
                   <Text style={styles.JoblistUpperButton}>Filter</Text>
                 </View>
               </TouchableWithoutFeedback>
-              <View style={{marginLeft: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={Listed}
-                      style={{
-                        height: scale(22),
-                        width: scale(22),
-                        marginTop: scale(2),
-                        marginHorizontal: scale(10),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={this.pushy}>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={detailed}
-                      style={{
-                        height: scale(22),
-                        width: scale(22),
-                        marginTop: scale(2),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
             </View>
           </View>
 

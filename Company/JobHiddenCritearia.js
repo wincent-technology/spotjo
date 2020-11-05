@@ -334,7 +334,7 @@ class JobHiddenCritearia extends Component {
                 alignItems: 'center',
                 alignSelf: 'center',
                 top: hp(-5),
-                height: hp('22%'),
+                height: hp('24%'),
                 backgroundColor: 'transparent',
                 marginHorizontal: wp('2%'),
                 // marginTop: scale(20),
@@ -393,6 +393,7 @@ class JobHiddenCritearia extends Component {
                     styles.FilterMinimumSalary,
                     {
                       width: wp(85),
+                      marginTop: 16,
                     },
                   ]}>
                   <View style={styles.FilterMinimumSalaryMin}>

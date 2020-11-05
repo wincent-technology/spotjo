@@ -391,6 +391,35 @@ class JobCompanyProfile extends Component {
                   </Text>
                 </View>
                 <View style={styles.JobListUpperButtonView}>
+                  <View style={{marginRight: scale(5), flexDirection: 'row'}}>
+                    <TouchableWithoutFeedback onPress={this.Back}>
+                      <View style={styles.JobListUpperButtonIcon}>
+                        <Image
+                          source={Listed}
+                          style={{
+                            height: scale(22),
+                            width: scale(22),
+                            marginTop: scale(2),
+                            marginHorizontal: scale(10),
+                          }}
+                          resizeMode={'contain'}
+                        />
+                      </View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback>
+                      <View style={styles.JobListUpperButtonIcon}>
+                        <Image
+                          source={detailed}
+                          style={{
+                            height: scale(22),
+                            width: scale(22),
+                            marginTop: scale(2),
+                          }}
+                          resizeMode={'contain'}
+                        />
+                      </View>
+                    </TouchableWithoutFeedback>
+                  </View>
                   <TouchableWithoutFeedback>
                     <View
                       style={[
@@ -424,35 +453,6 @@ class JobCompanyProfile extends Component {
                       <Text style={styles.JoblistUpperButton}>Filter</Text>
                     </View>
                   </TouchableWithoutFeedback>
-                  <View style={{marginLeft: scale(5), flexDirection: 'row'}}>
-                    <TouchableWithoutFeedback onPress={this.Back}>
-                      <View style={styles.JobListUpperButtonIcon}>
-                        <Image
-                          source={Listed}
-                          style={{
-                            height: scale(22),
-                            width: scale(22),
-                            marginTop: scale(2),
-                            marginHorizontal: scale(10),
-                          }}
-                          resizeMode={'contain'}
-                        />
-                      </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback>
-                      <View style={styles.JobListUpperButtonIcon}>
-                        <Image
-                          source={detailed}
-                          style={{
-                            height: scale(22),
-                            width: scale(22),
-                            marginTop: scale(2),
-                          }}
-                          resizeMode={'contain'}
-                        />
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </View>
                 </View>
               </View>
               <View style={styles.CompanyProfileMainImage1}>
