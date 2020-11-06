@@ -312,6 +312,7 @@ class JobBasicType extends Component {
                 alignItems: 'center',
                 backgroundColor: themeColor,
                 marginBottom: hp(2),
+                width: wp(70),
               }}>
               <View style={{alignItems: 'center', marginLeft: scale(10)}}>
                 <Text
@@ -321,20 +322,20 @@ class JobBasicType extends Component {
                     fontWeight: 'bold',
                     fontFamily: FontRegular,
                   }}>
-                  Job Type
+                  Type
                 </Text>
               </View>
               <View style={{alignItems: 'center', justifyContent: 'center'}}>
                 <Picker
                   selectedValue={this.state.selectedValue}
                   style={{
-                    width: wp(30),
+                    width: wp(50),
                     height: scale(40),
                     color: themeWhite,
                     fontSize: scale(22),
                     fontWeight: 'bold',
                     fontFamily: FontRegular,
-                    left: scale(36),
+                    left: scale(15),
                     transform: [
                       {
                         scaleX: 1.1,

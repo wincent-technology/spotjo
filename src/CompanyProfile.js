@@ -93,8 +93,8 @@ class CompanyProfile extends Component {
                     <Image
                       source={Listed}
                       style={{
-                        height: scale(22),
-                        width: scale(22),
+                        height: scale(26),
+                        width: scale(26),
                         marginTop: scale(2),
                         marginHorizontal: scale(10),
                       }}
@@ -107,8 +107,8 @@ class CompanyProfile extends Component {
                     <Image
                       source={detailed}
                       style={{
-                        height: scale(22),
-                        width: scale(22),
+                        height: scale(26),
+                        width: scale(26),
                         marginTop: scale(2),
                       }}
                       resizeMode={'contain'}

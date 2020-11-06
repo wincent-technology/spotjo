@@ -891,9 +891,9 @@ module.exports = {
   },
   itemsHiddenViewRate: {
     alignItems: 'flex-end',
-    justifyContent: 'center',
-    width: '35%',
-    alignItems: 'center',
+    justifyContent: 'flex-end',
+
+    alignItems: 'flex-end',
   },
   itemsHiddenViewScr: {
     backgroundColor: 'transparent',

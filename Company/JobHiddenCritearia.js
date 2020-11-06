@@ -250,7 +250,7 @@ class JobHiddenCritearia extends Component {
                 borderRadius: scale(20),
               }}>
               <CustomInput
-                placeholder={'Select Skill'}
+                placeholder={'Select 5 Skill'}
                 textChange={(text) =>
                   this.setState({
                     name: text,
@@ -292,7 +292,9 @@ class JobHiddenCritearia extends Component {
                   console.log('index', index);
                   return (
                     <View style={styles.itemsHiddenView}>
-                      <View style={styles.itemsHiddenSView}>
+                      <View
+                        style={styles.itemsHiddenSView}
+                        style={{width: wp(8)}}>
                         <Icon2
                           name={'highlight-off'}
                           size={scale(20)}
@@ -302,11 +304,14 @@ class JobHiddenCritearia extends Component {
                           }}
                         />
                       </View>
-                      <View style={styles.itemsHiddenTView}>
+                      <View
+                        style={styles.itemsHiddenTView}
+                        style={{width: wp(38)}}>
                         <Text style={styles.itemsHiddenFont} numberOfLines={1}>
                           {item.name}
                         </Text>
                       </View>
+
                       <View style={styles.itemsHiddenViewRate}>
                         <StarRating
                           emptyStar={blanks}
@@ -371,9 +376,6 @@ class JobHiddenCritearia extends Component {
                   height: 0,
                   width: 0,
                 }}
-                onSubmitEditing={(event) =>
-                  this.addsSkill(event.nativeEvent.text)
-                }
               />
               <ScrollView
                 nestedScrollEnabled={true}
@@ -442,23 +444,19 @@ class JobHiddenCritearia extends Component {
                   />
                 </View>
                 <View style={styles.itemsHiddenView}>
-                  <View style={styles.itemsHiddenTView}>
+                  <View style={styles.itemsHiddenTView} style={{width: wp(46)}}>
                     <Text
                       style={{
                         fontSize: scale(16),
                         color: themeWhite,
+                        left: wp(2),
                         fontFamily: 'Roboto-Regular',
                       }}
                       numberOfLines={1}>
                       Salary Rating
                     </Text>
                   </View>
-                  <View
-                    style={{
-                      alignItems: 'flex-end',
-                      justifyContent: 'center',
-                      width: '35%',
-                    }}>
+                  <View style={styles.itemsHiddenViewRate}>
                     <StarRating
                       emptyStar={blanks}
                       fullStar={Fulls}
@@ -466,7 +464,7 @@ class JobHiddenCritearia extends Component {
                       iconSet={'MaterialIcons'}
                       disabled={false}
                       maxStars={5}
-                      starSize={scale(18)}
+                      starSize={scale(20)}
                       rating={this.state.salaryrating}
                       selectedStar={(rating, index) =>
                         this.handlesalary(rating, index)
@@ -535,7 +533,9 @@ class JobHiddenCritearia extends Component {
                   console.log('index', index);
                   return (
                     <View style={styles.itemsHiddenView}>
-                      <View style={styles.itemsHiddenSView}>
+                      <View
+                        style={styles.itemsHiddenSView}
+                        style={{width: wp(8)}}>
                         <Icon2
                           name={'highlight-off'}
                           size={scale(20)}
@@ -545,7 +545,9 @@ class JobHiddenCritearia extends Component {
                           }}
                         />
                       </View>
-                      <View style={styles.itemsHiddenTView}>
+                      <View
+                        style={styles.itemsHiddenTView}
+                        style={{width: wp(38)}}>
                         <Text style={styles.itemsHiddenFont} numberOfLines={1}>
                           {item.name}
                         </Text>
@@ -630,7 +632,9 @@ class JobHiddenCritearia extends Component {
                   console.log('index', index);
                   return (
                     <View style={styles.itemsHiddenView}>
-                      <View style={styles.itemsHiddenSView}>
+                      <View
+                        style={styles.itemsHiddenSView}
+                        style={{width: wp(8)}}>
                         <Icon2
                           name={'highlight-off'}
                           size={scale(20)}
@@ -640,7 +644,9 @@ class JobHiddenCritearia extends Component {
                           }}
                         />
                       </View>
-                      <View style={styles.itemsHiddenTView}>
+                      <View
+                        style={styles.itemsHiddenTView}
+                        style={{width: wp(38)}}>
                         <Text style={styles.itemsHiddenFont} numberOfLines={1}>
                           {item.name}
                         </Text>
