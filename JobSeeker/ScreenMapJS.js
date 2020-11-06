@@ -80,12 +80,6 @@ class ScreenMapJS extends PureComponent {
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
-      circleregion: {
-        latitude: global.let,
-        longitude: global.long,
-        latitudeDelta: LATITUDE_DELTA,
-        longitudeDelta: LONGITUDE_DELTA,
-      },
       coordi: {
         latitude: global.let,
         longitude: global.long,
@@ -119,12 +113,6 @@ class ScreenMapJS extends PureComponent {
           longitude: e.nativeEvent.coordinate.longitude,
         },
         region: {
-          latitude: e.nativeEvent.coordinate.latitude,
-          longitude: e.nativeEvent.coordinate.longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LONGITUDE_DELTA,
-        },
-        circleregion: {
           latitude: e.nativeEvent.coordinate.latitude,
           longitude: e.nativeEvent.coordinate.longitude,
           latitudeDelta: LATITUDE_DELTA,
@@ -393,7 +381,7 @@ class ScreenMapJS extends PureComponent {
           </View>
           <PlacesInput
             googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
-            placeHolder={'Seach Place'}
+            placeHolder={'Search Place'}
             language={'en-US'}
             onSelect={(place) => {
               console.log('Place Input: ', place.result.geometry.location);

@@ -69,6 +69,10 @@ class UserScreenMap extends PureComponent {
       data: [],
       radius: 5000,
       zoom: 0,
+      circlecenter: {
+        latitude: global.let,
+        longitude: global.long,
+      },
       region: {
         latitude: global.let,
         longitude: global.long,
@@ -95,6 +99,30 @@ class UserScreenMap extends PureComponent {
       ],
     };
     this.watchId = '';
+    this.onMarkerDrag = this.onMarkerDrag.bind(this);
+  }
+
+  async onMarkerDrag(e) {
+    this.setState(
+      {
+        circlecenter: e.nativeEvent.coordinate,
+        markers: [],
+        data: [],
+        coordi: {
+          latitude: e.nativeEvent.coordinate.latitude,
+          longitude: e.nativeEvent.coordinate.longitude,
+        },
+        region: {
+          latitude: e.nativeEvent.coordinate.latitude,
+          longitude: e.nativeEvent.coordinate.longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+      },
+      () => {
+        this.call();
+      },
+    );
   }
 
   // componentWillMount() {
@@ -343,12 +371,14 @@ class UserScreenMap extends PureComponent {
           </View>
           <PlacesInput
             googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
-            placeHolder={'Seach Place'}
+            placeHolder={'Search Place'}
             language={'en-US'}
             onSelect={(place) => {
               console.log('place', place.result.geometry.location);
               this.setState(
                 {
+                  markers: [],
+                  data: [],
                   region: {
                     latitude: place.result.geometry.location.lat,
                     longitude: place.result.geometry.location.lng,
@@ -467,6 +497,8 @@ class UserScreenMap extends PureComponent {
                     latitude: region.latitude,
                     longitude: region.longitude,
                   },
+                  markers: [],
+                  data: [],
                 });
               }}
               onRegionChangeComplete={async (region) => {
@@ -474,18 +506,27 @@ class UserScreenMap extends PureComponent {
                 console.log('this.state', this.state.region);
                 this.setState({
                   region,
+                  markers: [],
+                  data: [],
                   zoom: given.zoom,
                   coordi: {
                     latitude: region.latitude,
                     longitude: region.longitude,
                   },
+                  circlecenter: region,
                 });
+                this.call();
               }}
               initialRegion={region}
               showsUserLocation={true}>
               <MapView.Marker.Animated
                 draggable
                 coordinate={this.state.coordi}
+                onDragEnd={(e) => {
+                  console.log('dragEnd', e.nativeEvent.coordinate);
+                  this.onMarkerDrag(e);
+                  //this.call();
+                }}
                 ref={(marker) => {
                   this.marker = marker;
                 }}
@@ -493,16 +534,13 @@ class UserScreenMap extends PureComponent {
               {this.state.markers.map((marker) => (
                 <Marker.Animated
                   key={marker.index}
-                  onDragEnd={(e) => {
-                    console.log('dragEnd', e.nativeEvent.coordinate);
-                  }}
                   coordinate={marker.coordinate}
                   pinColor={'#000'}
                   image={flagBlueImg}
                 />
               ))}
               <Circle
-                center={region}
+                center={this.state.circlecenter}
                 radius={this.state.radius}
                 strokeColor={themeColor}
                 strokeWidth={2}
