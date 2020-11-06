@@ -19,6 +19,7 @@ import {
   ImageBackground,
   Image,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
 import {withNavigationFocus} from 'react-navigation';
@@ -108,6 +109,14 @@ class MainScreen extends Component {
     }
   };
 
+  playVideo = () => {
+    let m = 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
+
+    this.props.navigation.navigate('VideoPlayer', {
+      vid: m,
+    });
+  };
+
   render() {
     return (
       <SafeAreaView style={styles.backGround}>
@@ -116,7 +125,7 @@ class MainScreen extends Component {
           source={Background}
           resizeMode={'stretch'}>
           <StatusBar hidden={true} />
-          <View style={styles.Homeplay}>
+          <TouchableOpacity style={styles.Homeplay} onPress={this.playVideo}>
             <Text
               style={[
                 {
@@ -129,7 +138,7 @@ class MainScreen extends Component {
             <View style={styles.MainScreenPlayLogo}>
               {play('logo-youtube', scale(20), '#37c0d3')}
             </View>
-          </View>
+          </TouchableOpacity>
           <View
             style={[
               styles.Homelogin,
