@@ -202,7 +202,7 @@ class ItemMV extends PureComponent {
                 style={{
                   marginLeft: scale(6),
 
-                  width: this.props.item.skills.length > 2 ? wp(30) : 'auto',
+                  width: this.props.item.skills.length > 2 ? wp(38) : 'auto',
                 }}
                 numberOfLines={1}>
                 {this.props.item.skills.map((item, index) => {
