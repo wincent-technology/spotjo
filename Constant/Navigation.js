@@ -14,6 +14,7 @@ import CompanyProfiles from '../src/CompanyProfiles';
 import ScreenMap from '../src/ScreenMap';
 import LoginFirst from '../src/LoginFirst';
 import VideoPlayer from '../src/VideoPlayer';
+import Youtube from '../src/Youtube';
 
 import CompanyLogin from '../Company/Login';
 import LoginWithEmail from '../Company/LoginWithEmail';
@@ -562,6 +563,7 @@ const AppNavigator = createStackNavigator(
     CompanyProfile: CompanyProfile,
     ScreenMap: ScreenMap,
     CompanyLogin: CompanyLogin,
+    Youtube: Youtube,
     LoginFirst: LoginFirst,
     LoginWithEmail: LoginWithEmail,
     ForgatPass: ForgatPass,

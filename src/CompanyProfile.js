@@ -19,7 +19,7 @@ import {left, library, icon, play, leftVid} from './IconManager';
 import {
   themeColor,
   themeWhite,
-  home,
+  homeic,
   place,
   screen,
   edit,
@@ -200,7 +200,7 @@ class CompanyProfile extends Component {
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
-                            source={home}
+                            source={homeic}
                             style={styles.imageStyle}
                             resizeMode={'contain'}
                           />

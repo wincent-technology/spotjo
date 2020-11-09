@@ -20,7 +20,6 @@ import {
   themeWhite,
   Background,
   TRANLINE,
-  home,
   place,
   screen,
   edit,

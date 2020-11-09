@@ -43,6 +43,7 @@
     "react-native-swiper": "^1.6.0",
     "react-native-vector-icons": "^7.0.0",
     "react-native-video": "^5.0.2",
+    "react-native-webview": "^10.10.2",
     "react-navigation": "^4.0.10",
     "react-navigation-stack": "^1.10.3",
     "react-navigation-tabs": "^2.5.6",

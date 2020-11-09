@@ -74,6 +74,7 @@ export const educationCap = require('../Img/educationCap.png');
 export const cal = require('../Img/cal.png');
 export const clock = require('../Img/clock.png');
 export const web = require('../Img/web.png');
+export const homeic = require('../Img/home_ic.png');
 
 export const actHome = require('../Img/icons-home-active.png');
 export const actUser = require('../Img/icons-person-active.png');
@@ -97,5 +98,6 @@ export const splashVid = require('../Img/01.mp4');
 //export const url = 'http://192.168.0.169:8091/';
 // export const url = "http://192.168.43.166:8091/"
 export const url = 'http://178.128.118.157:8091/';
+//export const url = 'http://192.168.1.13:8091/';
 
 // http://192.168.0.169:8091/images/user/lpbihogc9a.jpg

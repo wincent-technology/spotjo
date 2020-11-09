@@ -197,8 +197,8 @@ class ItemMVJobb extends PureComponent {
                   marginTop: scale(-1),
                   width:
                     this.props.item.skills != null &&
-                    this.props.item.skills.length > 3
-                      ? wp(30)
+                    this.props.item.skills.length >= 3
+                      ? wp(38)
                       : 'auto',
                 }}
                 numberOfLines={1}>

@@ -110,11 +110,7 @@ class MainScreen extends Component {
   };
 
   playVideo = () => {
-    let m = 'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4';
-
-    this.props.navigation.navigate('VideoPlayer', {
-      vid: m,
-    });
+    this.props.navigation.navigate('Youtube');
   };
 
   render() {

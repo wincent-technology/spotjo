@@ -19,7 +19,7 @@ import {left, library, icon, play, leftVid} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
-  home,
+  homeic,
   place,
   screen,
   edit,
@@ -204,6 +204,7 @@ class JobCompanyProfile extends Component {
     // this.setState({
     //     id: index
     // })
+
     return (
       <ScrollView
         style={{
@@ -249,7 +250,7 @@ class JobCompanyProfile extends Component {
               <View style={styles.CompanyDetailIcon}>
                 <View style={styles.CompanyDetailProfileIcon}>
                   <Image
-                    source={home}
+                    source={homeic}
                     style={styles.imageStyle}
                     resizeMode={'contain'}
                   />

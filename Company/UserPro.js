@@ -18,7 +18,7 @@ import {left, library, icon, play, leftVid} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
-  home,
+  homeic,
   place,
   screen,
   edit,
@@ -76,7 +76,8 @@ class UserPro extends Component {
   checking = () => {
     const {params} = this.props.navigation.state;
     const item = params ? params.item : null;
-    console.log('other item', params);
+    console.log('other item????????????', params);
+
     this.setState({
       data: global.ig,
       id: params.index || 0,
@@ -367,7 +368,7 @@ class UserPro extends Component {
             <View style={styles.CompanyDetailIcon}>
               <View style={styles.CompanyDetailProfileIcon}>
                 <Image
-                  source={home}
+                  source={homeic}
                   style={styles.imageStyle}
                   resizeMode={'contain'}
                 />
