@@ -90,7 +90,7 @@ class ItemMV extends PureComponent {
 
     render() {
         return (
-            <TouchableWithoutFeedback onPress={() => this.props.push(this.props.item)}>
+            <TouchableWithoutFeedback onPress={() => this.props.push(this.props.item,this.props.index)}>
             <LinearGradient colors={['#fff', '#f3f2f2']} style={styles.ItemMVMainView}>
             <View style={styles.ItemMVSecondView}>
             <View style={{

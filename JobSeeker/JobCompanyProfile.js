@@ -470,6 +470,8 @@ class JobCompanyProfile extends Component {
                     }}
                     // overlayOpacityHorizontalThreshold={10}
                     // overlayOpacityVerticalThreshold={10}
+                    inputOverlayLabelsOpacityRangeX={[wp(-100) / 3, -1, 0, 1, wp(100) / 3]}
+                  overlayOpacityHorizontalThreshold={1}
                     backgroundColor={'transparent'}
                     cardHorizontalMargin={0}
                     cardVerticalMargin={0}

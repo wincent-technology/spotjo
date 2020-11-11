@@ -58,10 +58,18 @@ class PostedJobList extends PureComponent {
     this.props.navigation.navigate('Filter');
   };
 
-  push = (item) => {
-    console.log('ji', item);
-    // global.item = item;
-    // this.props.navigation.navigate('CompanyProfile')
+  push = (item,index) => {
+    // console.log('ji', item);
+    //  global.ig = this.state.dataitem;
+    // // console.log('hi', global.ig);
+
+    // this.props.navigation.navigate('UserPro', {
+    //   item: item,
+    //   index: index,
+    //   status: 'defined',
+    // });
+    // // global.item = item;
+    // // this.props.navigation.navigate('CompanyProfile')
   };
   Back = () => {
     // this.props.navigation.navigate('ChooseTalent')

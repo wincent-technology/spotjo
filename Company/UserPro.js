@@ -76,7 +76,7 @@ class UserPro extends Component {
   checking = () => {
     const {params} = this.props.navigation.state;
     const item = params ? params.item : null;
-    console.log('other item????????????', params);
+    console.log('other item????????????', params,params.index);
 
     this.setState({
       data: global.ig,
@@ -408,7 +408,9 @@ class UserPro extends Component {
               <Text
                 style={{
                   marginLeft: scale(10),
-                }}>
+                  width:wp(50),
+                  marginTop:scale(-3)
+                }} numberOfLines={1}>
                 {data.skills != null &&
                   data.skills.map((item, index) => {
                     return (
@@ -572,6 +574,8 @@ class UserPro extends Component {
                   }}
                   // overlayOpacityHorizontalThreshold={10}
                   // overlayOpacityVerticalThreshold={10}
+                  inputOverlayLabelsOpacityRangeX={[wp(-100) / 3, -1, 0, 1, wp(100) / 3]}
+                  overlayOpacityHorizontalThreshold={1}
                   backgroundColor={'transparent'}
                   cardHorizontalMargin={0}
                   cardVerticalMargin={0}
