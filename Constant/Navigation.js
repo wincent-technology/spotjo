@@ -37,6 +37,7 @@ import LocationCom from '../Company/LocationCom';
 import ChooseTalentCom from '../Company/ChooseTalentCom';
 import FirstJobList from '../Company/FirstJobList';
 import UserPro from '../Company/UserPro';
+import PostedJobUser from '../Company/PostedJobUser'
 import FilterUser from '../Company/FilterUser';
 import UserScreenMap from '../Company/UserScreenMap';
 import CompanyService from '../Company/CompanyService';
@@ -355,6 +356,7 @@ const ComAd = createStackNavigator(
   {
     FirstJobList: FirstJobList,
     UserPro: UserPro,
+    PostedJobUser:PostedJobUser,
     FilterUser: FilterUser,
     UserScreenMap: UserScreenMap,
   },

@@ -54,7 +54,7 @@ import CustomInput from '../Component/Input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Share from 'react-native-share';
 
-class UserPro extends Component {
+class PostedJobUser extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -76,11 +76,11 @@ class UserPro extends Component {
   checking = () => {
     const {params} = this.props.navigation.state;
     const item = params ? params.item : null;
-    console.log('other item????????????', params);
+    console.log('other item????????????', params,params.index);
 
     this.setState({
       data: global.ig,
-      id: params.index || 0,
+      id: params.index,
       status: params.status,
     });
   };
@@ -326,157 +326,161 @@ class UserPro extends Component {
   };
   renderCard = (data, index) => {
     return (
-      <ScrollView
+     <ScrollView
         style={{
           alignSelf: 'stretch',
         }}>
-        <ImageBackground
-          style={{
-            width: wp('96%'),
-            height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-            overflow: 'hidden',
-          }}
-          source={require('../Img/ract.png')}
-          resizeMode={'stretch'}>
-          <View style={styles.CompanyProfileImageSize}>
-            <Image
-              source={
-                data.profile
-                  ? {
-                      uri: url + 'images/user/' + data.profile,
-                    }
-                  : avtar
-              }
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
-          <View style={styles.CompanyProfileSecongImage}>
-            <Image
-              source={
-                data.profile
-                  ? {
-                      uri: url + 'images/user/' + data.profile,
-                    }
-                  : avtar
-              }
-              style={styles.imageStyle}
-              resizeMode={'cover'}
-            />
-          </View>
-          <View style={styles.CompanyProfileDetail}>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={homeic}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1} numberOfLines={1}>
-                {data.first_name} {data.last_name}
-              </Text>
+          <ImageBackground
+            style={{
+              width: wp('96%'),
+              height:
+                hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+              overflow: 'hidden',
+            }}
+            source={require('../Img/ract.png')}
+            resizeMode={'stretch'}>
+            <View style={styles.CompanyProfileImageSize}>
+              <Image
+                source={
+                  data.logo
+                    ? {
+                        uri: url + 'images/company/' + data.logo,
+                      }
+                    : Companyavtar
+                }
+                style={styles.imageStyle}
+                resizeMode={'stretch'}
+              />
             </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={user}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>Employed</Text>
+            <View style={styles.CompanyProfileSecongImage}>
+              <Image
+                source={
+                  data.logo
+                    ? {
+                        uri: url + 'images/company/' + data.logo,
+                      }
+                    : Companyavtar
+                }
+                style={styles.imageStyle}
+                resizeMode={'stretch'}
+              />
             </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={screen}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
+            <View style={styles.CompanyProfileDetail}>
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={homeic}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>{data.name}</Text>
               </View>
-              <Text style={styles.ItemDetailLabel1}>{data.Company}</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={edit}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={user}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>
+                  {data.isEmployed ? (
+                    <Text>Employed</Text>
+                  ) : (
+                    <Text>Fresher</Text>
+                  )}
+                </Text>
               </View>
-              <Text
-                style={{
-                  marginLeft: scale(10),
-                  width:wp(50),
-                  marginTop:scale(-3)
-                }} numberOfLines={1}>
-                {data.skills != null &&
-                  data.skills.map((item, index) => {
-                    return (
-                      <Text key={index} style={styles.ItemDetailLabel1}>
-                        {item.name} /
-                      </Text>
-                    );
-                  })}
-              </Text>
-              <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={bag}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={screen}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>{data.title}</Text>
               </View>
-              <Text style={styles.ItemDetailLabel1}>
-                {data.totalExp == 1 ? 0 : data.totalExp - 1} - {data.totalExp}{' '}
-                Years /
-              </Text>
-              <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={place}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={edit}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text
+                  style={{
+                    marginLeft: scale(10),
+                    marginTop: scale(-2),
+                  }}>
+                  {data != '' &&
+                    data.skills.map((item, index) => {
+                      return (
+                        <Text key={index} style={styles.ItemDetailLabel1}>
+                          {item.name} /
+                        </Text>
+                      );
+                    })}
+                </Text>
+                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
               </View>
-              <Text style={styles.ItemDetailLabel1}>{data.place} /</Text>
-              <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={dollor}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={bag}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>
+                  {data.minExp} - {data.maxExp} Years /
+                </Text>
+                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
               </View>
-              <Text style={styles.ItemDetailLabel1}>
-                {data.minSal} - {data.maxSal},000$
-              </Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={earth}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={place}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>{data.city} /</Text>
+                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
               </View>
-              <Text style={styles.ItemDetailLabel1}>{data.email}</Text>
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={dollor}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>
+                  {data.salMin}-{data.salMax},000$
+                </Text>
+              </View>
+              <View style={styles.CompanyDetailIcon}>
+                <View style={styles.CompanyDetailProfileIcon}>
+                  <Image
+                    source={earth}
+                    style={styles.imageStyle}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <Text style={styles.ItemDetailLabel1}>{data.website}</Text>
+              </View>
             </View>
-          </View>
-        </ImageBackground>
+          </ImageBackground>
       </ScrollView>
     );
   };
 
   render() {
     const {data, dark, show1, show, id, left} = this.state;
+    console.log('this.state.id',id);
     return (
       <SafeAreaView style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
@@ -575,7 +579,6 @@ class UserPro extends Component {
                   // overlayOpacityHorizontalThreshold={10}
                   // overlayOpacityVerticalThreshold={10}
                   inputOverlayLabelsOpacityRangeX={[wp(-100) / 3, -1, 0, 1, wp(100) / 3]}
-                  inputCardOpacityRangeX={[wp(-75) / 3, -1.5, 0, 1.5, wp(75) / 3]}
                   overlayOpacityHorizontalThreshold={1}
                   backgroundColor={'transparent'}
                   cardHorizontalMargin={0}
@@ -586,7 +589,7 @@ class UserPro extends Component {
                   onSwipedTop={(index) => this.onSwiped('top', index)}
                   onSwipedBottom={(index) => this.onSwiped('bottom', index)}
                   cards={global.ig}
-                  cardIndex={this.state.id}
+                  cardIndex={id}
                   stackSize={2}
                   showSecondCard={true}
                   renderCard={this.renderCard}
@@ -1017,4 +1020,4 @@ class UserPro extends Component {
   }
 }
 
-export default withNavigationFocus(UserPro);
+export default withNavigationFocus(PostedJobUser);
