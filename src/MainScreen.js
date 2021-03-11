@@ -6,7 +6,9 @@
  * @flow
  */
 
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   Dimensions,
   StyleSheet,
@@ -22,12 +24,23 @@ import {
   TouchableOpacity,
 } from 'react-native';
 // import Icon from 'react-native-vector-icons/Ionicons';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from './Style';
-import {scale, snack} from './Util';
-import {play} from '../src/IconManager';
-import {Background, themeColor} from '../Constant/index';
+import {
+  scale,
+  snack
+} from './Util';
+import {
+  play
+} from '../src/IconManager';
+import {
+  Background,
+  themeColor
+} from '../Constant/index';
 import Geolocation from '@react-native-community/geolocation';
+import RNNotchInfo from 'react-native-notch-info';
 
 class MainScreen extends Component {
   constructor(props) {
@@ -37,80 +50,87 @@ class MainScreen extends Component {
   }
 
   talent = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('???', granted);
-        Geolocation.getCurrentPosition(
-          (info) => {
-            console.log('inf', info);
-            global.let = info.coords.latitude;
-            global.long = info.coords.longitude;
-            this.props.navigation.navigate('TalentScreen');
-          },
-          (err) => {
-            snack('Please Enable Location');
-          },
-        );
-      } else {
-        snack('Location permission denied');
-      }
-    } catch (err) {
-      console.log('>>>>>>>', err);
-    }
+    RNNotchInfo.hasNotch((hasNotch) => console.log('hasnotch', hasNotch))
+    // this.props.navigation.navigate('TalentScreen');
+
+    // try {
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    //   );
+    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //     console.log('???', granted);
+    //     Geolocation.getCurrentPosition(
+    //       (info) => {
+    //         console.log('inf', info);
+    //         global.let = info.coords.latitude;
+    //         global.long = info.coords.longitude;
+    //         this.props.navigation.navigate('TalentScreen');
+    //       },
+    //       (err) => {
+    //         snack('Please Enable Location');
+    //       },
+    //     );
+    //   } else {
+    //     snack('Location permission denied');
+    //   }
+    // } catch (err) {
+    //   console.log('>>>>>>>', err);
+    // }
   };
   Opportunities = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      console.log('???', granted);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.log('???', granted);
+    // try {
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    //   );
+    //   console.log('???', granted);
+    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //     console.log('???', granted);
 
-        Geolocation.getCurrentPosition(
-          (info) => {
-            console.log('inf', info);
-            global.let = info.coords.latitude;
-            global.long = info.coords.longitude;
+    //     Geolocation.getCurrentPosition(
+    //       (info) => {
+    //         console.log('inf', info);
+    //         global.let = info.coords.latitude;
+    //         global.long = info.coords.longitude;
             this.props.navigation.navigate('TalentScreen');
-          },
-          (err) => {
-            snack('Please Enable Location');
-          },
-        );
-      } else {
-        snack('Location permission denied');
-      }
-    } catch (err) {
-      console.log('>>>>>>>', err);
-    }
+    //       },
+    //       (err) => {
+    //         snack('Please Enable Location');
+    //       },
+    //     );
+    //   } else {
+    //     snack('Location permission denied');
+    //   }
+    // } catch (err) {
+    //   console.log('>>>>>>>', err);
+    // }
   };
+
   Login = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      console.log('???', granted);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        Geolocation.getCurrentPosition((info) => {
-          console.log('inf', info);
-          global.let = info.coords.latitude;
-          global.long = info.coords.longitude;
-        });
+    // try {
+    //   const granted = await PermissionsAndroid.request(
+    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    //   );
+    //   console.log('???', granted);
+    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+    //     Geolocation.getCurrentPosition((info) => {
+    //       console.log('inf', info);
+    //       global.let = info.coords.latitude;
+    //       global.long = info.coords.longitude;
+    //     });
         this.props.navigation.navigate('LoginFirst');
-      } else {
-        snack('Location permission denied');
-      }
-    } catch (err) {
-      console.log('>>>>>>>', err);
-    }
+    //   } else {
+    //     snack('Location permission denied');
+    //   }
+    // } catch (err) {
+    //   console.log('>>>>>>>', err);
+    // }
   };
 
   playVideo = () => {
     this.props.navigation.navigate('Youtube');
+  };
+  create = () => {
+    this.props.navigation.navigate('NoAccount');
   };
 
   render() {
@@ -148,7 +168,7 @@ class MainScreen extends Component {
               <Text
                 style={[
                   {
-                    fontSize: scale(18),
+                    fontSize: scale(20),
                     fontWeight: 'bold',
                   },
                   styles.Hometext,
@@ -164,27 +184,55 @@ class MainScreen extends Component {
               style={styles.imageStyle}
             />
           </View>
-          <View style={styles.Homelooking}>
-            <Text style={styles.LookingFor}>Looking for</Text>
-          </View>
-          <View style={styles.Homebut}>
+          
+          <View style={styles.HomebutGuest}>
             <TouchableWithoutFeedback
               style={styles.OpportunityView}
               onPress={this.Opportunities}>
               <View style={styles.TalentView}>
-                <Text style={styles.OppoTalentText}>Opportunities</Text>
+                <Text style={styles.OppoTalentText}>Guest</Text>
               </View>
             </TouchableWithoutFeedback>
           </View>
-          <View style={styles.HomeTel}>
-            <TouchableWithoutFeedback
-              style={styles.OpportunityView}
-              onPress={this.talent}>
-              <View style={styles.TalentView}>
-                <Text style={styles.OppoTalentText}>Talent</Text>
-              </View>
-            </TouchableWithoutFeedback>
+          <View style={styles.CompanyLoginAccountText}>
+            <Text
+              style={[
+                {
+                  fontSize: scale(23),
+                },
+                styles.FontSty,
+              ]}>
+              Don't Have Account?
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+              }}>
+              <Text
+                style={[
+                  {
+                    fontSize: scale(19),
+                  },
+                  styles.FontSty,
+                ]}>
+                Create new account{' '}
+              </Text>
+              <TouchableWithoutFeedback onPress={this.create}>
+                <Text
+                  style={[
+                    {
+                      textDecorationLine: 'underline',
+                      // textDecorationColor: "#fff",
+                      fontSize: scale(19),
+                    },
+                    styles.FontSty,
+                  ]}>
+                  Click here
+                </Text>
+              </TouchableWithoutFeedback>
+            </View>
           </View>
+         
         </ImageBackground>
       </SafeAreaView>
     );
@@ -192,3 +240,18 @@ class MainScreen extends Component {
 }
 
 export default withNavigationFocus(MainScreen);
+
+
+
+// <View style={styles.Homelooking}>
+//             <Text style={styles.LookingFor}>Looking for</Text>
+//           </View>
+{/* <View style={styles.HomeTel}>
+<TouchableWithoutFeedback
+  style={styles.OpportunityView}
+  onPress={this.talent}>
+  <View style={styles.TalentView}>
+    <Text style={styles.OppoTalentText}>Talent</Text>
+  </View>
+</TouchableWithoutFeedback>
+</View> */}

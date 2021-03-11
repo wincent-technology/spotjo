@@ -13,7 +13,7 @@ const NavigationHeader = ({onPress, text = '', ...props}) => (
         alignItems: "flex-start",
     }}  onPress={onPress}>
             {
-    left(scale(30), themeWhite)
+    left(scale(30), themeColor)
     }</TouchableOpacity>
             <View style={styles.HeaderLayer}><View style={styles.JoblistLogo}>
     <Image
@@ -23,9 +23,9 @@ const NavigationHeader = ({onPress, text = '', ...props}) => (
     /></View>
             <View style={[styles.JoblistMainViewHeading], {
         width: wp(70),
-        marginLeft: scale(30),
+        marginLeft: scale(35),
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "flex-start",
     }}>
     <Text style={styles.JoblistMainViewHeadingText} numberOfLines={1}>{text}</Text></View></View>
             </View>

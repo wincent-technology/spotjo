@@ -4,11 +4,13 @@ import { scale, secondsToTime } from '../src/Util'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 // import { Rating } from '../Component/ViewManager.js'
 // import { left, library, icon, play, leftVid } from './IconManager';
-import { themeColor, themeWhite } from '../Constant/index'
+import { themeColor, themeWhite,blanks,Fulls } from '../Constant/index'
 // import styles from './Style'
 const {height, width} = Dimensions.get('window')
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
-
+import {
+    StarRating
+  } from '../Component/ViewManager';
 import { FontBold, FontRegular } from '../Constant/index'
 
 class ItemMV extends PureComponent {
@@ -18,6 +20,7 @@ class ItemMV extends PureComponent {
 
     }
     render() {
+        console.log('this>>>>>>>>>>>>>',this.props.item)
         return (
             <View style={{
                 flexDirection: "row",
@@ -37,27 +40,42 @@ class ItemMV extends PureComponent {
                 fontFamily: FontBold,
                 fontSize: scale(18),
                 color: themeColor
-            }}>{this.props.item.heading}</Text>
+            }} numberOfLines={1}>{this.props.item.heading}</Text>
             <View style={{
                 flexDirection: 'row',
+                justifyContent:"space-between",
                 paddingBottom: hp(1),
-            }}><Text style={{
+            }}><View style={{alignItems:'flex-start',width:wp(55),flexDirection:"column"}}>
+<Text style={{
                 fontFamily: FontBold,
-                fontSize: scale(13),
-                color: '#000'
-            }}>{this.props.item.Company} ,</Text>
-                    <Text style={{
-                fontFamily: FontBold,
-                fontSize: scale(14),
-                color: '#000'
-            }}>{this.props.item.From} - {this.props.item.To}</Text>
+                fontSize: scale(11),
+                color: '#000',
+            }}>{this.props.item.Company} , {this.props.item.From} - {this.props.item.To}</Text>
+            </View>
+            <View style={{alignItems:"flex-end",marginTop:5,marginRight:5}}>
+            <StarRating
+                emptyStar={blanks}
+                fullStar={Fulls}
+                halfStar={'star-half'}
+                iconSet={'MaterialIcons'}
+                disabled={false}
+                maxStars={5}
+                starSize={scale(15)}
+                rating={this.props.item.Rating}
+            starStyle={{marginLeft:2}}
+                // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+                fullStarColor={'orange'}
+              />
+            </View>
                     </View>
-                     <View style={{
+                    
+            <View style={{
                 borderBottomWidth: scale(2),
                 borderBottomColor: '#eee',
                 width: wp(78),
                 alignItems: "center"
-            }}/></View></View>
+            }}/></View>
+            </View>
         )
     }
 }

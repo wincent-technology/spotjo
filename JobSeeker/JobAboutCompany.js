@@ -82,7 +82,7 @@ class JobAboutCompany extends Component {
             <ImageBackground style={styles.ImageBlue}
             source={Background}
             resizeMode={'stretch'}>
-                <StatusBar hidden={true} />
+                <StatusBar hidden={false} backgroundColor={themeColor} />
                     <ImageBackground style={{
                 width: wp('96%'),
                 marginHorizontal: wp(2),

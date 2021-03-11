@@ -17,6 +17,8 @@ import {
 import {withNavigationFocus} from 'react-navigation';
 import {scale, snack} from './Util';
 import CustomInput from '../Component/Input';
+import BackNext from '../Component/BackNext'
+import SuggestionView from '../Component/SuggestionView'
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -217,6 +219,8 @@ class TalentScreen extends Component {
                 <CustomInput
                   value={this.state.name}
                   placeholder={'E.g (Java Developer)'}
+                  inputContainerStyle={{borderRadius:scale(20),height:scale(45),width:'92%',backgroundColor:"#fff",borderBottomColor: "#E5E5E5",
+        borderBottomWidth: 0.3,}}
                   textChange={(text) => {
                     this.setState({
                       show: text != '' ? true : false,
@@ -251,44 +255,7 @@ class TalentScreen extends Component {
                   }}>
                   {suggesion &&
                     suggesion.map((elements, index) => (
-                      <TouchableWithoutFeedback
-                        onPress={() => this.suggestionTag(elements, index)}>
-                        <View
-                          key={index}
-                          style={{
-                            flexDirection: 'row',
-                            height: scale(30),
-                            borderRadius: scale(5),
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: scale(3),
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            padding: scale(5),
-                            marginBottom: scale(2),
-                          }}>
-                          <View
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              paddingLeft: scale(10),
-                            }}>
-                            <Text
-                              style={{
-                                color: themeColor,
-                                fontFamily: FontBold,
-                              }}>
-                              {elements}
-                            </Text>
-                          </View>
-                          <View
-                            style={{
-                              top: scale(-7),
-                              left: scale(5),
-                            }}>
-                            {library('highlight-off', scale(14), themeColor)}
-                          </View>
-                        </View>
-                      </TouchableWithoutFeedback>
+                      <SuggestionView onPress={() => this.suggestionTag(elements, index)} elements={elements} index={index} />
                     ))}
                 </ScrollView>
               </View>
@@ -321,23 +288,44 @@ class TalentScreen extends Component {
                 </View>
               )}
             </View>
-            <View
+            <BackNext onBack={this.back} onNext={this.next} />
+          </View>
+        </ImageBackground>
+      </SafeAreaView>
+    );
+  }
+}
+
+export default withNavigationFocus(TalentScreen);
+
+{/* <View
               style={{
                 flexDirection: 'row',
-                width: wp(100),
-                top: hp(15),
+                width: wp(86),
+                position:"absolute",
+                bottom: 5,
+                marginLeft:wp(7),
+                justifyContent:"space-between",
               }}>
               <View
                 style={{
-                  alignItems: 'flex-start',
                   width: wp(40),
-                  marginLeft: wp(7),
+                  justifyContent:"center",
+                  alignItems:"center",
                 }}>
-                <TouchableOpacity
-                  style={styles.Size}
+                  <View style={{
+                  width: wp(20),
+                  justifyContent:"center",
+                  alignItems:"center",
+                  borderTopWidth:1,
+                  borderTopColor:"#fff",
+                  height:45,
+                }}>
+                  <TouchableOpacity
+                  style={[styles.Size],{justifyContent:"center",alignItems:"center",}}
                   onPress={this.back}
                   hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}>
-                  <View style={styles.Size}>
+                  <View style={{justifyContent:"center",alignItems:"center",paddingTop:5}}>
                     <Text
                       style={[
                         {
@@ -349,24 +337,31 @@ class TalentScreen extends Component {
                     </Text>
                   </View>
                 </TouchableOpacity>
+                </View>
               </View>
+              <View 
+                style={{width:1,height:30,marginVertical:10,backgroundColor:"white"}}
+              />
               <View
                 style={{
-                  alignItems: 'flex-end',
-                  // right: wp(7),
-                  width: wp(47),
+                  alignItems: 'center',
+                  justifyContent:"center",
+                  width: wp(40),
                 }}>
-                <TouchableOpacity
-                  style={styles.Size}
+                 <View style={{
+                  width: wp(20),
+                  justifyContent:"center",
+                  alignItems:"center",
+                  borderTopWidth:1,
+                  borderTopColor:"#fff",
+                  height:45,
+                }}>
+                  <TouchableOpacity
+                  style={[styles.Size],{justifyContent:"center",alignItems:"center"}}
                   onPress={this.next}
                   hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}>
                   <View
-                    style={[
-                      styles.Size,
-                      {
-                        alignItems: 'flex-end',
-                      },
-                    ]}>
+                    style={{justifyContent:"center",alignItems:"center",paddingTop:5}}>
                     <Text
                       style={[
                         {
@@ -378,13 +373,7 @@ class TalentScreen extends Component {
                     </Text>
                   </View>
                 </TouchableOpacity>
+                </View>
+                
               </View>
-            </View>
-          </View>
-        </ImageBackground>
-      </SafeAreaView>
-    );
-  }
-}
-
-export default withNavigationFocus(TalentScreen);
+            </View> */}

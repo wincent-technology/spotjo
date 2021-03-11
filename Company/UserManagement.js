@@ -41,7 +41,7 @@ import {
     heightPercentageToDP as hp
 } from '../Component/responsive-ratio';
 import {
-    scale
+    scale,snack
 } from '../src/Util'
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
@@ -119,9 +119,10 @@ class UserManagement extends PureComponent {
         try {
             this._isMounted && http.POST('api/comuser/get', {
                 companyId: global.Id,
+                role:'4'
             }).then((res) => {
                 if (res['data']['status']) {
-                    // console.log('user 59', res['data']['result']);
+                    console.log('user 59', res['data']['result']);
                     this.setState({
                         data: res['data']['result'],
                     })
@@ -141,33 +142,20 @@ class UserManagement extends PureComponent {
         } = this.state;
         return (
             <View style={styles.backGround}>
-                <StatusBar hidden={true} />
+                <StatusBar hidden={false} backgroundColor={themeColor} />
                 <ImageBackground style={styles.ImageBlue}
             source={Background}
+            tintColor={themeWhite}
             resizeMode={'stretch'}>
         <NavigationEvents onDidFocus={this.checking}/>
-                    <NavigationHead centerComponent='User Management' rightComponent='Exit' onPress={() => this.Back()} onExit={() => this.Exit()} />
+                    <NavigationHead centerComponent='User Management' creauser = {true} rightComponent='edit' onPress={() => this.Back()} onExit={() => this.createJob()} />
                     <View style={{
-                borderTopColor: 'gray',
-                borderTopWidth: scale(2),
-                borderBottomWidth: scale(2),
-                borderBottomColor: 'gray',
-                width: wp('100%'),
-                backgroundColor: themeWhite,
-                height: scale(40),
-                alignItems: 'center',
-                justifyContent: "center",
-                elevation: 8,
-            }}>
-            <Text style={styles.JoblistSecondViewHeadingText}>User List</Text>
-            </View>
-                    <View style={{
-                height: hp(100) - scale(75)
+                height: hp(100) - scale(100)
             }}>
             {data != '' ? (<FlatList
             style={{
                 marginTop: 4,
-                marginBottom: 50,
+                marginBottom: 45 + StatusBar.currentHeight,
                 backgroundColor: 'transparent',
             }}
             data = {data}
@@ -197,48 +185,19 @@ class UserManagement extends PureComponent {
             />) : (<View  style = {{
                     justifyContent: "center",
                     alignItems: "center",
-                height: hp(100) - scale(75+100),
+                height: hp(100) - scale(100),
                     width:wp(100)
                 }}>
             <Text style={{
                     textAlign: 'center',
                     fontFamily: FontBold,
-                    color: themeWhite,
+                    color: themeColor,
                     fontSize: scale(18),
                     width: wp(60)
                 }}>No Data found 😞</Text>
             </View>) }
             </View>
-            <View style={{
-                bottom: scale(30),
-                position: "absolute",
-
-            }}>
-            <TouchableWithoutFeedback onPress={this.createJob}>
-            <View style={{
-                marginHorizontal: wp(2),
-                borderRadius: wp(15),
-            }}><ImageBackground source={require('../Img/create-job.png')} style={{
-                height: scale(60),
-                width: wp(96),
-                justifyContent: "center",
-                alignItems: "center"
-            }} resizeMode={'stretch'}>
-            <Text style={{
-                color: themeWhite,
-                fontSize: scale(20),
-                fontFamily: "Roboto-Bold"
-            }}>Create User</Text>
-           </ImageBackground></View>
-            </TouchableWithoutFeedback>
             
-            </View>
-                    <View style={styles.TranLingImage}>
-                        <Image
-            source={TRANLINE}
-            style={styles.imageStyle}
-            resizeMode={'stretch'}
-            /></View>
                 </ImageBackground>
             </View>
         )
@@ -246,3 +205,25 @@ class UserManagement extends PureComponent {
 };
 
 export default withNavigationFocus(UserManagement);
+
+
+// <View style={{
+//                 bottom: 50,
+//                 // position: "absolute",
+
+//             }}>
+//             <TouchableWithoutFeedback onPress={this.createJob}>
+//             <View style={{
+//                 marginHorizontal: wp(8),
+//                 borderRadius: 15,height:50,
+//                 justifyContent:"center",alignItems:"center",backgroundColor:themeColor
+//             }}>
+//             <Text style={{
+//                 color: themeWhite,
+//                 fontSize: scale(20),
+//                 fontFamily: "Roboto-Bold"
+//             }}>Create User</Text>
+//            </View>
+//             </TouchableWithoutFeedback>
+            
+//             </View>

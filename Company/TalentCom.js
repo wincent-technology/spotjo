@@ -29,6 +29,8 @@ import styles from '../src/Style';
 import {library} from '../src/IconManager';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
+import BackNext from '../Component/BackNext'
+import SuggestionView from '../Component/SuggestionView'
 
 var mg = [];
 class TalentCom extends Component {
@@ -232,6 +234,8 @@ class TalentCom extends Component {
                 <CustomInput
                   placeholder={'E.g (Java Developer)'}
                   value={this.state.name}
+                  inputContainerStyle={{borderRadius:scale(20),height:scale(45),width:'92%',backgroundColor:"#fff",borderBottomColor: "#E5E5E5",
+        borderBottomWidth: 0.3,}}
                   textChange={(text) => {
                     this.setState({
                       show: text != '' ? true : false,
@@ -265,43 +269,7 @@ class TalentCom extends Component {
                   }}>
                   {suggesion &&
                     suggesion.map((elements, index) => (
-                      <TouchableWithoutFeedback
-                        onPress={() => this.suggestionTag(elements, index)}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            height: scale(30),
-                            borderRadius: scale(5),
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            marginLeft: scale(3),
-                            backgroundColor: 'rgba(255,255,255,0.8)',
-                            padding: scale(5),
-                            marginBottom: scale(2),
-                          }}>
-                          <View
-                            style={{
-                              justifyContent: 'center',
-                              alignItems: 'center',
-                              paddingLeft: scale(10),
-                            }}>
-                            <Text
-                              style={{
-                                color: themeColor,
-                                fontFamily: FontBold,
-                              }}>
-                              {elements}
-                            </Text>
-                          </View>
-                          <View
-                            style={{
-                              top: scale(-7),
-                              left: scale(5),
-                            }}>
-                            {library('highlight-off', scale(14), themeColor)}
-                          </View>
-                        </View>
-                      </TouchableWithoutFeedback>
+                    <SuggestionView onPress={() => this.suggestionTag(elements, index)} elements={elements} index={index} />
                     ))}
                 </ScrollView>
               </View>
@@ -334,65 +302,7 @@ class TalentCom extends Component {
                 </View>
               )}
             </View>
-            <View
-              style={{
-                flexDirection: 'row',
-                width: wp(100),
-                top: hp(15),
-              }}>
-              <View
-                style={{
-                  alignItems: 'flex-start',
-                  width: wp(40),
-                  marginLeft: wp(7),
-                }}>
-                <TouchableOpacity
-                  style={styles.Size}
-                  onPress={this.back}
-                  hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}>
-                  <View style={styles.Size}>
-                    <Text
-                      style={[
-                        {
-                          fontSize: scale(20),
-                        },
-                        styles.FontSty,
-                      ]}>
-                      Back
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  alignItems: 'flex-end',
-                  // right: wp(7),
-                  width: wp(47),
-                }}>
-                <TouchableOpacity
-                  style={styles.Size}
-                  onPress={this.next}
-                  hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}>
-                  <View
-                    style={[
-                      styles.Size,
-                      {
-                        alignItems: 'flex-end',
-                      },
-                    ]}>
-                    <Text
-                      style={[
-                        {
-                          fontSize: scale(20),
-                        },
-                        styles.FontSty,
-                      ]}>
-                      Next
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
+            <BackNext onBack={this.back} onNext={this.next} />
           </View>
         </ImageBackground>
       </SafeAreaView>

@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -9,10 +11,17 @@ import {
   View,
   ScrollView,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, leftVid} from '../src/IconManager';
-import {scale} from '../src/Util';
+import {
+  left,
+  leftVid
+} from '../src/IconManager';
+import {
+  scale
+} from '../src/Util';
 import {
   themeColor,
   themeWhite,
@@ -21,14 +30,22 @@ import {
   rite,
   wrong,
 } from '../Constant/index';
-import {Rating, NavigationHeader} from '../Component/ViewManager';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager';
 import CustomButton from '../Component/Button';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {FontBold, FontRegular, Background} from '../Constant/index';
+import {
+  FontBold,
+  FontRegular,
+  Background
+} from '../Constant/index';
 import JobDescriptionItemMV from './JobDescriptionItemMV';
+import LinearGradient from 'react-native-linear-gradient';
 
 class JobDescription extends Component {
   constructor(props) {
@@ -52,17 +69,21 @@ class JobDescription extends Component {
     this.props.navigation.navigate('Personal');
   };
   componentDidMount() {
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const item = global.item;
     console.log('sdsdsdsdsdsd', global.item);
     // console.log('other item', item);
-    this.setState({
-      data: item != undefined || '' ? item.description.split('\n') : '',
-    });
+    // this.setState({
+    //   data: item != undefined || item != null ? item.description.split('\n') : '',
+    // });
   }
 
   render() {
-    const {data} = this.state;
+    const {
+      data
+    } = this.state;
 
     return (
       <SafeAreaView style={styles.backGround}>
@@ -70,16 +91,15 @@ class JobDescription extends Component {
           style={styles.ImageBlue}
           source={Background}
           resizeMode={'stretch'}>
-          <StatusBar hidden={true} />
-          <ImageBackground
+          <StatusBar hidden={false} backgroundColor={themeColor} />
+          <View
             style={{
               width: wp('96%'),
               marginHorizontal: wp(2),
-              height: hp('100%') - (StatusBar.currentHeight + 120 + hp(7)),
+              height: hp('100%') - (100 + wp(14) + 50),
               top: wp(14),
             }}
-            source={require('../Img/ract.png')}
-            resizeMode={'stretch'}>
+            >
             <View
               style={{
                 alignItems: 'center',
@@ -95,21 +115,6 @@ class JobDescription extends Component {
                 Job description
               </Text>
             </View>
-            <View
-              style={{
-                alignItems: 'center',
-                top: hp(1),
-              }}>
-              <Text
-                style={{
-                  color: themeColor,
-                  fontWeight: 'bold',
-                  fontSize: scale(18),
-                  fontFamily: FontBold,
-                }}>
-                Task
-              </Text>
-            </View>
             <FlatList
               style={{
                 marginTop: scale(10),
@@ -117,7 +122,7 @@ class JobDescription extends Component {
                 backgroundColor: 'transparent',
               }}
               data={
-                global.item.description && global.item.description.split('\n')
+                global.item.description || global.item.description != null && global.item.description.split('\n')
               }
               showsHorizontalScrollIndicator={false}
               removeClippedSubviews={true}
@@ -134,7 +139,65 @@ class JobDescription extends Component {
               })}
               keyExtractor={(item, index) => index + ''}
             />
-            <View
+            
+          </View>
+          <LinearGradient style={{top:hp('100%') - (100 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              // zIndex: 5,
+              height: 10,
+              width: wp(100),}} colors={['white', 'rgba(171,171,171,0.1)', 'rgba(171,171,171,0.4)']}/>
+          <View
+            style={{
+              // top: hp(6),
+              top:hp('100%') - (90 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              // zIndex: 5,
+              height: 50,
+              width: wp(100),
+              // left: wp(-2),
+              // transform: [{ rotate: "90deg" }]
+            }}
+            >
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <View
+                  style={{
+                    marginRight: wp(25),
+                  }}>
+                  <Image
+                    source={wrong}
+                    style={{
+                      height: scale(30),
+                      width: scale(30),
+                    }}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <View>
+                  <Image
+                    source={rite}
+                    style={{
+                      height: scale(35),
+                      width: scale(35),
+                    }}
+                    resizeMode={'contain'}
+                  />
+                </View>
+              </View>
+          </View>
+        </ImageBackground>
+      </SafeAreaView>
+    );
+  }
+}
+
+export default withNavigationFocus(JobDescription);
+
+
+
+{/* <View
               style={{
                 alignItems: 'center',
                 top: hp(1),
@@ -172,63 +235,4 @@ class JobDescription extends Component {
                 index,
               })}
               keyExtractor={(item, index) => index + ''}
-            />
-          </ImageBackground>
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
-          <View
-            style={{
-              top: hp(6),
-              // zIndex: 5,
-              height: hp(6),
-              width: wp(105),
-              left: wp(-2),
-            }}>
-            <ImageBackground
-              source={rightWrongBack}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                <View
-                  style={{
-                    marginRight: wp(25),
-                  }}>
-                  <Image
-                    source={wrong}
-                    style={{
-                      height: scale(30),
-                      width: scale(30),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <View>
-                  <Image
-                    source={rite}
-                    style={{
-                      height: scale(35),
-                      width: scale(35),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                </View>
-              </View>
-            </ImageBackground>
-          </View>
-        </ImageBackground>
-      </SafeAreaView>
-    );
-  }
-}
-
-export default withNavigationFocus(JobDescription);
+            /> */}

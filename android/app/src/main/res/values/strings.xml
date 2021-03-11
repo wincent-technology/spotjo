@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">spotjo</string>
+    <string name="facebook_app_id">276138257184052</string>
+<string name="fb_login_protocol_scheme">fb276138257184052</string>
 </resources>

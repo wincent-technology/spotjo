@@ -1,22 +1,26 @@
 import React, { Component } from 'react'
 import { Input, Icon, Image } from 'react-native-elements'
-import { themeColor, cal, clock } from '../Constant/index'
-import { View } from 'react-native'
+import { themeColor, cal, clock,FontBold } from '../Constant/index'
+import { View,Text } from 'react-native'
 import { scale } from '../src/Util'
-import { play } from '../src/IconManager'
+import { play,library } from '../src/IconManager'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
+const All = {height:scale(45),borderRadius:scale(20),width:45,marginRight:-4,justifyContent:"center",alignItems:"center"}
 export default CustomInput = (props) => <Input
     containerStyle={[{
         width: '100%',
         alignSelf: 'center',
         marginVertical: 6,
     }, props.containerStyle]}
+    
     inputContainerStyle={[{
         height: props.height ? props.height : scale(45),
         width: props.width ? props.width : '92%',
         alignSelf: 'center',
         borderBottomColor: "#E5E5E5",
         borderBottomWidth: 0.3,
+        
         borderRadius: scale(5),
         backgroundColor: props.backgroundColor ? props.backgroundColor : "#fff"
     }
@@ -65,9 +69,10 @@ export default CustomInput = (props) => <Input
         }, props.leftIconContainerStyle]
     } { ...props
     }
+   
     rightIcon = {
     <View style={{
-        marginRight: 10
+        marginRight: props.Company || props.pass  ? 0 : 10,
     }}>
      {props.RightIcon && <Image
     source = {props.RightIcon ? cal : props.RightIcon}
@@ -76,8 +81,21 @@ export default CustomInput = (props) => <Input
         height: props.height ? props.height : 25
     }], props.righticonStyle}
     resizeMode={'contain'}
-    />}</View>
+    />}
+    {props.Company && <View style={[{backgroundColor:props.Anywhere ? 'green' : '#cdf5fd'},All]} onStartShouldSetResponder={props.onPress}>
+                        <Text style={{fontSize:scale(16),fontFamily:FontBold,color:props.Anywhere ? '#fff' : '#000'}}>{props.Company}</Text>
+     </View>}
+     {props.pass && <View style={{backgroundColor:"green"}}>
+            {
+                library(props.pass ? 'visibility' :'visibility-off',15,'green')
+
+            }
+     </View>
+     }
+    </View>
+    
     }
+   
     rightIconContainerStyle = {[
         {
             padding: 0

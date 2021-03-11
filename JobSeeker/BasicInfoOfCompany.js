@@ -31,10 +31,10 @@ import {
     rite,
     wrong,
     Companyavtar,
-    url
+    url,Fulls,blanks
 } from '../Constant/index'
 import {
-    Rating,
+    StarRating,
     NavigationHeader
 } from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
@@ -47,6 +47,7 @@ import {
     FontRegular,
     Background
 } from '../Constant/index'
+import LinearGradient from 'react-native-linear-gradient';
 
 
 class BasicInfoOfCompany extends Component {
@@ -95,12 +96,14 @@ class BasicInfoOfCompany extends Component {
             source={Background}
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
-                    <ImageBackground style={{
-                width: wp('96%'),
-                marginHorizontal: wp(2),
-                height: hp('100%') - (StatusBar.currentHeight + 120 + hp(7)),
-                top: wp(14)
-            }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
+                <View
+            style={{
+              width: wp('96%'),
+              marginHorizontal: wp(2),
+              height: hp('100%') - (100 + wp(14) + 50),
+              top: wp(14)
+            }}
+            >
             <View style={{
                 alignItems: "center",
                 top: hp(1)
@@ -109,241 +112,188 @@ class BasicInfoOfCompany extends Component {
                 fontWeight: 'bold',
                 fontSize: scale(18),
                 fontFamily: FontBold
-            }}>BASIC INFO</Text></View>
-            <View style={{
-                alignItems: "center",
-                justifyContent: "center",
-                top: hp(1),
-                marginLeft: wp('29%'),
-                width: wp('38%'),
-                height: hp('12%'),
-                // borderRadius: scale(20),
-                overflow: 'hidden',
-            }}><Image
-            source = {data && global.item.logo ? {
-                uri: url + 'images/company/' + global.item.logo
-            } :
-                Companyavtar
-            }
-            style={styles.imageStyle}
-            resizeMode={'cover'}
-            /></View>
-          <View style={{
+            }}>Detail Skills</Text></View>
+             <View style={{
                 width: '90%',
                 top: hp(2),
                 height: hp('50%'),
-                backgroundColor: themeWhite,
+                // backgroundColor: "#eee",
                 marginHorizontal: wp('5%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
             // elevation: 7,
             }}>
-            <View style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-
-            // marginLeft: wp(3)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                fontSize: scale(18),
-                fontFamily: FontBold,
-                color: themeColor
-            }}>Company</Text>
-            </View>
-             <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                color: '#000',
-                fontSize: scale(16),
-                fontFamily: FontBold,
-
-            }}>{data && global.item.name}</Text>
-            </View>
-            </View>
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: '98%',
-                marginVertical: hp(1),
-                alignItems: "center"
-            }}/>
-            <View style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-
-            // marginLeft: wp(3)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                fontSize: scale(18),
-                fontFamily: FontBold,
-                color: themeColor
-            }}>Location</Text>
-            </View>
-             <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                color: '#000',
-                fontSize: scale(16),
-                fontFamily: FontBold,
-
-            }} numberOfLines={1}>{data && global.item.address}</Text>
-            </View>
-            </View>
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: '98%',
-                marginVertical: hp(1),
-                alignItems: "center"
-            }}/>
-            <View style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-
-            // marginLeft: wp(3)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                fontSize: scale(18),
-                fontFamily: FontBold,
-                color: themeColor
-            }}>Function</Text>
-            </View>
-             <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                color: '#000',
-                fontSize: scale(16),
-                fontFamily: FontBold,
-
-            }}>{data && global.item.skills && global.item.skills.map((item, index) => {
-                return (
-                    <Text key={index} style={{
-                        fontFamily: FontBold,
-                        fontSize: scale(16),
-                        color: '#000'
-                    }}>{item.name},</Text>
-                )
-            })}</Text>
-            </View>
-            </View>
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: '98%',
-                marginVertical: hp(1),
-                alignItems: "center"
-            }}/>
-             <View style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-
-            // marginLeft: wp(3)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                fontSize: scale(18),
-                fontFamily: FontBold,
-                color: themeColor
-            }}>Experience</Text>
-            </View>
-             <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                color: '#000',
-                fontSize: scale(16),
-                fontFamily: FontBold,
-
-            }}>{data && global.item.minExp}-{data && global.item.maxExp} Years</Text>
-            </View>
-            </View>
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: '98%',
-                marginVertical: hp(1),
-                alignItems: "center"
-            }}/>
-            <View style={{
-                flexDirection: "column",
-                alignItems: "flex-start",
-
-            // marginLeft: wp(3)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                fontSize: scale(18),
-                fontFamily: FontBold,
-                color: themeColor
-            }}>Work Type</Text>
-            </View>
-             <View style={{
-                alignItems: "flex-start",
-            }}>
-            <Text style={{
-                color: '#000',
-                fontSize: scale(16),
-                fontFamily: FontBold,
-
-            }}>{data && global.item.isFullTime && <Text>FullTime</Text>}</Text>
-            </View>
-            </View>
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: '98%',
-                marginVertical: hp(1),
-                alignItems: "center"
-            }}/>
-
-            </View></ImageBackground>
-            
-            <View style={styles.TranLingImage}>
-             <Image
-            source={TRANLINE}
-            style={styles.imageStyle}
-            resizeMode={'stretch'}
-            /></View>
-            <View style={{
-                top: hp(6),
-                // zIndex: 5,
-                height: hp(6),
-                width: wp(105),
-                left: wp(-2)
-            }}>
-            <ImageBackground source={rightWrongBack} style={styles.imageStyle} resizeMode={'stretch'}>
-                <View style={{
-                flexDirection: 'row',
+                <Text style={{fontSize:scale(18),color:"#333",fontFamily:FontBold}}>
+                    SKILLS
+                </Text>
+                <ScrollView
+                    style={{
+                      backgroundColor: themeWhite,
+                      // marginTop: '-7%',
+                      marginBottom: 30,
+                      // alignSelf: 'stretch',
+                    }}
+                    contentContainerStyle={{
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    //   marginHorizontal: wp(7),
+                    }}
+                    nestedScrollEnabled={true}>
+                   {global.item.skills && global.item.skills.map((item, index) => {
+                      return (
+                        <View style={{
+                flexDirection: "row",
                 alignItems: "center",
-                justifyContent: "center"
-            }}>
-                <View style={{
-                marginRight: wp(25),
-            }}><Image source={wrong} style={{
-                height: scale(30),
-                width: scale(30),
-            }} resizeMode={'contain'} /></View>
-            <View><Image source={rite} style={{
-                height: scale(35),
-                width: scale(35),
-            }} resizeMode={'contain'} /></View>
-            </View></ImageBackground></View>
+                width:wp(82),
+                    borderBottomWidth: scale(1),
+                height:50,borderBottomColor:'#eee',
+            }} key={index}>
+            <View style={{
+                flexDirection: 'row',
+                justifyContent:"space-between",
+                // paddingBottom: hp(1),
+                // width:wp(80)
+            }}><View style={{width:wp(45)}}>
+<Text style={{
+                fontFamily: FontBold,
+                fontSize: scale(16),
+                color: themeColor,width:wp(40)
+            }} numberOfLines={1}>{item.name}</Text>
+            </View>
+            <View style={{width:wp(39),alignItems:"flex-end"}}>
+            <StarRating
+                emptyStar={blanks}
+                fullStar={Fulls}
+                halfStar={'star-half'}
+                iconSet={'MaterialIcons'}
+                disabled={false}
+                maxStars={5}
+                starSize={scale(17)}
+                rating={item.rating}
+            starStyle={{marginLeft:2}}
+                // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+                fullStarColor={'orange'}
+              />
+            </View>
+                    </View>
+            <View style={{
+                borderBottomWidth: scale(2),
+                borderBottomColor: '#eee',
+                width: wp(78),
+                alignItems: "center"
+            }}/></View>
+                      );
+                    })}
+                  </ScrollView>
+                <Text style={{fontSize:scale(18),color:"#333",fontFamily:FontBold}}>
+                    LANGUAGE SKILLS
+                </Text>
+                <ScrollView
+                    style={{
+                      backgroundColor: themeWhite,
+                      // marginTop: '-7%',
+                      marginBottom: 30,
+                      // alignSelf: 'stretch',
+                    }}
+                    contentContainerStyle={{
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    //   marginHorizontal: wp(7),
+                    }}
+                    nestedScrollEnabled={true}>
+                   {global.item.language1 && global.item.language1.map((item, index) => {
+                      return (
+                        <View style={{
+                flexDirection: "row",
+                alignItems: "center",
+                width:wp(82),
+                    borderBottomWidth: scale(1),
+                height:50,borderBottomColor:'#eee',
+            }} key={index}>
+            <View style={{
+                flexDirection: 'row',
+                justifyContent:"space-between",
+                // paddingBottom: hp(1),
+                // width:wp(80)
+            }}><View style={{width:wp(45)}}>
+<Text style={{
+                fontFamily: FontBold,
+                fontSize: scale(16),
+                color: themeColor,width:wp(40)
+            }} numberOfLines={1}>{item.name}</Text>
+            </View>
+            <View style={{width:wp(39),alignItems:"flex-end"}}>
+            <StarRating
+                emptyStar={blanks}
+                fullStar={Fulls}
+                halfStar={'star-half'}
+                iconSet={'MaterialIcons'}
+                disabled={false}
+                maxStars={5}
+                starSize={scale(17)}
+                rating={item.rating}
+            starStyle={{marginLeft:2}}
+                // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+                fullStarColor={'orange'}
+              />
+            </View>
+                    </View>
+            <View style={{
+                borderBottomWidth: scale(2),
+                borderBottomColor: '#eee',
+                width: wp(78),
+                alignItems: "center"
+            }}/></View>
+                      );
+                    })}
+                  </ScrollView>
+            </View>
+            </View>
+            <LinearGradient style={{top:hp('100%') - (100 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              // zIndex: 5,
+              height: 10,
+              width: wp(100),}} colors={['white', 'rgba(171,171,171,0.1)', 'rgba(171,171,171,0.4)']}/>
+          <View
+            style={{
+              // top: hp(6),
+              top:hp('100%') - (90 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              // zIndex: 5,
+              height: 50,
+              width: wp(100),
+              // left: wp(-2),
+              // transform: [{ rotate: "90deg" }]
+            }}
+            ><View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                <View
+                  style={{
+                    marginRight: wp(25),
+                  }}>
+                  <Image
+                    source={wrong}
+                    style={{
+                      height: scale(30),
+                      width: scale(30),
+                    }}
+                    resizeMode={'contain'}
+                  />
+                </View>
+                <View>
+                  <Image
+                    source={rite}
+                    style={{
+                      height: scale(35),
+                      width: scale(35),
+                    }}
+                    resizeMode={'contain'}
+                  />
+                </View>
+              </View>
+          </View>
                 </ImageBackground></SafeAreaView>
         )
     }

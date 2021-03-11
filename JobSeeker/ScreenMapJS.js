@@ -12,7 +12,7 @@ import {
   ImageBackground,
   Text,
   Image,
-  View,
+  View,ActivityIndicator
 } from 'react-native';
 import {withNavigationFocus, NavigationEvents} from 'react-navigation';
 import styles from '../src/Style';
@@ -25,8 +25,8 @@ import {
   filter,
   TRANLINE,
   FontBold,
-  url,
-} from '../Constant/index';
+  url,compass
+} from '../Constant';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -58,7 +58,7 @@ let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 // Use the below code to zoom to particular location with radius.
 import PlacesInput from '../Component/PlacesInput';
 import DeviceInfo from 'react-native-device-info';
-
+import PermissionHelper from '../Component/PermissionHelper'
 let hasNotch = DeviceInfo.hasNotch();
 
 var flag = false;
@@ -74,6 +74,7 @@ class ScreenMapJS extends PureComponent {
         latitude: global.let,
         longitude: global.long,
       },
+      granted:false,
       region: {
         latitude: global.let,
         longitude: global.long,
@@ -135,35 +136,8 @@ class ScreenMapJS extends PureComponent {
     Geolocation.clearWatch(this.watchID);
   }
 
-  async componentDidMount() {
-    try {
-      var granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        Geolocation.getCurrentPosition((info) => {
-          console.log('inf', info);
-          global.let = info.coords.latitude;
-          global.long = info.coords.longitude;
-          this.setState({
-            region: {
-              latitude: info.coords.latitude,
-              longitude: info.coords.longitude,
-              latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA,
-            },
-            coordi: {
-              latitude: info.coords.latitude,
-              longitude: info.coords.longitude,
-            },
-          });
-        });
-      } else {
-        snack('Location permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
+  componentDidMount() {
+    this.permission()
     const {radius, zoom} = this.state;
     this.checking();
     // this.map.animateToRegion({
@@ -222,7 +196,46 @@ class ScreenMapJS extends PureComponent {
       snack(error);
     }
   };
+
+  LATLong = () => {
+    try {
+        Geolocation.getCurrentPosition((info) => {
+          console.log('inf', info);
+          global.let = info.coords.latitude;
+          global.long = info.coords.longitude;
+          this.setState({
+            region: {
+              latitude: info.coords.latitude,
+              longitude: info.coords.longitude,
+              latitudeDelta: LATITUDE_DELTA,
+              longitudeDelta: LONGITUDE_DELTA,
+            },
+            coordi: {
+              latitude: info.coords.latitude,
+              longitude: info.coords.longitude,
+            },
+          });
+        });
+    } catch (err) {
+      console.warn(err);
+    }
+  }
+
+
+  permission = async () => {
+    const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
+    if (granted)
+       { this.setState({granted:true})
+    console.log('granted')
+          this.LATLong()
+      }
+    else
+    {const granted = await PermissionHelper.Storage.requestLocationPermission();
+        !granted && this.permission();  }
+  }
+
   checking = () => {
+    this.permission()
     console.log('hey - 159 map', global.all);
     const {params} = this.props.navigation.state;
     const otherParam = params ? params.otherParam : null;
@@ -261,51 +274,7 @@ class ScreenMapJS extends PureComponent {
   };
   change = async (value) => {
     let given = await this.map.getCamera();
-    console.log('given', given);
 
-    // this.setState({
-    //     zoom: given.zoom,
-    // })
-    // console.log('zoom', this.state.zoom);
-    // const {
-    //     zoom,
-    //     radius
-    // } = this.state
-    // console.log('zoom', zoom);
-    // if (value < (radius / 1000)) {
-    //     this.setState({
-    //         radius: Math.round(value) * 1000
-    //     }, () => {
-    //         let reg = {
-    //             latitude: this.state.region.latitude,
-    //             longitude: this.state.region.longitude,
-    //             latitudeDelta: this.state.region.latitudeDelta / zoom,
-    //             longitudeDelta: this.state.region.longitudeDelta / zoom
-    //         }
-    //         console.log('reg <<<<<<', reg);
-    //         this.setState({
-    //             region: reg
-    //         }, () => this.map.animateToRegion(this.state.region, 500))
-    //         this.call();
-    //     })
-
-    // } else {
-    //     this.setState({
-    //         radius: Math.round(value) * 1000
-    //     }, () => {
-    //         let reg = {
-    //             latitude: this.state.region.latitude,
-    //             longitude: this.state.region.longitude,
-    //             latitudeDelta: this.state.region.latitudeDelta * zoom,
-    //             longitudeDelta: this.state.region.longitudeDelta * zoom
-    //         }
-    //         console.log('reg >>>>>>>', reg);
-    //         this.setState({
-    //             region: reg
-    //         }, () => this.map.animateToRegion(this.state.region, 500))
-    //         this.call();
-    //     })
-    // }
     console.log('longi', this.state.region);
     var circum = 40075;
     var ond = 111.32 * 1000;
@@ -340,20 +309,25 @@ class ScreenMapJS extends PureComponent {
 
   render() {
     const {region, redius, markers} = this.state;
-    return this.state.data ? (
+        if(!this.state.granted)
+            return <ActivityIndicator size={'large'} color={themeColor} />
+      else
+    return  (
       <View style={styles.backGround}>
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={'#fff'}
           resizeMode={'stretch'}>
           <View
             style={{
-              height: scale(40),
+              // height: scale(40),
               flexDirection: 'row',
-              width: wp('100%'),
+              width: 30,
               backgroundColor: 'transparent',
               alignItems: 'center',
-              marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
+              marginTop: scale(5),
+              
             }}>
             <TouchableOpacity
               style={{
@@ -363,24 +337,12 @@ class ScreenMapJS extends PureComponent {
                 zIndex: 10,
               }}
               onPress={() => this.Back()}>
-              {left(scale(30), themeWhite)}
+              {left(scale(32), themeColor)}
             </TouchableOpacity>
-            <View
-              style={{
-                // justifyContent: 'center',
-                marginTop: scale(7),
-
-                // alignItems: 'flex-start',
-              }}>
-              <Image
-                source={require('../Img/search.png')}
-                style={styles.JoblistLogoImageSize}
-                resizeMode={'contain'}
-              />
-            </View>
           </View>
           <PlacesInput
-            googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
+            // googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
+            googleApiKey={'AIzaSyDVScOwopPXw_Seu28wNHVo0UJAukwqo3E'}
             placeHolder={'Search Place'}
             language={'en-US'}
             onSelect={(place) => {
@@ -413,26 +375,26 @@ class ScreenMapJS extends PureComponent {
             stylesInput={{
               backgroundColor: 'transparent',
               // alignItems:"center",
-              marginLeft: scale(10),
+              // marginLeft: scale(10),
               justifyContent: 'center',
               fontSize: scale(17),
               height: scale(40),
               width: wp(80),
               fontFamily: FontBold,
               fontWeight: 'bold',
-              color: '#fff',
+              color: '#000',
             }}
             stylesContainer={{
               alignItems: 'center',
-              backgroundColor: 'rgba(255,255,255,0.4)',
+              backgroundColor: '#ecfbfe',
               width: wp(86),
               borderRadius: wp(10),
               marginBottom: scale(2),
               height: scale(40),
               marginLeft: wp(7),
               marginTop: scale(5),
-              justifyContent: 'center',
-              marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
+              justifyContent: 'center',flexDirection:"row",
+              // marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
             }}
           />
           <View
@@ -567,7 +529,7 @@ class ScreenMapJS extends PureComponent {
                 style={[
                   {
                     fontWeight: 'bold',
-                    color: themeWhite,
+                    color: '#333',
                   },
                   styles.FilterMinText,
                 ]}>
@@ -577,7 +539,7 @@ class ScreenMapJS extends PureComponent {
                 style={[
                   {
                     fontWeight: 'bold',
-                    color: themeWhite,
+                    color: '#333',
                   },
                   styles.FilterMaxText,
                 ]}>
@@ -591,15 +553,15 @@ class ScreenMapJS extends PureComponent {
               }}
               onSlidingStart={() => {}}
               onSlidingComplete={() => {}}
-              maximumTrackTintColor={themeWhite}
-              thumbTintColor={themeWhite}
+              maximumTrackTintColor={'#000'}
+              thumbTintColor={'#333'}
               onValueChange={(value) => {
                 this.change(value);
               }}
               minimumValue={1}
               maximumValue={200}
-              minimumTrackTintColor={themeWhite}
-              maximumTrackTintColor={themeWhite}
+              minimumTrackTintColor={'#000'}
+              maximumTrackTintColor={'#333'}
             />
           </View>
           {this.state.data != '' ? (
@@ -637,7 +599,7 @@ class ScreenMapJS extends PureComponent {
                 style={{
                   textAlign: 'center',
                   fontFamily: FontBold,
-                  color: themeWhite,
+                  color: themeColor,
                   fontSize: scale(18),
                   width: wp(60),
                 }}>
@@ -646,16 +608,9 @@ class ScreenMapJS extends PureComponent {
               <NavigationEvents onDidFocus={this.checking} />
             </View>
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </View>
-    ) : null;
+    )
   }
 }
 

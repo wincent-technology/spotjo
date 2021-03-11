@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
         height: 20,
         position: 'absolute',
         right: 16,
-        top: 15
+        top: 20
     },
     Dropunderline: {
         width: '100%',
@@ -104,6 +104,7 @@ class DropDownItem extends Component {
     }
 
     render() {
+        
         return (
             <Animated.View style={[
                 styles.Dropcontainer,
@@ -130,7 +131,7 @@ class DropDownItem extends Component {
           </View>
         </TouchableOpacity>
         <View
-            style={styles.Dropcontent}
+            style={[this.props.HeaderStyle,styles.Dropcontent]}
             onLayout={this.onLayout}
             >
           <View
@@ -187,7 +188,7 @@ class DropDownItem extends Component {
     }
 
     onLayout = (evt) => {
-        console.log('sdfsf>>>>>>>', evt.nativeEvent.layout.height, this.state.contentHeight);
+        // console.log('sdfsf>>>>>>>', evt.nativeEvent.layout.height, this.state.contentHeight);
         const contentHeight = evt.nativeEvent.layout.height;
         if (content == 0)
             content = contentHeight

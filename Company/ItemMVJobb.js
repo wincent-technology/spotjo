@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   View,
   Image,
@@ -7,13 +9,23 @@ import {
   StyleSheet,
   TouchableWithoutFeedback,
 } from 'react-native';
-import {scale} from '../src/Util';
+import {
+  scale
+} from '../src/Util';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {StarRating} from '../Component/ViewManager';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  StarRating
+} from '../Component/ViewManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -28,7 +40,10 @@ import {
   Fulls,
 } from '../Constant/index';
 import styles from '../src/Style';
-const {height, width} = Dimensions.get('window');
+const {
+  height,
+  width
+} = Dimensions.get('window');
 import LinearGradient from 'react-native-linear-gradient';
 
 class ItemMVJobb extends PureComponent {
@@ -36,7 +51,7 @@ class ItemMVJobb extends PureComponent {
   constructor(props) {
     super(props);
 
-    console.log('this.props?????/', this.props.item);
+    console.log('this.props?????/ 54', this.props.item);
   }
 
   dateDiffInDays(dt) {
@@ -77,7 +92,7 @@ class ItemMVJobb extends PureComponent {
         onPress={() => this.props.push(this.props.item, this.props.index)}>
         <LinearGradient
           colors={['#fff', '#f3f2f2']}
-          style={styles.ItemMVMainView}>
+          style={[styles.ItemMVMainView,{elevation:4}]}>
           <View style={styles.ItemMVSecondView}>
             <View
               style={{
@@ -120,7 +135,7 @@ class ItemMVJobb extends PureComponent {
                   : avtar
               }
               style={styles.imageStyle}
-              resizeMode={'cover'}
+              resizeMode={this.props.item.profile ? 'cover' : 'contain'}
             />
           </View>
           <View style={styles.ItemMVDetail}>
@@ -168,7 +183,7 @@ class ItemMVJobb extends PureComponent {
                 />
               </View>
               <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-                {this.props.item.place}
+                {this.props.item.place ? this.props.item.place : this.props.item.address}
               </Text>
               <Text styles={styles.ItemDetailLabel}> /</Text>
               <Text style={styles.ItemMVDetailColor}> 100%</Text>
@@ -237,10 +252,12 @@ class ItemMVJobb extends PureComponent {
               </View>
 
               <Text style={styles.ItemDetailLabel}>
-                {this.props.item.totalExp != '' && this.props.item.totalExp <= 1
-                  ? 0
-                  : this.props.item.totalExp - 1}{' '}
-                - {this.props.item.totalExp != '' && this.props.item.totalExp}{' '}
+                {this.props.item.totalExp != '' && this.props.item.totalExp != null
+                  ? this.props.item.totalExp - 1
+                  : 0 } 
+                 -{ this.props.item.totalExp != '' && this.props.item.totalExp != null
+                  ? this.props.item.totalExp
+                  : 0 }
                 Years /{' '}
               </Text>
               <Text style={styles.ItemMVDetailColor}> 100%</Text>

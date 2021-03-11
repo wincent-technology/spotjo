@@ -1,5 +1,5 @@
 apply plugin: "com.android.application"
-
+apply plugin: 'com.google.gms.google-services'
 import com.android.build.OutputFile
 
 /**
@@ -135,7 +135,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled true 
-
+        missingDimensionStrategy 'react-native-camera', 'general' 
     }
     splits {
         abi {
@@ -168,6 +168,7 @@ android {
             // see https://reactnative.dev/docs/signed-apk-android.
             signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
+            debuggable true
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro",'devsupport.pro'
         }
     }
@@ -195,8 +196,9 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     
 
+    implementation platform('com.google.firebase:firebase-bom:26.4.0')
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-
+    // implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }

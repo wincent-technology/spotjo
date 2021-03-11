@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,11 +11,19 @@ import {
   ImageBackground,
   Text,
   Image,
-  View,
+  View,ScrollView,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -30,15 +40,29 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHead} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHead
+} from '../Component/ViewManager.js';
+import CreateJobIndexButton from '../Component/CreateJobIndexButton'
 import ItemMV from '../src/ItemMV';
 import DeviceInfo from 'react-native-device-info';
 import JobBasicType from './JobBasicType';
 import JobPreference from './JobPreference';
 import JobTaskDescription from './JobTaskDescription';
+import JobTaskRequirement from './JobTaskRequirement';
 import JobHiddenCritearia from './JobHiddenCritearia';
+import CompanyEditEducation from './CompanyEditEducation';
+import CompanyAddSalary from './CompanyAddSalary';
+import CompanyAddSkillJob from './CompanyAddSkilJob';
+import CompanyAddLanguage from './CompanyAddLanguage';
+
+
 import PreviewJob from './PreviewJob';
 import Swiper from 'react-native-swiper';
 import http from '../api';
@@ -70,7 +94,9 @@ class CreateJob extends PureComponent {
     this.props.navigation.navigate('AdminDashboard');
   };
   next = () => {
-    if (this.state.index < 4) this.refs.swiper.scrollBy(1);
+    if (this.state.index < 8) {this.refs.swiper.scrollBy(1);
+      this.state.index == 3 && this.myScroll.scrollTo({ x: wp(100), animated: true });
+    }
   };
   callApi = () => {
     try {
@@ -145,17 +171,20 @@ class CreateJob extends PureComponent {
     this.callPostedJob();
   }
   render() {
-    const {index} = this.state;
+    const {
+      index
+    } = this.state;
     return (
       <View style={styles.backGround}>
         <StatusBar hidden={true} />
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHead
             centerComponent={
-              this.state.index != 4 ? 'Create Job' : 'Preview Job'
+              this.state.index != 8 ? 'Create Job' : 'Preview Job'
             }
             rightComponent="Exit"
             onPress={() => this.Back()}
@@ -163,15 +192,16 @@ class CreateJob extends PureComponent {
           />
           <View
             style={{
-              height: hp(100) - hp(5),
-              width: wp(96),
-              marginHorizontal: wp(2),
-              top: hp(4),
+              // height: hp(100) - hp(5),
+              height:hp(100)-100 ,
+              // width: wp(96),
+              marginHorizontal: wp(2)
+              // top: hp(4),
             }}>
             <Swiper
               // showsButtons={true}
               ref={'swiper'}
-              dotColor={themeWhite}
+              dotColor={themeColor}
               index={index}
               onIndexChanged={(index) =>
                 this.setState({
@@ -179,8 +209,8 @@ class CreateJob extends PureComponent {
                 })
               }
               paginationStyle={{
-                top: hp(-95),
-                position: 'absolute',
+                top: hp(-90)+50
+                // position: 'absolute',
               }}>
               <View>
                 <JobBasicType />
@@ -192,7 +222,19 @@ class CreateJob extends PureComponent {
                 <JobTaskDescription />
               </View>
               <View>
-                <JobHiddenCritearia />
+              <JobTaskRequirement/>
+              </View>
+              <View>
+                <CompanyAddSkillJob />
+              </View>
+              <View>
+                <CompanyAddSalary />
+              </View>
+              <View>
+                <CompanyEditEducation />
+              </View>
+              <View>
+                <CompanyAddLanguage />
               </View>
               <View>
                 <PreviewJob />
@@ -202,7 +244,9 @@ class CreateJob extends PureComponent {
               style={{
                 flexDirection: 'row',
                 width: wp(100),
-                top: hp(76) - hp(5),
+                justifyContent:"space-between",
+                // top: hp(76) - hp(5),
+                bottom:70,
                 position: 'absolute',
                 zIndex: 999,
               }}>
@@ -220,44 +264,40 @@ class CreateJob extends PureComponent {
                   <View style={styles.Size}>
                     <Text
                       style={[
-                        {
-                          fontSize: scale(18),
-                        },
                         styles.FontSty,
+
+                        {
+                          fontSize: scale(22),
+                          color:themeColor
+                        }
                       ]}>
-                      {this.state.index == 4 ? '' : <Text>Back</Text>}
+                      {this.state.index == 8 ? '' : <Text>Back</Text>}
                     </Text>
                   </View>
                 </TouchableOpacity>
               </View>
               <View
                 style={{
-                  alignItems: 'flex-end',
+                  alignItems: 'center',
                   // right: wp(7),
-                  width: wp(55),
+                  width: wp(20),
+                  marginRight: wp(10),
                 }}>
                 <TouchableOpacity
-                  style={styles.Size}
                   onPress={this.next}
                   hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}>
-                  <View
-                    style={[
-                      styles.Size,
-                      {
-                        alignItems: 'flex-end',
-                      },
-                    ]}>
+                  <View>
                     <Text
-                      style={[
+                      style={[styles.FontSty,
                         {
-                          fontSize: scale(18),
-                        },
-                        styles.FontSty,
+                          fontSize: scale(22),
+                          color:themeColor
+                        }
                       ]}
                       numberOfLines={1}>
-                      {this.state.index == 3 ? (
+                      {this.state.index == 7? (
                         <Text numberOfLines={1}>Preview</Text>
-                      ) : this.state.index == 4 ? (
+                      ) : this.state.index == 8 ? (
                         ''
                       ) : (
                         <Text>Next</Text>
@@ -269,191 +309,36 @@ class CreateJob extends PureComponent {
             </View>
           </View>
           <View>
-            <View
-              style={{
-                bottom: 47,
-                height: 5,
-                width: '100%',
-                position: 'absolute',
-              }}>
-              <Image
-                source={TRANLINE}
-                style={styles.imageStyle}
-                resizeMode={'stretch'}
-              />
-            </View>
           </View>
           <View
             style={{
-              bottom: scale(50) + hp(6),
+              bottom: 40,
               height: hp(6),
-              width: wp(105),
-              left: wp(-2),
+              width: wp(100),elevation:20,backgroundColor:"white"
+              // left: wp(-2),
             }}>
-            <ImageBackground
-              source={rightWrongBack}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}>
-              {this.state.index != 4 ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    height: hp(6),
-                    width: wp(103),
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                  }}>
-                  <TouchableWithoutFeedback>
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        // width: wp(20)
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                            color: this.state.index == 0 ? themeColor : '#000',
-                            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
-                          }}>
-                          Type{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                          }}>
-                          {'>'}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          height: scale(1),
-                          marginTop: scale(1),
-                          width: 'auto',
-                          backgroundColor:
-                            this.state.index == 0 ? '#000' : '#fff',
-                        }}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback>
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        // width: wp(20)
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                            color: this.state.index == 1 ? themeColor : '#000',
-                            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
-                          }}>
-                          Preferences{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                          }}>
-                          {'>'}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          height: scale(1),
-                          marginTop: scale(1),
-                          width: 'auto',
-                          backgroundColor:
-                            this.state.index == 1 ? '#000' : '#fff',
-                        }}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback>
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        // width: wp(20)
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                            color: this.state.index == 2 ? themeColor : '#000',
-                            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
-                          }}>
-                          Description{' '}
-                        </Text>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                          }}>
-                          {'>'}
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          height: scale(1),
-                          marginTop: scale(1),
-                          width: 'auto',
-                          backgroundColor:
-                            this.state.index == 2 ? '#000' : '#fff',
-                        }}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback>
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        // width: wp(20)
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                        }}>
-                        <Text
-                          style={{
-                            fontSize: scale(16),
-                            fontWeight: 'bold',
-                            color: this.state.index == 3 ? themeColor : '#000',
-                            // textDecorationLine: this.state.index == 0 ? 'underline' : 'none'
-                          }}>
-                          Criteria
-                        </Text>
-                      </View>
-                      <View
-                        style={{
-                          height: scale(1),
-                          marginTop: scale(1),
-                          width: 'auto',
-                          backgroundColor:
-                            this.state.index == 3 ? '#000' : '#fff',
-                        }}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
+             
+              {this.state.index < 8 ? (
+                <ScrollView 
+                 horizontal={true} contentContainerStyle={{justifyContent:"center",alignItems:'center'}}
+                 ref={(ref) => {
+            this.myScroll = ref
+          }}>
+                <CreateJobIndexButton name='Type' index={this.state.index == 0 && this.state.index}/>
+                <CreateJobIndexButton name='Preferences' index={this.state.index == 1 && this.state.index}/>
+                <CreateJobIndexButton name='Description' index={this.state.index == 2 && this.state.index}/>
+                <CreateJobIndexButton name='Requirements' index={this.state.index == 3 && this.state.index}/>
+                <CreateJobIndexButton name='Skills' index={this.state.index == 4 && this.state.index}/>
+                <CreateJobIndexButton name='Salary' index={this.state.index == 5 && this.state.index}/>
+                <CreateJobIndexButton name='Education' index={this.state.index == 6 && this.state.index}/>
+                <CreateJobIndexButton name='Language' index={this.state.index == 7 && this.state.index}/>
+                <CreateJobIndexButton name='Preview' index={this.state.index == 8 && this.state.index}/>
+                </ScrollView>
               ) : (
                 <View
                   style={{
                     height: hp(6),
-                    width: wp(103),
+                    width: wp(100),
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
@@ -483,7 +368,6 @@ class CreateJob extends PureComponent {
                   </TouchableWithoutFeedback>
                 </View>
               )}
-            </ImageBackground>
           </View>
         </ImageBackground>
       </View>

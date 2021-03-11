@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +14,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -31,15 +42,21 @@ import {
   filter,
   url,
   Listed,
-  detailed,
-} from '../Constant/index';
+  detailed,FontBold
+} from '../Constant';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMV from '../src/ItemMV';
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
@@ -63,25 +80,7 @@ class JobSeekerlist extends PureComponent {
   Filter = () => {
     this.props.navigation.navigate('JobSeekerFilter');
   };
-  componentDidMount() {
-    try {
-      http.GET('api/appjob/get').then(
-        (res) => {
-          if (res['data']['status']) {
-            global.all = res['data']['result'];
-            this.setState({
-              userdata: res['data']['result'],
-            });
-          } else {
-            snack(res['data']['message']);
-          }
-        },
-        (err) => alert(JSON.stringify(err['message'])),
-      );
-    } catch (error) {
-      alert(error);
-    }
-  }
+  
   checking = () => {
     // console.log('hey - 159 map', global.all)
     // const {params} = this.props.navigation.state;
@@ -124,13 +123,13 @@ class JobSeekerlist extends PureComponent {
   };
   render() {
     console.warn('>>', DeviceInfo.hasNotch());
-
     return (
       <View style={styles.backGround}>
-        <StatusBar hidden={true} />
+        <StatusBar hidden={false} backgroundColor={themeWhite}/>
         <NavigationEvents onDidFocus={this.checking} />
         <ImageBackground
           style={styles.ImageBlue}
+          tintColor={themeWhite}
           source={Background}
           resizeMode={'stretch'}>
           <NavigationHeader
@@ -208,11 +207,11 @@ class JobSeekerlist extends PureComponent {
               </TouchableWithoutFeedback>
             </View>
           </View>
-
+          {this.state.userdata != '' ? ( 
           <FlatList
             style={{
               marginTop: 4,
-              marginBottom: 50,
+              marginBottom: 47,
               backgroundColor: 'transparent',
             }}
             data={this.state.userdata}
@@ -236,13 +235,25 @@ class JobSeekerlist extends PureComponent {
             })}
             keyExtractor={(item, index) => index + ''}
           />
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
+          ) : (
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flex: 1,
+              }}>
+              <Text
+                style={{
+                  textAlign: 'center',
+                  fontFamily: FontBold,
+                  color: themeColor,
+                  fontSize: scale(18),
+                  width: wp(60),
+                }}>
+                No Data found 😞
+              </Text>
+            </View>
+          )}
         </ImageBackground>
       </View>
     );

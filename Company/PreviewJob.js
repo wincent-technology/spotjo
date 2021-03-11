@@ -1,14 +1,49 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StatusBar, ImageBackground, FlatList, Text, Image, View, ScrollView } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    StatusBar,
+    ImageBackground,
+    FlatList,
+    Text,
+    Image,
+    View,
+    ScrollView
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style'
-import { left, leftVid } from '../src/IconManager';
-import { scale } from '../src/Util'
-import { themeColor, themeWhite, TRANLINE, rightWrongBack, Companyavtar } from '../Constant/index'
-import { Rating, NavigationHeader } from '../Component/ViewManager'
+import {
+    left,
+    leftVid
+} from '../src/IconManager';
+import {
+    scale
+} from '../src/Util'
+import {
+    themeColor,
+    themeWhite,
+    TRANLINE,
+    rightWrongBack,
+    Companyavtar
+} from '../Constant/index'
+import {
+    Rating,
+    NavigationHeader
+} from '../Component/ViewManager'
 import CustomButton from '../Component/Button'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
-import { FontBold, FontRegular, Background, darkract } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
+import {
+    FontBold,
+    FontRegular,
+    Background,
+    darkract
+} from '../Constant/index'
 var m = ''
 class PreviewJob extends Component {
     constructor(props) {
@@ -40,18 +75,21 @@ class PreviewJob extends Component {
     // }
 
     render() {
-        const {Hourly, Monthly, Yearly} = this.state
+        const {
+            Hourly,
+            Monthly,
+            Yearly
+        } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
-            <ImageBackground style={styles.ImageBlue}
-            source={Background}
-            resizeMode={'stretch'}>
-                <StatusBar hidden={true} />
-                    <ImageBackground style={{
+           
+            <StatusBar hidden={false} backgroundColor={themeWhite} />
+                    <View style={{
                 width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(5)),
+                height: hp('100%') - 100,
+                marginTop:scale(5)
             // marginHorizontal: wp(2),
-            }} source={require('../Img/ract.png')} resizeMode={'stretch'}>
+            }}>
             <View style={{
                 alignItems: "center",
                 top: hp(1)
@@ -78,11 +116,11 @@ class PreviewJob extends Component {
             resizeMode={'stretch'}
             /></View>
           <View style={{
-                width: '90%',
+                width: '96%',
                 top: hp(2),
-                height: hp('50%'),
+                height: hp('60%'),
                 backgroundColor: themeWhite,
-                marginHorizontal: wp('5%'),
+                marginHorizontal: wp(2),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
             // elevation: 7,
@@ -268,15 +306,10 @@ class PreviewJob extends Component {
                 alignItems: "center"
             }}/>
 
-            </View></ImageBackground>
+            </View></View>
             
-            <View style={styles.TranLingImage}>
-             <Image
-            source={TRANLINE}
-            style={styles.imageStyle}
-            resizeMode={'stretch'}
-            /></View>
-                </ImageBackground></SafeAreaView>
+          
+                </SafeAreaView>
         )
     }
 }

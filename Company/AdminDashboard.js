@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +13,17 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -21,16 +31,21 @@ import {
   sort,
   filter,
   TRANLINE,
-  overlayimage,
+  overlayimage,Fulls,createJ
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale} from '../src/Util';
+import {
+  scale
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHead} from '../Component/ViewManager.js';
-import ItemMV from '../src/ItemMV';
+import {
+  Rating,
+  NavigationHead
+} from '../Component/ViewManager.js';
+// import ItemMV from '../src/ItemMV';
 import DeviceInfo from 'react-native-device-info';
 import JobListCompany from './JobListCompany';
 import JobMatches from './JobMatches';
@@ -87,7 +102,11 @@ class AdminDashboard extends PureComponent {
     });
   };
   renderPage = () => {
-    const {flagPosted, flagInterView, flagMatches} = this.state;
+    const {
+      flagPosted,
+      flagInterView,
+      flagMatches
+    } = this.state;
     if (flagPosted) return <PostedJobList />;
     else if (flagInterView) return <JobListCompany />;
     else if (flagMatches) return <JobMatches />;
@@ -95,9 +114,10 @@ class AdminDashboard extends PureComponent {
   render() {
     return (
       <View style={styles.backGround}>
-        <StatusBar hidden={true} />
+          <StatusBar hidden={false} backgroundColor={themeWhite} />
         <ImageBackground
           style={styles.ImageBlue}
+          tintColor={themeWhite}
           source={Background}
           resizeMode={'stretch'}>
           <NavigationHead
@@ -211,51 +231,34 @@ class AdminDashboard extends PureComponent {
           </View>
           <View
             style={{
-              height: hp(100.6) - (wp(100) / 3 + scale(80)),
+              height: hp(100.6) - (wp(100) / 3 + scale(80) + StatusBar.currentHeight),
             }}>
             {this.renderPage()}
           </View>
           {this.state.flagPosted && (
             <View
               style={{
-                bottom: scale(30),
+                bottom: scale(60),
                 position: 'absolute',
+                right:10
               }}>
               <TouchableWithoutFeedback onPress={this.createJob}>
                 <View
                   style={{
-                    marginHorizontal: wp(2),
-                    borderRadius: wp(15),
-                  }}>
-                  <ImageBackground
-                    source={require('../Img/create-job.png')}
-                    style={{
-                      height: scale(60),
-                      width: wp(96),
-                      justifyContent: 'center',
+                    height:60,width:60,borderRadius:30,backgroundColor:themeColor,justifyContent: 'center',
                       alignItems: 'center',
+                  }}>
+                  <Image
+                    source={createJ}
+                    style={{
+                      height:60,width:60,borderRadius:30,
+                      
                     }}
-                    resizeMode={'stretch'}>
-                    <Text
-                      style={{
-                        color: themeWhite,
-                        fontSize: scale(20),
-                        fontFamily: 'Roboto-Bold',
-                      }}>
-                      Create Job
-                    </Text>
-                  </ImageBackground>
+                    resizeMode={'cover'} />
                 </View>
               </TouchableWithoutFeedback>
             </View>
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </View>
     );

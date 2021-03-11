@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,12 +15,25 @@ import {
   ActivityIndicator,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents,
+  ThemeColors
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import ListShow from '../Component/ListShow'
+
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
+  company,icons_jobType_blue,skillCategory,workExp,placeIcon,icons_salerytype,
   homeic,
   place,
   screen,
@@ -34,22 +49,29 @@ import {
   TRANLINE,
   Companyavtar,
   FontBold,
-  Listed,
-  detailed,
+  Listed,web,
+  detailed,backgroundCorner,WhiteVideo,blanks,Fulls,facebook,linkedin,whatsapp
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  StarRating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import DoubleTap from '../Component/DoubleTap';
 // import ItemMV from './ItemMV'
 import Swipers from 'react-native-swiper';
 import BasicInfoOfCompany from './BasicInfoOfCompany';
 import JobDescription from './JobDescription';
 import JobAboutCompany from './JobAboutCompany';
+import JobLocation from './JobLocation'
 import Swiper from 'react-native-deck-swiper';
 import http from '../api';
 import Share from 'react-native-share';
@@ -68,10 +90,13 @@ class JobCompanyProfile extends Component {
 
   checking = () => {
     console.log('hey');
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const item = params ? params.item : null;
-    console.log('other item', item);
+    console.log('other item', item,global.all);
     global.item = item;
+
     this.setState({
       data: global.all,
       id: params.index,
@@ -171,6 +196,7 @@ class JobCompanyProfile extends Component {
         snack(error);
       }
     } else if (type == 'right') {
+      // console.log('global.Id ',global.Id,global.all[index].comapyId,global.all[index].id,global.all[index])
       try {
         http
           .POST('api/apply/job', {
@@ -181,7 +207,7 @@ class JobCompanyProfile extends Component {
           .then(
             async (res) => {
               if (res['data']['status']) {
-                console.log('rrrrrrrrr>>>>>><<<<<<<<<<', res['data']['result']);
+                console.log('rrrrrrrrr>>>>>><<<<<<<<<<', res['data']);
               } else {
                 snack(res['data']['message']);
               }
@@ -220,139 +246,162 @@ class JobCompanyProfile extends Component {
             }}
             source={require('../Img/ract.png')}
             resizeMode={'stretch'}>
-            <View style={styles.CompanyProfileImageSize}>
-              <Image
-                source={
-                  data.logo
+            <View style={{
+                top: hp(4),
+                marginHorizontal: wp(7)
+            }}><Text style={{
+                color: '#333',
+                fontSize: scale(23),
+                fontFamily: "Roboto-Bold"
+            }}>{data.title}</Text></View>
+                    <View style={{
+                flexDirection: "row",
+                alignItems: "flex-start",
+            }}>
+   <ImageBackground style={{
+                marginTop: hp(4.5),
+                marginLeft: wp(7),
+                width: wp(32),
+                height: wp(32),
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 5
+            }}
+            source={backgroundCorner}><Image 
+            source={data.logo
                     ? {
                         uri: url + 'images/company/' + data.logo,
                       }
                     : Companyavtar
-                }
-                style={styles.imageStyle}
-                resizeMode={'stretch'}
-              />
+                          }
+            style={{
+                height: wp('29'),
+                width: wp('29'),
+            // alignItems: "stretch",
+            // backgroundColor: "transparent"
+            }} resizeMode={'contain'}/></ImageBackground>
+            <View style={{
+                flexDirection: "column",
+                height: wp(32),
+                width: wp(50),justifyContent:"center",alignItems:"center",
+                marginTop: hp(3),marginHorizontal:wp(2),
+            }}>
+            <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
+                vid: url + '/images/company/' + data.video
+            })}><View style={{
+                flexDirection: "column",
+                // height: hp(9),
+                width: wp(26),
+                alignItems: "center",
+                justifyContent: "center"
+            }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
+                height: scale(65),
+                width: scale(65),
+            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                color: themeColor,
+                fontFamily: "Roboto-Regular",
+                fontSize: scale(10)
+            }}>Company Profile</Text></View>
+            </View></TouchableWithoutFeedback>
+            <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
+            <View style={{marginTop:scale(5)}}>
+            <StarRating
+            emptyStar={blanks}
+            starStyle={{marginLeft:5}}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(15)}
+            rating={3}
+            // selectedStar={(rating) => this.handleLanguage(rating, index)}
+            fullStarColor={'orange'}
+            /></View>
             </View>
-            <View style={styles.CompanyProfileSecongImage}>
-              <Image
-                source={
-                  data.logo
-                    ? {
-                        uri: url + 'images/company/' + data.logo,
-                      }
-                    : Companyavtar
-                }
-                style={styles.imageStyle}
-                resizeMode={'stretch'}
-              />
+            </View>
+            <View style={{
+                marginLeft: wp(7),
+                marginTop: hp(1),
+                height: hp(3),
+                width: wp(32),
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: 'row'
+            }}><Image source={facebook} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/><Image source={linkedin} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25),
+                marginHorizontal: wp(1)
+            }}/><Image source={whatsapp} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/>
             </View>
             <View style={styles.CompanyProfileDetail}>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={homeic}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.name}</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={user}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>
-                  {data.isEmployed ? (
-                    <Text>Employed</Text>
-                  ) : (
-                    <Text>Fresher</Text>
-                  )}
-                </Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={screen}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.title}</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={edit}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text
-                  style={{
-                    marginLeft: scale(10),
-                    marginTop: scale(-2),
-                  }}>
-                  {data != '' &&
-                    data.skills.map((item, index) => {
+            <ListShow name={data.name} image={company} />
+                    <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
+                    <ListShow name={data.title} image={skillCategory} />
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={workExp}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {data.minExp != '' && data.minExp != null
+                  ? data.minExp
+                  : 0 } 
+                 -{ data.maxExp != '' && data.maxExp != null
+                  ? data.maxExp
+                  : 0 }
+                {' '}Years /{' '}
+                        </Text>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          100%
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={placeIcon}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {data != null || data && data.city.map((item, index) => {
                       return (
                         <Text key={index} style={styles.ItemDetailLabel1}>
-                          {item.name} /
+                          {item} /
                         </Text>
                       );
-                    })}
-                </Text>
-                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={bag}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>
-                  {data.minExp} - {data.maxExp} Years /
-                </Text>
-                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={place}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.city} /</Text>
-                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={dollor}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>
-                  {data.salMin}-{data.salMax},000$
-                </Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={earth}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.website}</Text>
-              </View>
+                    })}</Text>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          {' '}
+                          100%
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={icons_salerytype}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                          {data.salMin} - {data.salMax},000$
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                    <ListShow name={data.website} image={web} />
             </View>
           </ImageBackground>
         </DoubleTap>
@@ -360,13 +409,20 @@ class JobCompanyProfile extends Component {
     );
   };
   render() {
-    const {data, id, changedindex} = this.state;
+    const {
+      data,
+      id,
+      changedindex
+    } = this.state;
+    console.log('data>>>>>>>>>>',data)
     return data != '' ? (
       <SafeAreaView style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
+          <StatusBar hidden={false} backgroundColor={themeColor} />
         <ImageBackground
           style={({overflow: 'hidden'}, [styles.ImageBlue])}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHeader onPress={() => this.Back()} text={data.title} />
           <Swipers
@@ -475,7 +531,7 @@ class JobCompanyProfile extends Component {
                     backgroundColor={'transparent'}
                     cardHorizontalMargin={0}
                     cardVerticalMargin={0}
-                    onSwiped={() => this.onSwiped('general')}
+                    onSwiped={(g) => this.onSwiped('general',g)}
                     onSwipedLeft={(index) => this.onSwiped('left', index)}
                     onSwipedRight={(index) => this.onSwiped('right', index)}
                     onSwipedTop={(index) => this.onSwiped('top', index)}
@@ -595,17 +651,9 @@ class JobCompanyProfile extends Component {
               <JobDescription />
             </View>
             <View>
-              <JobAboutCompany />
+              <JobLocation />
             </View>
           </Swipers>
-
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </SafeAreaView>
     ) : (
@@ -618,17 +666,11 @@ class JobCompanyProfile extends Component {
               alignItems: 'center',
             },
           ]}
+          tintColor={themeWhite}
           source={Background}
           resizeMode={'stretch'}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size="large" color= {themeColor} />
           <NavigationEvents onDidFocus={this.checking} />
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </SafeAreaView>
     );

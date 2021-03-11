@@ -4,6 +4,8 @@ import { themeColor, themeWhite } from '../Constant/index'
 import { View } from 'react-native'
 import { scale } from '../src/Util'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
+import { play,library } from '../src/IconManager'
+import { TouchableOpacity } from 'react-native-gesture-handler'
 
 
 export default CustomInput = (props) => <Input
@@ -35,7 +37,7 @@ export default CustomInput = (props) => <Input
     underlineColorAndroid = {'transparent'}
     multiline = {props.multiline}
     secureTextEntry = {
-    props.secureTextEntry
+    props.pass
     }
     onChangeText = {
     (text) => props.textChange(text)
@@ -57,4 +59,19 @@ export default CustomInput = (props) => <Input
     }
     } { ...props
     }
+    rightIcon = {
+    <View style={{
+        marginRight: props.pass  ? 0 : 0,
+    }}>
+     {props.passs && <View onStartShouldSetResponder={props.onPress}>
+                {library(props.pass ? 'visibility-off' :'visibility',20,'#fff')}</View>
+    }
+    </View>
+    }
+    rightIconContainerStyle = {[
+        {
+            padding: 0
+        }, props.rightIconContainerStyle]
+    }
+    { ...props}
     />

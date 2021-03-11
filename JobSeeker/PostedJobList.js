@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +13,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -29,9 +40,15 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMV from '../src/ItemMV';
 import DeviceInfo from 'react-native-device-info';
 import http from '../api';
@@ -59,15 +76,24 @@ class PostedJobList extends PureComponent {
   };
 
   push = (item, index) => {
+    if (item.jsstatus == null){
+      global.all = this.state.dataitem;
+
+      this.props.navigation.navigate('JobCompanyProfile', {
+        item: item,
+        index: index,
+      });
+    }
     if (item.jsstatus == 'Save') {
-      global.all = this.state.Expired;
+      global.all = this.state.dataitem;
 
       this.props.navigation.navigate('JobCompanyProfile', {
         item: item,
         index: index,
       });
     } else {
-      global.all = this.state.Active;
+      global.all = this.state.dataitem;
+      console.log('this.state.active',this.state.Active);
       this.props.navigation.navigate('JobCompanyProfile', {
         item: item,
         index: index,
@@ -146,58 +172,58 @@ class PostedJobList extends PureComponent {
     try {
       this._isMounted &&
         http
-          .POST('api/appjobseeker/get', {
-            userId: global.Id,
-          })
-          .then(
-            (res) => {
-              if (res['data']['status']) {
-                this.setState({
-                  dataitem: res['data']['result'],
-                  Published: res['data']['result'],
-                  pub: !this.state.pub,
-                  act: false,
-                  exp: false,
-                });
-              } else {
-                snack(res['data']['message']);
-              }
-            },
-            (err) => alert(JSON.stringify(err)),
-          );
+        .POST('api/appjobseeker/get', {
+          userId: global.Id,
+        })
+        .then(
+          (res) => {
+            if (res['data']['status']) {
+              this.setState({
+                dataitem: res['data']['result'],
+                Published: res['data']['result'],
+                pub: !this.state.pub,
+                act: false,
+                exp: false,
+              });
+            } else {
+              snack(res['data']['message']);
+            }
+          },
+          (err) => alert(JSON.stringify(err)),
+        );
     } catch (error) {
       snack(error);
     }
     try {
       this._isMounted &&
         http
-          .POST('api/jobseekerint/get', {
-            userId: global.Id,
-          })
-          .then(
-            (res) => {
-              console.log('res', res['data']['result']);
-              if (res['data']['status']) {
-                // console.log('146', res['data']['result']);
-                for (let i in res['data']['result']) {
-                  if (res['data']['result'][i]['jsstatus'] == 'Save') {
-                    Interested.push(res['data']['result'][i]);
-                  } else {
-                    Not.push(res['data']['result'][i]);
-                  }
+        .POST('api/jobseekerint/get', {
+          userId: global.Id,
+        })
+        .then(
+          (res) => {
+            console.log('res', res['data']['result']);
+            if (res['data']['status']) {
+              // console.log('146', res['data']['result']);
+              for (let i in res['data']['result']) {
+                if (res['data']['result'][i]['jsstatus'] == 'Save') {
+                  Interested.push(res['data']['result'][i]);
+                } else {
+                  Not.push(res['data']['result'][i]);
                 }
-                this.setState({
-                  Active: Not,
-                  Expired: Interested,
-                });
-                // this.props.navigation.navigate('AdminDashboard');
-                // this.postedJob(res['data']['result']);
-              } else {
-                snack(res['data']['message']);
               }
-            },
-            (err) => alert(JSON.stringify(err)),
-          );
+              this.setState({
+                Active: Not,
+                Expired: Interested,
+              });
+              // this.props.navigation.navigate('AdminDashboard');
+              // this.postedJob(res['data']['result']);
+            } else {
+              snack(res['data']['message']);
+            }
+          },
+          (err) => alert(JSON.stringify(err)),
+        );
     } catch (error) {
       snack(error);
     }
@@ -217,7 +243,7 @@ class PostedJobList extends PureComponent {
   render() {
     return (
       <View>
-        <StatusBar hidden={true} />
+        <StatusBar hidden={false} backgroundColor={themeColor} />
         <NavigationEvents onDidFocus={this.checking} />
         <View
           style={{
@@ -368,7 +394,7 @@ class PostedJobList extends PureComponent {
           <FlatList
             style={{
               marginTop: 4,
-              marginBottom: 50 + scale(35),
+              marginBottom: 47 + scale(35),
               backgroundColor: 'transparent',
             }}
             data={this.state.dataitem}

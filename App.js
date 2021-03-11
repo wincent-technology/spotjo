@@ -6,10 +6,12 @@
  * @flow strict-local
  */
 // if (__DEV__) {
-//     console.log = () => {};
+//   console.log = () => {};
 // }
 
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -61,7 +63,7 @@ global.UserEmail = '';
 global.UserMobile = '';
 global.UserProfile = '';
 global.UserSkill = '';
-global.UserEducation = '';
+global.UserEducation = [];
 global.UserLanguage = '';
 global.Qualification = '';
 global.CompanyExp = '';
@@ -74,6 +76,8 @@ global.maxYear;
 global.Service;
 global.role;
 global.item;
+global.Job_Location = [];
+global.msgUnreadTotal=0
 
 export default class App extends Component {
   constructor(props) {

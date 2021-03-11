@@ -41,13 +41,20 @@ class EmailSend extends Component {
                 http.POST('api/company/forgotpass', {
                     email: name,
                 }).then((res) => {
+                    console.log('res>>',res['data']['message'])
                     if (res['data']['status']) {
-                        alert('please kindly check your mail')
-                        this.props.navigation.navigate('ForgatPass')
+                        let b = 'You have signed up with social account!'
+                        if (res['data']['message'] === b)
+                        {alert(res['data']['message'])
+                        this.props.navigation.navigate('CompanyLogin')
+                    }
+                        else{
+                            alert('please kindly check your email to reset password')
+                        this.props.navigation.navigate('LoginWithEmail')}
                     } else {
                         snack(res['data']['message'])
                     }
-                }, err => snack(err['message']))
+                }, err => console.log('e',err['message']))
             } else {
                 snack('Required Email Password')
 

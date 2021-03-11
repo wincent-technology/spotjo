@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -6,15 +8,27 @@ import {
   ScrollView,
   ImageBackground,
   TouchableWithoutFeedback,
+  TouchableOpacity,
   FlatList,
   Text,
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from './Style';
-import {left, library, icon, play, leftVid} from './IconManager';
-import {scale, snack} from './Util';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from './IconManager';
+import {
+  scale,
+  snack
+} from './Util';
 import {
   FontBold,
   iconSearch,
@@ -57,51 +71,53 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 // import Slider from 'react-native-range-slider'
 import Slider from 'rn-range-slider';
 
-var radio_props = [
-  {
-    label: '  By Distance',
-    value: 0,
-  },
-  {
-    label: '  By Location',
-    value: 1,
-  },
-];
+var radio_props = [{
+  label: '  By Distance',
+  value: 0,
+}, {
+  label: '  By Location',
+  value: 1,
+}, ];
 
 var mg = [];
 
 class Filter extends Component {
+
+  defaultState={
+    Hourly: true,
+    Monthly: false,
+    Yearly: false,
+    ByDistance: false,
+    ByLocation: false,
+    flag: true,
+    name: '',
+    company: '',
+    addSkill: [],
+    FullTime: false,
+    PartTime: false,
+    salary: 0,
+    salaryMax: 150000,
+    Employed: false,
+    Internship: false,
+    StudentJobs: false,
+    HelpingVacancies: false,
+    Freelancer: false,
+    dataCheck: [],
+    Trainee: false,
+    Novice: false,
+    Proficient: false,
+    Expert: false,
+    suggesion: [],
+    show: false,
+  }
+
   constructor(props) {
     super(props);
 
-    this.state = {
-      Hourly: true,
-      Monthly: false,
-      Yearly: false,
-      ByDistance: false,
-      ByLocation: false,
-      flag: true,
-      name: '',
-      company: '',
-      addSkill: [],
-      FullTime: false,
-      PartTime: false,
-      salary: 0,
-      salaryMax: 150000,
-      Employed: false,
-      Internship: false,
-      StudentJobs: false,
-      HelpingVacancies: false,
-      Freelancer: false,
-      dataCheck: [],
-      Trainee: false,
-      Novice: false,
-      Proficient: false,
-      Expert: false,
-      suggesion: [],
-      show: false,
-    };
+    this.state = this.defaultState;
     this.arrayholder = [];
+
+    this.slider = React.createRef();
   }
 
   save = () => {
@@ -136,11 +152,11 @@ class Filter extends Component {
           (res) => {
             console.log('ress', res['data']);
             if (res['data']['status']) {
-              console.log('nwe api >>>>>>', res['data']['result']);
+              console.log('nwe api >>>>>>', res['data']['result'].length);
               global.all = res['data']['result'];
-              this.props.navigation.navigate('TabScreen', {
-                otherParam: res['data']['result'],
-              });
+              // this.props.navigation.navigate('TabScreen', {
+              //   otherParam: res['data']['result'],
+              // });
               this.props.navigation.goBack();
             } else {
               snack('Data Not Found');
@@ -256,7 +272,10 @@ class Filter extends Component {
     }
   };
   suggestionTag = (elements, index) => {
-    const {suggesion, dataCheck} = this.state;
+    const {
+      suggesion,
+      dataCheck
+    } = this.state;
     let m = suggesion;
     for (let i in suggesion) {
       if (m[i] == elements) {
@@ -269,7 +288,9 @@ class Filter extends Component {
   };
   remove = (item, index) => {
     console.log(index, item);
-    const {addSkill} = this.state;
+    const {
+      addSkill
+    } = this.state;
     let m = addSkill;
     for (let i in m) {
       if (m[i].name == item) {
@@ -345,23 +366,17 @@ class Filter extends Component {
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
           style={styles.ImageBlue}
+          tintColor={'#fff'}
           source={Background}
           resizeMode={'stretch'}>
-          <StatusBar hidden={true} />
+          <StatusBar hidden={false} backgroundColor={themeWhite} />
           <NavigationHead
             centerComponent="Edit Filter"
             rightComponent="Exit"
             onPress={() => this.Back()}
-            onExit={() => this.Exit()}
           />
+          <View style={{borderBottomWidth:scale(1),borderColor:"rgba(169,169,169,0.8)",width:"100%",marginTop:5}}/>
           <View style={styles.FilterMainView}>
-            <ImageBackground
-              style={{
-                width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
-              }}
-              source={require('../Img/ract.png')}
-              resizeMode={'stretch'}>
               <ScrollView
                 style={styles.FilterScroll}
                 nestedScrollEnabled={true}>
@@ -402,6 +417,7 @@ class Filter extends Component {
                       min={0}
                       max={150000}
                       step={1}
+                      ref={this.slider}
                       selectionColor={themeColor}
                       blankColor="#B0b0b0"
                       labelBackgroundColor={themeColor}
@@ -431,6 +447,9 @@ class Filter extends Component {
                   contentVisible={false}
                   invisibleImage={IC_ARR_DOWN}
                   visibleImage={IC_ARR_UP}
+                  HeaderStyle={{ flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',}}
                   header={
                     <View style={styles.FilterDropDownInnerView}>
                       <View style={styles.fliterIcon}>
@@ -443,40 +462,46 @@ class Filter extends Component {
                       <Text style={styles.DropDownHeader}>Salary Type</Text>
                     </View>
                   }>
-                  <View style={styles.SalaryTypeView}>
-                    <CheckBox
-                      selected={Hourly}
-                      style={styles.CheckBoxLabel}
-                      textStyle={styles.CheckBoxLabelFont}
-                      onPress={() => {
+                  <View style={{
+                    flexDirection: 'row',
+                    marginBottom: scale(10),
+                    marginLeft:scale(10),
+                    alignItems:"center",
+                    flexWrap:"wrap"
+                    // paddingHorizontal:"5%"
+                  }}>
+                    <View style ={{flexDirection:"row",justifyContent:"space-between",height:40,width:"100%"}}>
+                      <TouchableOpacity  onPress={() => {
                         this.setState({
                           Hourly: !Hourly,
                         });
-                      }}
-                      text="Hourly"
-                    />
-                    <CheckBox
-                      selected={Monthly}
-                      textStyle={styles.CheckBoxLabelFont}
-                      style={styles.CheckBoxLabel}
-                      onPress={() => {
+                      }} style={{borderColor: Hourly ? themeColor : '#000', backgroundColor : Hourly ? themeColor : themeWhite ,width:"44%",justifyContent:"center",alignItems:"center",borderRadius:scale(30),borderWidth:1,paddingHorizontal:scale(10)}}>
+                        <Text style={[{color:Hourly ? 'white' : '#000'},styles.CheckBoxLabelFont]}>
+                          Hourly
+                        </Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => {
                         this.setState({
                           Monthly: !Monthly,
                         });
-                      }}
-                      text="Monthly"
-                    />
-                    <CheckBox
-                      selected={Yearly}
-                      textStyle={styles.CheckBoxLabelFont}
-                      style={styles.CheckBoxLabel}
-                      onPress={() => {
+                      }} style={{borderColor: Monthly ? themeColor : '#000', backgroundColor : Monthly ? themeColor : themeWhite, width:"44%",borderWidth:1,justifyContent:"center",alignItems:"center",borderRadius:scale(30),paddingHorizontal:scale(10),marginRight:"8%"}}>
+                        <Text style={[{color:Monthly ? 'white' : '#000'},styles.CheckBoxLabelFont]}>
+                          Monthly
+                        </Text>
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <View style ={{flexDirection:"row",justifyContent:"space-between",height:40,width:"100%",marginTop:scale(15)}}>
+                    <TouchableOpacity onPress={() => {
                         this.setState({
                           Yearly: !Yearly,
                         });
-                      }}
-                      text="Yearly"
-                    />
+                      }} style={{borderColor: Yearly ? themeColor : '#000', backgroundColor : Yearly ? themeColor : themeWhite ,width:"44%",borderWidth:1,justifyContent:"center",alignItems:"center",borderRadius:scale(30),paddingHorizontal:scale(10)}}>
+                        <Text style={[{color:Yearly ? 'white' : '#000'},styles.CheckBoxLabelFont]}>
+                          Yearly
+                        </Text>
+                      </TouchableOpacity>
+                      </View>
                   </View>
                 </DropDownItem>
                 <DropDownItem
@@ -1328,17 +1353,52 @@ class Filter extends Component {
                     />
                   </View>
                 </DropDownItem>
-                <View
-                  style={[
+              </ScrollView>
+            </View>
+            <View
+                  style={
                     {
-                      marginTop: scale(80),
-                    },
-                    styles.SaveFilterButton,
-                  ]}>
+                      bottom: scale(200),
+                      borderTopWidth:1,
+                      height:100,justifyContent: 'space-around',
+                    flexDirection:"row",
+                    alignItems: 'center',
+                      backgroundColor:"rgba(255,255,255,0.2)"
+                    }
+                  }>
                   <TouchableWithoutFeedback
                     style={[
                       {
-                        width: wp('80%'),
+                        width: wp('40%')
+                      },
+                      styles.SaveFilterButton,
+                    ]}
+                    onPress={()=> this.setState({
+                        ...this.defaultState
+                    },()=> {
+                      this.slider.current.setHighValue(150000)
+                      this.slider.current.setLowValue(0)
+                    })}>
+                    <View
+                      style={[
+                        styles.SaveFilterButtonView,
+                        styles.SaveFilterButton,
+                      ]}>
+                      <Text
+                        style={[
+                          {
+                            fontSize: scale(20),
+                          },
+                          styles.FontSty,
+                        ]}>
+                        Reset
+                      </Text>
+                    </View>
+                  </TouchableWithoutFeedback>
+                  <TouchableWithoutFeedback
+                    style={[
+                      {
+                        width: wp('40%'),
                       },
                       styles.SaveFilterButton,
                     ]}
@@ -1355,21 +1415,11 @@ class Filter extends Component {
                           },
                           styles.FontSty,
                         ]}>
-                        Save Filter
+                        Apply
                       </Text>
                     </View>
                   </TouchableWithoutFeedback>
                 </View>
-              </ScrollView>
-            </ImageBackground>
-          </View>
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </SafeAreaView>
     );

@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +13,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -29,9 +40,15 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMV from './ItemMV';
 import DeviceInfo from 'react-native-device-info';
 import http from '../api';
@@ -58,9 +75,9 @@ class PostedJobList extends PureComponent {
     this.props.navigation.navigate('Filter');
   };
 
-  push = (item,index) => {
+  push = (item, index) => {
     console.log('ji', item);
-     global.ig = this.state.dataitem;
+    global.ig = this.state.dataitem;
     // console.log('hi', global.ig);
 
     this.props.navigation.navigate('PostedJobUser', {
@@ -104,7 +121,6 @@ class PostedJobList extends PureComponent {
   // }
 
   componentDidMount() {
-    this._isMounted = true;
     this.checking();
   }
   Active = () => {
@@ -126,86 +142,91 @@ class PostedJobList extends PureComponent {
     });
   };
   Published = () => {
-    console.log('Published');
+    // let i = this.state.Published
+    let p = this.state.Published.sort((a, b) => {
+      return new Date(a.createdAt) < new Date(b.createdAt)
+    })
+    console.log('Published,>>>>>>>>>>>>>>>>>>>>>>>', p);
     this.setState({
       pub: true,
       act: false,
       exp: false,
-      dataitem: this.state.Published,
+      dataitem: p,
     });
   };
   checking = () => {
     this._isMounted = true;
+    console.log('global.ig', global.ig);
     try {
       this._isMounted &&
         http
-          .POST('api/applogcom/job', {
-            companyId: global.Id,
-          })
-          .then(
-            (res) => {
-              if (res['data']['status']) {
-                this.setState({
-                  dataitem: res['data']['result'],
-                  Published: res['data']['result'],
-                  pub: true,
-                });
-                // this.props.navigation.navigate('AdminDashboard');
-                // this.postedJob(res['data']['result']);
-              } else {
-                snack(res['data']['message']);
-              }
-            },
-            (err) => alert(JSON.stringify(err)),
-          );
+        .POST('api/applogcom/job', {
+          companyId: global.Id,
+        })
+        .then(
+          (res) => {
+            if (res['data']['status']) {
+              this.setState({
+                dataitem: res['data']['result'],
+                Published: res['data']['result'],
+                pub: true,
+              });
+              // this.props.navigation.navigate('AdminDashboard');
+              // this.postedJob(res['data']['result']);
+            } else {
+              snack(res['data']['message']);
+            }
+          },
+          (err) => alert(JSON.stringify(err)),
+        );
     } catch (error) {
       snack(error);
     }
     try {
       this._isMounted &&
         http
-          .POST('api/get/activeJob', {
-            companyId: global.Id,
-          })
-          .then(
-            (res) => {
-              if (res['data']['status']) {
-                // console.log('126', res['data']['result']);
-                this.setState({
-                  Active: res['data']['result'],
-                });
-                // this.props.navigation.navigate('AdminDashboard');
-                // this.postedJob(res['data']['result']);
-              } else {
-                snack(res['data']['message']);
-              }
-            },
-            (err) => alert(JSON.stringify(err)),
-          );
+        .POST('api/get/activeJob', {
+          companyId: global.Id,
+        })
+        .then(
+          (res) => {
+            if (res['data']['status']) {
+              // console.log('126', res['data']['result']);
+              this.setState({
+                Active: res['data']['result'],
+              });
+              // this.props.navigation.navigate('AdminDashboard');
+              // this.postedJob(res['data']['result']);
+            } else {
+              snack(res['data']['message']);
+            }
+          },
+          (err) => alert(JSON.stringify(err)),
+        );
     } catch (error) {
       snack(error);
     }
     try {
       this._isMounted &&
         http
-          .POST('api/get/expireJob', {
-            companyId: global.Id,
-          })
-          .then(
-            (res) => {
-              if (res['data']['status']) {
-                // console.log('146', res['data']['result']);
-                this.setState({
-                  Expired: res['data']['result'],
-                });
-                // this.props.navigation.navigate('AdminDashboard');
-                // this.postedJob(res['data']['result']);
-              } else {
-                snack(res['data']['message']);
-              }
-            },
-            (err) => alert(JSON.stringify(err)),
-          );
+        .POST('api/get/expireJob', {
+          companyId: global.Id,
+        })
+        .then(
+          (res) => {
+            if (res['data']['status']) {
+              // console.log('146', res['data']['result']);
+              this.setState({
+                Expired: res['data']['result'],
+              });
+              // this.props.navigation.navigate('AdminDashboard');
+              // this.postedJob(res['data']['result']);
+            } else {
+              snack(res['data']['message']);
+            }
+          },
+          (err) => alert(JSON.stringify(err)),
+        );
     } catch (error) {
       snack(error);
     }
@@ -225,7 +246,7 @@ class PostedJobList extends PureComponent {
   render() {
     return (
       <View>
-        <StatusBar hidden={true} />
+          <StatusBar hidden={false} backgroundColor={themeWhite} />
         <NavigationEvents onDidFocus={this.checking} />
         <View
           style={{
@@ -356,7 +377,7 @@ class PostedJobList extends PureComponent {
           <FlatList
             style={{
               marginTop: 4,
-              marginBottom: 50,
+              marginBottom: 40,
               backgroundColor: 'transparent',
             }}
             data={this.state.dataitem}
@@ -393,7 +414,7 @@ class PostedJobList extends PureComponent {
               style={{
                 textAlign: 'center',
                 fontFamily: FontBold,
-                color: themeWhite,
+                color: themeColor,
                 fontSize: scale(18),
                 width: wp(60),
               }}>

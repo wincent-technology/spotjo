@@ -1,4 +1,6 @@
-import React, {Component, useState} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StatusBar,
@@ -6,17 +8,33 @@ import {
   FlatList,
   Text,
   Image,
-  TextInput,
   View,
   ScrollView,
-  TouchableWithoutFeedback,
+  TextInput,
+  TouchableWithoutFeedback,TouchableOpacity
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, leftVid, play, library} from '../src/IconManager';
-import {scale, snack} from '../src/Util';
-import {themeColor, themeWhite, TRANLINE} from '../Constant/index';
-import {Rating, NavigationHead} from '../Component/ViewManager';
+import {
+  left,
+  leftVid
+} from '../src/IconManager';
+import {
+  scale,
+  snack
+} from '../src/Util';
+import {
+  themeColor,
+  themeWhite,
+  TRANLINE,
+  educationCap,
+} from '../Constant/index';
+import {
+  Rating,
+  NavigationHead
+} from '../Component/ViewManager';
 import CustomButton from '../Component/Button';
 import {
   widthPercentageToDP as wp,
@@ -29,13 +47,20 @@ import {
   interViewBack,
   cal,
   clock,
-  workExp,
+  education,expframe
 } from '../Constant/index';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import ItemMV from './ItemMV';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import http from '../api';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input';
+import EducationComponent from '../Component/EducationComponent';
+import EducationComponentUni from '../Component/EducationComponentUni';
+import EducationRate from '../Component/EducationRate'
+
+import SuggestionView from '../Component/SuggestionView'
 
 var monthNames = [
   'Jan',
@@ -51,7 +76,9 @@ var monthNames = [
   'Nov',
   'Dec',
 ];
-let numOfLinesCompany = 0;
+var mg = []
+
+
 class EditWorkExperience extends Component {
   constructor(props) {
     super(props);
@@ -59,33 +86,225 @@ class EditWorkExperience extends Component {
     this.state = {
       show: false,
       sum: [],
-      fromDate: 'From',
-      toDate: 'To',
+      edu:false,
+      fromDate: 'From Date',
+      toDate: 'To Date',
       Start_date: Date.now(),
       from: false,
       to: false,
       EduTitle: '',
       EduUni: '',
-      exp: '',
+      name: '',
+      uni:false,
+      uniVerityName:'',
+      rate:false,
+      rating:3,
+    Anywhere: false,
+    dataCheck: [],
+    dataCheckU: [],
+    suggesion: []
     };
+      this.arrayholder = [];
+      this.arrayholderU = [];
+
+
   }
 
-  static navigationOptions = ({navigation}) => ({
-    tabBarVisible: true,
-    animationEnabled: true,
-  });
   Back = () => {
     // console.log("hi");
     this.props.navigation.goBack();
   };
+
+  componentDidMount() {
+    console.log(">>>",global.UserEducation);
+    this.setState({
+      sum: global.Experience,
+    });
+
+
+    // let data = []
+    // try {
+    //     http.GET('api/webuser/degree/get').then((res) => {
+    //         if (res['data']['status']) {
+    //             // console.log('data>>>', res['data']['result'])
+    //             this.setState({
+    //                 dataCheck: res['data']['result'],
+    //             });
+    //             this.arrayholder = res['data']['result'];
+    //             //            //will get data in this    res['data']['result']
+    //         } else {
+    //             snack(res['data']['message'])
+    //         }
+    //     }, err => snack(err['message']));
+    // } catch (error) {
+    //     snack(error)
+
+    // }
+  
+  }
+
+  AddUni = () => {
+    // try {
+  //     http.GET('api/webuser/unicol/get').then((res) => {
+  //         if (res['data']['status']) {
+  //             // console.log('data>>>', res['data']['result'])
+  //             this.setState({
+  //                 dataCheckU: res['data']['result'],
+  //             });
+  //             this.arrayholderU = res['data']['result'];
+  //             //            //will get data in this    res['data']['result']
+  //         } else {
+  //             snack(res['data']['message'])
+  //         }
+  //     }, err => snack(err['message']));
+  // } catch (error) {
+  //     snack(error)
+
+  // }
+
+  }
+
+
+
+choose = (choose) => {
+    // console.log('choose')
+    // mg.push(choose)
+    // mg = [...new Set(mg)]
+    // console.log('sfdsff', mg)
+    // let mni = []
+    // for (let i in mg) {
+    //     if (mg[i] != choose || mg[i] != '')
+    //         mni.push(mg[i])
+    // }
+    // this.state.edu && this.setState({
+    //     suggesion: mni,
+    //     name:  choose,
+    //     EduTitle:choose,
+    //     show: !this.state.show
+    // })
+    // this.state.uni && this.setState({
+    //   suggesion: mni,
+    //   uniVerityName: choose,
+    //   show: !this.state.show
+    // })
+    // console.log('this.state>>>>>>>>>>>>>',this.state.EduTitle,)
+    // console.log('this.state>>>>>>>>>>>>>',choose)
+    // console.log('this.state>>>>>>>>>>>>>',this.state.name)
+
+}
+cheks = (text) => {
+  // console.log('text')
+    var data = []
+    const newData = this.arrayholder.filter(item => {
+      // console.log('item',item)
+        const itemData = item != null && `${item.english.toUpperCase()}   
+                ${item.english.toUpperCase()} ${item.english.toUpperCase()}`;
+        const textData = text.toUpperCase();
+        // console.log('itemdata', itemData)
+        return itemData != null && itemData.toString().indexOf(textData) > -1;
+    });
+    for (let i in newData) {
+        data.push({
+            'name': newData[i],
+            'backGround': 'white'
+        })
+    }
+    if (newData != '') {
+        this.setState({
+            dataCheck: newData,
+            name: text,
+            EduTitle:text
+
+        })
+    } else {
+        newData.push(text)
+        this.setState({
+            dataCheck: newData,
+            name: text,
+            EduTitle:text
+
+        })
+    }
+}
+
+Unis = (text) => {
+  console.log('text')
+    var data = []
+    const newData = this.arrayholderU.filter(item => {
+      // console.log('item',item);
+        const itemData = item != null && item != '' ? `${item.english}` : `${item}`
+        const textData = text.toUpperCase();
+        // console.log('itemdata', itemData)
+        return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
+    });
+    for (let i in newData) {
+        data.push({
+            'name': newData[i],
+            'backGround': 'white'
+        })
+    }
+    if (newData != '') {
+        this.setState({
+            dataCheckU: newData,
+            uniVerityName: text
+        })
+    } else {
+        newData.push(text)
+        this.setState({
+            dataCheckU: newData,
+            uniVerityName: text
+
+        })
+    }
+}
+
+renderItem = (item, index) => {
+    // return (
+    //     <View style={{
+    //         width: wp(80),
+    //         marginLeft: scale(34),
+    //     }}>
+    //     <TouchableWithoutFeedback onPress={() => this.choose(item.english)}>
+    //     <View style={{
+    //         flexDirection: 'row',
+    //         alignItems: "center"
+    //     }}>
+    //     <View style={{
+    //         alignItems: "flex-start",
+    //         width: wp(68)
+    //     }}><Text style={{
+    //         fontWeight: "bold",
+    //         fontSize: scale(18),
+    //         color: themeColor
+    //     }}>{item.english}</Text></View>
+    //     </View>
+    //     </TouchableWithoutFeedback>
+    //     </View>
+    // )
+}
+suggestionTag = (elements, index) => {
+    const {
+        suggesion,
+        dataCheck
+    } = this.state;
+    let m = suggesion
+    for (let i in suggesion) {
+        if (m[i] == elements) {
+            m.splice(i, 1),
+                mg.splice(i, 1)
+        }
+        // for (let j in dataCheck) {
+        //     if (dataCheck[j]['name'] == elements)
+        //         dataCheck[j]['backGround'] = 'white'
+        // }
+    }
+    this.setState({
+        suggesion: m
+    })
+}
+
   save = () => {
-    console.log('sum', this.state);
     global.Experience = this.state.sum;
-    // let ni = this.state.array
-    // var sumy = ni.reduce(function(a, b) {
-    // return a + b;
-    // }, 0);
-    // console.log('summy', sumy)
     try {
       http
         .POST('api/user/editworkexp', {
@@ -94,10 +313,16 @@ class EditWorkExperience extends Component {
           // totalExp: 1
         })
         .then(
-          (res) => {
+          async (res) => {
             if (res['data']['status']) {
-              console.log('responce user', res['data']['result']);
-              this.props.navigation.navigate('JobEditProfile');
+              console.log('responce user', res);
+
+              var result = await AsyncStorage.getItem('UserLoggedInData');
+              result = JSON.parse(result);
+              result.workexp = global.Experience
+              AsyncStorage.setItem('UserLoggedInData', JSON.stringify(result));
+
+              // this.props.navigation.navigate('JobEditProfile');
             } else {
               snack(res['data']['message']);
             }
@@ -108,40 +333,52 @@ class EditWorkExperience extends Component {
       console.log(error);
     }
   };
-  ads = () => {
-    const {EduTitle, EduUni, fromDate, toDate, sum} = this.state;
-    let i = sum || [];
-
-    i.push({
-      heading: EduTitle.toUpperCase(),
-      Company: EduUni.toUpperCase(),
-      From: fromDate,
-      To: toDate,
-    });
+  Add = () => {
     this.setState({
-      sum: i,
+      edu: true,
+    });
+  };
+
+  ads = () => {
+    const {
+      EduTitle,
+      uniVerityName,
+      fromDate,
+      toDate,
+      sum,rating
+    } = this.state;
+    var tempo = this.state.sum || [];
+    // let tempo = [] ;
+      console.log('thisss',this.state.EduTitle.toUpperCase(),this.state.uniVerityName.toUpperCase(),this.state.fromDate,this.state.toDate,this.state.rating)
+
+
+      // console.log('i>>>this.state',...this.state.sum);
+    tempo.push({
+      heading : this.state.EduTitle.toUpperCase(),
+      Company : this.state.uniVerityName.toUpperCase(),
+      From : fromDate,
+      To : toDate,
+      Rating : rating,
+    });
+
+    console.log('temp',tempo)
+
+    this.setState({
+      sum: tempo,
       show: !this.state.show,
       fromDate: '',
       toDate: '',
       EduTitle: '',
       EduUni: '',
-      exp: '',
-    });
-  };
-  componentDidMount() {
-    this.setState({
-      sum: global.Experience,
-    });
-  }
+      uniVerityName:'',
+    },()=> this.save());
 
-  Add = () => {
-    this.setState({
-      show: true,
-    });
   };
   remove = (item, index) => {
     console.log(index, item);
-    const {sum} = this.state;
+    const {
+      sum
+    } = this.state;
     let m = sum;
     for (let i in m) {
       if (m[i].heading == item) {
@@ -152,10 +389,8 @@ class EditWorkExperience extends Component {
       sum: m,
     });
   };
-  //function to add TextInput dynamically
 
   onChange = (event, selectedDate) => {
-    // console.log('select date', new Date(selectedDate).toLocaleDateString());
     if (selectedDate === undefined) {
       this.setState({
         from: !this.state.from,
@@ -163,8 +398,7 @@ class EditWorkExperience extends Component {
       return;
     } else {
       this.setState({
-        fromDate:
-          monthNames[new Date(selectedDate).getMonth()] +
+        fromDate: monthNames[new Date(selectedDate).getMonth()] +
           ' ' +
           new Date(selectedDate).getFullYear(),
         from: !this.state.from,
@@ -179,375 +413,126 @@ class EditWorkExperience extends Component {
       return;
     } else {
       this.setState({
-        toDate:
-          monthNames[new Date(selectedDate).getMonth()] +
+        toDate: monthNames[new Date(selectedDate).getMonth()] +
           ' ' +
           new Date(selectedDate).getFullYear(),
         to: !this.state.to,
       });
     }
   };
-
-  dateDiffInDays = (i, g) => {
-    console.log(i, g);
-    const a = i;
-    const b = g;
-    // global.CompanyExp = Math.floor(b - a)
-    return Math.floor(b - a);
-  };
-  getValues = () => {
-    console.log('Data', this.state.inputData);
-  };
-
   render() {
-    const {from, to, show} = this.state;
-    // console.log("sum", this.state.sum)
+    const {
+      Anywhere,
+      name,
+      suggesion,
+      dataCheck,
+      dataCheckU,
+      show,edu,uni,rate
+    } = this.state;
+    console.log('this.sum',this.state.sum);
     return (
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
-          <StatusBar hidden={true} />
+          <StatusBar hidden={false} backgroundColor={themeColor} />
           <NavigationHead
-            centerComponent="Work Experience"
+            centerComponent="Education"
             rightComponent="Save"
             onPress={() => this.Back()}
             onExit={() => this.save()}
           />
-          <ImageBackground
-            style={{
-              width: wp('96%'),
-              marginHorizontal: wp(2),
-              height: hp('100%') - (StatusBar.currentHeight + 100 + hp(5)),
-              top: wp(15),
-            }}
-            source={require('../Img/ract.png')}
-            resizeMode={'stretch'}>
-            <View
-              style={{
-                justifyContent: 'center',
-                flexDirection: 'column',
-                height: wp(22),
-                width: wp(35),
-                borderRadius: scale(20),
-                borderColor: 'gray',
-                borderWidth: wp(0.6),
-                alignItems: 'center',
-                backgroundColor: themeWhite,
-                left: wp(30.5),
-                top: wp(-11),
-              }}>
-              <View>
-                <Image
-                  source={workExp}
-                  style={{
-                    height: scale(60),
-                    width: scale(60),
-                  }}
-                  resizeMode={'contain'}
-                />
-              </View>
-            </View>
-            <View
-              style={{
-                alignItems: 'center',
-                top: hp(-4),
-              }}>
-              <Text
-                style={{
-                  color: '#000',
-                  fontWeight: 'bold',
-                  fontSize: scale(18),
-                  fontFamily: FontBold,
-                }}>
-                Edit Work Experience
-              </Text>
-            </View>
-            {show && (
-              <ImageBackground
-                style={{
-                  width: wp('91%'),
-                  marginHorizontal: wp(2.3),
-                  // marginTop: hp(-10),
-                  height: hp('100%') - (StatusBar.currentHeight + 100 + hp(7)),
-                  position: 'absolute',
-                  zIndex: scale(50),
-                }}
-                source={interViewBack}
-                resizeMode={'stretch'}>
-                <View
-                  style={{
-                    zIndex: 1,
-                    top: scale(40),
-                    left: wp('80%'),
-                    height: scale(25),
-                    width: scale(25),
-                    // position: "absolute",
-                  }}>
-                  <TouchableWithoutFeedback
-                    onPress={() =>
-                      this.setState({
-                        show: !this.state.show,
-                      })
-                    }>
-                    <View
-                      style={{
-                        height: scale(25),
-                        width: scale(25),
-                        zIndex: 1,
-                      }}
-                      hitSlop={{
-                        top: 15,
-                        bottom: 15,
-                        left: 15,
-                        right: 15,
-                      }}>
-                      <Icon2 name={'clear'} size={scale(20)} color={'#fff'} />
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
-                <ScrollView
-                  nestedScrollEnabled={true}
-                  style={{marginBottom: scale(20)}}>
-                  <View
+          <View style={{flexDirection:"row",justifyContent:"space-between",width:wp(90),padding:10,marginHorizontal:wp(5),height:150,alignItems:"center"}}>
+          <View style={{width:wp(40),alignItems:"center",justifyContent:"center",}}>
+          <Image
+                    source={expframe}
                     style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        width: wp(96),
-                        marginVertical: hp(4),
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          color: themeWhite,
-                        }}>
-                        Add Experience
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(6),
-                      }}>
-                      <CustomInput
-                        multiLine={true}
-                        numberOfLines={2}
-                        placeholder={'Role'}
-                        value={this.state.EduTitle}
-                        textChange={(text) =>
-                          this.setState({
-                            EduTitle: text,
-                          })
-                        }
-                        inputContainerStyle={{
-                          backgroundColor: themeColor,
-                          // width: "100%",
-                          height: scale(40),
-                          borderColor: themeColor,
-                          justifyContent: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                        }}
-                        inputStyle={{
-                          color: 'white',
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          fontWeight: 'bold',
-                        }}
-                        placeholderTextColor={themeWhite}
-                        containerStyle={{
-                          width: wp(75),
-                          height: scale(45),
-                        }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(2),
-                      }}>
-                      <TextInput
-                        multiline={true}
-                        numberOfLines={2}
-                        placeholderTextColor={'white'}
-                        placeholder={'Work Experience'}
-                        style={{
-                          backgroundColor: themeColor,
-                          width: wp(70),
-                          height: numOfLinesCompany || scale(40),
-                          borderColor: themeColor,
-                          justifyContent: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                          textAlignVertical: 'top',
-                          marginHorizontal: wp(2.5),
-                          color: 'white',
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          fontWeight: 'bold',
-                          paddingLeft: scale(20),
-                        }}
-                        onChangeText={(text) =>
-                          this.setState({
-                            exp: text,
-                          })
-                        }
-                        onContentSizeChange={(e) => {
-                          numOfLinesCompany = e.nativeEvent.contentSize.height;
-                        }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(2),
-                      }}>
-                      <CustomInput
-                        placeholder={'Company'}
-                        value={this.state.EduUni}
-                        textChange={(text) =>
-                          this.setState({
-                            EduUni: text,
-                          })
-                        }
-                        inputContainerStyle={{
-                          backgroundColor: themeColor,
-                          // width: "100%",
-                          height: scale(40),
-                          borderColor: themeColor,
-                          justifyContent: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                        }}
-                        inputStyle={{
-                          color: 'white',
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          fontWeight: 'bold',
-                        }}
-                        placeholderTextColor={themeWhite}
-                        containerStyle={{
-                          width: wp(75),
-                          height: scale(45),
-                        }}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(2),
-                      }}>
-                      <View
-                        style={{
-                          backgroundColor: themeColor,
-                          width: wp(70),
-                          height: scale(40),
-                          borderColor: themeColor,
-                          alignItems: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                          flexDirection: 'row',
-                        }}
-                        onStartShouldSetResponder={() =>
-                          this.setState({
+                      height: scale(100),
+                      width: scale(100),
+                    }}
+                    resizeMode={'cover'}
+                  />
+          </View>
+          <View
+              style={{
+                // width:wp(50) 
+                alignItems: 'center',
+                justifyContent:"center",
+                
+                // right: wp(10),
+              }}>
+              <CustomButton
+                title={'+Add Experience'}
+                onPress={this.Add}
+                containerStyle={{
+                  // width: ,
+                  color: 'black',
+                  // fontFamily: FontRegular
+                }}
+                buttonStyle={{
+                  backgroundColor: '#333',
+                  height:30,
+                  borderRadius: scale(2),
+                  borderWidth: 0,
+                  // elevation: 6
+                }}
+                titleStyle={{
+                  color: themeWhite,
+                  position: 'absolute',
+                  fontFamily: FontBold,
+                  fontSize: scale(14),
+                }}
+              />
+            </View>
+          </View>
+          {edu && <EducationComponent name={this.state.name} placeHolder={`What's your Role`} 
+          textChange={
+            (text) => {
+                this.setState({
+                    show: text != '' ? true : false
+                })
+                this.cheks(text)
+            }} suggesion={suggesion} onNext={()=> {
+              this.setState({
+                edu:false,
+                uni:true
+              })
+              this.AddUni();
+            }} />}
+          {uni && <EducationComponentUni name={this.state.uniVerityName} placeHolder={'Enter Company name'} 
+          textChange={
+            (text) => {
+                this.setState({
+                    show: text != '' ? true : false
+                })
+                this.Unis(text)
+            }} suggesion={suggesion} onResponse={()=> this.setState({
                             from: !this.state.from,
-                          })
-                        }>
-                        <View
-                          style={{
-                            marginLeft: scale(20),
-                            width: wp(50),
-                            alignItems: 'flex-start',
-                          }}>
-                          <Text
-                            style={{
-                              color: 'white',
-                              fontSize: scale(18),
-                              fontFamily: 'Roboto-Bold',
-                              fontWeight: 'bold',
-                            }}>
-                            {this.state.fromDate}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            marginLeft: scale(10),
-                            width: scale(20),
-                            height: scale(20),
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Image
-                            source={cal}
-                            style={{
-                              height: scale(20),
-                              width: scale(20),
-                            }}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(2),
-                      }}>
-                      <View
-                        style={{
-                          backgroundColor: themeColor,
-                          width: wp(70),
-                          height: scale(40),
-                          borderColor: themeColor,
-                          alignItems: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                          flexDirection: 'row',
-                        }}
-                        onStartShouldSetResponder={() =>
-                          this.setState({
+                          })} fromDate={this.state.fromDate} toDate={this.state.toDate} onResponseTo={
+                            ()=> this.setState({
                             to: !this.state.to,
                           })
-                        }>
-                        <View
-                          style={{
-                            marginLeft: scale(20),
-                            width: wp(50),
-                            alignItems: 'flex-start',
-                          }}>
-                          <Text
-                            style={{
-                              color: 'white',
-                              fontSize: scale(18),
-                              fontFamily: 'Roboto-Bold',
-                              fontWeight: 'bold',
-                            }}>
-                            {this.state.toDate}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            marginLeft: scale(10),
-                            width: scale(20),
-                            height: scale(20),
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Image
-                            source={cal}
-                            style={{
-                              height: scale(20),
-                              width: scale(20),
-                            }}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                    {from && (
+                          }  onNext={()=> {
+              this.setState({
+                rate:true,
+                uni:false
+              })
+            }} onBack={()=> this.setState({
+              uni:false,edu:true
+            })}/>}
+            {rate && <EducationRate name={'Add Rating'} placeHolder={'Rate Your Experience'} 
+           starCount={this.state.rating} onStarRatingPress={(rating)=> this.setState({
+             rating
+           })} onBack={()=> this.setState({
+              uni:true,rate:false
+            })} onFinish ={
+              ()=> this.setState({
+              uni:false,rate:false,edu:false
+            },()=> this.ads())
+            }/>}
+                          {this.state.from && (
                       <DateTimePicker
                         testID="dateTimePicker"
                         value={this.state.Start_date}
@@ -557,7 +542,7 @@ class EditWorkExperience extends Component {
                         onChange={this.onChange}
                       />
                     )}
-                    {to && (
+                    {this.state.to && (
                       <DateTimePicker
                         testID="dateTimePicker"
                         value={this.state.Start_date}
@@ -567,119 +552,81 @@ class EditWorkExperience extends Component {
                         onChange={this.onChange1}
                       />
                     )}
-                    <View
-                      style={{
-                        top: hp(5),
-                        marginBottom: scale(30),
-                      }}>
-                      <TouchableWithoutFeedback
-                        style={styles.OpportunityView}
-                        onPress={this.ads}>
-                        <View
-                          style={{
-                            height: scale(40),
-                            width: scale(250),
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: themeColor,
-                            borderRadius: scale(5),
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: scale(18),
-                              fontFamily: FontBold,
-                              color: themeWhite,
-                              fontWeight: 'bold',
-                            }}>
-                            Add Now
-                          </Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </View>
-                </ScrollView>
-              </ImageBackground>
+         
+            { this.state.show && <View style={{
+                // width: wp(90),
+                borderRadius: scale(5),
+                height: dataCheck.length != 1 ? hp(12) : hp(6),
+                backgroundColor: "#fff",
+                position: "absolute",
+                top: scale(260),
+                marginHorizontal:wp(7)
+            }}>
+            
+            <FlatList
+            data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU}
+            keyboardShouldPersistTaps='always'
+            showsHorizontalScrollIndicator = { false  }
+            removeClippedSubviews={true}
+            renderItem={({item, index}) => this.renderItem(item, index)}
+            initialNumToRender={5}
+            maxToRenderPerBatch={10}
+            updateCellsBatchingPeriod={70}
+            getItemLayout={(data, index) => (
+            {
+                length: hp('1%'),
+                offset: hp('1%') * index,
+                index
+            }
             )}
-            <View
-              style={{
-                alignItems: 'flex-end',
-                right: wp(10),
-                top: hp(-2),
-              }}>
-              <CustomButton
-                title={'Add Experience'}
-                onPress={this.Add}
-                containerStyle={{
-                  width: wp(30),
-                  color: 'black',
-                  // fontFamily: FontRegular
-                }}
-                buttonStyle={{
-                  backgroundColor: themeColor,
-                  height: '33%',
-                  borderRadius: scale(2),
-                  borderWidth: 0,
-                }}
-                titleStyle={{
-                  color: themeWhite,
-                  position: 'absolute',
-                  fontFamily: FontBold,
-                  fontSize: scale(12),
-                }}
-              />
-            </View>
-            <View
-              style={{
-                width: '90%',
-                alignItems: 'center',
-                alignSelf: 'center',
-                top: hp(-22),
-                height: hp('50%'),
-                backgroundColor: themeWhite,
-                marginHorizontal: wp('2%'),
-                // marginTop: scale(20),
-                borderRadius: scale(20),
-                // elevation: 7,
-              }}>
-              <View
+            keyExtractor = {
+            (item, index) => index + ''
+            }
+            /></View> }
+          <View
                 style={{
-                  borderBottomWidth: scale(1),
-                  borderBottomColor: '#eee',
                   width: '90%',
                   alignItems: 'center',
-                }}
-              />
-              <FlatList
-                nestedScrollEnabled={true}
-                style={{
+                  alignSelf: 'center',
+                  top: hp(5),
+                  height: hp('50%'),
                   backgroundColor: themeWhite,
-                }}
-                extraData={this.state.sum}
-                data={this.state.sum}
-                showsHorizontalScrollIndicator={false}
-                removeClippedSubviews={true}
-                renderItem={({item, index}) => (
-                  <ItemMV item={item} index={index} remove={this.remove} />
-                )}
-                initialNumToRender={5}
-                maxToRenderPerBatch={10}
-                updateCellsBatchingPeriod={70}
-                getItemLayout={(data, index) => ({
-                  length: hp('4%'),
-                  offset: hp('4%') * index,
-                  index,
-                })}
-                keyExtractor={(item, index) => index + ''}
-              />
-            </View>
-          </ImageBackground>
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
+                  marginHorizontal: wp('2%'),
+                  // marginTop: scale(20),
+                  borderRadius: scale(20),
+                  // elevation: 7,
+                }}>
+                <View
+                  style={{
+                    borderBottomWidth: scale(1),
+                    borderBottomColor: '#eee',
+                    width: '90%',
+                    alignItems: 'center',
+                  }}
+                />
+                <FlatList
+                  nestedScrollEnabled={true}
+                  style={{
+                    backgroundColor: themeWhite,
+                  }}
+                  data={this.state.sum && this.state.sum}
+                  extraData={this.state.sum}
+                  showsHorizontalScrollIndicator={false}
+                  removeClippedSubviews={true}
+                  renderItem={({item, index}) => (
+                    <ItemMV item={item} index={index} remove={this.remove} />
+                  )}
+                  initialNumToRender={5}
+                  maxToRenderPerBatch={10}
+                  updateCellsBatchingPeriod={70}
+                  getItemLayout={(data, index) => ({
+                    length: hp('4%'),
+                    offset: hp('4%') * index,
+                    index,
+                  })}
+                  keyExtractor={(item, index) => index + ''}
+                />
+              </View>
         </ImageBackground>
       </SafeAreaView>
     );
@@ -687,17 +634,3 @@ class EditWorkExperience extends Component {
 }
 
 export default withNavigationFocus(EditWorkExperience);
-
-// <View style={{
-//                        width: wp(80),
-//                        alignItems: "center",
-//                        justifyContent: "space-around",
-//                        marginHorizontal: wp(2),
-//                        flexDirection: 'row',
-//                        marginVertical: scale(5),
-
-//                    }}>
-//        <TouchableWithoutFeedback onPress={this.hourly(index)}>
-//        {library(this.state.Hourly[index]['text'] ? 'check-box' : 'check-box-outline-blank', 25, themeWhite)}
-//        </TouchableWithoutFeedback>
-//        </View>

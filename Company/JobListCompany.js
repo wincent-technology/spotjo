@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +14,17 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -34,14 +44,22 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMVJobbM from './ItemMVJobbM';
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+// import GestureRecognizer, {
+//   swipeDirections
+// } from 'react-native-swipe-gestures';
 import http from '../api';
 
 // import styles from './Style'
@@ -117,65 +135,70 @@ class JobListCompany extends PureComponent {
   //         snack("error while register" + error)
   //     }
   // }
-  onSwipeUp = (gestureState, item, status) => {
-    // if (status == null) {
-    //     this.jaaveda('Matched', item);
-    // } else if (status == 'Matched') {
-    //     this.jaaveda('Shortlisted', item);
-    // } else if (status == 'Shortlisted') {
-    //     this.jaaveda('Shortlisted', item);
-    // }
-  };
+  // onSwipeUp = (gestureState, item, status) => {
+  //   // if (status == null) {
+  //   //     this.jaaveda('Matched', item);
+  //   // } else if (status == 'Matched') {
+  //   //     this.jaaveda('Shortlisted', item);
+  //   // } else if (status == 'Shortlisted') {
+  //   //     this.jaaveda('Shortlisted', item);
+  //   // }
+  // };
 
-  onSwipeDown = (gestureState, item, status) => {
-    // if (status == 'Matched')
-    //     this.jaaveda('Selected', item);
-    //     // alert(' Short Listed ' + item)
-  };
+  // onSwipeDown = (gestureState, item, status) => {
+  //   // if (status == 'Matched')
+  //   //     this.jaaveda('Selected', item);
+  //   //     // alert(' Short Listed ' + item)
+  // };
 
-  onSwipeLeft = (gestureState, item, status) => {
-    // // alert(' Not Interested ' + item)
-    // if (status == null) {
-    //     this.jaaveda('Not Interested', item);
-    // } else if (status == 'Matched') {
-    //     this.jaaveda('Rejected', item);
-    // }
-  };
+  // onSwipeLeft = (gestureState, item, status) => {
+  //   // // alert(' Not Interested ' + item)
+  //   // if (status == null) {
+  //   //     this.jaaveda('Not Interested', item);
+  //   // } else if (status == 'Matched') {
+  //   //     this.jaaveda('Rejected', item);
+  //   // }
+  // };
 
-  onSwipeRight = (gestureState, item, status) => {
-    // // alert(' Interested ' + item)
-    // if (status == null) {
-    //     this.jaaveda('Interested', item);
-    // } else if (status == 'Matched') {
-    //     for (let i in this.state.Matched) {
-    //         if (item == this.state.Matched[i].appid)
-    //             console.log('dfsdf', this.state.Matched)
-    //         this.setState({
-    //             jobId: this.state.Matched[i].jobId,
-    //             comId: this.state.Matched[i].comId,
-    //             userId: this.state.Matched[i].id,
-    //             dark: !this.state.dark
-    //         });
-    //     }
-    // }
-  };
-  onSwipe = (gestureName, gestureState) => {
-    console.log('gesture', gestureName);
-    const {SWIPE_UP, SWIPE_DOWN, SWIPE_LEFT, SWIPE_RIGHT} = swipeDirections;
-    this.setState({
-      gestureName: gestureName,
-    });
-    switch (gestureName) {
-      case SWIPE_UP:
-        break;
-      case SWIPE_DOWN:
-        break;
-      case SWIPE_LEFT:
-        break;
-      case SWIPE_RIGHT:
-        break;
-    }
-  };
+  // onSwipeRight = (gestureState, item, status) => {
+  //   // // alert(' Interested ' + item)
+  //   // if (status == null) {
+  //   //     this.jaaveda('Interested', item);
+  //   // } else if (status == 'Matched') {
+  //   //     for (let i in this.state.Matched) {
+  //   //         if (item == this.state.Matched[i].appid)
+  //   //             console.log('dfsdf', this.state.Matched)
+  //   //         this.setState({
+  //   //             jobId: this.state.Matched[i].jobId,
+  //   //             comId: this.state.Matched[i].comId,
+  //   //             userId: this.state.Matched[i].id,
+  //   //             dark: !this.state.dark
+  //   //         });
+  //   //     }
+  //   // }
+  // };
+  // onSwipe = (gestureName, gestureState) => {
+  //   console.log('gesture', gestureName);
+  //   const {
+  //     SWIPE_UP,
+  //     SWIPE_DOWN,
+  //     SWIPE_LEFT,
+  //     SWIPE_RIGHT
+  //   } = swipeDirections;
+  //   this.setState({
+  //     gestureName: gestureName,
+  //   });
+  //   switch (gestureName) {
+  //     case SWIPE_UP:
+  //       break;
+  //     case SWIPE_DOWN:
+  //       break;
+  //     case SWIPE_LEFT:
+  //       break;
+  //     case SWIPE_RIGHT:
+  //       break;
+  //   }
+  // };
 
   componentDidMount() {
     let Shortlisted = [],
@@ -218,13 +241,15 @@ class JobListCompany extends PureComponent {
       snack(error);
     }
     try {
+      console.log('global.id',global.Id);
       http
-        .GET('api/applyjob/get', {
+        .POST('api/applyjob/get', {
           comId: global.Id,
         })
         .then(
           (res) => {
             if (res['data']['status']) {
+              console.log('responce of applyjob',res['data']['result']);
               for (let i in res['data']['result']) {
                 this.setState({
                   data: res['data']['result'],
@@ -259,7 +284,8 @@ class JobListCompany extends PureComponent {
       sel: false,
     });
     let InterView = [],
-      Rejected = [];
+      Rejected = [],
+      Selected = []
 
     try {
       http
@@ -273,7 +299,7 @@ class JobListCompany extends PureComponent {
               // console.log("data", res['data']['result'])
               for (let i in res['data']['result']) {
                 if (res['data']['result'][i]['status'] == 'Selected') {
-                  InterView.push(res['data']['result'][i]);
+                  Selected.push(res['data']['result'][i]);
                 } else if (res['data']['result'][i]['status'] == 'Rejected') {
                   Rejected.push(res['data']['result'][i]);
                 } else {
@@ -283,6 +309,7 @@ class JobListCompany extends PureComponent {
               this.setState({
                 data: InterView,
                 InterView,
+                Selected
               });
             } else {
               snack(res['data']['message']);
@@ -425,11 +452,16 @@ class JobListCompany extends PureComponent {
   //     })
   // }
   render() {
-    const {show, show1, dark, data} = this.state;
+    const {
+      show,
+      show1,
+      dark,
+      data
+    } = this.state;
 
     return (
       <View>
-        <StatusBar hidden={true} />
+        <StatusBar hidden={false} backgroundColor={themeColor} />
         <View
           style={{
             flexDirection: 'row',
@@ -557,7 +589,7 @@ class JobListCompany extends PureComponent {
           <FlatList
             style={{
               marginTop: 4,
-              marginBottom: 50,
+              marginBottom: 40 + StatusBar.currentHeight,
               marginLeft: wp(-1),
               backgroundColor: 'transparent',
             }}
@@ -594,7 +626,7 @@ class JobListCompany extends PureComponent {
               style={{
                 textAlign: 'center',
                 fontFamily: FontBold,
-                color: themeWhite,
+                color: themeColor,
                 fontSize: scale(18),
                 width: wp(60),
               }}>

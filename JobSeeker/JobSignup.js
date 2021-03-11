@@ -9,6 +9,7 @@ import CustomInput from '../Component/TextInput';
 import { Background } from '../Constant/index';
 import http from '../api';
 import Geolocation from '@react-native-community/geolocation';
+import PermissionHelper from '../Component/PermissionHelper'
 
 
 
@@ -22,9 +23,23 @@ class JobSignup extends Component {
         };
     }
 
+    permission = async () => {
+        const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
+        if (granted)
+           {  Geolocation.getCurrentPosition((info) => {
+                  console.log('inf', info);
+                  global.let = info.coords.latitude;
+                  global.long = info.coords.longitude;
+                });
+          }
+        else
+        {const granted = await PermissionHelper.Storage.requestLocationPermission();
+            !granted && this.permission();  }
+      }
+
     onSignup = async () => {
 
-
+this.permission();
         const {email, password} = this.state;
         try {
             if (email.length > 0 && password.length > 0) {
@@ -37,7 +52,7 @@ class JobSignup extends Component {
                     if (res['data']['status']) {
                         global.Id = res['data']['result']
                         global.UserEmail = this.state.email
-                        this.props.navigation.navigate('TabScreenJob')
+                        this.props.navigation.navigate('OtpScreen')
                     } else {
                         snack(res['data']['message'])
                     }

@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +14,17 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -34,15 +44,56 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 import CustomInput from '../Component/Input';
-import {Rating, NavigationHead} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHead
+} from '../Component/ViewManager.js';
 import ItemMV from '../src/ItemMV';
 import DeviceInfo from 'react-native-device-info';
 import http from '../api';
 
 // import PostedJobList from './PostedJobList';
 // import styles from './Style'
+
+
+const Input = ({placeholder,...props}) => {
+          return (<View
+                      style={{
+                        marginTop: scale(10),
+                      }}>
+                      <CustomInput
+                        placeholder={placeholder}
+                        textChange={props.textChange}
+                        inputContainerStyle={{
+                          backgroundColor: themeWhite,
+                          // width: "100%",
+                          height: scale(40),
+                          borderBottomColor: '#eee',
+                          justifyContent: 'center',
+                          borderBottomWidth: scale(1),
+                          borderRadius: scale(5),
+                        }}
+                        inputStyle={{
+                          color: '#333',
+                          fontSize: scale(18),
+                          fontFamily: 'Roboto-Bold',
+                          fontWeight: 'bold',
+                        }}
+                        placeholderTextColor={'#333'}
+                        containerStyle={{
+                          width: wp(86),
+                          height: scale(40),
+                        }}
+                        iconName={iconSearch}
+                      />
+                    </View>)
+
+}
 
 class UserCreation extends PureComponent {
   constructor(props) {
@@ -55,6 +106,7 @@ class UserCreation extends PureComponent {
       lastName: '',
       email: '',
       pass: '',
+      cpass:''
     };
   }
 
@@ -64,7 +116,14 @@ class UserCreation extends PureComponent {
 
   callApi = () => {
     console.log('hellow');
-    const {firstName, lastName, email, pass, selectedValue} = this.state;
+    const {
+      firstName,
+      lastName,
+      email,
+      pass,
+      cpass,
+      selectedValue
+    } = this.state;
     try {
       http
         .POST('api/comuser/add', {
@@ -73,7 +132,8 @@ class UserCreation extends PureComponent {
           lastName: lastName,
           email: email,
           password: pass,
-          role: selectedValue,
+          role: selectedValue == 'Staff' ? '4' : '3',
+          
         })
         .then(
           (res) => {
@@ -84,10 +144,10 @@ class UserCreation extends PureComponent {
               snack(res['data']['message']);
             }
           },
-          (err) => snack(err['message']),
+          (err) => console.log('e',err['message']),
         );
     } catch (error) {
-      snack(error);
+      console.log('eeeeee',error);
     }
   };
 
@@ -98,16 +158,24 @@ class UserCreation extends PureComponent {
     });
     // global.Ci?ty = selectedValue
   };
+
+  
+
+
+
   render() {
-    const {firstName, lastName, email, pass, selectedValue} = this.state;
+    const {
+      firstName,
+      lastName,
+      email,
+      pass,
+      selectedValue
+    } = this.state;
 
     return (
       <View style={styles.backGround}>
-        <StatusBar hidden={true} />
-        <ImageBackground
-          style={styles.ImageBlue}
-          source={Background}
-          resizeMode={'stretch'}>
+        <StatusBar hidden={false} backgroundColor={themeColor} />
+       
           <NavigationHead
             centerComponent={'Create User'}
             rightComponent="Save"
@@ -116,198 +184,47 @@ class UserCreation extends PureComponent {
           />
           <View
             style={{
-              height: hp(100) - hp(5),
+              height: hp(100) - 100,
               width: wp(96),
               marginHorizontal: wp(2),
               top: hp(2),
             }}>
-            <View>
-              <ImageBackground
-                style={{
-                  width: wp('96%'),
-                  height: hp('100%') - (StatusBar.currentHeight + 80),
-                }}
-                source={darkract}
-                resizeMode={'stretch'}>
                 <View
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
                     marginTop: hp(4),
                   }}>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      width: wp(96),
-                      marginVertical: hp(1),
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Bold',
-                        color: themeWhite,
-                      }}>
-                      Create User
-                    </Text>
-                  </View>
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      width: wp(96),
-                      marginTop: hp(1),
-                    }}>
-                    <Text
-                      style={{
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Bold',
-                        textAlign: 'center',
-                        color: themeWhite,
-                      }}>
-                      Please provide all the information mentioned below
-                    </Text>
-                  </View>
+                 
                   <View
                     style={{
                       marginTop: hp(2),
                     }}>
-                    <CustomInput
-                      placeholder={'First Name'}
-                      textChange={(text) =>
-                        this.setState({
+                    <Input placeholder={'First Name'} textChange ={(text)=>  this.setState({
                           firstName: text,
-                        })
-                      }
-                      inputContainerStyle={{
-                        backgroundColor: themeColor,
-                        // width: "100%",
-                        height: scale(40),
-                        borderColor: themeColor,
-                        justifyContent: 'center',
-                        borderWidth: scale(1),
-                        borderRadius: scale(5),
-                      }}
-                      inputStyle={{
-                        color: 'white',
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Bold',
-                        fontWeight: 'bold',
-                      }}
-                      placeholderTextColor={themeWhite}
-                      containerStyle={{
-                        width: wp(75),
-                        height: scale(40),
-                      }}
-                      iconName={iconSearch}
-                    />
+                        }) }/>
+                        <Input placeholder={'Last Name'} textChange ={(text)=>  this.setState({
+                          lastName: text,
+                        }) }/>
+                        <Input placeholder={'Email Address'} textChange ={(text)=>  this.setState({
+                          email: text,
+                        }) }/>
+                        <Input placeholder={'Password'} textChange ={(text)=>  this.setState({
+                          pass: text,
+                        }) }/>
+                         <Input placeholder={'Confirm Password'} textChange ={(text)=>  this.setState({
+                          cpass: text,
+                        }) }/>
+                   
                     <View
                       style={{
-                        marginTop: scale(10),
-                      }}>
-                      <CustomInput
-                        placeholder={'Last Name'}
-                        textChange={(text) =>
-                          this.setState({
-                            lastName: text,
-                          })
-                        }
-                        inputContainerStyle={{
-                          backgroundColor: themeColor,
-                          // width: "100%",
-                          height: scale(40),
-                          borderColor: themeColor,
-                          justifyContent: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                        }}
-                        inputStyle={{
-                          color: 'white',
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          fontWeight: 'bold',
-                        }}
-                        placeholderTextColor={themeWhite}
-                        containerStyle={{
-                          width: wp(75),
-                          height: scale(40),
-                        }}
-                        iconName={iconSearch}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        marginTop: scale(10),
-                      }}>
-                      <CustomInput
-                        placeholder={'Email Address'}
-                        textChange={(text) =>
-                          this.setState({
-                            email: text,
-                          })
-                        }
-                        inputContainerStyle={{
-                          backgroundColor: themeColor,
-                          // width: "100%",
-                          height: scale(40),
-                          borderColor: themeColor,
-                          justifyContent: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                        }}
-                        inputStyle={{
-                          color: 'white',
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          fontWeight: 'bold',
-                        }}
-                        placeholderTextColor={themeWhite}
-                        containerStyle={{
-                          width: wp(75),
-                          height: scale(40),
-                        }}
-                        iconName={iconSearch}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        marginTop: scale(10),
-                      }}>
-                      <CustomInput
-                        placeholder={'Password'}
-                        textChange={(text) =>
-                          this.setState({
-                            pass: text,
-                          })
-                        }
-                        inputContainerStyle={{
-                          backgroundColor: themeColor,
-                          // width: "100%",
-                          height: scale(40),
-                          borderColor: themeColor,
-                          justifyContent: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                        }}
-                        inputStyle={{
-                          color: 'white',
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          fontWeight: 'bold',
-                        }}
-                        placeholderTextColor={themeWhite}
-                        containerStyle={{
-                          width: wp(75),
-                          height: scale(40),
-                        }}
-                        iconName={iconSearch}
-                      />
-                    </View>
-                    <View
-                      style={{
-                        width: wp(70),
+                        width: wp(80),
                         height: scale(40),
                         borderRadius: scale(5),
-                        backgroundColor: themeColor,
-                        marginTop: hp(2),
+                        borderBottomWidth:1,
+                        borderBottomColor:"#eee",
+                        backgroundColor: themeWhite,
+                        marginTop: scale(10),
                         marginLeft: wp(2.5),
                       }}>
                       <Picker
@@ -316,9 +233,9 @@ class UserCreation extends PureComponent {
                         }}
                         selectedValue={this.state.selectedValue}
                         style={{
-                          width: wp(50),
+                          width: wp(60),
                           height: scale(40),
-                          color: themeWhite,
+                          color: '#333',
                           fontSize: scale(22),
                           fontWeight: 'bold',
                           fontFamily: FontRegular,
@@ -343,25 +260,27 @@ class UserCreation extends PureComponent {
                     </View>
                   </View>
                 </View>
-              </ImageBackground>
             </View>
-          </View>
-          <View>
-            <View
-              style={{
-                bottom: 47,
-                height: 5,
-                width: '100%',
-                position: 'absolute',
-              }}>
-              <Image
-                source={TRANLINE}
-                style={styles.imageStyle}
-                resizeMode={'stretch'}
-              />
+             <View style={{
+                bottom: 55,
+                // position: "absolute",
+
+            }}>
+            <TouchableWithoutFeedback onPress={this.callApi}>
+            <View style={{
+                marginHorizontal: wp(8),
+                borderRadius: 15,height:50,
+                justifyContent:"center",alignItems:"center",backgroundColor:themeColor
+            }}>
+            <Text style={{
+                color: themeWhite,
+                fontSize: scale(20),
+                fontFamily: "Roboto-Bold"
+            }}>Create User</Text>
+           </View>
+            </TouchableWithoutFeedback>
+            
             </View>
-          </View>
-        </ImageBackground>
       </View>
     );
   }

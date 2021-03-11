@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +13,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from './Style';
-import {left, library, icon, play, leftVid} from './IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from './IconManager';
 import {
   themeColor,
   themeWhite,
@@ -30,8 +41,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale} from './Util';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  scale
+} from './Util';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMV from './ItemMV';
 import CompanyProfile from './CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
@@ -50,10 +66,12 @@ class JobList extends PureComponent {
     this.checking();
   }
   checking = () => {
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const otherParam = params ? params.otherParam : null;
-
-    this.setState({
+    console.log('global.all>>>>>>>>>',global.all.length)
+    this.setState({ 
       data: global.all,
     });
   };
@@ -98,13 +116,19 @@ class JobList extends PureComponent {
     this.props.navigation.navigate('ChooseTalent');
   };
   render() {
-    const {data} = this.state;
+    const {
+      data
+    } = this.state;
+    console.warn('>> false', DeviceInfo.getBrand());
+
     return (
       <View style={styles.backGround}>
-        <StatusBar hidden={true} />
+        <StatusBar hidden={false} backgroundColor={themeWhite} />
+        <NavigationEvents onDidFocus={this.checking} />
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={'#fff'}
           resizeMode={'stretch'}>
           <NavigationHeader
             onPress={() => this.Back()}
@@ -160,6 +184,7 @@ class JobList extends PureComponent {
                       height: scale(20),
                       width: scale(16),
                     }}
+                    tintColor={'#333'}
                     resizeMode={'contain'}
                   />
                   <Text style={styles.JoblistUpperButton}>Sort</Text>
@@ -169,6 +194,8 @@ class JobList extends PureComponent {
                 <View style={styles.JobListUpperButtonIcon}>
                   <Image
                     source={filter}
+                    tintColor={'#333'}
+                    
                     style={{
                       height: scale(19),
                       width: scale(14),
@@ -186,7 +213,7 @@ class JobList extends PureComponent {
             <FlatList
               style={{
                 marginTop: 4,
-                marginBottom: 50,
+                marginBottom: 45,
                 backgroundColor: 'transparent',
               }}
               data={data}
@@ -221,22 +248,14 @@ class JobList extends PureComponent {
                 style={{
                   textAlign: 'center',
                   fontFamily: FontBold,
-                  color: themeWhite,
+                  color: themeColor,
                   fontSize: scale(18),
                   width: wp(60),
                 }}>
                 No Data found 😞
               </Text>
-              <NavigationEvents onDidFocus={this.checking} />
             </View>
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </View>
     );

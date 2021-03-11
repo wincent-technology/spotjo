@@ -45,6 +45,13 @@ const {
 } = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
 
+
+const CompanyProfileIcon = {
+    height: scale(20),
+    width: scale(20),
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+  }
 class ItemMV extends PureComponent {
     // title, href, total_time, total_listen, image
     constructor(props) {
@@ -117,7 +124,7 @@ class ItemMV extends PureComponent {
                 Companyavtar
             }
             style={styles.imageStyle}
-            resizeMode={'contain'}
+            resizeMode={this.props.item.logo ? 'contain' : 'cover'}
             /></View>
             <View style={styles.ItemMVDetail}>
             <View><Text style={{
@@ -127,20 +134,29 @@ class ItemMV extends PureComponent {
             }}>{this.props.item.name}</Text></View>
         
             <View style={styles.ItemMVDetailIcon}>
-            <View style={styles.CompanyProfileIcon}>
+            <View style={CompanyProfileIcon}>
             <Image source ={user} style={styles.imageStyle} resizeMode={'contain'} /></View>
             <Text style={styles.ItemDetailLabel}>
             {this.props.item.isEmployed == 1 ? <Text>Employed</Text> : ''}</Text>
             <Text style={styles.ItemDetailLabel}>
             {this.props.item.isFreelancer == 1 ? <Text>/ Freelancer</Text> : ''}</Text>
             </View>
-            <View style={styles.ItemMVDetailIcon}><View style={styles.CompanyProfileIcon}>
+            <View style={styles.ItemMVDetailIcon}><View style={CompanyProfileIcon}>
             <Image source ={place} style={styles.imageStyle} resizeMode={'contain'} /></View>
-            <Text style={styles.ItemDetailLabel} numberOfLines={1}>{this.props.item.city}</Text><Text styles={styles.ItemDetailLabel}> /</Text>
+            <Text style={styles.ItemDetailLabel} numberOfLines={1}>
+            {this.props.item.city && this.props.item.city.map((item, index) => {
+                return (
+                    <Text  key={index} style={{
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: scale(12)
+                    }}>{item} / </Text>
+                )
+            })}
+            </Text>
             <Text style={styles.ItemMVDetailColor}> 100%</Text></View>
-            <View style={styles.ItemMVDetailIcon}><View style={styles.CompanyProfileIcon}><Image source ={edit} style={styles.imageStyle} resizeMode={'contain'} /></View><Text style={{
+            <View style={styles.ItemMVDetailIcon}><View style={CompanyProfileIcon}><Image source ={edit} style={styles.imageStyle} resizeMode={'contain'} /></View><Text style={{
                 marginLeft: scale(5)
-            }}>{this.props.item.skills.map((item, index) => {
+            }}>{this.props.item.skills && this.props.item.skills.map((item, index) => {
                 return (
                     <Text  key={index} style={{
                         fontFamily: 'Roboto-Regular',
@@ -150,9 +166,9 @@ class ItemMV extends PureComponent {
             })}</Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
             <View style={styles.ItemMVDetailIcon}>
                 
-                <View style={styles.CompanyProfileIcon}><Image source ={bag} style={styles.imageStyle} resizeMode={'contain'} /></View>
+                <View style={CompanyProfileIcon}><Image source ={bag} style={styles.imageStyle} resizeMode={'contain'} /></View>
                 
-                <Text style={styles.ItemDetailLabel}>{this.props.item.minExp}-{this.props.item.maxExp} Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
+                <Text style={styles.ItemDetailLabel}>{this.props.item.minExp ? this.props.item.minExp : 0 }-{this.props.item.maxExp ?this.props.item.maxExp : 0} Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
    
       </View>
             <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}><Text style={{

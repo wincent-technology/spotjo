@@ -71,6 +71,7 @@ class CompanyProfiles extends Component {
     return (
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
+        tintColor={themeWhite}
           style={styles.ImageBlue}
           source={Background}
           resizeMode={'stretch'}>
@@ -131,7 +132,7 @@ class CompanyProfiles extends Component {
                   style={{
                     textAlign: 'center',
                     fontFamily: FontBold,
-                    color: themeWhite,
+                    color: themeColor,
                     fontSize: scale(18),
                     width: wp(60),
                   }}>
@@ -139,13 +140,6 @@ class CompanyProfiles extends Component {
                 </Text>
               </View>
             </ScrollView>
-          </View>
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
           </View>
         </ImageBackground>
       </SafeAreaView>

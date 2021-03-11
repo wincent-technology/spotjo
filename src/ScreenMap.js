@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,9 +16,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from './Style';
-import {left, library, icon, play, leftVid} from './IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from './IconManager';
 import {
   themeColor,
   themeWhite,
@@ -31,8 +42,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from './Util';
-import {NavigationHeader} from '../Component/ViewManager';
+import {
+  scale,
+  snack
+} from './Util';
+import {
+  NavigationHeader
+} from '../Component/ViewManager';
 import Slider from '@react-native-community/slider';
 import ItemMV from './ItemMV';
 import MapView, {
@@ -80,20 +96,17 @@ class ScreenMap extends PureComponent {
         latitude: global.let,
         longitude: global.long,
       },
-      markers: [
-        {
-          coordinate: {
-            latitude: global.let + SPACE,
-            longitude: global.long + SPACE,
-          },
+      markers: [{
+        coordinate: {
+          latitude: global.let+SPACE,
+          longitude: global.long + SPACE,
         },
-        {
-          coordinate: {
-            latitude: global.let + SPACE,
-            longitude: global.long - SPACE,
-          },
+      }, {
+        coordinate: {
+          latitude: global.let+SPACE,
+          longitude: global.long - SPACE,
         },
-      ],
+      }, ],
     };
     this.markerDrag = this.markerDrag.bind(this);
     this.Mount = false;
@@ -172,7 +185,10 @@ class ScreenMap extends PureComponent {
     } catch (err) {
       console.warn('err', err);
     }
-    const {radius, zoom} = this.state;
+    const {
+      radius,
+      zoom
+    } = this.state;
     this.checking();
     // this.map.animateToRegion({
     //     latitude: global.let,
@@ -228,7 +244,9 @@ class ScreenMap extends PureComponent {
   };
   checking = () => {
     // console.log('hey - 159 map', global.all)
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const otherParam = params ? params.otherParam : null;
     // console.log('other item', otherParam);
     this.setState({
@@ -318,8 +336,8 @@ class ScreenMap extends PureComponent {
       Math.atan(
         Math.sin(angle) * Math.cos(this.state.region.latitude),
         Math.cos(angle) -
-          Math.sin(this.state.region.latitude) *
-            Math.sin(this.state.region.latitude),
+        Math.sin(this.state.region.latitude) *
+        Math.sin(this.state.region.latitude),
       ),
     );
 
@@ -329,8 +347,7 @@ class ScreenMap extends PureComponent {
       latitudeDelta: latitudeDelta + 0.7,
       longitudeDelta: longitudeDelta + 0.7,
     };
-    this.setState(
-      {
+    this.setState({
         region: result,
         radius: Math.round(distance),
       },
@@ -340,7 +357,11 @@ class ScreenMap extends PureComponent {
   };
 
   render() {
-    const {region, radius, markers} = this.state;
+    const {
+      region,
+      radius,
+      markers
+    } = this.state;
     return this.state.data ? (
       <View style={styles.backGround}>
         <ImageBackground

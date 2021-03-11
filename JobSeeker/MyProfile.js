@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +14,17 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -40,16 +50,23 @@ import {
   Companyavtar,
   linkedin,
   whatsapp,
-  facebook,
+  facebook,company,icons_jobType_blue,skillCategory,workExp,placeIcon,icons_salerytype,Mail,mobile,
   avtar,
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale} from '../src/Util';
+import {
+  scale
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {StarRating, NavigationHead} from '../Component/ViewManager.js';
+import {
+  StarRating,
+  NavigationHead
+} from '../Component/ViewManager.js';
+import ListShow from '../Component/ListShow'
+
 // import ItemMV from './ItemMV'
 
 class MyProfile extends Component {
@@ -74,9 +91,10 @@ class MyProfile extends Component {
     let g = this.state.dt;
     g = new Date(g).getFullYear();
 
-    let im = global.Experience;
-    console.log('im', im);
+    let im = global.Experience
+    // console.log('im', im);
     for (let i in im) {
+      // console.log(im[i])
       From = im[i].From.split(' ');
       To = im[i].To.split(' ');
       ary.push(parseInt(To[1]));
@@ -86,7 +104,7 @@ class MyProfile extends Component {
     this.setState({
       TotalExp: m,
     });
-    let jig = ary.sort(function (a, b) {
+    let jig = ary.sort(function(a, b) {
       console.log('a,b', a, b);
       return b - a;
     });
@@ -100,7 +118,7 @@ class MyProfile extends Component {
       }
     }
 
-    console.log('hi total', m, new Date(g).getFullYear(), jig);
+    // console.log('hi total', m, new Date(g).getFullYear());
   }
 
   Back = () => {
@@ -110,12 +128,17 @@ class MyProfile extends Component {
     this.props.navigation.navigate('JobEditProfile');
   };
   render() {
-    const {CompanyName, JobHeading, TotalExp} = this.state;
+    const {
+      CompanyName,
+      JobHeading,
+      TotalExp
+    } = this.state;
     return (
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+        tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHead
             centerComponent="My Profile"
@@ -123,15 +146,15 @@ class MyProfile extends Component {
             rightComponent="edit"
             onExit={() => this.Edit()}
           />
+        <StatusBar hidden={false} backgroundColor={themeColor}/>
           <View style={styles.CompanyProfileMainImage}>
             <ScrollView>
-              <ImageBackground
-                style={{
-                  width: wp('96%'),
-                  height: hp('100%') - (StatusBar.currentHeight + 40 + hp(5)),
-                }}
-                source={transparentImage}
-                resizeMode={'stretch'}>
+            <View style={{
+              width: wp('96%'),
+                  height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
+                  overflow:"hidden",
+                  zIndex:20
+            }}>
                 <View
                   style={{
                     top: hp(4),
@@ -139,7 +162,7 @@ class MyProfile extends Component {
                   }}>
                   <Text
                     style={{
-                      color: themeWhite,
+                      color: '#333',
                       fontSize: scale(23),
                       fontFamily: 'Roboto-Bold',
                     }}
@@ -180,264 +203,122 @@ class MyProfile extends Component {
                       resizeMode={'contain'}
                     />
                   </ImageBackground>
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      height: hp(6),
-                      width: wp(50),
-                      marginTop: hp(8),
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'column',
-                        height: hp(6),
-                        width: wp(15),
-                        alignItems: 'center',
-                        marginHorizontal: wp(5),
-                        justifyContent: 'center',
-                      }}>
-                      <View>
-                        <Image
-                          source={setting}
-                          resizeMode={'contain'}
-                          style={{
-                            height: scale(28),
-                            width: scale(30),
-                          }}
-                        />
-                      </View>
-                      <View>
-                        <Text
-                          style={{
-                            color: themeWhite,
-                            fontFamily: 'Roboto-Regular',
-                            fontSize: scale(12),
-                          }}>
-                          Settings
+                  <View style={{
+                flexDirection: "column",
+                height: wp(32),
+                width: wp(50),justifyContent:"center",alignItems:"center",
+                marginTop: hp(3),marginHorizontal:wp(2),
+            }}>
+            <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
+                vid: global.Video
+            })}><View style={{
+                flexDirection: "column",
+                // height: hp(9),
+                width: wp(26),
+                alignItems: "center",
+                justifyContent: "center"
+            }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
+                height: scale(65),
+                width: scale(65),
+            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                color: themeColor,
+                fontFamily: "Roboto-Regular",
+                fontSize: scale(10)
+            }}>Video Resume</Text></View>
+            </View></TouchableWithoutFeedback>
+            <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
+            <View style={{marginTop:scale(5)}}>
+            <StarRating
+            emptyStar={blanks}
+            starStyle={{marginLeft:5}}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(15)}
+            rating={3}
+            // selectedStar={(rating) => this.handleLanguage(rating, index)}
+            fullStarColor={'orange'}
+            /></View>
+            </View>
+                </View>
+               
+               <View style={{
+                marginLeft: wp(7),
+                marginTop: hp(1),
+                height: hp(3),
+                width: wp(32),
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: 'row'
+            }}><Image source={facebook} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/><Image source={linkedin} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25),
+                marginHorizontal: wp(1)
+            }}/><Image source={whatsapp} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/>
+            </View>
+            <View style={[styles.CompanyProfileDetail,{marginTop:10}]}>
+                    <ListShow name={CompanyName} image={company} />
+                    <ListShow name={JobHeading ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
+                    <ListShow name={JobHeading} image={skillCategory} />
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={workExp}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {TotalExp != 0 ? TotalExp - 1 : 0} - {TotalExp} Years /
+                        </Text>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          {' '}
+                          100%
                         </Text>
                       </View>
-                    </View>
-                    <TouchableWithoutFeedback
-                      onPress={() =>
-                        this.props.navigation.navigate('VideoPlayer', {
-                          vid: global.Video,
-                        })
-                      }>
-                      <View
-                        style={{
-                          flexDirection: 'column',
-                          height: hp(6),
-                          width: wp(26),
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <Image
-                          source={WhiteVideo}
-                          resizeMode={'contain'}
-                          style={{
-                            height: scale(30),
-                            width: scale(35),
-                          }}
-                        />
-                        <View>
-                          <Text
-                            style={{
-                              color: themeWhite,
-                              fontFamily: 'Roboto-Regular',
-                              fontSize: scale(12),
-                            }}>
-                            Video Resume
-                          </Text>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={placeIcon}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
                         </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                          {global.Place} /
+                        </Text>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          {' '}
+                          100%
+                        </Text>
                       </View>
-                    </TouchableWithoutFeedback>
-                  </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={mobile}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {global.UserMobile}
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                    <ListShow name={global.UserEmail} image={Mail} />
+                    </View>
                 </View>
-                <View
-                  style={{
-                    height: hp(0.6),
-                    width: '94.4%',
-                    marginLeft: wp(2.3),
-                    marginTop: hp(-5.5),
-                    backgroundColor: '#d2d2d2',
-                  }}
-                />
-                <View
-                  style={{
-                    marginLeft: wp(7),
-                    marginTop: hp(6),
-                    height: hp(3),
-                    width: wp(32),
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'row',
-                  }}>
-                  <Image
-                    source={facebook}
-                    resizeMode={'contain'}
-                    style={{
-                      height: scale(25),
-                      width: scale(25),
-                    }}
-                  />
-                  <Image
-                    source={linkedin}
-                    resizeMode={'contain'}
-                    style={{
-                      height: scale(25),
-                      width: scale(25),
-                      marginHorizontal: wp(1),
-                    }}
-                  />
-                  <Image
-                    source={whatsapp}
-                    resizeMode={'contain'}
-                    style={{
-                      height: scale(25),
-                      width: scale(25),
-                    }}
-                  />
-                </View>
-                <View
-                  style={{
-                    marginTop: hp(-7),
-                    marginLeft: wp(50),
-                    height: scale(20),
-                    width: scale(100),
-                  }}>
-                  <StarRating
-                    emptyStar={blanks}
-                    fullStar={Fulls}
-                    halfStar={'star-half'}
-                    iconSet={'MaterialIcons'}
-                    disabled={false}
-                    maxStars={5}
-                    starSize={scale(20)}
-                    rating={3}
-                    // selectedStar={(rating) => this.handleLanguage(rating, index)}
-                    fullStarColor={'orange'}
-                  />
-                </View>
-                <View
-                  style={{
-                    marginLeft: wp(8),
-                    marginTop: hp(7),
-                    flexDirection: 'column',
-                  }}>
-                  <View
-                    style={[
-                      styles.CompanyDetailIcon,
-                      {
-                        alignItems: 'center',
-                        marginLeft: scale(23),
-                      },
-                    ]}>
-                    <View style={styles.myProfileIconImageBuilding}>
-                      <Image
-                        source={building}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <Text
-                      style={{
-                        marginLeft: scale(5),
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Regular',
-                      }}>
-                      {CompanyName}
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.CompanyDetailIcon,
-                      {
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <View style={styles.myProfileIconImage}>
-                      <Image
-                        source={screentheme}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <Text style={styles.ItemDetailLabel1}>{JobHeading}</Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.CompanyDetailIcon,
-                      {
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <View style={styles.myProfileIconImage}>
-                      <Image
-                        source={bagtheme}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <Text style={styles.ItemDetailLabel1}>
-                      {TotalExp - 1} - {TotalExp} years
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.CompanyDetailIcon,
-                      {
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <View style={styles.myProfileIconImage}>
-                      <Image
-                        source={notheme}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <Text style={styles.ItemDetailLabel1}>
-                      {global.UserMobile}
-                    </Text>
-                  </View>
-                  <View
-                    style={[
-                      styles.CompanyDetailIcon,
-                      {
-                        alignItems: 'center',
-                      },
-                    ]}>
-                    <View style={styles.myProfileIconImage}>
-                      <Image
-                        source={mailtheme}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <Text style={styles.ItemDetailLabel1}>
-                      {global.UserEmail}
-                    </Text>
-                  </View>
-                  <View style={styles.CompanyDetailIcon}>
-                    <View style={styles.myProfileIconImage}>
-                      <Image
-                        source={placetheme}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <Text style={styles.ItemDetailLabel1}>{global.Place}</Text>
-                  </View>
-                </View>
-              </ImageBackground>
             </ScrollView>
-          </View>
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
           </View>
         </ImageBackground>
       </SafeAreaView>

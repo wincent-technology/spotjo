@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   TouchableWithoutFeedback,
@@ -12,8 +14,12 @@ import {
   TextInput,
   ScrollView,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
-import {scale} from '../src/Util';
+import {
+  withNavigationFocus
+} from 'react-navigation';
+import {
+  scale
+} from '../src/Util';
 import CustomInput from '../Component/Input';
 import ToggleSwitch from '../Component/ToggleSwitch';
 import {
@@ -66,8 +72,7 @@ class JobHiddenCritearia extends Component {
       name: i,
       rating: 1,
     });
-    this.setState(
-      {
+    this.setState({
         addSkill: gems,
       },
       () => {
@@ -83,8 +88,7 @@ class JobHiddenCritearia extends Component {
       name: i,
       rating: 1,
     });
-    this.setState(
-      {
+    this.setState({
         Education: gems,
       },
       () => {
@@ -101,8 +105,7 @@ class JobHiddenCritearia extends Component {
         name: i,
         rating: 1,
       });
-    this.setState(
-      {
+    this.setState({
         Language: gems,
       },
       () => {
@@ -116,8 +119,7 @@ class JobHiddenCritearia extends Component {
     var arr = [];
     arr = this.state.addSkill;
     arr[index].rating = value;
-    return this.setState(
-      {
+    return this.setState({
         addSkill: arr,
       },
       () => {
@@ -130,8 +132,7 @@ class JobHiddenCritearia extends Component {
     var arr = [];
     arr = this.state.Education;
     arr[index].rating = value;
-    this.setState(
-      {
+    this.setState({
         Education: arr,
       },
       () => {
@@ -143,8 +144,7 @@ class JobHiddenCritearia extends Component {
     var arr = [];
     arr = this.state.Language;
     arr[index].rating = value;
-    this.setState(
-      {
+    this.setState({
         Language: arr,
       },
       () => {
@@ -154,8 +154,7 @@ class JobHiddenCritearia extends Component {
   };
 
   handlesalary = (value, index, item) => {
-    this.setState(
-      {
+    this.setState({
         salaryrating: value,
       },
       () => {
@@ -165,7 +164,11 @@ class JobHiddenCritearia extends Component {
   };
   remove = (item, index) => {
     console.log(index, item);
-    const {addSkill, Education, Language} = this.state;
+    const {
+      addSkill,
+      Education,
+      Language
+    } = this.state;
     let m = addSkill;
     let j = Education;
     let n = Language;
@@ -212,6 +215,7 @@ class JobHiddenCritearia extends Component {
         }}
         source={darkract}
         resizeMode={'stretch'}>
+            <StatusBar hidden={false} backgroundColor={themeColor} />
         <View
           style={{
             justifyContent: 'center',

@@ -7,7 +7,15 @@ import CustomInput from '../Component/TextInput'
 import { Background, url } from '../Constant/index'
 import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import Geolocation from '@react-native-community/geolocation';
+import PermissionHelper from '../Component/PermissionHelper'
+import {
+    left,
+    library,
+    icon,
+    play,
+    leftVid
+  } from '../src/IconManager';
 
 class LoginWithEmail extends Component {
     constructor(props) {
@@ -15,11 +23,29 @@ class LoginWithEmail extends Component {
 
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            pass:true
         };
     }
 
+
+    permission = async () => {
+        const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
+        if (granted)
+           {  Geolocation.getCurrentPosition((info) => {
+                  console.log('inf>>>>>>>>>>', info);
+                  global.let = info.coords.latitude;
+                  global.long = info.coords.longitude;
+                });
+          }
+        else
+        {const granted = await PermissionHelper.Storage.requestLocationPermission();
+            !granted && this.permission();  }
+      }
+      
     onLogin = async () => {
+    this.permission();
+
         const {email, password} = this.state;
         try {
             if (email.length > 0 && password.length > 0) {
@@ -46,8 +72,8 @@ class LoginWithEmail extends Component {
                         global.minSalary = res['data']['result']['minSal']
                         global.maxSalary = res['data']['result']['maxSal']
                         global.Experience = res['data']['result']['workexp']
-                        global.let = parseFloat(res['data']['result']['latitude'])
-                        global.long = parseFloat(res['data']['result']['longitude'])
+                        global.let = parseFloat(res['data']['result']['latitude']) || global.let
+                        global.long = parseFloat(res['data']['result']['longitude']) || global.long
                         AsyncStorage.setItem('UserLoggedInData', JSON.stringify(res['data']['result']));
 
                         this.props.navigation.navigate('TabScreenJob')
@@ -75,6 +101,7 @@ class LoginWithEmail extends Component {
     }
 
     render() {
+        const {pass} = this.state
         return (
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
@@ -105,7 +132,7 @@ class LoginWithEmail extends Component {
        <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
                 email: text
             })} />
-       <CustomInput placeholder = {'Password'} secureTextEntry={true} textChange = {(text) => this.setState({
+       <CustomInput placeholder = {'Password'} passs={true} pass={pass} onPress={()=> this.setState({pass:!this.state.pass})} textChange = {(text) => this.setState({
                 password: text
             })}/>
         <TouchableWithoutFeedback onPress={this.forgat}><Text style={{

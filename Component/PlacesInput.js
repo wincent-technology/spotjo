@@ -6,7 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
-  TextInput,
+  TextInput,Image,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -43,9 +43,17 @@ class PlacesInput extends Component {
     return (
       <View style={styles.container}>
       <View style={this.props.stylesContainer}>
+      <View
+              style={{marginLeft:35,borderRightWidth:0.8,borderRightColor:"#afafaf",paddingRight:10}}>
+              <Image
+                source={require('../Img/compass.png')}
+                style={{height:15,width:15}}
+                resizeMode={'contain'}
+              />
+            </View>
         <TextInput
           placeholder={this.props.placeHolder}
-          placeholderTextColor={'#fff'}
+          placeholderTextColor={'#333'}
           style={[styles.input, this.props.stylesInput]}
           onChangeText={query => {
             this.setState({query}, () => {
@@ -174,7 +182,7 @@ class PlacesInput extends Component {
             this.props.queryFields
           }${this.buildLocationQuery()}${this.buildCountryQuery()}${this.buildTypesQuery()}${this.buildSessionQuery()}`
         ).then(response => response.json());
-
+          console.log("sdfsfsfdfdf>>>>>>>>",places)
         this.setState({
           isLoading: false,
           places: places.predictions,
@@ -195,7 +203,7 @@ class PlacesInput extends Component {
         const place = await fetch(
           `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${this.props.googleApiKey}&fields=${this.props.queryFields}&language=${this.props.language}${this.buildSessionQuery()}`
         ).then(response => response.json());
-
+          console.log('placeInput',place)
         return this.setState({
             showList: false,
             isLoading: false,

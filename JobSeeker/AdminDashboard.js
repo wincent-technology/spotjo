@@ -86,19 +86,14 @@ class AdminDashboard extends PureComponent {
             <View style={styles.backGround}>
                 <StatusBar hidden={true} />
                 <ImageBackground style={styles.ImageBlue}
+                tintColor={themeWhite}
             source={Background}
             resizeMode={'stretch'}>
                     <NavigationHead centerComponent='User Dashboard' rightComponent='Exit' onPress={() => this.Back()} onExit={() => this.Exit()} />
                     <View></View>
                     <View style={{
-                height: hp(102) - ((wp(100) / 3) + scale(47))
+                height: hp(102) - ((wp(100) / 3) + scale(47) + StatusBar.currentHeight)
             }}>{this.renderPage()}</View>
-                    <View style={styles.TranLingImage}>
-                        <Image
-            source={TRANLINE}
-            style={styles.imageStyle}
-            resizeMode={'stretch'}
-            /></View>
                 </ImageBackground>
             </View>
         )

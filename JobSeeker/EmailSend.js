@@ -39,8 +39,14 @@ class EmailSend extends Component {
                     email: name,
                 }).then((res) => {
                     if (res['data']['status']) {
-                        alert('please kindly check your mail')
-                        this.props.navigation.navigate('JobForgatPass')
+                        let b = 'You have signed up with social account!'
+                        if (res['data']['message'] === b)
+                        {alert(res['data']['message'])
+                        this.props.navigation.navigate('JobLogin')
+                    }
+                        else{
+                            alert('please kindly check your email we have sent you password')
+                        this.props.navigation.navigate('JobLoginWithEmail')}
                     } else {
                         snack(res['data']['message'])
                     }

@@ -55,14 +55,15 @@ import ImagePicker from 'react-native-image-picker';
 import http from '../api'
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-community/async-storage';
-import Video from 'react-native-video';
+import BackNext from '../Component/BackNext'
 
+import Video from 'react-native-video';
 class VideoResume extends Component {
     constructor(props) {
         super(props);
         this.state = {
             show: false,
-            letdue: 0
+            letdue: 0,flag:false
         }
 
     }
@@ -100,6 +101,10 @@ class VideoResume extends Component {
         }
     }
 
+    Record  = () => {
+        console.log('hi')
+        this.props.navigation.navigate('Camera');
+    }
 
 
     OpenImage = () => {
@@ -139,10 +144,13 @@ class VideoResume extends Component {
 
     onLoad = (data) => {
         console.log('durationVideo', data.duration);
+        if(!this.state.flag){
         if (data.duration <= 30)
-            this.maggi(this.state.letdue.path)
+        {this.setState({
+            flag:true
+        },()=> this.maggi(this.state.letdue.path))}
         else
-            Alert.alert(
+            {Alert.alert(
                 'Sorry',
                 'Video must be less then 30 Seconds', [{
                     text: 'OK',
@@ -150,7 +158,8 @@ class VideoResume extends Component {
                 }], {
                     cancelable: false
                 }
-            );
+            );}
+        }
 
     }
 
@@ -239,6 +248,25 @@ class VideoResume extends Component {
                 fontSize: scale(17)
             }}
             />
+             <CustomButton title = {'Record Company Video'}
+            onPress = {()=> this.Record()}
+            containerStyle = {{
+                width: wp('80%'),
+                marginTop: scale(20),
+                elevation: 5
+            }}
+            buttonStyle={{
+                backgroundColor: "white",
+                width: wp('80%'),
+                borderRadius: scale(3),
+                borderWidth: 0,
+
+            }}
+            titleStyle={{
+                color: themeColor,
+                fontSize: scale(17)
+            }}
+            />
         </View>
         {
             show && <View style={{
@@ -269,20 +297,11 @@ class VideoResume extends Component {
             }}
             volume={0}
             />
-            <TouchableOpacity style={styles.Size} onPress={() => this.back()} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
             </View>
-            <View style={{
-                alignItems: 'flex-end',
-                right: wp(7),
-                width: wp(47)
-            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
-                alignItems: 'flex-end'
-            }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
+
             </View> }
+            <BackNext onBack={this.back} onNext={this.next} />
+
        </ImageBackground></SafeAreaView>
 
         );

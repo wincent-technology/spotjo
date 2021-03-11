@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   TouchableWithoutFeedback,
@@ -14,8 +16,12 @@ import {
   Picker,
   ScrollView,
 } from 'react-native';
-import {withNavigationFocus} from 'react-navigation';
-import {scale} from '../src/Util';
+import {
+  withNavigationFocus
+} from 'react-navigation';
+import {
+  scale
+} from '../src/Util';
 import CustomInput from '../Component/Input';
 import ToggleSwitch from '../Component/ToggleSwitch';
 import {
@@ -37,7 +43,10 @@ import {
 import styles from '../src/Style';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import http from '../api';
-import {play, library} from '../src/IconManager';
+import {
+  play,
+  library
+} from '../src/IconManager';
 import Slider from 'rn-range-slider';
 import MultiSelect from 'react-native-multiple-select';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
@@ -185,7 +194,10 @@ class JobBasicType extends Component {
     );
   };
   suggestionTag = (elements, index) => {
-    const {suggesion, city} = this.state;
+    const {
+      suggesion,
+      city
+    } = this.state;
     let m = suggesion;
     for (let i in suggesion) {
       if (m[i] == elements) {
@@ -268,15 +280,8 @@ class JobBasicType extends Component {
     } = this.state;
 
     return (
-      <ImageBackground
-        style={{
-          width: wp('96%'),
-          height: hp('100%') - (StatusBar.currentHeight + 100 + hp(4)),
-          // justifyContent: "center",
-          // alignItems: 'center'
-        }}
-        source={darkract}
-        resizeMode={'stretch'}>
+      <>
+            <StatusBar hidden={false} backgroundColor={themeColor} />
         <View
           style={{
             justifyContent: 'center',
@@ -292,14 +297,14 @@ class JobBasicType extends Component {
               style={{
                 fontSize: scale(18),
                 fontFamily: 'Roboto-Bold',
-                color: themeWhite,
+                color: '#333',
               }}>
               Job Preferences
             </Text>
           </View>
           <View
             style={{
-              marginTop: hp(6),
+              marginTop: hp(2),
             }}></View>
           <View
             style={{
@@ -308,16 +313,18 @@ class JobBasicType extends Component {
             <View
               style={{
                 flexDirection: 'row',
-                height: scale(40),
+                height: scale(50),
                 alignItems: 'center',
-                backgroundColor: themeColor,
+                // backgroundColor: themeColor,
+                borderBottomWidth:1,
+                borderColor:"#eee",
                 marginBottom: hp(2),
                 width: wp(70),
               }}>
               <View style={{alignItems: 'center', marginLeft: scale(10)}}>
                 <Text
                   style={{
-                    color: themeWhite,
+                    color: "#333",
                     fontSize: scale(18),
                     fontWeight: 'bold',
                     fontFamily: FontRegular,
@@ -331,7 +338,7 @@ class JobBasicType extends Component {
                   style={{
                     width: wp(50),
                     height: scale(40),
-                    color: themeWhite,
+                    color: '#333',
                     fontSize: scale(22),
                     fontWeight: 'bold',
                     fontFamily: FontRegular,
@@ -356,12 +363,14 @@ class JobBasicType extends Component {
             </View>
             <View
               style={{
-                backgroundColor: themeColor,
+                // backgroundColor: themeColor,
                 width: wp(70),
                 height: scale(40),
-                borderColor: themeColor,
+                // borderColor: themeColor,
+                borderBottomWidth:1,
+                borderColor:"#eee",
                 alignItems: 'center',
-                borderWidth: scale(1),
+                // borderWidth: scale(1),
                 borderRadius: scale(5),
                 flexDirection: 'row',
               }}
@@ -378,9 +387,9 @@ class JobBasicType extends Component {
                 }}>
                 <Text
                   style={{
-                    color: 'white',
+                    color: '#333',
                     fontSize: scale(18),
-                    fontFamily: 'Roboto-Bold',
+                    fontFamily: 'Roboto-Regular',
                     fontWeight: 'bold',
                   }}>
                   {this.state.From_date}
@@ -397,6 +406,7 @@ class JobBasicType extends Component {
                 }}>
                 <Image
                   source={cal}
+                  tintColor={themeColor}
                   style={{
                     height: scale(20),
                     width: scale(20),
@@ -408,13 +418,15 @@ class JobBasicType extends Component {
             {selectedValue == 'Limited' && (
               <View
                 style={{
-                  backgroundColor: themeColor,
+                  // backgroundColor: themeColor,
+                  borderBottomWidth:1,
+                borderColor:"#eee",
                   width: wp(70),
                   height: scale(40),
                   marginTop: hp(2),
-                  borderColor: themeColor,
+                  // borderColor: themeColor,
                   alignItems: 'center',
-                  borderWidth: scale(1),
+                  // borderWidth: scale(1),
                   borderRadius: scale(5),
                   flexDirection: 'row',
                 }}
@@ -431,7 +443,7 @@ class JobBasicType extends Component {
                   }}>
                   <Text
                     style={{
-                      color: 'white',
+                      color: '#333',
                       fontSize: scale(18),
                       fontFamily: 'Roboto-Bold',
                       fontWeight: 'bold',
@@ -450,6 +462,7 @@ class JobBasicType extends Component {
                   }}>
                   <Image
                     source={cal}
+                    tintColor={themeColor}
                     style={{
                       height: scale(20),
                       width: scale(20),
@@ -495,7 +508,8 @@ class JobBasicType extends Component {
               zIndex: 1,
             }}>
             <CustomInput
-              placeholder={'Select City'}
+              placeholder={'City'}
+
               textChange={(text) => {
                 this.setState({
                   citys: text != '' ? true : false,
@@ -504,14 +518,14 @@ class JobBasicType extends Component {
               }}
               inputContainerStyle={{
                 height: scale(40),
-                backgroundColor: themeColor,
+                // backgroundColor: themeColor,
                 // width: "100%",
-                borderColor: themeColor,
-                borderWidth: scale(1),
+                borderColor: '#eee',
+                borderBottomWidth: scale(1),
                 borderRadius: scale(5),
               }}
               inputStyle={{
-                color: themeWhite,
+                color: '#333',
                 fontSize: scale(18),
                 fontFamily: 'Roboto-Bold',
                 fontWeight: 'bold',
@@ -519,12 +533,7 @@ class JobBasicType extends Component {
               containerStyle={{
                 width: wp(75),
               }}
-              placeholderTextColor={themeWhite}
-              iconName={iconSearch}
-              iconStyle={{
-                height: 25,
-                width: 25,
-              }}
+              placeholderTextColor={'#333'}
             />
             <View
               style={{
@@ -616,21 +625,36 @@ class JobBasicType extends Component {
               </View>
             )}
           </ScrollView>
+          
           <View
             style={{
               width: wp(70),
-              height: scale(60),
-              marginTop: hp(1),
+              height: scale(90),
+              // marginTop: hp(1),
               borderRadius: scale(5),
-              backgroundColor: themeColor,
+              borderBottomWidth:1,
+              borderColor:"#eee",paddingBottom:10,
+              // backgroundColor: themeColor,
             }}>
-            <View style={styles.FilterMinimumSalaryMin}>
-              <Text
+            <Text
                 style={{
                   left: scale(15),
                   fontSize: scale(15),
                   fontFamily: FontRegular,
-                  color: themeWhite,
+                  color: '#333',alignItems:"flex-start",
+                  fontWeight: 'bold',marginBottom:5,
+                }}>
+               Select Experience
+              </Text>
+            <View style={{
+              justifyContent:"space-between",width:wp(70),flexDirection:"row"
+            }}>
+              <Text
+                style={{
+                  // left: scale(15),
+                  fontSize: scale(15),
+                  fontFamily: FontRegular,
+                  color: '#333',
                   fontWeight: 'bold',
                 }}>
                 {' '}
@@ -638,11 +662,11 @@ class JobBasicType extends Component {
               </Text>
               <Text
                 style={{
-                  right: scale(20),
-                  position: 'absolute',
+                  // right: scale(5),
+                  // position: 'absolute',
                   fontSize: scale(15),
                   fontFamily: FontRegular,
-                  color: themeWhite,
+                  color: '#333',
                   fontWeight: 'bold',
                 }}>
                 Max Exp {this.state.maxYear}y+
@@ -650,20 +674,22 @@ class JobBasicType extends Component {
             </View>
             <Slider
               style={{
-                width: wp(60),
+                width: wp(70),
                 flex: 1,
                 height: scale(10),
                 alignSelf: 'center',
                 marginTop: scale(-30),
               }}
-              gravity={'center'}
+              gravity={'bottom'}
+              floatingLabel
               min={0}
               max={20}
               step={1}
-              selectionColor={themeWhite}
-              blankColor="#B0b0b0"
-              labelBackgroundColor={themeColor}
-              labelBorderColor={'#b0b0b0'}
+              selectionColor={themeColor}
+              blankColor="#333"
+              labelBackgroundColor={themeWhite}
+              labelTextColor="#333"
+              labelBorderColor={themeWhite}
               onValueChanged={(low, high, fromUser) => {
                 global.minYear = low;
                 global.maxYear = high;
@@ -675,7 +701,7 @@ class JobBasicType extends Component {
             />
           </View>
         </View>
-      </ImageBackground>
+      </>
     );
   }
 }

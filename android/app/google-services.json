@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "644805459038",
+    "project_id": "spotjo-305912",
+    "storage_bucket": "spotjo-305912.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:644805459038:android:4dc67577628f299c5bc8cf",
+        "android_client_info": {
+          "package_name": "com.spotjo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "644805459038-hbpduloq4i8ectihvu8e03s829pnu6j4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.spotjo",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "644805459038-s0g3uu1phbbdc2rh28o5baj8925irvn4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyrJn31DRQ3iB8d2gBgg_YLDzzpbLhjZs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "644805459038-s0g3uu1phbbdc2rh28o5baj8925irvn4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

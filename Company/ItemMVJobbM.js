@@ -45,7 +45,8 @@ const {
     width
 } = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
-
+let Company = '';
+let min = 0;
 
 class ItemMVJobbM extends PureComponent {
     // title, href, total_time, total_listen, image
@@ -59,10 +60,69 @@ class ItemMVJobbM extends PureComponent {
         const b = Date.parse(new Date(dt))
         // global.CompanyExp = Math.floor(b - a)
         return Math.floor(a - b)
+    }
 
+    Companyname() {
+        let items = this.props.item;
+        let ary = [];
+        let To;
+        console.log('item>>>69', items.workexp)
+        if (items.workexp == undefined)
+            return;
+        for (let i in items.workexp) {
+            To = items.workexp[i].To.split(' ');
+            ary.push(parseInt(To[1]));
+        }
+        ary.sort();
+        // let a = ary[ary.length - 1];
+        // console.log('ary', ary[ary.length - 1]);
+        // return a
+
+        for (let i in items.workexp) {
+            To = items.workexp[i].To.split(' ');
+            if (ary[ary.length - 1] == To[1]) {
+                console.log(">>>>", items.workexp[i])
+                return Company = items.workexp[i].Company
+                // let From = items.workexp[i].From.split(' ');
+                // To = items.workexp[i].To.split(' ');
+                // min = To[1] -/ From[1];
+
+            }
+        }
+    }
+    ExpYears() {
+        let items = this.props.item;
+        console.log(">>>>", items.workexp)
+        let ary = [];
+        let To;
+        if (items.workexp == undefined)
+            return min;
+
+        for (let i in items.workexp) {
+            To = items.workexp[i].To.split(' ');
+            ary.push(parseInt(To[1]));
+        }
+        ary.sort();
+
+        for (let i in items.workexp) {
+            To = items.workexp[i].To.split(' ');
+            if (ary[ary.length - 1] == To[1]) {
+                // console.log(">>>>", items.workexp[i])
+                // Company = items.workexp[i].Company
+                let From = items.workexp[i].From.split(' ');
+                To = items.workexp[i].To.split(' ');
+                min = To[1] - From[1];
+                // console.log('min', min)
+                // if ()
+                return <Text>{min != 0 ? min - 1 : 0} - {min != 0 ? min : 0}</Text>
+            }
+        }
     }
 
     timeConversion = (millisec) => {
+
+
+
         let today = new Date(millisec);
         var mil = this.dateDiffInDays(today)
         let day,
@@ -92,8 +152,9 @@ class ItemMVJobbM extends PureComponent {
         }
     }
 
-    render() {
 
+    render() {
+        console.log('this.props', this.props.item)
         return (
             <TouchableWithoutFeedback onPress={() => this.props.push(this.props.item,this.props.index)} style={styles.ItemMVMainView}>
             <LinearGradient colors={['#fff', '#f3f2f2']} style={styles.ItemMVMainView}>
@@ -129,7 +190,7 @@ class ItemMVJobbM extends PureComponent {
                 fontSize: scale(13),
                 fontFamily: 'Roboto-Bold',
                 fontWeight: "bold"
-            }}>google</Text></View>
+            }}>{this.Companyname()}</Text></View>
         
             <View style={styles.ItemMVDetailIcon}>
             <View style={{
@@ -183,7 +244,7 @@ class ItemMVJobbM extends PureComponent {
                 alignItems: 'center',
             }}><Image source ={bag} style={styles.imageStyle} resizeMode={'contain'} /></View>
                 
-                <Text style={styles.ItemDetailLabel}>5-6 Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
+                <Text style={styles.ItemDetailLabel}>{this.ExpYears()} Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
    
       </View>
             <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}><Text style={{

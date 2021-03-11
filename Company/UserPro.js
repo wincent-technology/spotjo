@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,11 +14,21 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
+  company,icons_jobType_blue,skillCategory,workExp,placeIcon,icons_salerytype,mobile,Mail,
   themeWhite,
   homeic,
   place,
@@ -37,15 +49,23 @@ import {
   clock,
   interViewBack,
   Listed,
-  detailed,
+  detailed,backgroundCorner,blanks,Fulls,WhiteVideo,facebook,linkedin,whatsapp
 } from '../Constant/index';
+import ListShow from '../Component/ListShow'
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  StarRating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 // import ItemMV from './ItemMV'
 import Swiper from 'react-native-deck-swiper';
 import http from '../api';
@@ -59,31 +79,42 @@ class UserPro extends Component {
     super(props);
     this.state = {
       data: '',
-      id: 0,
+      id: '',
       status: '',
       jobId: '',
       comId: '',
       userId: '',
       show: false,
+      userHeading:'',
       show1: false,
       currentDate: Date.now(),
       interviewDate: 'Interview Date',
       interviewTime: 'Interview Time',
       dark: false,
+      fleg:false
     };
   }
 
   checking = () => {
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const item = params ? params.item : null;
-    console.log('other item????????????', params);
+    // console.log('other item>>>> 98', global.ig);
 
     this.setState({
       data: global.ig,
-      id: params.index || 0,
+      id: params.index,
       status: params.status,
+      fleg: this.state.fleg == true ? !this.state.fleg : this.state.fleg,
+    }, () => {
+      console.log('id',this.props.navigation.state.params,params.index,global.ig)
+      this.swiper.jumpToCardIndex(params.index);
     });
   };
+
+
+
   Back = () => {
     if (this.state.status == 'undefined')
       this.props.navigation.navigate('FirstJobList');
@@ -111,9 +142,9 @@ class UserPro extends Component {
     hour = new Date(selectedDate).getHours();
     minute = minute > 10 ? minute : '0' + minute;
     hour =
-      hour <= 12
-        ? hour + ':' + minute + ' ' + 'am'
-        : hour - 12 + ':' + minute + ' ' + 'pm';
+      hour <= 12 ?
+      hour + ':' + minute + ' ' + 'am' :
+      hour - 12 + ':' + minute + ' ' + 'pm';
 
     console.log(
       'event',
@@ -134,7 +165,13 @@ class UserPro extends Component {
     }
   };
   Shadule = () => {
-    const {jobId, comId, userId, interviewDate, interviewTime} = this.state;
+    const {
+      jobId,
+      comId,
+      userId,
+      interviewDate,
+      interviewTime
+    } = this.state;
 
     try {
       http
@@ -167,7 +204,11 @@ class UserPro extends Component {
 
   InterviewOperation = (status) => {
     console.log('0000000000000000', status);
-    const {jobId, comId, userId} = this.state;
+    const {
+      jobId,
+      comId,
+      userId
+    } = this.state;
 
     try {
       http
@@ -225,7 +266,9 @@ class UserPro extends Component {
   onSwiped = (type, index) => {
     console.log(`on swiped ${type}`, index);
     console.log(',,,,', this.state.status);
-    const {status} = this.state;
+    const {
+      status
+    } = this.state;
     const item = global.ig[index]['appid'];
     this.setState({
       id: index,
@@ -248,8 +291,7 @@ class UserPro extends Component {
           if (item == this.state.data[i].appid)
             console.log('dfsdf inter 262', this.state.data[i]);
           // console.log('dfsdf', this.state.data)
-          this.setState(
-            {
+          this.setState({
               jobId: this.state.data[i].jobId,
               comId: this.state.data[i].comId,
               userId: this.state.data[i].userId,
@@ -268,14 +310,22 @@ class UserPro extends Component {
             comId: this.state.data[i].comId,
             userId: this.state.data[i].id,
             dark: !this.state.dark,
+            fleg: !this.state.fleg,
+          },()=> {
+            this.props.navigation.navigate('ShaduleInterView',{
+              jobId:this.state.jobId,
+              comId:this.state.comId,
+              userId:this.state.userId,
+              first_name:this.state.data[i].first_name,
+              last_name:this.state.data[i].last_name
+            })
           });
         }
       } else if (status == 'Interview') {
         for (let i in this.state.data) {
           if (item == this.state.data[i].appid)
             console.log('dfsdf', this.state.data[i]);
-          this.setState(
-            {
+          this.setState({
               jobId: this.state.data[i].jobId,
               comId: this.state.data[i].comId,
               userId: this.state.data[i].userId,
@@ -286,8 +336,7 @@ class UserPro extends Component {
       }
     } else if (type == 'top') {
       if (status == null || status == 'undefined') {
-        this.setState(
-          {
+        this.setState({
             id: index,
           },
           () => this.Sharing(),
@@ -325,6 +374,8 @@ class UserPro extends Component {
     }
   };
   renderCard = (data, index) => {
+    this.setState({userHeading:data.heading})
+    console.log('dat >>>>>>>>', data.profile);
     return (
       <ScrollView
         style={{
@@ -338,137 +389,129 @@ class UserPro extends Component {
           }}
           source={require('../Img/ract.png')}
           resizeMode={'stretch'}>
-          <View style={styles.CompanyProfileImageSize}>
-            <Image
-              source={
-                data.profile
-                  ? {
-                      uri: url + 'images/user/' + data.profile,
-                    }
-                  : avtar
-              }
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
-          <View style={styles.CompanyProfileSecongImage}>
-            <Image
-              source={
-                data.profile
-                  ? {
-                      uri: url + 'images/user/' + data.profile,
-                    }
-                  : avtar
-              }
-              style={styles.imageStyle}
-              resizeMode={'cover'}
-            />
-          </View>
+          <View style={{
+                top: hp(4),
+                marginHorizontal: wp(7)
+            }}><Text style={{
+                color: '#333',
+                fontSize: scale(23),
+                fontFamily: "Roboto-Bold"
+            }}>{data.first_name} {data.last_name}</Text></View>
+            <View style={{
+                flexDirection: "row",
+                alignItems: "flex-start",
+            }}>
+   <ImageBackground style={{
+                marginTop: hp(4.5),
+                marginLeft: wp(7),
+                width: wp(32),
+                height: wp(32),
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 5
+            }}
+            source={backgroundCorner}><Image 
+            source={data.profile
+                    ? {
+                        uri: url + 'images/user/' + data.profile,
+                      }
+                    : avtar
+                          }
+            style={{
+                height: wp('29'),
+                width: wp('29'),
+            // alignItems: "stretch",
+            // backgroundColor: "transparent"
+            }} resizeMode={'contain'}/></ImageBackground>
+            <View style={{
+                flexDirection: "column",
+                height: wp(32),
+                width: wp(50),justifyContent:"center",alignItems:"center",
+                marginTop: hp(3),marginHorizontal:wp(2),
+            }}>
+            <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
+                vid: url + '/images/user/' + data.video
+            })}><View style={{
+                flexDirection: "column",
+                // height: hp(9),
+                width: wp(26),
+                alignItems: "center",
+                justifyContent: "center"
+            }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
+                height: scale(65),
+                width: scale(65),
+            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                color: themeColor,
+                fontFamily: "Roboto-Regular",
+                fontSize: scale(10)
+            }}>Company Profile</Text></View>
+            </View></TouchableWithoutFeedback>
+            <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
+            <View style={{marginTop:scale(5)}}>
+            <StarRating
+            emptyStar={blanks}
+            starStyle={{marginLeft:5}}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(15)}
+            rating={3}
+            // selectedStar={(rating) => this.handleLanguage(rating, index)}
+            fullStarColor={'orange'}
+            /></View>
+            </View>
+            </View>
+            <View style={{
+                marginLeft: wp(7),
+                marginTop: hp(1),
+                height: hp(3),
+                width: wp(32),
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: 'row'
+            }}><Image source={facebook} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/><Image source={linkedin} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25),
+                marginHorizontal: wp(1)
+            }}/><Image source={whatsapp} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/>
+            </View>
           <View style={styles.CompanyProfileDetail}>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={homeic}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1} numberOfLines={1}>
-                {data.first_name} {data.last_name}
-              </Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={user}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>Employed</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={screen}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>{data.Company}</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={edit}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text
-                style={{
-                  marginLeft: scale(10),
-                  width:wp(50),
-                  marginTop:scale(-3)
-                }} numberOfLines={1}>
-                {data.skills != null &&
-                  data.skills.map((item, index) => {
-                    return (
-                      <Text key={index} style={styles.ItemDetailLabel1}>
-                        {item.name} /
-                      </Text>
-                    );
-                  })}
-              </Text>
-              <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={bag}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>
-                {data.totalExp == 1 ? 0 : data.totalExp - 1} - {data.totalExp}{' '}
-                Years /
-              </Text>
-              <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={place}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>{data.place} /</Text>
-              <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={dollor}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>
-                {data.minSal} - {data.maxSal},000$
-              </Text>
-            </View>
-            <View style={styles.CompanyDetailIcon}>
-              <View style={styles.CompanyDetailProfileIcon}>
-                <Image
-                  source={earth}
-                  style={styles.imageStyle}
-                  resizeMode={'contain'}
-                />
-              </View>
-              <Text style={styles.ItemDetailLabel1}>{data.email}</Text>
-            </View>
+          <ListShow name={data.Company} image={company} />
+          <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
+          <ListShow name={data.heading} image={skillCategory} />
+          <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={workExp}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {data.totalExp != '' && data.totalExp != null
+                  ? data.totalExp-1
+                  : 0 } 
+                 -{ data.totalExp != '' && data.totalExp != null
+                  ? data.totalExp
+                  : 0 }
+                {' '}Years /{' '}
+                        </Text>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          100%
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <ListShow name={data.place + ' / 100%'} image={placeIcon} />
+                      <ListShow name={data.mobile} image={mobile} />
+                      <ListShow name={data.email} image={Mail} />
           </View>
         </ImageBackground>
       </ScrollView>
@@ -476,17 +519,27 @@ class UserPro extends Component {
   };
 
   render() {
-    const {data, dark, show1, show, id, left} = this.state;
+    const {
+      data,
+      dark,
+      show1,
+      show,
+      id,
+      left
+    } = this.state;
+    console.log('id>>>>>',global.ig[id])
     return (
       <SafeAreaView style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
+          <StatusBar hidden={false} backgroundColor={themeWhite} />
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHeader
             onPress={() => this.Back()}
-            text={global.ig && data.heading}
+            text={global.ig && this.state.userHeading}
           />
           <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
@@ -750,7 +803,7 @@ class UserPro extends Component {
                     style={{
                       textAlign: 'center',
                       fontFamily: FontBold,
-                      color: themeWhite,
+                      color: themeColor,
                       fontSize: scale(18),
                       width: wp(60),
                     }}>
@@ -758,231 +811,6 @@ class UserPro extends Component {
                   </Text>
                   <NavigationEvents onDidFocus={this.checking} />
                 </View>
-              )}
-              {dark && (
-                <ImageBackground
-                  style={{
-                    width: wp('90%'),
-                    height:
-                      hp('100%') -
-                      (StatusBar.currentHeight + scale(100) + hp(7)),
-                    marginHorizontal: wp(2.7),
-                  }}
-                  source={interViewBack}
-                  resizeMode={'stretch'}>
-                  <View
-                    style={{
-                      zIndex: 1,
-                      top: scale(15),
-                      right: scale(15),
-                      height: scale(25),
-                      width: scale(25),
-                      position: 'absolute',
-                    }}>
-                    <TouchableWithoutFeedback
-                      onPress={() =>
-                        this.setState({
-                          dark: !this.state.dark,
-                        })
-                      }>
-                      <View
-                        style={{
-                          height: scale(25),
-                          width: scale(25),
-                          zIndex: 1,
-                        }}
-                        hitSlop={{
-                          top: 15,
-                          bottom: 15,
-                          left: 15,
-                          right: 15,
-                        }}>
-                        <Icon2 name={'clear'} size={scale(20)} color={'#fff'} />
-                      </View>
-                    </TouchableWithoutFeedback>
-                  </View>
-                  <View
-                    style={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                    }}>
-                    <View
-                      style={{
-                        alignItems: 'center',
-                        width: wp(96),
-                        marginVertical: hp(4),
-                      }}>
-                      <Text
-                        style={{
-                          fontSize: scale(18),
-                          fontFamily: 'Roboto-Bold',
-                          color: themeWhite,
-                        }}>
-                        Schedule InterView
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(10),
-                      }}>
-                      <View
-                        style={{
-                          backgroundColor: themeColor,
-                          width: wp(70),
-                          height: scale(40),
-                          borderColor: themeColor,
-                          alignItems: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                          flexDirection: 'row',
-                        }}
-                        onStartShouldSetResponder={() =>
-                          this.setState({
-                            show: !this.state.show,
-                          })
-                        }>
-                        <View
-                          style={{
-                            marginLeft: 10,
-                            width: wp(50),
-                            alignItems: 'flex-start',
-                          }}>
-                          <Text
-                            style={{
-                              color: 'white',
-                              fontSize: scale(18),
-                              fontFamily: 'Roboto-Bold',
-                              fontWeight: 'bold',
-                            }}>
-                            {this.state.interviewDate}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            marginLeft: scale(20),
-                            width: scale(20),
-                            height: scale(20),
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Image
-                            source={cal}
-                            style={{
-                              height: scale(20),
-                              width: scale(20),
-                            }}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        marginTop: hp(2),
-                      }}>
-                      <View
-                        style={{
-                          backgroundColor: themeColor,
-                          width: wp(70),
-                          height: scale(40),
-                          borderColor: themeColor,
-                          alignItems: 'center',
-                          borderWidth: scale(1),
-                          borderRadius: scale(5),
-                          flexDirection: 'row',
-                        }}
-                        onStartShouldSetResponder={() =>
-                          this.setState({
-                            show1: !this.state.show,
-                          })
-                        }>
-                        <View
-                          style={{
-                            marginLeft: 10,
-                            width: wp(50),
-                            alignItems: 'flex-start',
-                          }}>
-                          <Text
-                            style={{
-                              color: 'white',
-                              fontSize: scale(18),
-                              fontFamily: 'Roboto-Bold',
-                              fontWeight: 'bold',
-                            }}>
-                            {this.state.interviewTime}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            marginLeft: scale(20),
-                            width: scale(20),
-                            height: scale(20),
-                            alignItems: 'flex-end',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                          }}>
-                          <Image
-                            source={clock}
-                            style={{
-                              height: scale(20),
-                              width: scale(20),
-                            }}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                      </View>
-                    </View>
-                    {show && (
-                      <DateTimePicker
-                        testID="dateTimePicker"
-                        value={this.state.currentDate}
-                        mode={'date'}
-                        is24Hour={true}
-                        display="spinner"
-                        onChange={this.onChange}
-                      />
-                    )}
-                    {show1 && (
-                      <DateTimePicker
-                        testID="dateTimePicker"
-                        value={this.state.currentDate}
-                        mode={'time'}
-                        is24Hour={false}
-                        display="default"
-                        onChange={this.onChange1}
-                      />
-                    )}
-                    <View
-                      style={{
-                        top: hp(22),
-                      }}>
-                      <TouchableWithoutFeedback
-                        style={styles.OpportunityView}
-                        onPress={this.Shadule}>
-                        <View
-                          style={{
-                            height: scale(40),
-                            width: scale(250),
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            backgroundColor: themeColor,
-                            borderRadius: scale(5),
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: scale(18),
-                              fontFamily: FontBold,
-                              color: themeWhite,
-                              fontWeight: 'bold',
-                            }}>
-                            Schedule Now
-                          </Text>
-                        </View>
-                      </TouchableWithoutFeedback>
-                    </View>
-                  </View>
-                </ImageBackground>
               )}
             </View>
           ) : (

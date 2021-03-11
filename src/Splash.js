@@ -13,6 +13,8 @@ import styles from './Style'
 import { Background, themeColor, url, splashVid } from '../Constant/index'
 import AsyncStorage from '@react-native-community/async-storage';
 import Video from 'react-native-video';
+import http from '../api';
+import { scale,snack } from './Util';
 
 let navigate = 'MainScreen'
 
@@ -51,6 +53,8 @@ class Splash extends Component {
         if (keys.indexOf("UserLoggedInData") !== -1) {
             var result = await AsyncStorage.getItem('UserLoggedInData');
             result = JSON.parse(result);
+            console.log('result',JSON.parse(result))
+            console.log('resulteducation',result);
             global.Id = result['id'];
             global.firstName = result['first_name']
             global.lastName = result['last_name']
@@ -59,16 +63,18 @@ class Splash extends Component {
             global.UserMobile = result['mobile']
             global.UserProfile = url + '/images/user/' + result['profile']
             global.Video = url + '/images/user/' + result['video']
-            global.UserSkill = result['skills']
+            global.UserSkill = JSON.parse(result['skills'])
             global.UserLanguage = result['language']
-            global.Qualification = result['qualification']
-            global.UserEducation = result['education']
+            global.Qualification = (result['qualification'])
+            global.UserEducation = JSON.parse(result['education']) || []
             global.salaryrating = result['salaryrating']
             global.salary = result['minSal']
-            global.Experience = result['workexp']
+            global.maxSalary =result['maxSal']
+            global.Experience = JSON.parse(result['workexp'])
             global.let = parseFloat(result['latitude'])
             global.long = parseFloat(result['longitude'])
             navigate = 'TabScreenJob'
+            this.callJob()
         } else if (keys.indexOf("CompanyLoggedInData") !== -1) {
             var result = await AsyncStorage.getItem('CompanyLoggedInData');
             result = JSON.parse(result);
@@ -84,12 +90,33 @@ class Splash extends Component {
             global.Address = result['address']
             global.long = parseFloat(result['longitude'])
             global.let = parseFloat(result['latitude'])
-            navigate = 'TalentCom'
+            navigate = result['isLoggedFirstTime']  == 0 ? 'TalentCom' : 'ComEdit'
         }
-    // setTimeout(() => {
-    //     this.props.navigation.navigate(navigate)
-    // }, this.state.duration)
+    setTimeout(() => {
+        this.props.navigation.navigate(navigate)
+    }, this.state.duration)
     }
+
+    callJob = () => {
+        try {
+          http.POST('api/appjob/get', {
+            location: global.Place
+          }).then(
+            (res) => {
+              console.log('resssssssssssssssssssssssssssssssssssssssssssssssss',res['data']['result'])
+              if (res['data']['status']) {
+                global.all = res['data']['result'];
+              } else {
+                snack(res['data']['message']);
+              }
+            },
+            (err) => snack(JSON.stringify(err['message'])),
+          );
+        } catch (error) {
+          snack(error);
+        }
+      }
+
     render() {
         return (
             <View style={stylee.container}>

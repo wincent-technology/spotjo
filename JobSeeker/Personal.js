@@ -19,7 +19,7 @@ import {
     View,
     PermissionsAndroid,
     TouchableWithoutFeedback,
-    TouchableOpacity,
+    TouchableOpacity,TextInput,
     ScrollView
 } from 'react-native';
 import {
@@ -41,6 +41,36 @@ import {
     Background
 } from '../Constant/index'
 import ImagePicker from 'react-native-image-picker';
+import BackNext from '../Component/BackNext'
+
+
+const InputText = ({...props}) => {
+    console.log(props)
+    return <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center",borderBottomWidth:1,borderBottomColor:"#fff"}}>
+                <View style={{ alignItems: 'baseline'}}>
+                <Text style={[styles.PersonalInfoText, {
+            fontFamily: FontBold,
+            fontSize: scale(18),
+            }]}>{props.Text} </Text></View>
+            <View>
+            <TextInput
+            autoCorrect={false}
+            onChangeText={props.textChange}
+            value={props.value}
+            placeholder={!props.value ? 'Enter' + ' ' + props.Text : ''}
+            placeholderTextColor={'rgba(255,255,255,0.5)'}
+            style={[{ flex: 1,width:'auto',
+            justifyContent:"center",
+                // alignItems: 'stretch',
+            fontFamily: FontRegular,
+            fontWeight: '700',
+            fontSize: scale(18),
+            borderColor: 'black'},styles.PersonalInfoText]}
+            {...props}
+            /></View>
+</View>
+}
+
 
 class Personal extends Component {
     constructor(props) {
@@ -48,10 +78,15 @@ class Personal extends Component {
 
         this.state = {
             firstName: '',
+            fname:false,
             lastName: '',
+            lname:false,
             Email: '',
+            em:false,
             Place: '',
+            pl:false,
             Mobile: '',
+            Mb:false,
             img: ''
 
         };
@@ -69,6 +104,12 @@ class Personal extends Component {
     }
 
     next = () => {
+        const {firstName,lastName,Email,Place,Mobile} = this.state;
+        global.firstName = firstName
+        global.lastName = lastName
+        global.UserEmail = Email
+        global.Place = Place
+        global.UserMobile=Mobile
         this.props.navigation.navigate('JobVideoResume');
     }
     back = () => {
@@ -127,7 +168,7 @@ class Personal extends Component {
             lastName,
             Email,
             Place,
-            Mobile
+            Mobile,fname,lname,em,pl,Mb
         } = this.state;
         return (
             <SafeAreaView style={styles.backGround}>
@@ -156,128 +197,38 @@ class Personal extends Component {
                         <View style={styles.PersonalInfo}>
                             <ScrollView style={{
                 alignSelf: "stretch",
-                height: hp(30)
+                height: hp(35)
             }}>
-                            <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
-                fontFamily: FontBold,
-                fontSize: scale(18),
-
-            }]}>First Name</Text></View>
-                                <View style={styles.PersonalInfoEnd}>
-                                <CustomInput textAlign={'right'} value = {firstName} textChange = {(text) => this.setState({
+            <InputText Text ={'First Name'} value={firstName} textChange = {(text) => this.setState({
                 firstName: text
             }, () => {
-                global.firstName = firstName
-            })} containerStyle={styles.PersonalCompanyTextInput} inputContainerStyle={styles.PersonalCompanystyleInput}
-            inputStyle={[styles.PersonalInfoText, {
-                fontFamily: FontRegular,
-                fontWeight: '700',
-                fontSize: scale(16)
-            }]}
-            /></View></View>
-                            <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
-                fontFamily: FontBold,
-                fontSize: scale(18),
-
-            }]}>Last Name</Text></View>
-                                <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {lastName} textChange = {(text) => this.setState({
+                global.firstName = this.state.firstName
+            })} />
+             <InputText Text ={'Last Name'} value={lastName} textChange = {(text) => this.setState({
                 lastName: text
             }, () => {
-                global.lastName = lastName
-            })} containerStyle={[styles.PersonalCompanyTextInput, {
-                width: wp(43)
-            }]} inputContainerStyle={styles.PersonalCompanystyleInput}
-            inputStyle={[styles.PersonalInfoText, {
-                fontFamily: FontRegular,
-                fontWeight: '700',
-                fontSize: scale(16)
-            }]}
-            /></View></View>
-                            <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
-                fontFamily: FontBold,
-                fontSize: scale(18),
-
-            }]}>Email</Text></View>
-                                <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {Email} textChange = {(text) => this.setState({
+                global.lastName = this.state.lastName
+            })} />
+             <InputText Text ={'Email'} value={Email} textChange = {(text) => this.setState({
                 Email: text
             }, () => {
-                global.UserEmail = Email
-            })} containerStyle={[styles.PersonalCompanyTextInput, {
-                width: wp(60)
-            }]} inputContainerStyle={styles.PersonalCompanystyleInput}
-            inputStyle={[styles.PersonalInfoText, {
-                fontFamily: FontRegular,
-                fontWeight: '700',
-                fontSize: scale(16)
-            }]}
-            /></View></View>
-                            <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
-                fontFamily: FontBold,
-                fontSize: scale(18),
-
-            }]}>Place</Text></View>
-                                <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {Place} textChange = {(text) => this.setState({
-                Place: text
+                global.UserEmail = this.state.Email
+            })} />
+            <InputText Text ={'Place'} value={Place} textChange = {(text) => this.setState({
+               Place: text
             }, () => {
-                global.Place = Place
-            })} containerStyle={styles.PersonalCompanyTextInput} inputContainerStyle={styles.PersonalCompanystyleInput}
-            inputStyle={[styles.PersonalInfoText, {
-                fontFamily: FontRegular,
-                fontWeight: '700',
-                fontSize: scale(16)
-            }]}
-            /></View></View>
-            <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
-                fontFamily: FontBold,
-                fontSize: scale(18),
-
-            }]}>Mobile Number</Text></View>
-                                <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {Mobile} textChange = {(text) => this.setState({
-                Mobile: text
+                global.Place = this.state.Place
+            })} />
+            <InputText Text ={'Mobile Number'} keyboardType={'numeric'} value={Mobile} textChange = {(text) => this.setState({
+               Mobile: text
             }, () => {
-                global.UserMobile = Mobile
-            })} containerStyle={[styles.PersonalCompanyTextInput, {
-                width: wp(48)
-            }]} inputContainerStyle={styles.PersonalCompanystyleInput}
-            inputStyle={[styles.PersonalInfoText, {
-                fontFamily: FontRegular,
-                fontWeight: '700',
-                fontSize: scale(16)
-            }]}
-            keyboardType={'phone-pad'}
-            /></View></View>
+                global.UserMobile = this.state.Mobile
+            })} />
+            
                         </ScrollView>
                         </View>
-                        <View style={{
-                flexDirection: "row",
-                width: wp(90),
-                top: hp(6),
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-                width: wp(40),
-                marginLeft: wp(5)
-            }}>
-            <TouchableOpacity style={styles.Size} onPress={() => this.back()} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
-            </View>
-            <View style={{
-                alignItems: 'flex-end',
-                right: wp(7),
-                width: wp(47)
-            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
-                alignItems: 'flex-end'
-            }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
-            </View>
                     </View>
+                    <BackNext onBack={this.back} onNext={this.next} />
                 </ImageBackground></SafeAreaView>
         );
     }

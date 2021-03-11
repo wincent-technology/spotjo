@@ -35,6 +35,8 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from '../Component/responsive-ratio';
+import BackNext from '../Component/BackNext'
+
 import {
     backgroundCorner,
     Companyavtar,
@@ -159,7 +161,7 @@ class PersonalCompany extends Component {
                         <View style={styles.PersonalInfo}>
                          <ScrollView showsVerticalScrollIndicator={true} style={{
                 alignSelf: "stretch",
-                height: hp(30)
+                // height: hp(30)
             }}>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
@@ -281,31 +283,9 @@ class PersonalCompany extends Component {
             onChangeText ={(text) => this.handleChange(text)}
             /></View></View>
                         </ScrollView></View>
-                        <View style={{
-                flexDirection: "row",
-                width: wp(90),
-                top: hp(6),
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-                width: wp(40),
-                marginLeft: wp(5)
-            }}>
-            <TouchableOpacity style={styles.Size} onPress={() => this.back()} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
-            </View>
-            <View style={{
-                alignItems: 'flex-end',
-                right: wp(7),
-                width: wp(47)
-            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
-                alignItems: 'flex-end'
-            }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
-            </View>
                     </View>
+                    <BackNext onBack={this.back} onNext={this.next} />
+
                 </ImageBackground></SafeAreaView>
         );
     }

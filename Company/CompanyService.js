@@ -113,21 +113,12 @@ class CompanyService extends PureComponent {
         } = this.state;
         return (
             <View style={styles.backGround}>
-                <StatusBar hidden={true} />
-                <ImageBackground style={styles.ImageBlue}
-            source={Background}
-            resizeMode={'stretch'}>
+                <StatusBar hidden={false} backgroundColor={themeWhite} />
                     <NavigationHead centerComponent='Company Service' rightComponent='Save' onPress={() => this.Back()} onExit={() => this.Exit()} />
                     <View style={{
                 height: hp(100) - (hp(11) + scale(45))
             }}>
-            <ImageBackground style={{
-                width: wp('96%'),
-                marginHorizontal: wp(2),
-                height: hp('100%') - (StatusBar.currentHeight + 50 + hp(4)),
-            // justifyContent: "center",
-            // alignItems: 'center'
-            }} source={darkract} resizeMode={'stretch'}>
+            
             <View style={{
                 justifyContent: "center",
                 alignItems: "center"
@@ -149,9 +140,9 @@ class CompanyService extends PureComponent {
             numberOfLines={10}
             style={{
                 height: hp(65),
-                width: wp(72),
+                width: wp(86),
                 borderRadius: scale(10),
-                backgroundColor: 'white',
+                backgroundColor: '#eee',
                 alignSelf: 'center',
                 textAlignVertical: 'top'
             }}
@@ -159,14 +150,7 @@ class CompanyService extends PureComponent {
             value={name}
             /></View>
            </View>
-            </ImageBackground></View>
-                    <View style={styles.TranLingImage}>
-                        <Image
-            source={TRANLINE}
-            style={styles.imageStyle}
-            resizeMode={'stretch'}
-            /></View>
-                </ImageBackground>
+            </View>
             </View>
         )
     }

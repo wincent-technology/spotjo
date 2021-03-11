@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +14,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -38,15 +49,25 @@ import {
   interViewBack,
   Listed,
   detailed,
+  Companyavtar
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 // import ItemMV from './ItemMV'
+import {
+  BlurView
+} from "@react-native-community/blur";
 import Swiper from 'react-native-deck-swiper';
 import http from '../api';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
@@ -54,7 +75,7 @@ import CustomInput from '../Component/Input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Share from 'react-native-share';
 
-class PostedJobUser extends Component {
+class PostedJobUser extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -74,16 +95,23 @@ class PostedJobUser extends Component {
   }
 
   checking = () => {
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const item = params ? params.item : null;
-    console.log('other item????????????', params,params.index);
+    console.log('other item????????????', params.index);
 
     this.setState({
       data: global.ig,
       id: params.index,
       status: params.status,
+    }, () => {
+      this.swiper.jumpToCardIndex(this.state.id);
     });
+
   };
+
+
   Back = () => {
     if (this.state.status == 'undefined')
       this.props.navigation.navigate('FirstJobList');
@@ -111,9 +139,9 @@ class PostedJobUser extends Component {
     hour = new Date(selectedDate).getHours();
     minute = minute > 10 ? minute : '0' + minute;
     hour =
-      hour <= 12
-        ? hour + ':' + minute + ' ' + 'am'
-        : hour - 12 + ':' + minute + ' ' + 'pm';
+      hour <= 12 ?
+      hour + ':' + minute + ' ' + 'am' :
+      hour - 12 + ':' + minute + ' ' + 'pm';
 
     console.log(
       'event',
@@ -134,7 +162,13 @@ class PostedJobUser extends Component {
     }
   };
   Shadule = () => {
-    const {jobId, comId, userId, interviewDate, interviewTime} = this.state;
+    const {
+      jobId,
+      comId,
+      userId,
+      interviewDate,
+      interviewTime
+    } = this.state;
 
     try {
       http
@@ -167,7 +201,11 @@ class PostedJobUser extends Component {
 
   InterviewOperation = (status) => {
     console.log('0000000000000000', status);
-    const {jobId, comId, userId} = this.state;
+    const {
+      jobId,
+      comId,
+      userId
+    } = this.state;
 
     try {
       http
@@ -225,7 +263,9 @@ class PostedJobUser extends Component {
   onSwiped = (type, index) => {
     console.log(`on swiped ${type}`, index);
     console.log(',,,,', this.state.status);
-    const {status} = this.state;
+    const {
+      status
+    } = this.state;
     const item = global.ig[index]['appid'];
     this.setState({
       id: index,
@@ -248,8 +288,7 @@ class PostedJobUser extends Component {
           if (item == this.state.data[i].appid)
             console.log('dfsdf inter 262', this.state.data[i]);
           // console.log('dfsdf', this.state.data)
-          this.setState(
-            {
+          this.setState({
               jobId: this.state.data[i].jobId,
               comId: this.state.data[i].comId,
               userId: this.state.data[i].userId,
@@ -274,8 +313,7 @@ class PostedJobUser extends Component {
         for (let i in this.state.data) {
           if (item == this.state.data[i].appid)
             console.log('dfsdf', this.state.data[i]);
-          this.setState(
-            {
+          this.setState({
               jobId: this.state.data[i].jobId,
               comId: this.state.data[i].comId,
               userId: this.state.data[i].userId,
@@ -286,8 +324,7 @@ class PostedJobUser extends Component {
       }
     } else if (type == 'top') {
       if (status == null || status == 'undefined') {
-        this.setState(
-          {
+        this.setState({
             id: index,
           },
           () => this.Sharing(),
@@ -326,7 +363,7 @@ class PostedJobUser extends Component {
   };
   renderCard = (data, index) => {
     return (
-     <ScrollView
+      <ScrollView
         style={{
           alignSelf: 'stretch',
         }}>
@@ -339,6 +376,7 @@ class PostedJobUser extends Component {
             }}
             source={require('../Img/ract.png')}
             resizeMode={'stretch'}>
+  <StatusBar hidden={false} backgroundColor={themeColor} />                 
             <View style={styles.CompanyProfileImageSize}>
               <Image
                 source={
@@ -435,7 +473,13 @@ class PostedJobUser extends Component {
                   />
                 </View>
                 <Text style={styles.ItemDetailLabel1}>
-                  {data.minExp} - {data.maxExp} Years /
+                  {data.minExp != '' && data.minExp != null
+                  ? data.minExp
+                  : 0 } 
+                 -{ data.maxExp != '' && data.maxExp != null
+                  ? data.maxExp
+                  : 0 }
+                {' '}Years /{' '}
                 </Text>
                 <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
               </View>
@@ -447,7 +491,14 @@ class PostedJobUser extends Component {
                     resizeMode={'contain'}
                   />
                 </View>
-                <Text style={styles.ItemDetailLabel1}>{data.city} /</Text>
+                <Text style={styles.ItemDetailLabel1}>{data != '' &&
+                    data.city.map((item, index) => {
+                      return (
+                        <Text key={index} style={styles.ItemDetailLabel1}>
+                          {item} /
+                        </Text>
+                      );
+                    })}</Text>
                 <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
               </View>
               <View style={styles.CompanyDetailIcon}>
@@ -474,13 +525,21 @@ class PostedJobUser extends Component {
               </View>
             </View>
           </ImageBackground>
+          
       </ScrollView>
     );
   };
 
   render() {
-    const {data, dark, show1, show, id, left} = this.state;
-    console.log('this.state.id',id);
+    const {
+      data,
+      dark,
+      show1,
+      show,
+      id,
+      left
+    } = this.state;
+
     return (
       <SafeAreaView style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
@@ -589,7 +648,7 @@ class PostedJobUser extends Component {
                   onSwipedTop={(index) => this.onSwiped('top', index)}
                   onSwipedBottom={(index) => this.onSwiped('bottom', index)}
                   cards={global.ig}
-                  cardIndex={id}
+                  cardIndex={this.state.id}
                   stackSize={2}
                   showSecondCard={true}
                   renderCard={this.renderCard}

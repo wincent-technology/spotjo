@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -13,13 +15,22 @@ import {
   View,
   ActivityIndicator,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents,
+  ThemeColors
+} from 'react-navigation';
 import styles from './Style';
-import {left, library, icon, play, leftVid} from './IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from './IconManager';
 import {
   themeColor,
-  themeWhite,
-  homeic,
+  company,icons_jobType_blue,skillCategory,workExp,placeIcon,icons_salerytype,
   place,
   screen,
   edit,
@@ -28,25 +39,31 @@ import {
   user,
   bag,
   Background,
+  themeWhite,
   sort,
   filter,
   TRANLINE,
   url,
-  Companyavtar,
+  Companyavtar,facebook,linkedin,whatsapp,
   FontBold,
-  Listed,
-  detailed,
+  Listed,blanks,Fulls,
+  detailed,backgroundCorner,settingTab,WhiteVideo
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale} from './Util';
+import {
+  scale
+} from './Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader,StarRating
+} from '../Component/ViewManager.js';
 // import ItemMV from './ItemMV'
 import Swipers from 'react-native-swiper';
-
+import ListShow from '../Component/ListShow'
 class CompanyProfile extends Component {
   constructor(props) {
     super(props);
@@ -57,7 +74,9 @@ class CompanyProfile extends Component {
 
   checking = () => {
     // console.log('hey')
-    const {params} = this.props.navigation.state;
+    const {
+      params
+    } = this.props.navigation.state;
     const item = params ? params.item : null;
     // console.log('other item', item);
     this.setState({
@@ -69,8 +88,11 @@ class CompanyProfile extends Component {
     this.props.navigation.goBack();
   };
 
+
   render() {
-    const {data} = this.state;
+    const {
+      data
+    } = this.state;
     return data != '' ? (
       <SafeAreaView style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
@@ -78,6 +100,7 @@ class CompanyProfile extends Component {
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHeader onPress={() => this.Back()} text={data.title} />
           <View style={styles.JoblistSecondViewHeading}>
@@ -170,104 +193,109 @@ class CompanyProfile extends Component {
                     }}
                     source={require('../Img/ract.png')}
                     resizeMode={'stretch'}>
-                    <View style={styles.CompanyProfileImageSize}>
-                      <Image
-                        source={
-                          data.logo
-                            ? {
-                                uri: url + 'images/company/' + data.logo,
-                              }
-                            : Companyavtar
-                        }
-                        style={styles.imageStyle}
-                        resizeMode={'stretch'}
-                      />
-                    </View>
-                    <View style={styles.CompanyProfileSecongImage}>
-                      <Image
-                        source={
-                          data.logo
-                            ? {
-                                uri: url + 'images/company/' + data.logo,
-                              }
-                            : Companyavtar
-                        }
-                        style={styles.imageStyle}
-                        resizeMode={'cover'}
-                      />
-                    </View>
-                    <View style={styles.CompanyProfileDetail}>
+                    <View style={{
+                top: hp(4),
+                marginHorizontal: wp(7)
+            }}><Text style={{
+                color: '#333',
+                fontSize: scale(23),
+                fontFamily: "Roboto-Bold"
+            }}>{data.title}</Text></View>
+                    <View style={{
+                flexDirection: "row",
+                alignItems: "flex-start",
+            }}>
+   <ImageBackground style={{
+                marginTop: hp(4.5),
+                marginLeft: wp(7),
+                width: wp(32),
+                height: wp(32),
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 5
+            }}
+            source={backgroundCorner}><Image 
+            source={
+                            data.logo
+                              ? {
+                                  uri: url + 'images/company/' + data.logo,
+                                }
+                              : Companyavtar
+                          }
+            style={{
+                height: wp('29'),
+                width: wp('29'),
+            // alignItems: "stretch",
+            // backgroundColor: "transparent"
+            }} resizeMode={'contain'}/></ImageBackground>
+            <View style={{
+                flexDirection: "column",
+                height: wp(32),
+                width: wp(50),justifyContent:"center",alignItems:"center",
+                marginTop: hp(3),marginHorizontal:wp(2),
+            }}>
+            <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
+                vid: global.Video
+            })}><View style={{
+                flexDirection: "column",
+                // height: hp(9),
+                width: wp(26),
+                alignItems: "center",
+                justifyContent: "center"
+            }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
+                height: scale(65),
+                width: scale(65),
+            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                color: themeColor,
+                fontFamily: "Roboto-Regular",
+                fontSize: scale(10)
+            }}>Company Profile</Text></View>
+            </View></TouchableWithoutFeedback>
+            <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
+            <View style={{marginTop:scale(5)}}>
+            <StarRating
+            emptyStar={blanks}
+            starStyle={{marginLeft:5}}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(15)}
+            rating={3}
+            // selectedStar={(rating) => this.handleLanguage(rating, index)}
+            fullStarColor={'orange'}
+            /></View>
+            </View>
+            </View>
+            <View style={{
+                marginLeft: wp(7),
+                marginTop: hp(1),
+                height: hp(3),
+                width: wp(32),
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: 'row'
+            }}><Image source={facebook} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/><Image source={linkedin} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25),
+                marginHorizontal: wp(1)
+            }}/><Image source={whatsapp} resizeMode={'contain'} style={{
+                height: scale(25),
+                width: scale(25)
+            }}/>
+            </View>
+                    <View style={[styles.CompanyProfileDetail,{marginTop:10}]}>
+                    <ListShow name={data.name} image={company} />
+                    <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
+                    <ListShow name={data.title} image={skillCategory} />
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
-                            source={homeic}
-                            style={styles.imageStyle}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                        <Text style={styles.ItemDetailLabel1}>{data.name}</Text>
-                      </View>
-                      <View style={styles.CompanyDetailIcon}>
-                        <View style={styles.CompanyDetailProfileIcon}>
-                          <Image
-                            source={user}
-                            style={styles.imageStyle}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                        <Text style={styles.ItemDetailLabel1}>
-                          {data.isEmployed ? (
-                            <Text>Employed</Text>
-                          ) : (
-                            <Text>Fresher</Text>
-                          )}
-                        </Text>
-                      </View>
-                      <View style={styles.CompanyDetailIcon}>
-                        <View style={styles.CompanyDetailProfileIcon}>
-                          <Image
-                            source={screen}
-                            style={styles.imageStyle}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                        <Text style={styles.ItemDetailLabel1}>
-                          {data.title}
-                        </Text>
-                      </View>
-                      <View style={styles.CompanyDetailIcon}>
-                        <View style={styles.CompanyDetailProfileIcon}>
-                          <Image
-                            source={edit}
-                            style={styles.imageStyle}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                        <Text
-                          style={{
-                            marginLeft: scale(10),
-                            marginTop: scale(-2),
-                          }}>
-                          {data != '' &&
-                            data.skills.map((item, index) => {
-                              return (
-                                <Text
-                                  key={index}
-                                  style={styles.ItemDetailLabel1}>
-                                  {item.name} /
-                                </Text>
-                              );
-                            })}
-                        </Text>
-                        <Text style={styles.CompanyProfileDetailLabel100}>
-                          {' '}
-                          100%
-                        </Text>
-                      </View>
-                      <View style={styles.CompanyDetailIcon}>
-                        <View style={styles.CompanyDetailProfileIcon}>
-                          <Image
-                            source={bag}
+                            source={workExp}
                             style={styles.imageStyle}
                             resizeMode={'contain'}
                           />
@@ -280,10 +308,11 @@ class CompanyProfile extends Component {
                           100%
                         </Text>
                       </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
-                            source={place}
+                            source={placeIcon}
                             style={styles.imageStyle}
                             resizeMode={'contain'}
                           />
@@ -296,10 +325,11 @@ class CompanyProfile extends Component {
                           100%
                         </Text>
                       </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
-                            source={dollor}
+                            source={icons_salerytype}
                             style={styles.imageStyle}
                             resizeMode={'contain'}
                           />
@@ -308,18 +338,8 @@ class CompanyProfile extends Component {
                           {data.salMin} - {data.salMax},000$
                         </Text>
                       </View>
-                      <View style={styles.CompanyDetailIcon}>
-                        <View style={styles.CompanyDetailProfileIcon}>
-                          <Image
-                            source={earth}
-                            style={styles.imageStyle}
-                            resizeMode={'contain'}
-                          />
-                        </View>
-                        <Text style={styles.ItemDetailLabel1}>
-                          {data.website}
-                        </Text>
-                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                    <ListShow name={data.website} image={earth} />
                     </View>
                   </ImageBackground>
                 </View>
@@ -345,13 +365,6 @@ class CompanyProfile extends Component {
               </View>
             </Swipers>
           </View>
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </SafeAreaView>
     ) : (
@@ -365,16 +378,10 @@ class CompanyProfile extends Component {
             },
           ]}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size="large" color={themeColor} />
           <NavigationEvents onDidFocus={this.checking} />
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </SafeAreaView>
     );

@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -11,9 +13,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -33,9 +44,14 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale} from '../src/Util';
+import {
+  scale
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMVJobb from './ItemMVJobb';
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
@@ -57,23 +73,82 @@ class FirstJobList extends PureComponent {
   };
 
   push = (item, index) => {
+
+    let data = []
+                    let From,
+                        To,
+                        tmpobj,
+                        jobs = global.all;
+
+              for (let i in jobs) {
+
+                  if (jobs[i]['workexp']) {
+                      for (let j in jobs[i]['workexp']) {
+                              tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+
+                              From = jobs[i]['workexp'][j]['From'].split(' ');
+                              To = jobs[i]['workexp'][j]['To'].split(' ');
+
+                              tmpobj.Company = jobs[i]['workexp'][j]['Company'];
+                              tmpobj.heading = jobs[i]['workexp'][j]['heading'];
+                              tmpobj.totalExp = To[1] - From[1];
+
+                              data.push(tmpobj);
+                      }
+                  }
+                  tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+                  data.push(tmpobj)
+              }
+              console.log("data >>>", data);
+              global.all = data
+
     global.ig = global.all;
     console.log('hi', global.ig);
 
-    this.props.navigation.navigate('UserPro', {
+    data && this.props.navigation.navigate('UserPro', {
       item: item,
       index: index,
       status: 'undefined',
     });
   };
   pushy = () => {
-    global.ig = global.all;
-    this.props.navigation.navigate('UserPro', {
+    let data = []
+    let From,
+        To,
+        tmpobj,
+        jobs = global.all;
+
+for (let i in jobs) {
+
+  if (jobs[i]['workexp']) {
+      for (let j in jobs[i]['workexp']) {
+              tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+
+              From = jobs[i]['workexp'][j]['From'].split(' ');
+              To = jobs[i]['workexp'][j]['To'].split(' ');
+
+              tmpobj.Company = jobs[i]['workexp'][j]['Company'];
+              tmpobj.heading = jobs[i]['workexp'][j]['heading'];
+              tmpobj.totalExp = To[1] - From[1];
+
+              data.push(tmpobj);
+      }
+  }
+  tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+  data.push(tmpobj)
+}
+console.log("data >>>", data);
+global.all = data
+
+global.ig = global.all;
+
+    data && this.props.navigation.navigate('UserPro', {
       item: global.all || [],
       status: 'undefined',
     });
   };
   Back = () => {
+    // console.log('hmm')
     this.props.navigation.goBack();
   };
   componentDidMount() {
@@ -90,7 +165,7 @@ class FirstJobList extends PureComponent {
     // this.props.navigation.navigate('VideoResume');
   };
   checking = () => {
-    console.log('hey', global.all);
+    // console.log('hey', global.all);
     // const {params} = this.props.navigation.state;
     // const otherParam = params ? params.otherParam : null;
 
@@ -100,14 +175,17 @@ class FirstJobList extends PureComponent {
     });
   };
   render() {
-    const {data} = this.state;
+    const {
+      data
+    } = this.state;
     return (
       <View style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
-        <StatusBar hidden={true} />
+          <StatusBar hidden={false} backgroundColor={themeColor} />
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHeader
             onPress={() => this.Back()}
@@ -224,7 +302,7 @@ class FirstJobList extends PureComponent {
                 style={{
                   textAlign: 'center',
                   fontFamily: FontBold,
-                  color: themeWhite,
+                  color: themeColor,
                   fontSize: scale(18),
                   width: wp(60),
                 }}>
@@ -233,18 +311,11 @@ class FirstJobList extends PureComponent {
               <NavigationEvents onDidFocus={this.checking} />
             </View>
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </View>
     );
   }
-}
+} 
 
 // class CompanyProfile extends Component {
 //     render() {

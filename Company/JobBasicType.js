@@ -1,12 +1,39 @@
-import React, { Component } from 'react';
-import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
-import { withNavigationFocus } from 'react-navigation';
-import { scale } from '../src/Util';
+import React, {
+    Component
+} from 'react';
+import {
+    SafeAreaView,
+    TouchableWithoutFeedback,
+    StatusBar,
+    ImageBackground,
+    Dimensions,
+    Text,
+    Image,
+    View,TouchableOpacity,
+    TextInput
+} from 'react-native';
+import {
+    withNavigationFocus
+} from 'react-navigation';
+import {
+    scale
+} from '../src/Util';
 import CustomInput from '../Component/Input'
 import ToggleSwitch from '../Component/ToggleSwitch'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { switchColor, Background, themeColor, themeWhite, iconSearch, darkract } from '../Constant/index'
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp
+} from '../Component/responsive-ratio';
+import {
+    switchColor,
+    Background,
+    themeColor,
+    themeWhite,
+    iconSearch,
+    darkract
+} from '../Constant/index'
 import styles from '../src/Style';
+import TalentButton from '../Component/TalentButton'
 
 
 
@@ -32,15 +59,20 @@ class JobBasicType extends Component {
 
 
     render() {
-        const {FullTime, PartTime, Employed, Internship, StudentJobs, HelpingVacancies, Freelancer, name} = this.state
+        const {
+            FullTime,
+            PartTime,
+            Employed,
+            Internship,
+            StudentJobs,
+            HelpingVacancies,
+            Freelancer,
+            name
+        } = this.state
         return (
 
-            <ImageBackground style={{
-                width: wp('96%'),
-                height: hp('100%') - (StatusBar.currentHeight + 100 + hp(4)),
-            // justifyContent: "center",
-            // alignItems: 'center'
-            }} source={darkract} resizeMode={'stretch'}>
+           <>
+            <StatusBar hidden={false} backgroundColor={themeColor} />
             <View style={{
                 justifyContent: "center",
                 alignItems: "center",
@@ -52,198 +84,122 @@ class JobBasicType extends Component {
                 marginVertical: hp(1)
 
             }}><Text style={{
-                fontSize: scale(18),
+                fontSize: scale(20),
                 fontFamily: "Roboto-Bold",
-                color: themeWhite
+                color: '#333'
             }}>Job Basic Type</Text></View>
             <View style={{
                 alignItems: "center",
                 width: wp(96),
                 marginTop: hp(1)
             }}><Text style={{
-                fontSize: scale(18),
-                fontFamily: "Roboto-Bold",
+                fontSize: scale(19),
+                fontFamily: "Roboto-Regular",
                 textAlign: "center",
-                color: themeWhite
+                color: '#333'
             }}>Please provide all the information mentioned below</Text></View>
             <View style={{
-                marginTop: hp(2)
+                marginTop: hp(3)
             }}><CustomInput placeholder = {'New Job Title'} textChange = {(text) => global.Job_Title = text}
             inputContainerStyle={{
-                backgroundColor: themeColor,
+                // backgroundColor: themeColor,
                 // width: "100%",
                 height: scale(40),
-                borderColor: themeColor,
+                borderColor: '#eee',
                 justifyContent: "center",
-                borderWidth: scale(1),
+                borderBottomWidth: scale(1),
                 borderRadius: scale(5),
             }} inputStyle={{
-                color: 'white',
+                color: '#333',
                 fontSize: scale(18),
-                fontFamily: "Roboto-Bold",
+                fontFamily: "Roboto-Regular",
                 fontWeight: "bold"
             }}
-            placeholderTextColor={themeWhite}
+            placeholderTextColor={'#333'}
             containerStyle={{
-                width: wp(75),
+                width: wp(86),
                 height: scale(40)
             }}
-            iconName={iconSearch}
-            iconStyle={{
-                height: 25,
-                width: 25
-            }}
             /></View>
-            <View style={{
-                flexDirection: 'column',
-                width: wp(80),
-                top: hp(2)
-            }}>
+            <Text style={[  styles.Employment ,{
+                fontSize: scale(18),
+                fontWeight: "bold",
+                color:"#333",marginTop:15,
+            }]}>How will you use your talent?</Text>
+                            <View style={styles.PersonalInfoChoose}>
+                            
                             <View style={styles.PersonalInfoRowChoose}>
-                                <View style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                width: wp(40)
-            }}><Text style={[{
-                marginRight: scale(5),
-                fontSize: scale(20)
-            }, styles.EmploymentJobtype]}>Fulltime</Text><View style={
-            styles.SwitchView}><ToggleSwitch
-            isOn={FullTime}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                FullTime: toggle
-            }, () => {
-                global.FullTime = this.state.FullTime
-            })}
-            /></View></View>
-            <View style={{
-                flexDirection: "row",
-                alignItems: 'flex-end',
-                width: wp(40),
-                justifyContent: "center"
-            }}><Text style={[{
-                marginRight: scale(5),
-                fontSize: scale(20)
-            }, styles.EmploymentJobtype]}>Part-time</Text><View style={
-            styles.SwitchView}><ToggleSwitch
-            isOn={PartTime}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                PartTime: toggle
-            }, () => {
-                global.PartTime = this.state.PartTime
-            })}
-            /></View></View></View>
+                                <TalentButton name='FullTime' job = {true} bool = {FullTime} onPress={
+                                    () => this.setState({
+                                FullTime: !this.state.FullTime
+                            },() => global.FullTime = this.state.FullTime)
+                                } />
+                                 <TalentButton name='Part-time' job = {true} bool = {PartTime} onPress={
+                                    () => this.setState({
+                                        PartTime: !this.state.PartTime
+                            },() => global.PartTime = this.state.PartTime)
+                                } />
+            </View>
              <View style={{
-                top: hp(2)
-            }}>
-                                <View style={{
-                flexDirection: 'row',
-                alignItems: 'flex-start',
-                width: wp(45)
-            }}><Text style={[{
-                marginLeft: wp(7.2),
-                fontSize: scale(20),
-                fontWeight: "bold"
-            }, styles.EmploymentJobtype]}>Employment</Text></View></View></View>
-            <View style={{
-                flexDirection: 'column',
-                width: wp(70),
-                marginLeft: wp(5),
-                top: hp(3)
-            }}>
-            <View style={[styles.PersonalInfoRowChoose, {
-                marginTop: hp(2)
-            }]}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.EmploymentJobtype, {
-                fontSize: scale(18)
-            }]}>Employed</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={Employed}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                Employed: toggle
-            }, () => {
-                global.Employed = this.state.Employed
-            })}
-            /></View></View></View>
-            <View style={styles.PersonalInfoRowChoose}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.EmploymentJobtype, {
-                fontSize: scale(18)
-            }]}>Internship</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={Internship}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                Internship: toggle
-            }, () => {
-                global.Internship = this.state.Internship
-            })}
-            /></View></View></View>
-            <View style={styles.PersonalInfoRowChoose}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.EmploymentJobtype, {
-                fontSize: scale(18)
-            }]}>Student jobs</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={StudentJobs}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                StudentJobs: toggle
-            }, () => {
-                global.StudentJobs = this.state.StudentJobs
-            })}
-            /></View></View></View>
-            <View style={styles.PersonalInfoRowChoose}>
-                                <View style={[styles.PersonalInfoStartEmp, {
-                width: wp(50)
-            }]}><Text style={[styles.EmploymentJobtype, {
-                fontSize: scale(18)
-            }]}>Helping Vacancies</Text></View>
-                                <View style={[styles.PersonalInfoEndEmp, {
-                width: wp(20)
-            }]}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={HelpingVacancies}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                HelpingVacancies: toggle
-            }, () => {
-                global.HelpingVacancies = this.state.HelpingVacancies
-            })}
-            /></View></View></View>
-            <View style={styles.PersonalInfoRowChoose}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.EmploymentJobtype, {
-                fontSize: scale(18)
-            }]}>Freelancer</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={Freelancer}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                Freelancer: toggle
-            }, () => {
-                global.Freelancer = this.state.Freelancer
-            })}
-            /></View></View></View>
+                marginVertical: hp(4)
+            }}><View style={{
+                                    justifyContent:"center",alignItems:"center"
+                                }}><Text style={[  styles.Employment ,{
+                fontSize: scale(22),
+                fontWeight: "bold",
+                color:"#333"
+            }]}>Employment</Text>
             </View></View>
-           
-            </ImageBackground>
+            </View>
+
+            <View style={styles.PersonalInfoRowChoose}>
+            <TalentButton name='Employed'  job = {true} bool = {Employed} onPress={
+                                    () => this.setState({
+                                Employed: !this.state.Employed
+                            },() => global.Employed = this.state.Employed)
+                                } />
+                                <TalentButton job = {true} name='Freelancer' bool = {Freelancer} onPress={
+                                    () => this.setState({
+                                        Freelancer: !this.state.Freelancer
+                            },() => global.Freelancer = this.state.Freelancer)
+                                } /></View>
+
+            <View style={styles.PersonalInfoRowChoose}>
+            <TalentButton name='Internship' job = {true} bool = {Internship} onPress={
+                                    () => this.setState({
+                                        Internship: !this.state.Internship
+                            },() => global.Internship = this.state.Internship)
+                                } />
+            <TalentButton name='Student jobs' job = {true} bool = {StudentJobs} onPress={
+                                    () => this.setState({
+                                StudentJobs: !this.state.StudentJobs
+                            },() => global.StudentJobs = this.state.StudentJobs)
+                                } />
+                                </View>
+                                <View style={styles.PersonalInfoRowChoose}>
+                                <View style={styles.PersonalInfoRowChoose}>
+                                <View style={[styles.PersonalInfoStartEmp, {
+                width: wp(55)
+            }]}>
+            <TouchableOpacity style={{
+        borderRadius: 20,borderWidth : 1,borderColor:HelpingVacancies ? themeColor:'#333', backgroundColor: HelpingVacancies ? themeColor : 0,paddingHorizontal:scale(9),}} 
+    onPress={ () => this.setState({
+                                        HelpingVacancies: !this.state.HelpingVacancies
+                            },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
+        <Text style={[styles.Employment, {
+                fontSize: scale(20),
+                color:HelpingVacancies ? '#fff':'#333',
+                fontWeight:"normal"
+            }]}>Helping Vacancies</Text>
+    </TouchableOpacity>
+            </View><View style={[styles.PersonalInfoEndEmp, {
+                width: wp(20)
+            }]}></View></View>
+                                </View>
+            </View>
+            </>
         )
     }
-}
-;
+};
 
 export default JobBasicType;

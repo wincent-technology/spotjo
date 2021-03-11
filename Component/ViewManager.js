@@ -8,6 +8,8 @@ import DropDownItem from './DropDownItem'
 import Rating from './SwipeRating';
 import NavigationHeader from './NavigationHeader'
 import NavigationHead from './NavigationHead'
+import TopBar from './TopBar'
+
 import MapInut from './MapInut'
 
 
@@ -26,5 +28,5 @@ export {
 	Rating,
 	NavigationHeader,
 	NavigationHead,
-	MapInut
+	MapInut,TopBar
 }

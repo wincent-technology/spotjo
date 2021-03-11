@@ -20,8 +20,9 @@ import {
     scale,
     snack
 } from '../src/Util';
-import CustomInput from '../Component/Input'
-import ToggleSwitch from '../Component/ToggleSwitch'
+import TalentButton from '../Component/TalentButton'
+import BackNext from '../Component/BackNext'
+
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -145,7 +146,6 @@ class ChooseTalentCom extends Component {
             StudentJobs,
             HelpingVacancies,
             Freelancer,
-            name
         } = this.state
         return (
             <SafeAreaView style={styles.backGround}>
@@ -169,148 +169,76 @@ class ChooseTalentCom extends Component {
             }}><Text style={[{
                 fontSize: scale(24),
                 textAlign: 'center'
-            }, styles.FontSty]}>Select the talent type?</Text></View>
+            }, styles.FontSty]}>How will you use your talent?</Text></View>
             <View style={styles.PersonalInfoChoose}>
                             <View style={styles.PersonalInfoRowChoose}>
-                                <View style={[styles.PersonalInfoStartChoose, {
-                flexDirection: 'row'
-            }]}><Text style={[{
-                marginRight: scale(5),
-                fontSize: scale(16)
-            }, styles.Employment]}>Fulltime</Text><View style={
-            styles.SwitchView}><ToggleSwitch
-            isOn={FullTime}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                FullTime: toggle
-            },() => global.FullTime = toggle)}
-            /></View></View>
-            <View style={[styles.PersonalInfoEndChoose, {
-                flexDirection: "row"
-            }]}><Text style={[{
-                marginRight: scale(5),
-                fontSize: scale(16)
-            }, styles.Employment]}>Part-time</Text><View style={
-            styles.SwitchView}><ToggleSwitch
-            isOn={PartTime}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                PartTime: toggle
-            },() => global.PartTime = toggle)}
-            /></View></View></View>
+                                <TalentButton name='FullTime' bool = {FullTime} onPress={
+                                    () => this.setState({
+                                FullTime: !this.state.FullTime
+                            },() => global.FullTime = this.state.FullTime)
+                                } />
+                                 <TalentButton name='Part-time' bool = {PartTime} onPress={
+                                    () => this.setState({
+                                        PartTime: !this.state.PartTime
+                            },() => global.PartTime = this.state.PartTime)
+                                } />
+            </View>
              <View style={{
-                top: hp(4)
-            }}>
-                                <View style={[styles.PersonalInfoStartChoose, {
-                flexDirection: 'row'
-            }]}><Text style={[{
-                marginRight: scale(5),
-                fontSize: scale(18),
+                marginVertical: hp(7)
+            }}><View style={{
+                                    justifyContent:"center",alignItems:"center"
+                                }}><Text style={[{
+                fontSize: scale(22),
                 fontWeight: "bold"
-            }, styles.Employment]}>Employment</Text></View></View></View>
-            <View style={styles.PersonalInfoEmpoyementList}>
-            <View style={[styles.PersonalInfoRowChoose, {
-                marginTop: hp(5)
-            }]}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
-                fontSize: scale(16)
-            }]}>Employed</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={Employed}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                Employed: toggle
-            },() => global.Employed = toggle)}
-            /></View></View></View>
+            }, styles.Employment]}>Employment</Text>
+            </View></View>
+            </View>
             <View style={styles.PersonalInfoRowChoose}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
-                fontSize: scale(16)
-            }]}>Internship</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={Internship}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                Internship: toggle
-            },() => global.Internship = toggle)}
-            /></View></View></View>
+            <TalentButton name='Employed' bool = {Employed} onPress={
+                                    () => this.setState({
+                                Employed: !this.state.Employed
+                            },() => global.Employed = this.state.Employed)
+                                } />
+                                <TalentButton name='Freelancer' bool = {Freelancer} onPress={
+                                    () => this.setState({
+                                        Freelancer: !this.state.Freelancer
+                            },() => global.Freelancer = this.state.Freelancer)
+                                } /></View>
+
             <View style={styles.PersonalInfoRowChoose}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
-                fontSize: scale(16)
-            }]}>Student jobs</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={StudentJobs}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                StudentJobs: toggle
-            },() => global.StudentJobs = toggle)}
-            /></View></View></View>
-            <View style={styles.PersonalInfoRowChoose}>
+            <TalentButton name='Internship' bool = {Internship} onPress={
+                                    () => this.setState({
+                                        Internship: !this.state.Internship
+                            },() => global.Internship = this.state.Internship)
+                                } />
+            <TalentButton name='Student jobs' bool = {StudentJobs} onPress={
+                                    () => this.setState({
+                                StudentJobs: !this.state.StudentJobs
+                            },() => global.StudentJobs = this.state.StudentJobs)
+                                } />
+                                </View>
+                                <View style={styles.PersonalInfoRowChoose}>
+                                <View style={styles.PersonalInfoRowChoose}>
                                 <View style={[styles.PersonalInfoStartEmp, {
-                width: wp(50)
-            }]}><Text style={[styles.Employment, {
-                fontSize: scale(16)
-            }]}>Helping Vacancies</Text></View>
+                width: wp(55)
+            }]}>
+            <TouchableOpacity style={{
+        borderRadius: HelpingVacancies ? 20 : 0,backgroundColor: HelpingVacancies ? "green" : 0,paddingHorizontal:scale(10),}} 
+    onPress={ () => this.setState({
+                                        HelpingVacancies: !this.state.HelpingVacancies
+                            },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
+        <Text style={[styles.Employment, {
+                fontSize: scale(20)
+            }]}>Helping Vacancies</Text>
+    </TouchableOpacity>
+            </View>
                                 <View style={[styles.PersonalInfoEndEmp, {
                 width: wp(20)
-            }]}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={HelpingVacancies}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                HelpingVacancies: toggle
-            },() => global.HelpingVacancies = toggle)}
-            /></View></View></View>
-            <View style={styles.PersonalInfoRowChoose}>
-                                <View style={styles.PersonalInfoStartEmp}><Text style={[styles.Employment, {
-                fontSize: scale(16)
-            }]}>Freelancer</Text></View>
-                                <View style={styles.PersonalInfoEndEmp}><View style={styles.SwitchView}><ToggleSwitch
-            isOn={Freelancer}
-            onColor={switchColor}
-            offColor="#b4b4b4"
-            size="small"
-            onToggle={toggle => this.setState({
-                Freelancer: toggle
-            },() => global.Freelancer = toggle)}
-            /></View></View></View>
-            <View style={{
-                flexDirection: "row",
-                width: wp(100),
-                top: hp(10)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-                justifyContent: "center",
-                width: wp(20),
-                marginLeft: wp(-6)
-            }}>
-            <TouchableOpacity style={styles.Size} onPress={this.back} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
+            }]}></View></View>
+                                </View>
+                                
             </View>
-            <View style={{
-                alignItems: 'flex-end',
-                // right: wp(7),
-                width: wp(62)
-            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
-                alignItems: 'flex-end'
-            }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
-            </View>
-            </View>
-            </View>
+            <BackNext onBack={this.back} onNext={this.next} />
             </View>
         </ImageBackground></SafeAreaView>
         )

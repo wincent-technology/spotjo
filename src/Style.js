@@ -1,12 +1,28 @@
-import {Dimensions, StyleSheet, StatusBar} from 'react-native';
-import {scale, getStatusBarHeight} from './Util';
-const {height, width} = Dimensions.get('window');
+import {
+  Dimensions,
+  StyleSheet,
+  StatusBar
+} from 'react-native';
+import {
+  scale,
+  getStatusBarHeight
+} from './Util';
+const {
+  height,
+  width
+} = Dimensions.get('window');
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {themeColor, themeWhite} from '../Constant/index';
-import {FontBold, FontRegular} from '../Constant/index';
+import {
+  themeColor,
+  themeWhite
+} from '../Constant/index';
+import {
+  FontBold,
+  FontRegular
+} from '../Constant/index';
 import DeviceInfo from 'react-native-device-info';
 
 let hasNotch = DeviceInfo.hasNotch();
@@ -20,7 +36,7 @@ module.exports = {
   },
   backGround: {
     flex: 1,
-    backgroundColor: themeColor,
+    backgroundColor: themeWhite,
   },
   ImageBlue: {
     left: 0,
@@ -114,6 +130,11 @@ module.exports = {
     marginTop: scale(360),
     position: 'absolute',
   },
+  HomebutGuest: {
+    left: Dimensions.get('window').width / 7,
+    marginTop: height/2 + scale(50),
+    position: 'absolute',
+  },
   HomeTel: {
     left: Dimensions.get('window').width / 7,
     marginTop: scale(420),
@@ -128,6 +149,43 @@ module.exports = {
     height: scale(20),
     // width: scale(50),
     width: wp('20%'),
+  },
+  BackNextRootView :{
+      flexDirection: 'row',
+      width: wp(86),
+      position:"absolute",
+      bottom: 5,
+      marginLeft:wp(7),
+      justifyContent:"space-between",
+  },
+  BackNextButtonView:{
+    width: wp(40),
+    justifyContent:"center",
+    alignItems:"center",
+  },
+  BackTouchableView:{
+    width: wp(20),
+    justifyContent:"center",
+    alignItems:"center",
+    borderTopWidth:1,
+    borderTopColor:"#fff",
+    height:45,
+  },
+  SuggestionView:{
+    flexDirection: 'row',
+    height: scale(30),
+    borderRadius: scale(5),
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginLeft: scale(3),
+    backgroundColor: 'rgba(255,255,255,0.8)',
+    padding: scale(5),
+    marginBottom: scale(2),
+  },
+  SuggestionViewText:{
+    color: themeColor,
+    fontFamily: FontBold,
+    fontSize:scale(12)
   },
   CenterLogo: {
     justifyContent: 'center',
@@ -171,7 +229,8 @@ module.exports = {
     width: wp('100%'),
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: hasNotch ? StatusBar.currentHeight + hp(3.5) : hp(1),
+    height:50,
+    // marginTop: hasNotch ? StatusBar.currentHeight + hp(3.5) : hp(1),
   },
   FilterLeft: {
     left: scale(10),
@@ -179,39 +238,39 @@ module.exports = {
   },
   FilterMainView: {
     width: wp('96%'),
-    height: hp('100%') - (scale(100) + StatusBar.currentHeight),
+    height: hp('100%'),
     // backgroundColor: themeWhite,
     marginHorizontal: wp('2%'),
-    marginTop: scale(20),
+    // marginTop: scale(20),
     borderRadius: scale(20),
+    overflow:"hidden"
     // elevation: 7,
   },
   FilterScroll: {
     alignSelf: 'stretch',
-    marginBottom: scale(20),
-    marginTop: scale(5),
+    marginBottom: scale(100),
+    // marginTop: scale(5),
   },
   FilterDropDown: {
     width: wp('90%'),
-    borderWidth: scale(1),
+    borderBottomWidth: scale(1),
     marginLeft: wp('2.3%'),
-    marginTop: scale(2),
-    borderLeftWidth: scale(8),
-    borderLeftColor: 'rgba(55,192,211,0.5)',
+    // marginTop: scale(2),
     borderTopColor: 'gray',
     borderBottomColor: 'rgba(169,169,169,0.8)',
     borderRightColor: 'gray',
     borderRadius: scale(5),
-    borderBottomWidth: scale(2),
+    // borderBottomWidth: scale(2),
     overflow: 'hidden',
     // elevation: scale(4)
   },
   FilterDropDownInnerView: {
-    height: scale(40),
+    height: scale(60),
     // width: scale(25),
     alignItems: 'center',
     marginLeft: scale(10),
     flexDirection: 'row',
+    // flex:1
   },
   DropDownHeader: {
     fontSize: scale(21),
@@ -267,7 +326,7 @@ module.exports = {
   RadioSearchType: {
     // flexDirection: "row",
     justifyContent: 'center',
-    alignItems: 'center',
+    // alignItems: 'center',
     width: wp('90%'),
     height: scale(40),
     marginTop: scale(-10),
@@ -284,21 +343,22 @@ module.exports = {
     fontWeight: 'bold',
   },
   SaveFilterButton: {
-    justifyContent: 'center',
+    justifyContent: 'space-around',
+    flexDirection:"row",
     alignItems: 'center',
     height: scale(40),
   },
   SaveFilterButtonView: {
-    width: wp('60%'),
+    width: wp('35%'),
     backgroundColor: themeColor,
-    borderRadius: scale(5),
+    borderRadius: scale(20),
   },
   ItemMVMainView: {
     flex: 1,
     // backgroundColor: themeWhite,
     height: scale(180),
-    width: wp(98),
-    marginHorizontal: wp(1),
+    width: wp(97),
+    marginHorizontal: wp(1.5),
     marginVertical: hp(0.5),
     borderRadius: scale(15),
     // elevation: 5,
@@ -367,7 +427,7 @@ module.exports = {
   CompanyDetailIcon: {
     marginTop: scale(5),
     marginLeft: scale(12),
-    flexDirection: 'row',
+    flexDirection: 'row',alignItems: 'center',height:40
   },
   ItemDetailLabel: {
     marginLeft: scale(6),
@@ -379,7 +439,7 @@ module.exports = {
     marginLeft: scale(10),
     fontSize: scale(16),
     fontFamily: FontRegular,
-    marginTop: scale(-3),
+    // marginTop: scale(-3),
     // justifyContent: "center"
   },
   CompanyProfileDetailLabel100: {
@@ -436,19 +496,19 @@ module.exports = {
     fontSize: scale(20),
     fontFamily: FontBold,
     fontWeight: 'bold',
-    color: themeWhite,
+    color: '#333',
   },
   JoblistSecondViewHeading: {
     borderTopColor: 'gray',
-    borderTopWidth: scale(2),
-    borderBottomWidth: scale(2),
+    borderTopWidth: scale(1),
+    borderBottomWidth: scale(1.5),
     borderBottomColor: 'gray',
     flexDirection: 'row',
     width: wp('100%'),
     backgroundColor: themeWhite,
     height: scale(40),
     alignItems: 'center',
-    elevation: 8,
+    elevation: 5,
   },
   JoblistSecondViewHeadingResult: {
     backgroundColor: themeWhite,
@@ -463,7 +523,7 @@ module.exports = {
   JoblistUpperButton: {
     fontSize: scale(19),
     fontFamily: FontRegular,
-    color: themeColor,
+    color: '#333',
     marginLeft: scale(2),
   },
   JobListUpperButtonView: {
@@ -479,14 +539,14 @@ module.exports = {
     alignItems: 'center',
   },
   CompanyProfileIcon: {
-    height: scale(18),
-    width: scale(18),
+    height: scale(30),
+    width: scale(30),
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   CompanyDetailProfileIcon: {
-    height: scale(18),
-    width: scale(18),
+    height: scale(30),
+    width: scale(30),
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -611,17 +671,17 @@ module.exports = {
     // right: scale(25)
   },
   NativeViewButton: {
-    width: wp(89),
+    width: wp(84),
     height: scale(40),
-    borderRadius: scale(10),
-    borderLeftWidth: scale(8),
-    borderWidth: scale(1.5),
+    // borderRadius: scale(10),
+    // borderLeftWidth: scale(8),
+    borderBottomWidth: scale(1.5),
     // elevation: scale(2),
-    marginLeft: wp(3),
-    marginVertical: wp(0.5),
-    borderLeftColor: 'rgba(55,192,211,0.4)',
-    borderRightColor: '#b0b0b0',
-    borderTopColor: '#b0b0b0',
+    // marginHorizontal: wp(7),
+    marginVertical: wp(1),
+    // borderLeftColor: 'rgba(55,192,211,0.4)',
+    // borderRightColor: '#b0b0b0',
+    // borderTopColor: '#b0b0b0',
     borderBottomColor: '#b0b0b0',
     flexDirection: 'row',
     alignItems: 'center',
@@ -631,7 +691,7 @@ module.exports = {
     width: scale(30),
     justifyContent: 'center',
     alignItems: 'flex-start',
-    marginHorizontal: scale(10),
+    marginRight: scale(10),
   },
   NativeThirdView: {
     width: wp(60),
@@ -746,13 +806,17 @@ module.exports = {
     marginTop: hp(1),
   },
   PersonalInfoStartChoose: {
-    alignItems: 'flex-start',
+    // alignItems: 'center',
+    // justifyContent:"center",
     width: wp(42),
+    // backgroundColor:"blue"
   },
   PersonalInfoEndChoose: {
     alignItems: 'flex-end',
     width: wp(43),
     justifyContent: 'center',
+    // backgroundColor:"blue"
+
     // backgroundColor: "yellow"
   },
   PersonalInfoEmpoyementList: {
@@ -771,7 +835,7 @@ module.exports = {
     // backgroundColor: "yellow"
   },
   HeaderLayer: {
-    backgroundColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: '#ecfbfe',
     width: wp(80),
     borderRadius: wp(10),
     height: hp(4.3),
@@ -804,7 +868,7 @@ module.exports = {
     fontWeight: 'bold',
   },
   PersonalCompanyTextInput: {
-    width: wp(41),
+    width: wp(43),
     alignItems: 'flex-end',
     right: wp(-1.5),
     marginTop: scale(-5),
@@ -864,24 +928,26 @@ module.exports = {
   },
   itemsHiddenView: {
     flexDirection: 'row',
-    width: wp(85),
-    justifyContent: 'center',
+    width: wp(87),
+    // backgroundColor:"blue",
+    justifyContent: 'space-between',
     marginBottom: scale(2),
     marginTop: scale(2),
     height: scale(15),
     alignItems: 'center',
+
   },
   itemsHiddenSView: {
     height: scale(20),
     width: scale(20),
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: scale(-2),
+    alignItems: 'flex-start',
+    // marginTop: scale(-2),
   },
   itemsHiddenTView: {
     alignItems: 'flex-start',
-    justifyContent: 'center',
-    width: '40%',
+    // justifyContent: 'center',
+    width: '50%',
     marginLeft: '3%',
   },
   itemsHiddenFont: {

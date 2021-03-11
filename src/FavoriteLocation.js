@@ -16,6 +16,8 @@ import {
     View,
     TextInput
 } from 'react-native';
+import BackNext from '../Component/BackNext'
+import SuggestionView from '../Component/SuggestionView'
 import {
     withNavigationFocus
 } from 'react-navigation';
@@ -64,6 +66,7 @@ class FavoriteLocation extends Component {
         try {
             http.GET('api/appcityjson/get').then((res) => {
                 if (res['data']['status']) {
+                    console.log('res', res['data']['result']);
                     this.setState({
                         dataCheck: res['data']['result'],
                     });
@@ -208,7 +211,10 @@ class FavoriteLocation extends Component {
                 textAlign: 'center'
             }, styles.FontSty]}>What's your favorite location?</Text></View><View style={{
                 top: scale(20)
-            }}><CustomInput value = {this.state.name} placeholder={'Place to Work'}textChange = {
+            }}><CustomInput value = {this.state.name} placeholder={'Place to Work'} 
+            inputContainerStyle={{borderRadius:scale(20),height:scale(45),width:'92%',backgroundColor:"#fff",borderBottomColor: "#E5E5E5",
+        borderBottomWidth: 0.3,}}
+            textChange = {
             (text) => {
                 this.setState({
                     show: text != '' ? true : false
@@ -237,34 +243,8 @@ class FavoriteLocation extends Component {
                 flexDirection: 'row',
                 flexWrap: 'wrap',
             }}>
-                {suggesion && suggesion.map((elements, index) => <TouchableWithoutFeedback onPress = {() => this.suggestionTag(elements, index)}><View style={{
-                    flexDirection: 'row',
-                    height: scale(30),
-                    borderRadius: scale(5),
-                    alignItems: "center",
-                    justifyContent: "center",
-                    marginLeft: scale(3),
-                    backgroundColor: "rgba(255,255,255,0.8)",
-                    padding: scale(5),
-                    marginBottom: scale(2)
-                }}><View style={{
-                    justifyContent: "center",
-                    alignItems: 'center',
-                    paddingLeft: scale(10)
-                }}><Text style={{
-                    color: themeColor,
-                    fontFamily: FontBold
-                }}>{elements}</Text></View>
-                <View style={{
-                    top: scale(-7),
-                    left: scale(5)
-
-                }}>
-                 {
-                library('highlight-off', scale(14), themeColor)
-                }
-                </View>
-                    </View></TouchableWithoutFeedback>
+                {suggesion && suggesion.map((elements, index) => 
+                    <SuggestionView onPress={() => this.suggestionTag(elements, index)} elements={elements} index={index} />
             )}
             </ScrollView>
             </View>
@@ -299,30 +279,9 @@ class FavoriteLocation extends Component {
             }
             /></View> }
             </View>
-            <View style={{
-                flexDirection: "row",
-                width: wp(100),
-                top: hp(15)
-            }}>
-            <View style={{
-                alignItems: "flex-start",
-                width: wp(40),
-                marginLeft: wp(7)
-            }}>
-            <TouchableOpacity style={styles.Size} onPress={this.back} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={styles.Size}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Back</Text></View></TouchableOpacity>
+            <BackNext onBack={this.back} onNext={this.next} />
+
             </View>
-            <View style={{
-                alignItems: 'flex-end',
-                // right: wp(7),
-                width: wp(47)
-            }}><TouchableOpacity style={styles.Size} onPress={this.next} hitSlop={{top: 40, bottom: 40, left: 50, right: 50}}><View  style={[styles.Size, {
-                alignItems: 'flex-end'
-            }]}><Text style={[{
-                fontSize: scale(20),
-            }, styles.FontSty]}>Next</Text></View></TouchableOpacity></View>
-            </View></View>
         </ImageBackground></SafeAreaView>
         )
     }

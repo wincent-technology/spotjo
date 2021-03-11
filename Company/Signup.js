@@ -19,6 +19,7 @@ import http from '../api';
 import SnackBar from '../Component/SnackBar'
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
+import PermissionHelper from '../Component/PermissionHelper'
 
 
 class Signup extends Component {
@@ -33,8 +34,23 @@ class Signup extends Component {
     }
 
 
+    permission = async () => {
+        const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
+        if (granted)
+           {  Geolocation.getCurrentPosition((info) => {
+                  console.log('inf', info);
+                  global.let = info.coords.latitude;
+                  global.long = info.coords.longitude;
+                });
+          }
+        else
+        {const granted = await PermissionHelper.Storage.requestLocationPermission();
+            !granted && this.permission();  }
+      }
 
     onSignup = async () => {
+      this.permission();
+
         const {email, password} = this.state;
         try {
             if (email.length > 0 && password.length > 0) {
@@ -48,7 +64,7 @@ class Signup extends Component {
                         console.log('response', res['data']['result'], res['data']['result']);
                         global.Id = res['data']['result'][0]['id']
                         global.Email = res['data']['result'][0]['email']
-                        global.role = res['data']['result'][0]['role']
+                        global.role = res['data']['result'][0]['role'] == '2' || res['data']['result'][0]['role'] == '3' ? 'Super Admin' : 'Staff'
                         AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
                         this.props.navigation.navigate('ComEdit')
                     } else {

@@ -1,7 +1,15 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 
-import {StyleSheet, View, Platform} from 'react-native';
-import {WebView} from 'react-native-webview';
+import {
+  StyleSheet,
+  View,
+  Platform
+} from 'react-native';
+import {
+  WebView
+} from 'react-native-webview';
 
 export default class Youtube extends Component {
   render() {

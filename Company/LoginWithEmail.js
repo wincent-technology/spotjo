@@ -1,4 +1,6 @@
-import React, {Component} from 'react';
+import React, {
+  Component
+} from 'react';
 import {
   SafeAreaView,
   Dimensions,
@@ -12,14 +14,30 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import {withNavigationFocus} from 'react-navigation';
+import {
+  withNavigationFocus
+} from 'react-navigation';
 import styles from '../src/Style';
-import {scale, snack} from '../src/Util';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  scale,
+  snack
+} from '../src/Util';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import CustomInput from '../Component/TextInput';
-import {Background, url} from '../Constant/index';
+import {
+  Background,
+  url
+} from '../Constant/index';
 import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
+import Geolocation from '@react-native-community/geolocation';
+import PermissionHelper from '../Component/PermissionHelper'
 
 class LoginWithEmail extends Component {
   constructor(props) {
@@ -27,7 +45,7 @@ class LoginWithEmail extends Component {
 
     this.state = {
       email: '',
-      password: '',
+      password: '',pass:false
     };
   }
 
@@ -38,8 +56,27 @@ class LoginWithEmail extends Component {
     this.props.navigation.navigate('EmailSend');
   };
 
+  permission = async () => {
+    const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
+    if (granted)
+       {  Geolocation.getCurrentPosition((info) => {
+              console.log('inf>>>>>>>>>>', info);
+              global.let = info.coords.latitude;
+              global.long = info.coords.longitude;
+            });
+      }
+    else
+    {const granted = await PermissionHelper.Storage.requestLocationPermission();
+        !granted && this.permission();  }
+  }
+
+
   onLogin = async () => {
-    const {email, password} = this.state;
+    this.permission();
+    const {
+      email,
+      password
+    } = this.state;
     try {
       if (email.length > 0 && password.length > 0) {
         http
@@ -49,11 +86,11 @@ class LoginWithEmail extends Component {
           })
           .then(
             (res) => {
-              console.log('sdf', res['data']['result']);
+              console.log('sdf', res['data']);
               if (res['data']['status']) {
-                if (res['data']['result']['role'] == 'Super Admin') {
+                if (res['data']['result']['role'] == '2' || res['data']['result']['role'] == '3') {
                   console.log('login id ', res['data']['result']);
-                  global.role = res['data']['result']['role'];
+                  global.role = res['data']['result']['role'] ? 'Super Admin' : ''
                   global.Service = res['data']['result']['services'];
                   global.Id = res['data']['result']['id'];
                   global.Email = res['data']['result']['email'];
@@ -67,8 +104,8 @@ class LoginWithEmail extends Component {
                   global.WebSite = res['data']['result']['website'];
                   global.Address = res['data']['result']['address'];
                   global.Service = res['data']['result']['services'];
-                  global.let = parseFloat(res['data']['result']['latitude']);
-                  global.long = parseFloat(res['data']['result']['longitude']);
+                  global.let = parseFloat(res['data']['result']['latitude']) || global.let;
+                  global.long = parseFloat(res['data']['result']['longitude']) || global.long;
                   console.log('glo', global.let, global.long);
                   AsyncStorage.setItem(
                     'CompanyLoggedInData',
@@ -81,7 +118,7 @@ class LoginWithEmail extends Component {
                   }
                 } else {
                   console.log('login id ', res['data']['result']);
-                  global.role = res['data']['result']['role'];
+                  global.role = res['data']['result']['role'] == '4' ? 'Staff' : '';
                   global.Service = res['data']['result']['services'];
                   global.Id = res['data']['result']['companyId'];
                   global.Email = res['data']['result']['email'];
@@ -94,8 +131,8 @@ class LoginWithEmail extends Component {
                     url + 'images/company/' + res['data']['result']['video'];
                   global.WebSite = res['data']['result']['website'];
                   global.Address = res['data']['result']['address'];
-                  global.let = parseFloat(res['data']['result']['latitude']);
-                  global.long = parseFloat(res['data']['result']['longitude']);
+                  global.let = parseFloat(res['data']['result']['latitude']) || global.let;
+                  global.long = parseFloat(res['data']['result']['longitude']) || global.long;
                   console.log('glo', global.let, global.long);
                   // AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
                   this.props.navigation.navigate('TalentCom');
@@ -115,6 +152,7 @@ class LoginWithEmail extends Component {
   };
 
   render() {
+    const {pass} = this.state
     return (
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
@@ -167,7 +205,7 @@ class LoginWithEmail extends Component {
             />
             <CustomInput
               placeholder={'Password'}
-              secureTextEntry={true}
+              passs={true} pass={pass} onPress={()=> this.setState({pass:!this.state.pass})}
               textChange={(text) =>
                 this.setState({
                   password: text,

@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,9 +14,18 @@ import {
   Image,
   View,
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -35,14 +46,22 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
+import {
+  scale,
+  snack
+} from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
-import {Rating, NavigationHeader} from '../Component/ViewManager.js';
+import {
+  Rating,
+  NavigationHeader
+} from '../Component/ViewManager.js';
 import ItemMVJobbM from './ItemMVJobbM';
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
+import GestureRecognizer, {
+  swipeDirections
+} from 'react-native-swipe-gestures';
 import http from '../api';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input';
@@ -50,7 +69,7 @@ import CustomInput from '../Component/Input';
 // import styles from './Style'
 var c = 0;
 
-class JobMatches extends PureComponent {
+class JobMatches extends React.Component {
   constructor(props) {
     super(props);
 
@@ -84,122 +103,6 @@ class JobMatches extends PureComponent {
     };
   }
 
-  // jaaveda = (status, item) => {
-  //     let Matched = [],
-  //         Shortlisted = [],
-  //         Interested = [],
-  //         NotInterested = [],
-  //         Rejected = [];
-
-  //     console.log('status', status, item);
-  //     try {
-  //         http.POST('api/applyjob/comdec', {
-  //             id: item,
-  //             status: status
-  //         }).then((res) => {
-  //             if (res['data']['status']) {
-  //                 console.log('res.....', res['data']['result'])
-  //                 for (let i in res['data']['result']) {
-  //                     if (res['data']['result'][i]['status'] == 'Matched') {
-  //                         Matched.push(res['data']['result'][i])
-  //                     } else if (res['data']['result'][i]['status'] == 'Shortlisted') {
-  //                         Shortlisted.push(res['data']['result'][i])
-  //                     } else if (res['data']['result'][i]['status'] == 'Interested') {
-  //                         Interested.push(res['data']['result'][i])
-  //                     } else if (res['data']['result'][i]['status'] == 'Not Interested') {
-  //                         NotInterested.push(res['data']['result'][i])
-  //                     } else if (res['data']['result'][i]['status'] == 'Rejected')
-  //                         Rejected.push(res['data']['result'][i])
-  //                 }
-  //                 this.setState({
-  //                     Matched,
-  //                     Shortlisted,
-  //                     Interested,
-  //                     NotInterested,
-  //                     Rejected
-  //                 })
-  //             } else {
-  //                 snack(res['data']['message'])
-  //             }
-  //         }, err => snack(err['message']))
-  //     } catch (error) {
-  //         snack("error while register" + error)
-  //     }
-  // }
-  // onSwipeUp = (gestureState, item, status) => {
-  //     if (status == null) {
-  //         alert('Matched');
-  //         this.jaaveda('Matched', item);
-  //     } else if (status == 'Matched') {
-  //         alert('shortlisted')
-  //         this.jaaveda('Shortlisted', item);
-  //     } else if (status == 'Shortlisted') {
-  //         this.jaaveda('Matched', item);
-  //     }
-  // }
-
-  // onSwipeDown = (gestureState, item, status) => {
-  //     if (status == 'Matched')
-  //         alert('selected')
-  //     this.jaaveda('Selected', item);
-  //     // alert(' Short Listed ' + item)
-
-  // }
-
-  // onSwipeLeft = (gestureState, item, status) => {
-  //     // alert(' Not Interested ' + item)
-  //     if (status == null) {
-  //         alert('NotInterested')
-  //         this.jaaveda('Not Interested', item);
-  //     } else if (status == 'Matched') {
-  //         alert('rejected')
-  //         this.jaaveda('Rejected', item);
-  //     }
-  // }
-
-  // onSwipeRight = (gestureState, item, status) => {
-  //     // alert(' Interested ' + item)
-  //     if (status == null) {
-  //         alert('Interested')
-  //         this.jaaveda('Interested', item);
-  //     } else if (status == 'Matched') {
-  //         alert('interview')
-  //         for (let i in this.state.Matched) {
-  //             if (item == this.state.Matched[i].appid)
-  //                 console.log('dfsdf', this.state.Matched)
-  //             this.setState({
-  //                 jobId: this.state.Matched[i].jobId,
-  //                 comId: this.state.Matched[i].comId,
-  //                 userId: this.state.Matched[i].id,
-  //                 dark: !this.state.dark
-  //             });
-  //         }
-
-  //     }
-
-  // }
-  // onSwipe = (gestureName, gestureState) => {
-  //     console.log('gesture', gestureName);
-  //     const {
-  //         SWIPE_UP,
-  //         SWIPE_DOWN,
-  //         SWIPE_LEFT,
-  //         SWIPE_RIGHT
-  //     } = swipeDirections;
-  //     this.setState({
-  //         gestureName: gestureName
-  //     });
-  //     switch (gestureName) {
-  //         case SWIPE_UP:
-  //             break;
-  //         case SWIPE_DOWN:
-  //             break;
-  //         case SWIPE_LEFT:
-  //             break;
-  //         case SWIPE_RIGHT:
-  //             break;
-  //     }
-  // }
 
   checking = () => {
     console.log('hi');
@@ -218,7 +121,8 @@ class JobMatches extends PureComponent {
         .then(
           (res) => {
             if (res['data']['status']) {
-              console.log("res['data']['result']", res['data']['result']);
+
+              console.log("res['data']['result']>>>>>>>>>>>>>>>", res['data']['result']);
 
               // this.setState({
               //     Applied: res['data']['result']
@@ -349,7 +253,45 @@ class JobMatches extends PureComponent {
 
   push = (item, index) => {
     console.log('item', item);
-    global.ig = this.state.data;
+    let data = []
+    let From,
+      To,
+      tmpobj,
+      jobs = this.state.data;
+
+    for (let i in jobs) {
+
+      if (jobs[i]['workexp']) {
+        for (let j in jobs[i]['workexp']) {
+          tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+
+          From = jobs[i]['workexp'][j]['From'].split(' ');
+          To = jobs[i]['workexp'][j]['To'].split(' ');
+
+          tmpobj.Company = jobs[i]['workexp'][j]['Company'];
+          tmpobj.heading = jobs[i]['workexp'][j]['heading'];
+          tmpobj.totalExp = To[1] - From[1];
+
+          data.push(tmpobj);
+        }
+      } else {
+        tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+
+        // From = jobs[i]['workexp'][j]['From'].split(' ');
+        // To = jobs[i]['workexp'][j]['To'].split(' ');
+
+        tmpobj.Company = 'UnKnown';
+        tmpobj.heading = 'Unknown';
+        tmpobj.totalExp = 1 - 0;
+
+        data.push(tmpobj);
+      }
+    }
+    //   tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+    //   data.push(tmpobj)
+    // }
+    console.log("data >>>", data);
+    global.ig = data;
     this.props.navigation.navigate('UserPro', {
       item: item,
       index: index,
@@ -439,11 +381,16 @@ class JobMatches extends PureComponent {
   //     })
   // }
   render() {
-    const {show, show1, dark, data} = this.state;
+    const {
+      show,
+      show1,
+      dark,
+      data
+    } = this.state;
 
     return (
       <View>
-        <StatusBar hidden={true} />
+        <StatusBar hidden={false} backgroundColor={themeColor} />
         <View
           style={{
             flexDirection: 'row',
@@ -698,20 +645,20 @@ class JobMatches extends PureComponent {
           <FlatList
             style={{
               marginTop: 4,
-              marginBottom: 50,
+              marginBottom: 40,
               marginLeft: wp(-1),
               backgroundColor: 'transparent',
             }}
             data={data}
             showsHorizontalScrollIndicator={false}
             removeClippedSubviews={true}
-            renderItem={({item, index}) => (
+            renderItem={({ item, index }) => (
               <ItemMVJobbM
                 item={item}
                 index={index}
                 push={this.push}
                 Video={this.Video}
-                // getAudioTimeString={this.getAudioTimeString}
+              // getAudioTimeString={this.getAudioTimeString}
               />
             )}
             initialNumToRender={5}
@@ -736,7 +683,7 @@ class JobMatches extends PureComponent {
               style={{
                 textAlign: 'center',
                 fontFamily: FontBold,
-                color: themeWhite,
+                color: themeColor,
                 fontSize: scale(18),
                 width: wp(60),
               }}>

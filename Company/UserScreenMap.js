@@ -1,4 +1,6 @@
-import React, {PureComponent} from 'react';
+import React, {
+  PureComponent
+} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -12,11 +14,20 @@ import {
   ImageBackground,
   Text,
   Image,
-  View,
+  View,ActivityIndicator
 } from 'react-native';
-import {withNavigationFocus, NavigationEvents} from 'react-navigation';
+import {
+  withNavigationFocus,
+  NavigationEvents
+} from 'react-navigation';
 import styles from '../src/Style';
-import {left, library, icon, play, leftVid} from '../src/IconManager';
+import {
+  left,
+  library,
+  icon,
+  play,
+  leftVid
+} from '../src/IconManager';
 import {
   themeColor,
   themeWhite,
@@ -31,8 +42,13 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import {scale, snack} from '../src/Util';
-import {NavigationHeader} from '../Component/ViewManager';
+import {
+  scale,
+  snack
+} from '../src/Util';
+import {
+  NavigationHeader
+} from '../Component/ViewManager';
 import Slider from '@react-native-community/slider';
 import ItemMVJobb from './ItemMVJobb';
 import MapView, {
@@ -56,6 +72,7 @@ const LATITUDE_DELTA = Platform.OS === 'ios' ? 1.5 : 0.5;
 let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 import PlacesInput from '../Component/PlacesInput';
 import DeviceInfo from 'react-native-device-info';
+import PermissionHelper from '../Component/PermissionHelper'
 
 let hasNotch = DeviceInfo.hasNotch();
 // Use the below code to zoom to particular location with radius.
@@ -69,6 +86,7 @@ class UserScreenMap extends PureComponent {
       data: [],
       radius: 5000,
       zoom: 0,
+      granted:false,
       circlecenter: {
         latitude: global.let,
         longitude: global.long,
@@ -83,28 +101,24 @@ class UserScreenMap extends PureComponent {
         latitude: global.let,
         longitude: global.long,
       },
-      markers: [
-        {
-          coordinate: {
-            latitude: global.let + SPACE,
-            longitude: global.long + SPACE,
-          },
+      markers: [{
+        coordinate: {
+          latitude: global.let+SPACE,
+          longitude: global.long + SPACE,
         },
-        {
-          coordinate: {
-            latitude: global.let + SPACE,
-            longitude: global.long - SPACE,
-          },
+      }, {
+        coordinate: {
+          latitude: global.let+SPACE,
+          longitude: global.long - SPACE,
         },
-      ],
+      }, ],
     };
     this.watchId = '';
     this.onMarkerDrag = this.onMarkerDrag.bind(this);
   }
 
   async onMarkerDrag(e) {
-    this.setState(
-      {
+    this.setState({
         circlecenter: e.nativeEvent.coordinate,
         markers: [],
         data: [],
@@ -135,37 +149,49 @@ class UserScreenMap extends PureComponent {
   componentWillUnmount() {
     Geolocation.clearWatch(this.watchID);
   }
+  permission = async () => {
+    const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
+    if (granted)
+       { this.setState({granted:true})
+          this.LATLong()
+      }
+    else
+    {const granted = await PermissionHelper.Storage.requestLocationPermission();
+        !granted && this.permission();  }
+  }
 
-  async componentDidMount() {
+  LATLong = async () => {
     try {
-      var granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        Geolocation.getCurrentPosition((info) => {
+        await Geolocation.getCurrentPosition((info) => {
           console.log('inf', info);
           global.let = info.coords.latitude;
           global.long = info.coords.longitude;
           this.setState({
             region: {
-              latitude: info.coords.latitude,
-              longitude: info.coords.longitude,
+              latitude: global.let,
+              longitude: global.long,
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
             },
             coordi: {
-              latitude: info.coords.latitude,
-              longitude: info.coords.longitude,
+              latitude: global.let,
+              longitude: global.long,
             },
           });
         });
-      } else {
-        snack('Location permission denied');
-      }
+        console.log('this.state>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',this.state)
     } catch (err) {
       console.warn(err);
     }
-    const {radius, zoom} = this.state;
+  }
+
+
+   componentDidMount() {
+       this.permission()
+    const {
+      radius,
+      zoom
+    } = this.state;
     this.checking();
   }
   call = () => {
@@ -198,8 +224,7 @@ class UserScreenMap extends PureComponent {
                 });
               }
               array &&
-                this.setState(
-                  {
+                this.setState({
                     markers: array,
                   },
                   () => console.log('asfsf 177', this.state.markers),
@@ -217,6 +242,7 @@ class UserScreenMap extends PureComponent {
     }
   };
   checking = () => {
+    this.permission()
     console.log('hey', global.all);
     this.setState({
       data: global.all,
@@ -307,8 +333,8 @@ class UserScreenMap extends PureComponent {
       Math.atan(
         Math.sin(angle) * Math.cos(this.state.region.latitude),
         Math.cos(angle) -
-          Math.sin(this.state.region.latitude) *
-            Math.sin(this.state.region.latitude),
+        Math.sin(this.state.region.latitude) *
+        Math.sin(this.state.region.latitude),
       ),
     );
 
@@ -318,8 +344,7 @@ class UserScreenMap extends PureComponent {
       latitudeDelta: latitudeDelta + 0.7,
       longitudeDelta: longitudeDelta + 0.7,
     };
-    this.setState(
-      {
+    this.setState({
         region: result,
         radius: Math.round(distance),
       },
@@ -329,21 +354,31 @@ class UserScreenMap extends PureComponent {
   };
 
   render() {
-    const {region, redius, markers} = this.state;
-    return global.all ? (
-      <View style={styles.backGround}>
+    const {
+      region,
+      redius,
+      markers
+    } = this.state;
+    console.log("this.state.granted>>>>>>>>>>>>>>>>>>>>>>>>>>",this.state.granted)
+    if(!this.state.granted || region.latitude == NaN)
+    return <ActivityIndicator size={'large'} color={themeColor} />
+else
+    return (
+      region.latitude!= NaN && <View style={styles.backGround}>
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
+          <StatusBar hidden={false} backgroundColor={themeWhite} />
           <View
             style={{
-              height: scale(40),
+              // height: scale(40),
               flexDirection: 'row',
-              width: wp('100%'),
+              width: 30,
               backgroundColor: 'transparent',
               alignItems: 'center',
-              marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
+              marginTop: scale(5),
             }}>
             <TouchableOpacity
               style={{
@@ -353,21 +388,8 @@ class UserScreenMap extends PureComponent {
                 zIndex: 10,
               }}
               onPress={() => this.Back()}>
-              {left(scale(30), themeWhite)}
+              {left(scale(30), themeColor)}
             </TouchableOpacity>
-            <View
-              style={{
-                // justifyContent: 'center',
-                marginTop: scale(7),
-
-                // alignItems: 'flex-start',
-              }}>
-              <Image
-                source={require('../Img/search.png')}
-                style={styles.JoblistLogoImageSize}
-                resizeMode={'contain'}
-              />
-            </View>
           </View>
           <PlacesInput
             googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
@@ -403,26 +425,26 @@ class UserScreenMap extends PureComponent {
             stylesInput={{
               backgroundColor: 'transparent',
               // alignItems:"center",
-              marginLeft: scale(10),
+              // marginLeft: scale(10),
               justifyContent: 'center',
               fontSize: scale(17),
               height: scale(40),
               width: wp(80),
               fontFamily: FontBold,
               fontWeight: 'bold',
-              color: '#fff',
+              color: '#000',
             }}
             stylesContainer={{
               alignItems: 'center',
-              backgroundColor: 'rgba(255,255,255,0.4)',
+              backgroundColor: '#ecfbfe',
               width: wp(86),
               borderRadius: wp(10),
               marginBottom: scale(2),
               height: scale(40),
               marginLeft: wp(7),
               marginTop: scale(5),
-              justifyContent: 'center',
-              marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
+              justifyContent: 'center',flexDirection:"row",
+              // marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
             }}
           />
           <View
@@ -533,7 +555,7 @@ class UserScreenMap extends PureComponent {
               />
               {this.state.markers.map((marker) => (
                 <Marker.Animated
-                  key={marker.index}
+                  key={new Date().getTime().toString() + (Math.floor(Math.random() * Math.floor(new Date().getTime()))).toString()}
                   coordinate={marker.coordinate}
                   pinColor={'#000'}
                   image={flagBlueImg}
@@ -555,7 +577,7 @@ class UserScreenMap extends PureComponent {
                 style={[
                   {
                     fontWeight: 'bold',
-                    color: themeWhite,
+                    color: '#333',
                   },
                   styles.FilterMinText,
                 ]}>
@@ -565,7 +587,7 @@ class UserScreenMap extends PureComponent {
                 style={[
                   {
                     fontWeight: 'bold',
-                    color: themeWhite,
+                    color: '#333',
                   },
                   styles.FilterMaxText,
                 ]}>
@@ -579,15 +601,15 @@ class UserScreenMap extends PureComponent {
               }}
               onSlidingStart={() => {}}
               onSlidingComplete={() => {}}
-              maximumTrackTintColor={themeWhite}
-              thumbTintColor={themeWhite}
+              maximumTrackTintColor={'#000'}
+              thumbTintColor={'#333'}
               onValueChange={(value) => {
                 this.change(value);
               }}
               minimumValue={1}
               maximumValue={200}
-              minimumTrackTintColor={themeWhite}
-              maximumTrackTintColor={themeWhite}
+              minimumTrackTintColor={'#000'}
+              maximumTrackTintColor={'#333'}
             />
           </View>
           {this.state.data != '' ? (
@@ -625,7 +647,7 @@ class UserScreenMap extends PureComponent {
                 style={{
                   textAlign: 'center',
                   fontFamily: FontBold,
-                  color: themeWhite,
+                  color: themeColor,
                   fontSize: scale(18),
                   width: wp(60),
                 }}>
@@ -643,7 +665,7 @@ class UserScreenMap extends PureComponent {
           </View>
         </ImageBackground>
       </View>
-    ) : null;
+    )
   }
 }
 
