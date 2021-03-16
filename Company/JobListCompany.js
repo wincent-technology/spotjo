@@ -354,7 +354,7 @@ class JobListCompany extends PureComponent {
   push = (item, index) => {
     console.log('item', item, this.state.data);
     global.ig = this.state.data;
-    this.props.navigation.navigate('UserPro', {
+    this.props.navigation.navigate('UserPros', {
       item: item,
       index: index,
       status: item.status,

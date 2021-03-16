@@ -5,15 +5,15 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
-  ScrollView,
   FlatList,
   TouchableWithoutFeedback,
   TouchableOpacity,
   ImageBackground,
   Text,
   Image,
-  View,
+  View,Dimensions
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler'
 import {
   withNavigationFocus,
   NavigationEvents
@@ -73,7 +73,10 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Share from 'react-native-share';
-
+const {
+  height,
+  width
+} = Dimensions.get('window');
 class UserPro extends Component {
   constructor(props) {
     super(props);
@@ -94,6 +97,9 @@ class UserPro extends Component {
       fleg:false
     };
   }
+
+
+  
 
   checking = () => {
     const {
@@ -375,22 +381,22 @@ class UserPro extends Component {
   };
   renderCard = (data, index) => {
     this.setState({userHeading:data.heading})
-    console.log('dat >>>>>>>>', data.profile);
+    // console.log('dat >>>>>>>>',hp(100),StatusBar.currentHeight,hp(10),scale(100),height,hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)));
     return (
-      <ScrollView
-        style={{
-          alignSelf: 'stretch',
-        }}>
+      
         <ImageBackground
           style={{
             width: wp('96%'),
             height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-            overflow: 'hidden',
+            // flex:1
+            // overflow: 'hidden',
           }}
+          
           source={require('../Img/ract.png')}
           resizeMode={'stretch'}>
+          <ScrollView removeClippedSubviews={true} style={{height:hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
           <View style={{
-                top: hp(4),
+                top: hp(2),
                 marginHorizontal: wp(7)
             }}><Text style={{
                 color: '#333',
@@ -399,7 +405,7 @@ class UserPro extends Component {
             }}>{data.first_name} {data.last_name}</Text></View>
             <View style={{
                 flexDirection: "row",
-                alignItems: "flex-start",
+                alignItems: "flex-start",alignItems:"center"
             }}>
    <ImageBackground style={{
                 marginTop: hp(4.5),
@@ -425,9 +431,9 @@ class UserPro extends Component {
             }} resizeMode={'contain'}/></ImageBackground>
             <View style={{
                 flexDirection: "column",
-                height: wp(32),
+                height: 50,
                 width: wp(50),justifyContent:"center",alignItems:"center",
-                marginTop: hp(3),marginHorizontal:wp(2),
+                marginTop: hp(4) ,marginHorizontal:wp(2)
             }}>
             <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
                 vid: url + '/images/user/' + data.video
@@ -512,9 +518,8 @@ class UserPro extends Component {
                       <ListShow name={data.place + ' / 100%'} image={placeIcon} />
                       <ListShow name={data.mobile} image={mobile} />
                       <ListShow name={data.email} image={Mail} />
-          </View>
+          </View></ScrollView>
         </ImageBackground>
-      </ScrollView>
     );
   };
 
@@ -621,9 +626,7 @@ class UserPro extends Component {
                   }}
                   cardStyle={{
                     width: wp('96%'),
-                    height:
-                      hp('100%') -
-                      (StatusBar.currentHeight + scale(100) + hp(5)),
+                   flex:1,marginBottom:10
                   }}
                   // overlayOpacityHorizontalThreshold={10}
                   // overlayOpacityVerticalThreshold={10}

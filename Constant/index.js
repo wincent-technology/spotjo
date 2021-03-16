@@ -106,9 +106,9 @@ export const Mail = require('../Img/mail.png');
 export const splashVid = require('../Img/01.mp4');
 export const createJ = require('../Img/createjob.png')
 // export const url = "https://sportjo.herokuapp.com/" //http://192.168.0.169:8090/"
-// export const url = 'http://192.168.0.169:8091/';
+export const url = 'http://192.168.0.169:8091/';
 // export const url = "http://192.168.43.166:8091/"
-export const url = 'http://178.128.118.157:8091/'; //last live
+// export const url = 'http://178.128.118.157:8091/'; //last live
 // export const url = 'http://192.168.1.13:8091/';
 
 // http://192.168.0.169:8091/images/user/lpbihogc9a.jpg
@@ -135,7 +135,8 @@ export const InActive = {
 // redirectUri -  msauth://com.spotjo/Xo8WBi6jzSxKDVR4drqm84yr9iU%3D
 // "tenant_id": "75f3941f-f5ae-4416-adba-55cd4b4e1cbb"
 // client secret - 0801bc08-0781-45f9-a62d-a96dbd673a7e
-
+// need to follow
+//https://stackoverflow.com/questions/54347728/calendar-endpoint-returns-organizationfromtenantguidnotfound 
 //Authorization code for microsoft outlook
 // 0.AAAAH5Tzda71FkStulXNS04cu4SpUTHhRD1Cls44qtpxXmdxAAA.AQABAAIAAAD--DLA3VO7QrddgJg7Wevrtc8lN8dp5IwnPZ-8V99NBhY9Q4DFExT573P4UNjUdkigB9k0rtVS0tGCVw97WqLjR7fHNqkv_8GajMJ1vkoeHyhs-cPME0mKwL-RGgjU5oPGInwD90bHhX0etmJLU9bCL14ZTzVy6J5Hqwfx85PFJs9uUOCkkh99g7m9LTV8QmNCRdFO_MGTfawtu2X7AE05ohvLVChNe2oXRqHp4lwvccsGo58f-SiZPoRAAkEKstv8DjkfAGW9XdsAi3zPU5BtHbk9QGYhByjMWJ6t2nphWFwEyPHYXlSygf5NxAeJHtXQhJGQlh1x0wWbdYC3nfaBhrQa1_SKJq22oR1KN7oBo_b5w5DidUwouoPamnAZYvszvvmL3tJU2A-ZBuqydWiZSIs-b0xQes4qRItBMJmjHEo4rBgyQoluAxDtHcIpd2BS_UYOJSm3v4ZZMBNFsPR3iNM9hlEzaZG1xPUbxZtCrmGU4H-18uNHmw7-pEayiOj8jTBMWxkH-2zj9gU2pAxDV7uqPr-p72ONdLrTGX2CbQxtwtvbRsdA5Df3Y4vvtZcyJFCcCwoEE4ZM59dW12c_CoSGm7DjjJkz4z8At7ZoXotOXKCISCU3s59tcYVGnn1L8TNwNIJ1DD1e0ns8ty-HnENV_0TI9IAcqRrqov9fytD-Sws-QS0TVJnP78NjzK7YzXzfQ1QiabzOlBekqb14YZWR258TMTccs04Gx9xduuchFeXd4hSXJrJFXChDZ512yzyohuVld5aliXpP8w8w_mxBH5O_gVGV0XNKk0aU3f9IsB-sqs3v60GDyckfad8rySGGeUjIoAtS3lYBG2KhDN9RcIX-Jsr-aX1v1VsI5m1MMxrpBSjGuQs91wubsMjYHRwWQVsJCcheUApbNNd7f0aGRzFxyZk0css2191eautF265lTYU7lm6tNAXMaGIRf38RAc_U6LZS1N909gtyYKTvmFTMoCL2wO2sXVztx8xnf1w6fvDfsRHuGL5dUi85IgZ9Ey-FA1CD59wcYu-5xi7DEp2O_zm0q03rJHrBLOdj_FZp31IGe-LgFSFmfolkpT6F0lX1Yyen7ftMr_b-HQhrI-QkvRM6ly3nlKKSFqqzUptX7oBakX9A2dKFa3IbfCkiX5OakCRGUeolJweTNkAwXIJFb8w4sgwZ4n9_oLB0zBqtLhhP2Mvqa3yzD8Efjpk780_VBQTevvSdZTWxDioU7J3ONOYTceAG5POKAiAA
 

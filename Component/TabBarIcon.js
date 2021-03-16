@@ -14,7 +14,7 @@ class TabBarIcon extends React.Component {
       icon,
       tintColor,
     } = this.props;
-    console.log('icon',this.props);
+    // console.log('icon',this.props);
     const numberWrap = (number = 0) => (
       number != 0 && <View style={styles.numberWrap}>
         <Text style={styles.number}>{number}</Text>

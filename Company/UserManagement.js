@@ -150,12 +150,13 @@ class UserManagement extends PureComponent {
         <NavigationEvents onDidFocus={this.checking}/>
                     <NavigationHead centerComponent='User Management' creauser = {true} rightComponent='edit' onPress={() => this.Back()} onExit={() => this.createJob()} />
                     <View style={{
-                height: hp(100) - scale(100)
+                // height: hp(100) - scale(100)
+                flex:1
             }}>
             {data != '' ? (<FlatList
             style={{
                 marginTop: 4,
-                marginBottom: 45 + StatusBar.currentHeight,
+                marginBottom: 45,
                 backgroundColor: 'transparent',
             }}
             data = {data}

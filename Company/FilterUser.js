@@ -658,8 +658,8 @@ class FilterUser extends Component {
                       }}
                       contentContainerStyle={{
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        width: wp(80),
+                        justifyContent: 'space-between',
+                        width: wp(82),
                       }}>
                       {this.state.addSkill.map((item, index) => {
                         return (
@@ -1304,9 +1304,9 @@ class FilterUser extends Component {
           <View
                   style={
                     {
-                      bottom: scale(180),
+                      bottom: scale(80),position:"absolute",
                       borderTopWidth:1,
-                      height:80,justifyContent: 'space-around',
+                      height:80,width:wp(100),justifyContent: 'space-around',
                     flexDirection:"row",
                     alignItems: 'center',
                       backgroundColor:"rgba(255,255,255,0.2)"

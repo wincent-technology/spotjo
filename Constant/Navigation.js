@@ -25,7 +25,7 @@ import CompanyLogin from '../Company/Login';
 import LoginWithEmail from '../Company/LoginWithEmail';
 import EmailSend from '../Company/EmailSend';
 import ForgatPass from '../Company/ForgatPass';
-import CompanyEditProfile from '../Company/CompanyEditProfile';
+import CompanyEditProfiles from '../Company/CompanyEditProfile';
 import VideoResume from '../Company/VideoResume';
 import PersonalCompany from '../Company/PersonalCompany';
 import NoAccount from '../Company/NoAccount';
@@ -42,6 +42,8 @@ import LocationCom from '../Company/LocationCom';
 import ChooseTalentCom from '../Company/ChooseTalentCom';
 import FirstJobList from '../Company/FirstJobList';
 import UserPro from '../Company/UserPro';
+import UserPros from '../Company/UserPro';
+
 import PostedJobUser from '../Company/PostedJobUser'
 import FilterUser from '../Company/FilterUser';
 import UserScreenMap from '../Company/UserScreenMap';
@@ -357,7 +359,7 @@ const TabScreenJob = createBottomTabNavigator({
     style: {
       // height: 50,
       paddingHorizontal: 20,
-      backgroundColor: 'transparent',
+      backgroundColor: themeWhite,
       position: 'absolute',
       left: 1,
       bottom: 0,
@@ -385,7 +387,6 @@ const TabScreenJob = createBottomTabNavigator({
 const ComAd = createStackNavigator({
   FirstJobList: FirstJobList,
   UserPro: UserPro,
-  PostedJobUser: PostedJobUser,
   FilterUser: FilterUser,
   // UserScreenMap: UserScreenMap,
   ShaduleInterView:ShaduleInterView
@@ -397,12 +398,24 @@ const ComAd = createStackNavigator({
 const Admin = createStackNavigator({
   AdminDashboard: AdminDashboard,
   PostedJobList: PostedJobList,
+  PostedJobUser: PostedJobUser,
   JobListCompany: JobListCompany,
   CreateJob: CreateJob,
+  UserPros:UserPros
 }, {
   headerMode: 'none',
   initialRouteName: 'AdminDashboard',
 }, );
+
+const CompanyEditProfile = createStackNavigator({
+  CompanyEditProfile: CompanyEditProfiles,
+  Admin:Admin
+}, {
+  headerMode: 'none',
+  initialRouteName: 'CompanyEditProfile',
+}, );
+
+
 const CompanyServices = createStackNavigator({
   CompanyService: CompanyService,
 }, {

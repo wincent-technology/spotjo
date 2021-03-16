@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   StyleSheet,
   StatusBar,
-  ScrollView,
   FlatList,
   TouchableWithoutFeedback,
   TouchableOpacity,
@@ -14,6 +13,8 @@ import {
   Image,
   View,
 } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler'
+
 import {
   withNavigationFocus,
   NavigationEvents
@@ -28,6 +29,7 @@ import {
 } from '../src/IconManager';
 import {
   themeColor,
+  company,icons_jobType_blue,skillCategory,workExp,placeIcon,icons_salerytype,
   themeWhite,
   homeic,
   place,
@@ -47,8 +49,9 @@ import {
   cal,
   clock,
   interViewBack,
-  Listed,
-  detailed,
+  Listed,web,
+  detailed,backgroundCorner,WhiteVideo,blanks,Fulls,facebook,linkedin,whatsapp,
+  
   Companyavtar
 } from '../Constant/index';
 import {
@@ -61,9 +64,11 @@ import {
 } from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
-  Rating,
+  StarRating,
   NavigationHeader
 } from '../Component/ViewManager.js';
+import ListShow from '../Component/ListShow'
+
 // import ItemMV from './ItemMV'
 import {
   BlurView
@@ -111,6 +116,9 @@ class PostedJobUser extends PureComponent {
 
   };
 
+  componentDidMount(){
+    this._scrollView.scrollResponderHandleStartShouldSetResponder = () => true
+  }
 
   Back = () => {
     if (this.state.status == 'undefined')
@@ -261,79 +269,79 @@ class PostedJobUser extends PureComponent {
   };
 
   onSwiped = (type, index) => {
-    console.log(`on swiped ${type}`, index);
-    console.log(',,,,', this.state.status);
-    const {
-      status
-    } = this.state;
-    const item = global.ig[index]['appid'];
-    this.setState({
-      id: index,
-    });
-    if (index >= global.ig.length - 1) {
-      this.setState({
-        fleg: !this.state.fleg,
-      });
-    }
+    // console.log(`on swiped ${type}`, index);
+    // console.log(',,,,', this.state.status);
+    // const {
+    //   status
+    // } = this.state;
+    // const item = global.ig[index]['appid'];
+    // this.setState({
+    //   id: index,
+    // });
+    // if (index >= global.ig.length - 1) {
+    //   this.setState({
+    //     fleg: !this.state.fleg,
+    //   });
+    // }
 
-    if (type == 'left') {
-      if (status == null) {
-        // alert('NotInterested')
-        // this.setState({
-        //   left: true
-        // })
-        this.jaaveda('Rejected', item);
-      } else if (status == 'Interview') {
-        for (let i in this.state.data) {
-          if (item == this.state.data[i].appid)
-            console.log('dfsdf inter 262', this.state.data[i]);
-          // console.log('dfsdf', this.state.data)
-          this.setState({
-              jobId: this.state.data[i].jobId,
-              comId: this.state.data[i].comId,
-              userId: this.state.data[i].userId,
-            },
-            () => this.InterviewOperation('Rejected'),
-          );
-        }
-      }
-    } else if (type == 'right') {
-      if (status == null) {
-        for (let i in this.state.data) {
-          if (item == this.state.data[i].appid)
-            console.log('dfsdf null ', this.state.data[i]);
-          this.setState({
-            jobId: this.state.data[i].jobId,
-            comId: this.state.data[i].comId,
-            userId: this.state.data[i].id,
-            dark: !this.state.dark,
-          });
-        }
-      } else if (status == 'Interview') {
-        for (let i in this.state.data) {
-          if (item == this.state.data[i].appid)
-            console.log('dfsdf', this.state.data[i]);
-          this.setState({
-              jobId: this.state.data[i].jobId,
-              comId: this.state.data[i].comId,
-              userId: this.state.data[i].userId,
-            },
-            () => this.InterviewOperation('Selected'),
-          );
-        }
-      }
-    } else if (type == 'top') {
-      if (status == null || status == 'undefined') {
-        this.setState({
-            id: index,
-          },
-          () => this.Sharing(),
-        );
-      }
-    } else if (type == 'bottom') {
-      if (status == null) this.jaaveda('Shortlisted', item);
-      // alert(' Short Listed ' + item)    }
-    }
+    // if (type == 'left') {
+    //   if (status == null) {
+    //     // alert('NotInterested')
+    //     // this.setState({
+    //     //   left: true
+    //     // })
+    //     this.jaaveda('Rejected', item);
+    //   } else if (status == 'Interview') {
+    //     for (let i in this.state.data) {
+    //       if (item == this.state.data[i].appid)
+    //         console.log('dfsdf inter 262', this.state.data[i]);
+    //       // console.log('dfsdf', this.state.data)
+    //       this.setState({
+    //           jobId: this.state.data[i].jobId,
+    //           comId: this.state.data[i].comId,
+    //           userId: this.state.data[i].userId,
+    //         },
+    //         () => this.InterviewOperation('Rejected'),
+    //       );
+    //     }
+    //   }
+    // } else if (type == 'right') {
+    //   if (status == null) {
+    //     for (let i in this.state.data) {
+    //       if (item == this.state.data[i].appid)
+    //         console.log('dfsdf null ', this.state.data[i]);
+    //       this.setState({
+    //         jobId: this.state.data[i].jobId,
+    //         comId: this.state.data[i].comId,
+    //         userId: this.state.data[i].id,
+    //         dark: !this.state.dark,
+    //       });
+    //     }
+    //   } else if (status == 'Interview') {
+    //     for (let i in this.state.data) {
+    //       if (item == this.state.data[i].appid)
+    //         console.log('dfsdf', this.state.data[i]);
+    //       this.setState({
+    //           jobId: this.state.data[i].jobId,
+    //           comId: this.state.data[i].comId,
+    //           userId: this.state.data[i].userId,
+    //         },
+    //         () => this.InterviewOperation('Selected'),
+    //       );
+    //     }
+    //   }
+    // } else if (type == 'top') {
+    //   if (status == null || status == 'undefined') {
+    //     this.setState({
+    //         id: index,
+    //       },
+    //       () => this.Sharing(),
+    //     );
+    //   }
+    // } else if (type == 'bottom') {
+    //   if (status == null) this.jaaveda('Shortlisted', item);
+    //   // alert(' Short Listed ' + item)    }
+    // }
   };
 
   Sharing = async () => {
@@ -363,169 +371,156 @@ class PostedJobUser extends PureComponent {
   };
   renderCard = (data, index) => {
     return (
-      <ScrollView
-        style={{
-          alignSelf: 'stretch',
-        }}>
+      <ScrollView removeClippedSubviews={true}  onScroll={(e) => {
+        console.log('e.nativeEvent.contentOffset.x / w',e.nativeEvent.contentOffset.y)
+    }} ref={x => this._scrollView = x} style={{flex:1,flexGrow:1,alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
           <ImageBackground
             style={{
               width: wp('96%'),
-              height:
-                hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-              overflow: 'hidden',
+           flex:1,paddingBottom:20
+              // paddingBottom:20
             }}
             source={require('../Img/ract.png')}
             resizeMode={'stretch'}>
-  <StatusBar hidden={false} backgroundColor={themeColor} />                 
-            <View style={styles.CompanyProfileImageSize}>
-              <Image
-                source={
-                  data.logo
+          
+            <View style={{
+                top: hp(1),
+                marginHorizontal: wp(7)
+            }}><Text style={{
+                color: '#333',
+                fontSize: scale(23),
+                fontFamily: "Roboto-Bold"
+            }}>{data.title}</Text></View>
+                    <View style={{
+                flexDirection: "row",
+                alignItems: "flex-start",alignItems:"center"
+            }}>
+   <ImageBackground style={{
+                marginTop: hp(4.5),
+                marginLeft: wp(7),
+                width: wp(32),
+                height: wp(32),
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 5
+            }}
+            source={backgroundCorner}><Image 
+            source={data.logo
                     ? {
                         uri: url + 'images/company/' + data.logo,
                       }
                     : Companyavtar
-                }
-                style={styles.imageStyle}
-                resizeMode={'stretch'}
-              />
+                          }
+            style={{
+                height: wp('29'),
+                width: wp('29'),
+            // alignItems: "stretch",
+            // backgroundColor: "transparent"
+            }} resizeMode={'contain'}/></ImageBackground>
+            <View style={{
+                flexDirection: "column",
+                height:50,
+                width: wp(50),justifyContent:"center",alignItems:"center",
+                marginTop: hp(3),marginHorizontal:wp(2),
+            }}>
+            <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
+                vid: url + '/images/company/' + data.video
+            })}><View style={{
+                flexDirection: "column",
+                // height: hp(9),
+                width: wp(26),
+                alignItems: "center",
+                justifyContent: "center"
+            }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
+                height: scale(65),
+                width: scale(65),
+            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                color: themeColor,
+                fontFamily: "Roboto-Regular",
+                fontSize: scale(10)
+            }}>Company Profile</Text></View>
+            </View></TouchableWithoutFeedback>
+            <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
+            <View style={{marginTop:scale(5)}}>
+            <StarRating
+            emptyStar={blanks}
+            starStyle={{marginLeft:5}}
+            fullStar={Fulls}
+            halfStar={'star-half'}
+            iconSet={'MaterialIcons'}
+            disabled={false}
+            maxStars={5}
+            starSize={scale(15)}
+            rating={3}
+            // selectedStar={(rating) => this.handleLanguage(rating, index)}
+            fullStarColor={'orange'}
+            /></View>
             </View>
-            <View style={styles.CompanyProfileSecongImage}>
-              <Image
-                source={
-                  data.logo
-                    ? {
-                        uri: url + 'images/company/' + data.logo,
-                      }
-                    : Companyavtar
-                }
-                style={styles.imageStyle}
-                resizeMode={'stretch'}
-              />
             </View>
             <View style={styles.CompanyProfileDetail}>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={homeic}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.name}</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={user}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>
-                  {data.isEmployed ? (
-                    <Text>Employed</Text>
-                  ) : (
-                    <Text>Fresher</Text>
-                  )}
-                </Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={screen}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.title}</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={edit}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text
-                  style={{
-                    marginLeft: scale(10),
-                    marginTop: scale(-2),
-                  }}>
-                  {data != '' &&
-                    data.skills.map((item, index) => {
-                      return (
-                        <Text key={index} style={styles.ItemDetailLabel1}>
-                          {item.name} /
-                        </Text>
-                      );
-                    })}
-                </Text>
-                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={bag}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>
-                  {data.minExp != '' && data.minExp != null
+            <ListShow name={data.name} image={company} />
+                    <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
+                    <ListShow name={data.title} image={skillCategory} />
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={workExp}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {data.minExp != '' && data.minExp != null
                   ? data.minExp
                   : 0 } 
                  -{ data.maxExp != '' && data.maxExp != null
                   ? data.maxExp
                   : 0 }
                 {' '}Years /{' '}
-                </Text>
-                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={place}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data != '' &&
-                    data.city.map((item, index) => {
+                        </Text>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          100%
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={placeIcon}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                        {data != null || data && data.city.map((item, index) => {
                       return (
                         <Text key={index} style={styles.ItemDetailLabel1}>
                           {item} /
                         </Text>
                       );
                     })}</Text>
-                <Text style={styles.CompanyProfileDetailLabel100}> 100%</Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={dollor}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>
-                  {data.salMin}-{data.salMax},000$
-                </Text>
-              </View>
-              <View style={styles.CompanyDetailIcon}>
-                <View style={styles.CompanyDetailProfileIcon}>
-                  <Image
-                    source={earth}
-                    style={styles.imageStyle}
-                    resizeMode={'contain'}
-                  />
-                </View>
-                <Text style={styles.ItemDetailLabel1}>{data.website}</Text>
-              </View>
+                        <Text style={styles.CompanyProfileDetailLabel100}>
+                          {' '}
+                          100%
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={styles.CompanyDetailIcon}>
+                        <View style={styles.CompanyDetailProfileIcon}>
+                          <Image
+                            source={icons_salerytype}
+                            style={styles.imageStyle}
+                            resizeMode={'contain'}
+                          />
+                        </View>
+                        <Text style={styles.ItemDetailLabel1}>
+                          {data.salMin} - {data.salMax},000$
+                        </Text>
+                      </View>
+                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                    <ListShow name={data.website} image={web} />
             </View>
           </ImageBackground>
-          
       </ScrollView>
     );
   };
@@ -546,6 +541,7 @@ class PostedJobUser extends PureComponent {
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
+          tintColor={themeWhite}
           resizeMode={'stretch'}>
           <NavigationHeader
             onPress={() => this.Back()}
@@ -631,9 +627,7 @@ class PostedJobUser extends PureComponent {
                   }}
                   cardStyle={{
                     width: wp('96%'),
-                    height:
-                      hp('100%') -
-                      (StatusBar.currentHeight + scale(100) + hp(5)),
+                    flex:1,marginBottom:15
                   }}
                   // overlayOpacityHorizontalThreshold={10}
                   // overlayOpacityVerticalThreshold={10}
@@ -648,6 +642,7 @@ class PostedJobUser extends PureComponent {
                   onSwipedTop={(index) => this.onSwiped('top', index)}
                   onSwipedBottom={(index) => this.onSwiped('bottom', index)}
                   cards={global.ig}
+                  // verticalSwipe={false}
                   cardIndex={this.state.id}
                   stackSize={2}
                   showSecondCard={true}

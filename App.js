@@ -16,13 +16,13 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  View,
+  View,Button,
   Text,
   StatusBar,
   AppState,
 } from 'react-native';
 import Routes from './Constant/Navigation';
-
+import LanguageProvider, { LanguageContext } from './Constant/LanguageContext';
 global.Job_Title = '';
 global.Company = '';
 global.Branch = '';
@@ -90,14 +90,40 @@ export default class App extends Component {
   }
   ComponentDidMount() {}
 
+
+  changeLanguage = (language, data) => () => {
+    /**
+     * Confused? It is just a simple function which returns another function
+     * I use this pattern to minimize the use of anonymous arrow functions.
+     * Why? For better performance as they are made on every render.  
+     */
+    data.changeLanguage(language);
+  }
+
+
+
   render() {
     return (
+      <LanguageProvider>
       <View
         style={{
           flex: 1,
         }}>
         <Routes />
       </View>
+      </LanguageProvider>
     );
   }
 }
+
+// <LanguageContext.Consumer>
+//             {/* The Language Consumer which recieves the providers ...state, and changeLanguage.  */}
+//             {(data) => {
+//               return (
+//                 <Button
+//                   title='Change to Spanish'
+//                   onPress={this.changeLanguage('spanish', data)}
+//                 />
+//               );
+//             }}
+//           </LanguageContext.Consumer>

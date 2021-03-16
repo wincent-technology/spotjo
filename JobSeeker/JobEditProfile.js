@@ -166,7 +166,14 @@ class JobEditProfile extends Component {
             centerComponent="Edit Profile"
             onPress={() => this.Back()}
           />
-          <View style={styles.FilterMainView}>
+          <ScrollView style={{flex:1,alignSelf:"stretch"}} nestedScrollEnabled>
+          <View style={{
+             width: wp('96%'),
+              height: hp('100%'),
+              flexGrow:1,
+              marginHorizontal: wp('2%'),
+              borderRadius: scale(20),
+          }}>
           <View style={{
                 top: hp(4),
                 marginHorizontal: wp(7)
@@ -246,11 +253,14 @@ class JobEditProfile extends Component {
             /></View>
             </View>
             </View>
-              <ScrollView style={{ alignSelf: 'stretch',
-    marginBottom: scale(265),}}>
+              <ScrollView style={{
+    paddingBottom: scale(200),height:hp(20)}} nestedScrollEnabled>
                 <View
                   style={{
+                    flex:1,
+                    // height:hp(30),
                     flexDirection: 'column',
+                    paddingBottom:210,
                     marginHorizontal:wp(7)
                   }}>
 
@@ -371,8 +381,9 @@ class JobEditProfile extends Component {
                 </View>
               </ScrollView>
           </View>
+          </ScrollView>
           <View style={{alignItems:"center",bottom:50,position:"absolute",justifyContent:"center",width:"100%"}}>
-              {this.state.piedata && <PieChart style={{ height: 125,width:125,marginBottom:5 }} data={this.piedata()}/>}
+              {this.state.piedata && <PieChart style={{ height: 100,width:100,marginBottom:5 }} data={this.piedata()}/>}
             <View style={{alignItems:"center",justifyContent:"center"}}>
               <Text style={{color:themeColor,fontSize:scale(20),fontFamily:FontBold}}>
                   {this.sums()}

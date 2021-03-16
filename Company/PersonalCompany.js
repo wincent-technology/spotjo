@@ -160,8 +160,8 @@ class PersonalCompany extends Component {
            
                         <View style={styles.PersonalInfo}>
                          <ScrollView showsVerticalScrollIndicator={true} style={{
-                alignSelf: "stretch",
-                // height: hp(30)
+                alignSelf: "stretch",flexGrow:1,
+                height: hp(100) < 600 ? hp(33) : 'auto'
             }}>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {

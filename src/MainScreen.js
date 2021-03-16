@@ -21,8 +21,10 @@ import {
   ImageBackground,
   Image,
   TouchableWithoutFeedback,
-  TouchableOpacity,
+  TouchableOpacity
 } from 'react-native';
+  // import Text from '../Constant/Text'
+
 // import Icon from 'react-native-vector-icons/Ionicons';
 import {
   withNavigationFocus
@@ -39,6 +41,8 @@ import {
   Background,
   themeColor
 } from '../Constant/index';
+import LanguageProvider, { LanguageContext } from '../Constant/LanguageContext';
+
 import Geolocation from '@react-native-community/geolocation';
 import RNNotchInfo from 'react-native-notch-info';
 
@@ -91,7 +95,9 @@ class MainScreen extends Component {
     //         console.log('inf', info);
     //         global.let = info.coords.latitude;
     //         global.long = info.coords.longitude;
+    // DevSettings.reload()
             this.props.navigation.navigate('TalentScreen');
+            
     //       },
     //       (err) => {
     //         snack('Please Enable Location');

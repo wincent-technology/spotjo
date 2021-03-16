@@ -504,8 +504,8 @@ else
               onMapReady={() => {
                 this.map.animateToRegion(
                   {
-                    latitude: global.let,
-                    longitude: global.long,
+                    latitude: global.let || 10,
+                    longitude: global.long || 10,
                     latitudeDelta: this.state.region.latitudeDelta,
                     longitudeDelta: this.state.region.longitudeDelta,
                   },

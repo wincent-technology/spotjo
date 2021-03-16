@@ -148,12 +148,13 @@ class MyProfile extends Component {
           />
         <StatusBar hidden={false} backgroundColor={themeColor}/>
           <View style={styles.CompanyProfileMainImage}>
-            <ScrollView>
+            <ScrollView style={{flex:1,alignSelf:"stretch",marginBottom:20}}>
             <View style={{
               width: wp('96%'),
-                  height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
-                  overflow:"hidden",
-                  zIndex:20
+              flex:1,paddingBottom:35
+                  // height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
+                  // overflow:"hidden",
+                  // zIndex:20
             }}>
                 <View
                   style={{

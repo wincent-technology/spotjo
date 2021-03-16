@@ -292,7 +292,7 @@ class JobMatches extends React.Component {
     // }
     console.log("data >>>", data);
     global.ig = data;
-    this.props.navigation.navigate('UserPro', {
+    this.props.navigation.navigate('UserPros', {
       item: item,
       index: index,
       status: item.status == 'NULL' ? null : item.status,

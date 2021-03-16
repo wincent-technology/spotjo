@@ -34,8 +34,8 @@ if (!window.location) {
 
 
 // This must be below your `window.navigator` hack above
-const socket = io('http://178.128.118.157:8091');
-//  const socket = io('http://192.168.0.169:8091');
+// const socket = io('http://178.128.118.157:8091');
+ const socket = io('http://192.168.0.169:8091');
 
 
 
@@ -53,8 +53,18 @@ class ChatOne extends Component{
         suggesion: [],
         messages:[],
         show:false,
-        flag:false
+        flag:false,
+        read : null
       };
+
+      // socket.on("new_message_alert",(content) => 
+      //   {
+      //     console.log('content',content)
+      //     // this.onMessage(content)
+      //     // socket.emit("message_read", content);
+
+      //   });
+        
       this.arrayholder = [];
 }
  
@@ -103,12 +113,23 @@ componentDidMount(){
         socket.on('connect', () => console.log('connected'))
         socket.on('error', console.error)
         socket.on('connect_error', console.error)
-        socket.on("new_message_alert", 
-          (content) => content.type == 'Add' && this.onMessage(content)
-        );
+        socket.emit("userOnApp", global.Id);
+        socket.on("new_message_alert",(content) => 
+        {
+
+          console.log('content',content)
+          content.isRead = 0
+          this.onMessage(content)
+
+          socket.emit("message_read", content);
+
+        });
+        
+
+       
       var data = [];
-      console.log('io("ws://<LOCAL HOME NETWORK IP>:<PORT ON SERVER>"',socket)
-      console.log(this.props.navigation.state.params.thread)
+      // console.log('io("ws://<LOCAL HOME NETWORK IP>:<PORT ON SERVER>"',socket)
+      // console.log(this.props.navigation.state.params.thread)
       try {
         http.POST('api/webuser/chat/get',{
           loginId : global.Id,
@@ -131,6 +152,7 @@ componentDidMount(){
                   res['data']['result'][i].text = res['data']['result'][i].message
                   res['data']['result'][i]._id = res['data']['result'][i].senderId
                   res['data']['result'][i].name = this.props.navigation.state.params.thread.firstName
+                  
                   // delete res['data']['result'][i].message
                   // delete res['data']['result'][i].senderId
                   let user = {
@@ -138,6 +160,7 @@ componentDidMount(){
                     name:res['data']['result'][i]._id == global.Id ? global.Company : this.props.navigation.state.params.thread.firstName,
                     
                   }
+                  
                   res['data']['result'][i]['user'] = user
 
                   DATA.push(res['data']['result'][i])
@@ -147,7 +170,7 @@ componentDidMount(){
                 this.setState({
                   messages:dm
                 })
-                this.giftedChatRef.current.scrollToBottom();
+                // this.giftedChatRef.current.scrollToTop();
 
               // setMessages(dm);
               // console.log('datacheck',DATA);
@@ -160,108 +183,67 @@ componentDidMount(){
       } catch (error) {
         snack(error);
       } 
+      
+
+      
+      socket.on("message_read", (data) => {
+        console.log('data',data)
+        let messages = this.state.messages
+        messages.length && messages.filter(i => {if(i.id == data.id)i.isRead=1});
+        this.setState({messages});
+      })
+
+        socket.on("message_read_all", (data) => {
+          console.log('data Read all>>>>>>>>',data)
+          if (this.props.navigation.state.params.thread && this.props.navigation.state.params.thread.id == data.senderId || data.receiverId) {
+            let messages = this.state.messages
+            messages.length && messages.filter(i => {i.isRead = 1;this.renderTicks(i)});
+            this.setState({messages});
+          }
+        });
+
+
 }
 
+
+// check = (msg) => {
+//   console.log('hi')
+//   // socket.connect()
+//   socket.on('connect', (som) => 
+//   {
+//     console.log('som',som)
+    
+// }
+//   )
+// }
  
 onMessage = (msg) => {
-  let DATA  = [];
-  if (msg.type == 'Get' && msg.result.length != 1){
-  console.log('msg >>>>>>>>> IF',msg,msg.type)
-
-              for (let i in msg['result'])
-                {
-                  if(msg['result'][i].receiverDelete == 0 || msg['result'][i].senderDelete == 0)
+                  if(msg.receiverDelete == 0 || msg.senderDelete == 0)
                   {
 
                   }
                   else {
-                  // console.log(msg['result'][i].senderId == global.Id)
-                  msg['result'][i].text = msg['result'][i].message
-                  msg['result'][i]._id = msg['result'][i].senderId
-                  msg['result'][i].name = this.props.navigation.state.params.thread.firstName
-                  // delete msg['result'][i].message
-                  // delete msg['result'][i].senderId
+                  msg.text = msg.message
+                  msg._id = msg.senderId
+                  msg.name = this.props.navigation.state.params.thread.firstName
                   let user = {
-                    _id :msg['result'][i]._id == global.Id ? global.Id : msg['result'][i].receiverId,
-                    name:msg['result'][i]._id == global.Id ? global.Company : this.props.navigation.state.params.thread.firstName
+                    _id :msg._id == global.Id ? global.Id : msg.receiverId,
+                    name:msg._id == global.Id ? global.Company :  this.props.navigation.state.params.thread.firstName
                   }
-                  msg['result'][i]['user'] = user
-
-                  DATA.push(msg['result'][i])
+                  msg['user'] = user
+                  let dm = [...this.state.messages,msg ]
+                    
+                  
+                  this.setState({ messages: dm,flag:true})
+                  
+                  
                 }
-              }
-                let dm = DATA
-                this.setState({
-                  messages:dm
-                })
-              }
-else if (msg.type == 'Get' && msg.result.length == 1){
-  for (let i in msg['result'])
-                {
-                  if(msg['result'][i].receiverDelete == 0 || msg['result'][i].senderDelete == 0)
-                  {
-
-                  }
-                  else {
-                  // console.log(msg['result'][i].senderId == global.Id)
-                  msg['result'][i].text = msg['result'][i].message
-                  msg['result'][i]._id = msg['result'][i].senderId
-                  msg['result'][i].name = this.props.navigation.state.params.thread.firstName
-                  // delete msg['result'][i].message
-                  // delete msg['result'][i].senderId
-                  let user = {
-                    _id :msg['result'][i]._id == global.Id ? global.Id : msg['result'][i].receiverId,
-                    name:msg['result'][i]._id == global.Id ? global.Company : this.props.navigation.state.params.thread.firstName
-                  }
-                  msg['result'][i]['user'] = user
-
-                  // DATA.push(msg['result'][i])
-                  // console.log('msg[result][i]',msg['result'][i])
-                  let dm = [...this.state.messages, msg['result'][i]]
-                  this.setState({ messages: dm})
-
-                  console.log('this.state.message???????????',this.state.messages)
-                }
-
-                }
-
-} else {
-  for (let i in msg['result'])
-                {
-                  if(msg['result'][i].receiverDelete == 0 || msg['result'][i].senderDelete == 0)
-                  {
-
-                  }
-                  else {
-                  console.log(msg['result'][i].senderId == global.Id)
-                  msg['result'][i].text = msg['result'][i].message
-                  msg['result'][i]._id = msg['result'][i].senderId
-                  msg['result'][i].name = this.props.navigation.state.params.thread.firstName
-                  // delete msg['result'][i].message
-                  // delete msg['result'][i].senderId
-                  console.log('msg[result][i]._id == global.Id',msg['result'][i]._id == global.Id )
-                  let user = {
-                    _id :msg['result'][i]._id == global.Id ? global.Id : msg['result'][i].receiverId,
-                    name:msg['result'][i]._id == global.Id ? global.Company :  this.props.navigation.state.params.thread.firstName
-                  }
-                  msg['result'][i]['user'] = user
-
-                  // DATA.push(msg['result'][i])
-                  console.log('msg[result][i]',msg['result'][i])
-                  let dm = [...this.state.messages, msg['result'][i]]
-                  this.setState({ messages: dm})
-                  this.giftedChatRef.scrollToBottom();
-                  console.log('this.state.message???????????',this.state.messages)
-                }
-
-                }
-}
+               
 
 }
 
       
    renderBubble(props) {
-console.log('props',props.currentMessage)
     return (
       <Bubble
         {...props}
@@ -292,7 +274,7 @@ console.log('props',props.currentMessage)
    renderLoading() {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size='large' color='#6646ee' />
+        <ActivityIndicator size='large' color='#6646ee'/>
       </View>
     );
   }
@@ -328,6 +310,11 @@ console.log('props',props.currentMessage)
         (res) => {
           if (res['data']['status']) {
             console.log('result', res['data']['result']);
+            // let cd = []
+            // cd.push(res['data']['result']);
+            this.onMessage(res['data']['result'])
+            // socket.emit('new_message_alert', newMessage[0].text);
+             
             // let DATA  = [];
             // for (let i in res['data']['result'])
             //   {
@@ -356,9 +343,7 @@ console.log('props',props.currentMessage)
     } catch (error) {
       snack(error);
     } 
-    this.renderTicks(newMessage)
 
-    this.props.navigation.state.params.thread.isBlock != 1 && socket.emit('new_message_alert', newMessage[0].text);
   }
 
   Back = () => {
@@ -367,7 +352,7 @@ console.log('props',props.currentMessage)
   del = () => {
 
     let temp = this.state.messages.filter(i => i.needtodel == 1)
-    console.log('temp.length',temp.length)
+    // console.log('temp.length',temp.length)
     let data = []
     temp.forEach(obj => {
       data.push({
@@ -424,18 +409,20 @@ console.log('props',props.currentMessage)
     } 
   }
   show = () => {
+    let Old = this.props.navigation.state.params.thread
+    Old.isBlock = !Old.isBlock
     try {
       http.POST('api/webuser/chat/staffblock',{
         loginId : global.Id,
         companyId:global.Id,
-        isBlock:this.props.navigation.state.params.thread.isBlock == 1 ? 0 : 1,
-        userId : this.props.navigation.state.params.thread.id
+        isBlock:Old.isBlock,
+        userId : Old.id
       }).then(
         (res) => {
-          console.log('res>>>>>>>>>',res['data']['result']);
-          let dg = res['data']['result'].find(i => i.id == this.props.navigation.state.params.thread.id)
-          console.log('dg',dg)
-          this.props.navigation.setParams({thread: dg });
+          console.log('res>>>>>>>>>',res);
+          // let dg = res['data']['result'].find(i => i.id == this.props.navigation.state.params.thread.id)
+          // console.log('dg',dg)
+          this.props.navigation.setParams({thread: Old });
           this.setState({show:!this.state.show})
         },
         (err) => snack(err['message']),
@@ -530,7 +517,7 @@ console.log('props',props.currentMessage)
 renderChatFooter = () => {
   if (this.props.navigation.state.params.thread.isBlock == 1) {
     console.log('hi>>>>>>>>>');
-    return <Text style={{color:'red',textAlign:"center",fontSize:16}}>You have Blocked</Text>;
+    return <Text style={{color:'red',textAlign:"center",fontSize:16}}>This User Is Blocked</Text>;
   } 
 return null;
 };
@@ -555,11 +542,10 @@ Delete = () => {
 renderTicks = message => {
   const { messages } = this.state;
   // TODO: Status pending
-  // console.log('messages>>>>>>>>>>>>>>',message)
+  // console.log('messages>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<',message)
   if (message.senderId == global.Id) {
-      const status = message.hasOwnProperty('isRead') ? message['isRead'] : 0 ;
-      console.log('status',status)
-      switch (status) {
+      // const status = message.hasOwnProperty('isRead') ? message['isRead'] : message['isRead'] ;
+      switch (message['isRead']) {
           case 0:
               return library('done',15,message._id == global.Id ? '#fff' : 'gray')
           case 1:
@@ -574,6 +560,7 @@ renderTicks = message => {
 };
 
 render(){
+  
   const {thread} = this.props.navigation.state.params;
   return (
     <View style={{marginBottom:60,flex:1}}>
@@ -610,15 +597,19 @@ render(){
             </TouchableHighlight></Animatable.View> : <View/>
                }
         <GiftedChat
-      messages={this.state.messages.reverse()}
+      messages={this.state.messages}
       ref={ref => this.giftedChatRef = ref}
+      // extraData={this.state.messages}
       onSend={newMessage => this.handleSend(newMessage)}
       user={{ _id: global.Id, name: global.Company,}}
       renderBubble={this.renderBubble}
       placeholder='Type your message here...'
       showUserAvatar
       alwaysShowSend
-      inverted={true}
+      shouldUpdateMessage={(props, nextProps) =>
+        props.extraData !== nextProps.extraData
+ }
+      inverted={false}
       onLongPress={this.onLongPress}
       onPress={this.state.flag && this.onPress}
       renderTicks={this.renderTicks}

@@ -14,11 +14,20 @@ import styles from './Style';
 import { scale } from './Util';
 import { Background } from '../Constant/index'
 
-class AllSongs extends Component {
+// const {
+//     height,
+//     width
+//   } = Dimensions.get('window');
+  const {
+    height,
+  } = Dimensions.get('screen');
+
+class LoginFirst extends Component {
     constructor(props) {
         super(props);
 
     // this.state = {};
+    console.log('>>>>>>>>',height);
     }
 
     talent = () => {
@@ -54,4 +63,4 @@ class AllSongs extends Component {
 ;
 
 
-export default withNavigationFocus(AllSongs);
+export default withNavigationFocus(LoginFirst);

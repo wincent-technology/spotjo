@@ -63,6 +63,10 @@ import RadioForm, {
 import CustomButton from '../Component/Button';
 // import { Rating } from '../Component/ViewManager'
 import { PieChart } from 'react-native-svg-charts'
+import io from "socket.io-client";
+
+// const socket = io('http://178.128.118.157:8091');
+ const socket = io('http://192.168.0.169:8091');
 
 class CompanyEditProfile extends Component {
   constructor(props) {
@@ -112,6 +116,10 @@ class CompanyEditProfile extends Component {
   };
 
   componentWillMount(){
+    socket.on('connect', () => console.log('connected companyEditprofile>>>>>>>>>>>>>>>>>>>>>>>>>'))
+    socket.emit("userOnApp", global.Id);
+
+    
     this.sum = this.sums();
     let piedata = this.piedata();
     console.log('piedata>',piedata)
@@ -160,7 +168,6 @@ class CompanyEditProfile extends Component {
 
 
   render() {
-    console.log(this.state.piedata)
     return (
       <ImageBackground
           style={styles.ImageBlue}
@@ -172,7 +179,13 @@ class CompanyEditProfile extends Component {
             centerComponent="Edit Company Profile"
             onPress={() => this.Back()}
           />
-          <View style={styles.FilterMainView}>
+          <ScrollView style={{flex:1,alignSelf:"stretch"}}>
+          <View style={{ width: wp('96%'),
+              height: hp('100%'),
+              flexGrow:1,
+              marginHorizontal: wp('2%'),
+              borderRadius: scale(20),
+            }}>
           <View style={{
                 top: hp(4),
                 marginHorizontal: wp(7)
@@ -336,9 +349,9 @@ class CompanyEditProfile extends Component {
                   </TouchableNativeFeedback>
                 )}
               </View>
-          </View>
+          </View></ScrollView>
           <View style={{alignItems:"center",bottom:50,position:"absolute",justifyContent:"center",width:"100%"}}>
-              {this.state.piedata && <PieChart style={{ height: 125,width:125,marginBottom:5 }} data={this.piedata()}/>}
+              {this.state.piedata && <PieChart style={{ height: 100,width:100,marginBottom:5 }} data={this.piedata()}/>}
             <View style={{alignItems:"center",justifyContent:"center"}}>
               <Text style={{color:themeColor,fontSize:scale(20),fontFamily:FontBold}}>
                   {this.sums()}

@@ -238,17 +238,18 @@ module.exports = {
   },
   FilterMainView: {
     width: wp('96%'),
-    height: hp('100%'),
+    height: hp('100%') - scale(100),
+    // flexGrow:1,
     // backgroundColor: themeWhite,
     marginHorizontal: wp('2%'),
     // marginTop: scale(20),
     borderRadius: scale(20),
-    overflow:"hidden"
+    // overflow:"hidden"
     // elevation: 7,
   },
   FilterScroll: {
     alignSelf: 'stretch',
-    marginBottom: scale(100),
+    marginBottom: scale(150),
     // marginTop: scale(5),
   },
   FilterDropDown: {
@@ -443,7 +444,7 @@ module.exports = {
     // justifyContent: "center"
   },
   CompanyProfileDetailLabel100: {
-    marginTop: scale(-2),
+    // marginTop: scale(-2),
     fontSize: scale(16),
     fontFamily: 'Roboto-Regular',
   },
@@ -928,12 +929,12 @@ module.exports = {
   },
   itemsHiddenView: {
     flexDirection: 'row',
-    width: wp(87),
+    width: wp(82),
     // backgroundColor:"blue",
     justifyContent: 'space-between',
     marginBottom: scale(2),
     marginTop: scale(2),
-    height: scale(15),
+    height: scale(16),
     alignItems: 'center',
 
   },

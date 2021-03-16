@@ -196,7 +196,7 @@ class UserCreation extends PureComponent {
               <View style={{
               alignItems: "center",
               width: wp(100),
-              marginTop: hp(5)
+              marginTop: hp(100) < 600  ? hp(3) : hp(5)
           }}><Text style={{
               fontSize: scale(18),
               fontFamily: "Roboto-Bold",
@@ -205,7 +205,8 @@ class UserCreation extends PureComponent {
           }}>Please provide all the information mentioned below</Text></View>
               <View
                 style={{
-                  height: hp(100) - (150 + hp(5)),
+                  // height: hp(100) - (150 + hp(5)),
+                  flex:1,
                   width: wp(96),
                   marginHorizontal: wp(2),
                   top: hp(2),
@@ -214,7 +215,7 @@ class UserCreation extends PureComponent {
                       style={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        marginTop: hp(4),
+                        marginTop: hp(100) < 600  ? hp(0) : hp(3),
                       }}>
                       <View
                         style={{

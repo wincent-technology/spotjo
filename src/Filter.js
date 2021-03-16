@@ -118,6 +118,7 @@ class Filter extends Component {
     this.arrayholder = [];
 
     this.slider = React.createRef();
+    console.log('filter Height',hp(100))
   }
 
   save = () => {
@@ -379,6 +380,7 @@ class Filter extends Component {
           <View style={styles.FilterMainView}>
               <ScrollView
                 style={styles.FilterScroll}
+                onScroll = {(e)=> console.log('e.nativeEvent.contentOffset.x / w',e.nativeEvent)}
                 nestedScrollEnabled={true}>
                 <DropDownItem
                   style={[
@@ -1358,9 +1360,9 @@ class Filter extends Component {
             <View
                   style={
                     {
-                      bottom: scale(200),
+                      bottom: scale(80),position:"absolute",
                       borderTopWidth:1,
-                      height:100,justifyContent: 'space-around',
+                      height:80,width:wp(100),justifyContent: 'space-around',
                     flexDirection:"row",
                     alignItems: 'center',
                       backgroundColor:"rgba(255,255,255,0.2)"

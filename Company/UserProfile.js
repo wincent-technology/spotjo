@@ -114,16 +114,17 @@ class UserProfile extends Component {
           />
         <StatusBar hidden={false} backgroundColor={themeColor}/>
           <View style={styles.CompanyProfileMainImage}>
-            <ScrollView>
             <View style={{
               width: wp('96%'),
-                  height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
+              flex:1,
+                  // height: '100%' - (StatusBar.currentHeight + 50 + hp(5)),
                   overflow:"hidden",
                   zIndex:20
             }}>
+          <ScrollView style={{flex:1,alignSelf:"stretch"}}>
                 <View
                   style={{
-                    top: hp(4),
+                    // top: hp(4),
                     marginHorizontal: wp(7),
                   }}>
                   <Text
@@ -143,7 +144,7 @@ class UserProfile extends Component {
                   }}>
                   <ImageBackground
                     style={{
-                      marginTop: hp(4.5),
+                      marginTop: hp(2),
                       marginLeft: wp(7),
                       width: wp(32),
                       height: wp(32),
@@ -235,8 +236,8 @@ class UserProfile extends Component {
                     <ListShow name={global.WebSite} image={web} />
                     <ListShow name={global.Address} image={placeIcon} />
                     </View>
-                </View>
             </ScrollView>
+                </View>
           </View>
         </ImageBackground>
       </SafeAreaView>

@@ -10,7 +10,7 @@ import {
     Text,
     Image,
     View,TouchableOpacity,
-    TextInput
+    TextInput,ScrollView
 } from 'react-native';
 import {
     withNavigationFocus
@@ -124,7 +124,7 @@ class JobBasicType extends Component {
             <Text style={[  styles.Employment ,{
                 fontSize: scale(18),
                 fontWeight: "bold",
-                color:"#333",marginTop:15,
+                color:"#333",marginTop:scale(15),
             }]}>How will you use your talent?</Text>
                             <View style={styles.PersonalInfoChoose}>
                             

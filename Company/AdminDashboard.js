@@ -72,11 +72,11 @@ class AdminDashboard extends PureComponent {
   // // this.props.navigation.navigate('CompanyProfile')
   // }
   Back = () => {
-    this.props.navigation.navigate('ComEdit');
+    // this.props.navigation.navigate('Admin');
+    this.props.navigation.pop();
+
   };
   createJob = () => {
-    console.log('hey');
-
     this.props.navigation.navigate('CreateJob');
   };
 

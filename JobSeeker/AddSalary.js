@@ -13,6 +13,7 @@ import React, {
     withNavigationFocus
   } from 'react-navigation';
   import styles from '../src/Style';
+import { ScrollView } from 'react-native-gesture-handler'
   import {
     scale,
     snack
@@ -184,6 +185,7 @@ import React, {
                 />
               </View>
             </View>
+            <ScrollView style={{alignSelf:"stretch",flex:1,marginBottom:45}} nestedScrollEnabled>
             <View style={{flexDirection:"column",alignItems:"center",marginTop:-5}}>
             <Text style={{fontSize:18,fontFamily:FontBold}}>
                           {Math.round((this.state.salaryMax * 200)/150)} K
@@ -226,7 +228,7 @@ import React, {
               
             </View>
             <Text style={{fontSize:18,fontFamily:FontBold}}>3 k</Text>
-            </View>
+            </View></ScrollView>
           </ImageBackground>
         </SafeAreaView>
       );

@@ -919,13 +919,10 @@ class Camera extends Component{
 }
 
   maggi = async (file) => {
-    // console.log('file',file)
-    var data = await RNFS.readFile(file, 'base64').then(async (res1) => {
-      // console.log('res1',res1);
+    await RNFS.readFile(file, 'base64').then(async (res1) => {
         RNFS.stat(file)
             .then((stats) => {
                 let videoType = stats.path.split('.').pop()
-                // console.log('stats',stats,videoType)
                 try {
                     this.setState({
                         show: true

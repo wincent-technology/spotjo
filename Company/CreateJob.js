@@ -147,29 +147,29 @@ class CreateJob extends PureComponent {
     }
   };
 
-  callPostedJob = () => {
-    try {
-      http.GET('api/job/get').then(
-        (res) => {
-          if (res['data']['status']) {
-            console.log(
-              '>>>>>>>>>>>>',
-              JSON.stringify(res['data']['result'][3]['description']),
-            );
-          } else {
-            console.log('res', res);
-            alert(res[0]['data']['message']['message']);
-          }
-        },
-        (err) => alert(JSON.stringify(err)),
-      );
-    } catch (error) {
-      console.log('error while register' + error);
-    }
-  };
-  componentDidMount() {
-    this.callPostedJob();
-  }
+  // callPostedJob = () => {
+  //   try {
+  //     http.GET('api/job/get').then(
+  //       (res) => {
+  //         if (res['data']['status']) {
+  //           console.log(
+  //             '>>>>>>>>>>>>',
+  //             JSON.stringify(res['data']['result'][3]['description']),
+  //           );
+  //         } else {
+  //           console.log('res', res);
+  //           alert(res[0]['data']['message']['message']);
+  //         }
+  //       },
+  //       (err) => alert(JSON.stringify(err)),
+  //     );
+  //   } catch (error) {
+  //     console.log('error while register' + error);
+  //   }
+  // };
+  // componentDidMount() {
+  //   this.callPostedJob();
+  // }
   render() {
     const {
       index
@@ -192,14 +192,11 @@ class CreateJob extends PureComponent {
           />
           <View
             style={{
-              // height: hp(100) - hp(5),
-              height:hp(100)-100 ,
-              // width: wp(96),
+              flex:1,
               marginHorizontal: wp(2)
-              // top: hp(4),
             }}>
+            <ScrollView style={{alignSelf:"stretch",flexWrap:"wrap"}}>
             <Swiper
-              // showsButtons={true}
               ref={'swiper'}
               dotColor={themeColor}
               index={index}
@@ -209,8 +206,7 @@ class CreateJob extends PureComponent {
                 })
               }
               paginationStyle={{
-                top: hp(-90)+50
-                // position: 'absolute',
+                position: "absolute", top: 0, bottom: undefined
               }}>
               <View>
                 <JobBasicType />
@@ -239,13 +235,12 @@ class CreateJob extends PureComponent {
               <View>
                 <PreviewJob />
               </View>
-            </Swiper>
+            </Swiper></ScrollView>
             <View
               style={{
                 flexDirection: 'row',
                 width: wp(100),
                 justifyContent:"space-between",
-                // top: hp(76) - hp(5),
                 bottom:70,
                 position: 'absolute',
                 zIndex: 999,
@@ -279,7 +274,6 @@ class CreateJob extends PureComponent {
               <View
                 style={{
                   alignItems: 'center',
-                  // right: wp(7),
                   width: wp(20),
                   marginRight: wp(10),
                 }}>
@@ -310,9 +304,10 @@ class CreateJob extends PureComponent {
           </View>
           <View>
           </View>
+          {/* </ScrollView> */}
           <View
             style={{
-              bottom: 40,
+              bottom: 45,
               height: hp(6),
               width: wp(100),elevation:20,backgroundColor:"white"
               // left: wp(-2),

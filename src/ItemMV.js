@@ -203,7 +203,6 @@ class ItemMV extends PureComponent {
               </View>
               <Text style={styles.ItemDetailLabel} numberOfLines={1}>
                 {this.props.item.city != null && this.props.item.city.map((item, index) => {
-                  console.log('item',item)
                   return (
                     <Text
                       key={index}

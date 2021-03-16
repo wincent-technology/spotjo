@@ -1,3 +1,4 @@
+//skils need to changes by germen and english
 import React, {
     Component
 } from 'react';
@@ -75,7 +76,7 @@ class BasicInfoOfCompany extends Component {
     }
 
     checking = () => {
-        console.log('sfsfsfsfsffffffffffffffffffffffffffffffff>>>>>>>>>>>>>>>>>....');
+        console.log('sfsfsfsfsffffffffffffffffffffffffffffffff>>>>>>>>>>>>>>>>>....', global.item.skills);
         const {
             params
         } = this.props.navigation.state;
@@ -139,7 +140,7 @@ class BasicInfoOfCompany extends Component {
                     //   marginHorizontal: wp(7),
                     }}
                     nestedScrollEnabled={true}>
-                   {global.item.skills && global.item.skills.map((item, index) => {
+                   {global.item.skills.length && global.item.skills.map((item, index) => {
                       return (
                         <View style={{
                 flexDirection: "row",
@@ -158,7 +159,7 @@ class BasicInfoOfCompany extends Component {
                 fontFamily: FontBold,
                 fontSize: scale(16),
                 color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{item.name}</Text>
+            }} numberOfLines={1}>{item.english}</Text>
             </View>
             <View style={{width:wp(39),alignItems:"flex-end"}}>
             <StarRating
@@ -170,7 +171,7 @@ class BasicInfoOfCompany extends Component {
                 maxStars={5}
                 starSize={scale(17)}
                 rating={item.rating}
-            starStyle={{marginLeft:2}}
+                starStyle={{marginLeft:2}}
                 // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
                 fullStarColor={'orange'}
               />
@@ -201,7 +202,7 @@ class BasicInfoOfCompany extends Component {
                     //   marginHorizontal: wp(7),
                     }}
                     nestedScrollEnabled={true}>
-                   {global.item.language1 && global.item.language1.map((item, index) => {
+                   {global.item.language1.length && global.item.language1.map((item, index) => {
                       return (
                         <View style={{
                 flexDirection: "row",
@@ -220,7 +221,7 @@ class BasicInfoOfCompany extends Component {
                 fontFamily: FontBold,
                 fontSize: scale(16),
                 color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{item.name}</Text>
+            }} numberOfLines={1}>{item.english}</Text>
             </View>
             <View style={{width:wp(39),alignItems:"flex-end"}}>
             <StarRating

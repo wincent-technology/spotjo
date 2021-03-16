@@ -44,7 +44,7 @@ import {
   skill,
   skillCategory,
   skillLavel,
-  Filterjobtype,
+  Filterjobtype,blanks,Fulls,
   searchType,
 } from '../Constant/index';
 import {
@@ -60,10 +60,10 @@ import RadioForm, {
   CheckBox,
   DropDownItem,
   NavigationHead,
-  Rating,
+  StarRating,
 } from '../Component/ViewManager.js';
 import http from '../api';
-import Items from '../src/Items';
+// import Items from '../src/Items';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 // import Slider from 'react-native-range-slider'
 import Slider from 'rn-range-slider';
@@ -713,8 +713,7 @@ class FilterJS extends Component {
                         this.addsSkill(event.nativeEvent.text)
                       }
                     />
-                    <FlatList
-                      nestedScrollEnabled={true}
+                    <ScrollView
                       style={{
                         backgroundColor: 'transparent',
                         marginTop: '-5%',
@@ -723,31 +722,53 @@ class FilterJS extends Component {
                       }}
                       contentContainerStyle={{
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        width: wp(80),
-                      }}
-                      data={this.state.addSkill}
-                      extraData={this.state.addSkill}
-                      showsHorizontalScrollIndicator={false}
-                      removeClippedSubviews={true}
-                      renderItem={({item, index}) => (
-                        <Items
-                          item={item}
-                          index={index}
-                          remove={this.remove}
-                          handleChange={this.handleChange}
-                        />
-                      )}
-                      initialNumToRender={5}
-                      maxToRenderPerBatch={10}
-                      updateCellsBatchingPeriod={70}
-                      getItemLayout={(data, index) => ({
-                        length: hp('4%'),
-                        offset: hp('4%') * index,
-                        index,
+                        justifyContent: 'space-between',
+                        width: wp(82),
+                      }}>
+                      {this.state.addSkill.map((item, index) => {
+                        return (
+                          <View style={styles.itemsHiddenView}>
+                            <View
+                              style={
+                                ([styles.itemsHiddenSView],
+                                {marginLeft: scale(15)})
+                              }>
+                              <Icon2
+                                name={'highlight-off'}
+                                size={scale(20)}
+                                color={themeColor}
+                                onPress={() => {
+                                  this.remove(item.name, index);
+                                }}
+                              />
+                            </View>
+                            <View style={styles.itemsHiddenTView}>
+                              <Text
+                                style={styles.addSkillFont}
+                                numberOfLines={1}>
+                                {item.name}
+                              </Text>
+                            </View>
+                            <View style={styles.itemsHiddenViewRate} >
+                              <StarRating
+                                emptyStar={blanks}
+                                fullStar={Fulls}
+                                // halfStar={'star-half'}
+                                iconSet={'MaterialIcons'}
+                                disabled={false}
+                                maxStars={5}
+                                starSize={scale(20)}
+                                rating={item.rating}
+                                selectedStar={(rating) =>
+                                  this.handleChange(rating, index)
+                                }
+                                fullStarColor={'orange'}
+                              />
+                            </View>
+                          </View>
+                        );
                       })}
-                      keyExtractor={(item, index) => index + ''}
-                    />
+                    </ScrollView>
                   </View>
                 </DropDownItem>
                 <DropDownItem
@@ -1347,9 +1368,9 @@ class FilterJS extends Component {
           <View
                   style={
                     {
-                      bottom: scale(200),
+                      bottom: scale(80),position:"absolute",
                       borderTopWidth:1,
-                      height:100,justifyContent: 'space-around',
+                      height:80,width:wp(100),justifyContent: 'space-around',
                     flexDirection:"row",
                     alignItems: 'center',
                       backgroundColor:"rgba(255,255,255,0.2)"

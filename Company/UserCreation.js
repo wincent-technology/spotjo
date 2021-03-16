@@ -184,7 +184,8 @@ class UserCreation extends PureComponent {
           />
           <View
             style={{
-              height: hp(100) - 100,
+              // height: hp(100) - 100,
+              flex:1,
               width: wp(96),
               marginHorizontal: wp(2),
               top: hp(2),

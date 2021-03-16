@@ -73,7 +73,7 @@ class CompanyProfile extends Component {
   }
 
   checking = () => {
-    // console.log('hey')
+    console.log('hey###########################################')
     const {
       params
     } = this.props.navigation.state;
@@ -82,6 +82,9 @@ class CompanyProfile extends Component {
     this.setState({
       data: item != undefined || '' ? item : '',
     });
+
+
+    // console.log('<<<<<<<<<<<<<',this.state.data.city.map(item => console.log(item)))
   };
   Back = () => {
     console.log('global.all>>>>>>>>>>>>', global.all);
@@ -181,18 +184,21 @@ class CompanyProfile extends Component {
               onIndexChanged={(index) => console.log('index', index)}
               ref={'swiper'}
               index={this.state.changedindex}>
-              <ScrollView>
+                       
                 <View>
                   <ImageBackground
                     style={{
                       width: wp('96%'),
-                      height:
-                        hp('100%') -
-                        (StatusBar.currentHeight + scale(100) + hp(5)),
-                      overflow: 'hidden',
+              height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+
+                    // flex:1,
+                        paddingBottom:20
+                      // overflow: 'hidden',
                     }}
                     source={require('../Img/ract.png')}
                     resizeMode={'stretch'}>
+                    <ScrollView style={{height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                     <View style={{
                 top: hp(4),
                 marginHorizontal: wp(7)
@@ -317,8 +323,19 @@ class CompanyProfile extends Component {
                             resizeMode={'contain'}
                           />
                         </View>
-                        <Text style={styles.ItemDetailLabel1}>
-                          {data.city} /
+                        <Text style={[styles.ItemDetailLabel1,{width:wp(50)}]}numberOfLines ={1}>
+                        {data.city.map((item, index) => {
+                          return (
+                        <Text
+                      key={index}
+                      style={{
+                        fontFamily: 'Roboto-Regular',
+                        fontSize: scale(16),
+                      }}>
+                      {item} /{' '}
+                    </Text>
+                      );
+                                         })}
                         </Text>
                         <Text style={styles.CompanyProfileDetailLabel100}>
                           {' '}
@@ -341,9 +358,10 @@ class CompanyProfile extends Component {
                       <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                     <ListShow name={data.website} image={earth} />
                     </View>
+                    </ScrollView>
                   </ImageBackground>
                 </View>
-              </ScrollView>
+              {/* </ScrollView> */}
               <View
                 style={{
                   justifyContent: 'center',
@@ -356,7 +374,7 @@ class CompanyProfile extends Component {
                   style={{
                     textAlign: 'center',
                     fontFamily: FontBold,
-                    color: themeWhite,
+                    color: themeColor,
                     fontSize: scale(18),
                     width: wp(60),
                   }}>

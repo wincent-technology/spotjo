@@ -33,10 +33,12 @@ import {
 import {
     switchColor,
     Background,
-    themeColor
+    themeColor,
+    themeWhite
 } from '../Constant/index'
 import styles from './Style';
 import http from '../api';
+import { ScrollView } from 'react-native-gesture-handler'
 
 
 class ChooseTalent extends Component {
@@ -111,7 +113,6 @@ class ChooseTalent extends Component {
             }, err => snack(err['message']));
         } catch (error) {
             snack(error)
-
         }
 
 
@@ -168,7 +169,7 @@ class ChooseTalent extends Component {
                                 } />
             </View>
              <View style={{
-                marginVertical: hp(7)
+                marginVertical: hp(4)
             }}><View style={{
                                     justifyContent:"center",alignItems:"center"
                                 }}><Text style={[{
@@ -212,7 +213,8 @@ class ChooseTalent extends Component {
                                         HelpingVacancies: !this.state.HelpingVacancies
                             },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
         <Text style={[styles.Employment, {
-                fontSize: scale(20)
+                fontSize: scale(20),
+                color:HelpingVacancies ? themeColor : themeWhite
             }]}>Helping Vacancies</Text>
     </TouchableOpacity>
             </View>
@@ -222,8 +224,8 @@ class ChooseTalent extends Component {
                                 </View>
                                 
             </View>
-            <BackNext onBack={this.back} onNext={this.next} />
             </View>
+            <BackNext onBack={this.back} onNext={this.next} />
         </ImageBackground></SafeAreaView>
         )
     }

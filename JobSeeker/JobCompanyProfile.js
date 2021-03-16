@@ -109,7 +109,7 @@ class JobCompanyProfile extends Component {
     if (this.state.changedindex > 0) this.refs.swiper.scrollBy(-1);
   };
   next = () => {
-    console.log('global.all[this.state.id]', global.all[this.state.id]);
+    console.log('global.all[this.state.id]>>>>>>>>>>>>', global.all[this.state.id]);
     global.item = global.all[this.state.id];
     if (this.state.changedindex < 4) this.refs.swiper.scrollBy(1);
   };
@@ -237,17 +237,18 @@ class JobCompanyProfile extends Component {
           alignSelf: 'stretch',
         }}>
         <DoubleTap onDoubleTap={this.next}>
+        <View onStartShouldSetResponder={() => true}>
           <ImageBackground
             style={{
               width: wp('96%'),
-              height:
-                hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-              overflow: 'hidden',
+              height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+              paddingBottom:15
             }}
             source={require('../Img/ract.png')}
             resizeMode={'stretch'}>
+            <ScrollView removeClippedSubviews={true} keyboardShouldPersistTaps={'handled'} style={{height:hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
             <View style={{
-                top: hp(4),
+                top: hp(2),
                 marginHorizontal: wp(7)
             }}><Text style={{
                 color: '#333',
@@ -403,7 +404,8 @@ class JobCompanyProfile extends Component {
                       <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                     <ListShow name={data.website} image={web} />
             </View>
-          </ImageBackground>
+            </ScrollView>
+          </ImageBackground></View>
         </DoubleTap>
       </ScrollView>
     );
@@ -434,7 +436,7 @@ class JobCompanyProfile extends Component {
             }
             ref={'swiper'}
             index={this.state.changedindex}
-            dotColor={themeWhite}
+            dotColor={themeColor}
             paginationStyle={{
               top: hp(-82),
               position: 'absolute',
@@ -520,9 +522,7 @@ class JobCompanyProfile extends Component {
                     }}
                     cardStyle={{
                       width: wp('96%'),
-                      height:
-                        hp('100%') -
-                        (StatusBar.currentHeight + scale(100) + hp(5)),
+                      flex:1,marginBottom:10
                     }}
                     // overlayOpacityHorizontalThreshold={10}
                     // overlayOpacityVerticalThreshold={10}
@@ -633,7 +633,7 @@ class JobCompanyProfile extends Component {
                       style={{
                         textAlign: 'center',
                         fontFamily: FontBold,
-                        color: themeWhite,
+                        color: themeColor,
                         fontSize: scale(18),
                         width: wp(60),
                       }}>
