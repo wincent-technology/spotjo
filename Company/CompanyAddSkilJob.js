@@ -60,23 +60,13 @@ import EducationRate from '../Component/EducationRate'
 import AsyncStorage from '@react-native-community/async-storage';
 
 import SuggestionView from '../Component/SuggestionView'
+import ListOfChoosed from '../Component/ListOfChoosed';
+import Texting from '../Constant/Text'
+import AddExpSkillEdu from '../Component/AddExpSkillEdu'
 
-var monthNames = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
 var mg = []
 
+var items = global.language == 'english' ? true : false
 
 class CompanyAddSkilJob extends Component {
   constructor(props) {
@@ -146,39 +136,20 @@ class CompanyAddSkilJob extends Component {
     console.log('gems', gems, text, gems.length);
     if (gems.length <= 4) {
       gems.push({
-        name: text.toUpperCase(),
+        german: text.german.toUpperCase(),
+        english: text.english.toUpperCase(),
         rating
       });
       this.setState({
           addSkill: gems,
         },
         () => {
-          global.addSkill = this.state.addSkill;
           this.save()
         },
       );
     } else alert('You can upload upto 5 Skills');
   };
-  AddUni = () => {
-    try {
-      http.GET('api/webuser/unicol/get').then((res) => {
-          if (res['data']['status']) {
-              // console.log('data>>>', res['data']['result'])
-              this.setState({
-                  dataCheckU: res['data']['result'],
-              });
-              this.arrayholderU = res['data']['result'];
-              //            //will get data in this    res['data']['result']
-          } else {
-              snack(res['data']['message'])
-          }
-      }, err => snack(err['message']));
-  } catch (error) {
-      snack(error)
-
-  }
-
-  }
+  
 
 
 
@@ -193,84 +164,38 @@ choose = (choose) => {
             mni.push(mg[i])
     }
     this.state.edu && this.setState({
-        suggesion: mni,
-        name:  choose,
-        EduTitle:choose,
+      name:  items ? choose.english : choose.german,
+      EduTitle:choose,
         show: !this.state.show
     })
-    this.state.uni && this.setState({
-      suggesion: mni,
-      uniVerityName: choose,
-      show: !this.state.show
-    })
-    console.log('this.state>>>>>>>>>>>>>',this.state.EduTitle,)
+   
     console.log('this.state>>>>>>>>>>>>>',choose)
-    console.log('this.state>>>>>>>>>>>>>',this.state.name)
 
 }
 cheks = (text) => {
   // console.log('text')
-    var data = []
-    const newData = this.arrayholder.filter(item => {
-      // console.log('item',item)
-      const itemData = item != null && item != '' ? `${item.english}` : `${item}`
-      const textData = text.toUpperCase();
-      // console.log('itemdata', itemData)
-      return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
-    });
-    for (let i in newData) {
-        data.push({
-            'name': newData[i],
-            'backGround': 'white'
-        })
-    }
-    if (newData != '') {
-        this.setState({
-            dataCheck: newData,
-            name: text,
-            // EduTitle:text
+  var data = []
+  const newData = this.arrayholder.filter(item => {
+    console.log('item',items)
+    const itemData = items ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
+    const textData = text.toUpperCase();
+    // console.log('itemdata', itemData)
+    return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
+  });
+  for (let i in newData) {
+      data.push({
+          'name': newData,
+          'backGround': 'white'
+      })
+  }
+  if (newData != '') {
+      this.setState({
+          dataCheck: newData,
+          name: text,
+          // EduTitle:text
 
-        })
-    } else {
-      newData.push({english:text})
-        this.setState({
-            dataCheck: newData,
-            name: text,
-            // EduTitle:text
-
-        })
-    }
-}
-
-Unis = (text) => {
-  console.log('text')
-    var data = []
-    const newData = this.arrayholderU.filter(item => {
-      // console.log('item',item);
-        const itemData = item != null && item != '' ? `${item.english}` : `${item}`
-        const textData = text.toUpperCase();
-        // console.log('itemdata', itemData)
-        return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
-    });
-    for (let i in newData) {
-        data.push({
-            'name': newData[i],
-            'backGround': 'white'
-        })
-    }
-    if (newData != '') {
-        this.setState({
-            dataCheckU: newData,
-            uniVerityName: text
-        })
-    } else {
-        newData.push(text)
-        this.setState({
-            dataCheckU: newData,
-            uniVerityName: text
-
-        })
-    }
+      })
+  } 
 }
 
 renderItem = (item, index) => {
@@ -279,7 +204,7 @@ renderItem = (item, index) => {
             width: wp(80),
             marginLeft: scale(34),
         }}>
-        <TouchableWithoutFeedback onPress={() => this.choose(item.english)}>
+        <TouchableWithoutFeedback onPress={() => this.choose(item)}>
         <View style={{
             flexDirection: 'row',
             alignItems: "center"
@@ -291,66 +216,16 @@ renderItem = (item, index) => {
             fontWeight: "bold",
             fontSize: scale(18),
             color: themeColor
-        }}>{item.english}</Text></View>
+        }}>{items ? item.english : item.german}</Text></View>
         </View>
         </TouchableWithoutFeedback>
         </View>
     )
 }
-suggestionTag = (elements, index) => {
-    const {
-        suggesion,
-        dataCheck
-    } = this.state;
-    let m = suggesion
-    for (let i in suggesion) {
-        if (m[i] == elements) {
-            m.splice(i, 1),
-                mg.splice(i, 1)
-        }
-        // for (let j in dataCheck) {
-        //     if (dataCheck[j]['name'] == elements)
-        //         dataCheck[j]['backGround'] = 'white'
-        // }
-    }
-    this.setState({
-        suggesion: m
-    })
-}
+
 
   save = () => {
-    console.log('data',global.addSkill)
     global.addSkill = this.state.addSkill
-    // try {
-    //   http
-    //     .POST('api/user/editskill', {
-    //       id: global.Id,
-    //       skills: global.UserSkill,
-    //       salRatting: global.salaryrating,
-    //         minSal: global.minSalary,
-    //         maxSal: global.maxSalary,
-    //     })
-    //     .then(
-    //       async(res) => {
-    //         console.log('res',res)
-    //         if (res['data']['status']) {
-    //           console.log('responce user', res['data']['result']);
-    //           var result = await AsyncStorage.getItem('UserLoggedInData');
-    //           result = JSON.parse(result);
-    //           result.skills = global.UserSkill
-    //           await AsyncStorage.setItem('UserLoggedInData', JSON.stringify(result));
-    //           console.log('ress',result)
-    //           // this.props.navigation.navigate('JobEditProfile');
-    //         } else {
-    //           snack(res['data']['message']);
-    //         }
-    //       },
-    //       (err) => snack(err['message']),
-    //     );
-    // } catch (error) {
-    //   snack(error);
-    // }
-    // // alert('video is coming soon');
   };
 
   Add = () => {
@@ -366,7 +241,7 @@ suggestionTag = (elements, index) => {
     } = this.state;
     let m = addSkill;
     for (let i in m) {
-      if (m[i].name == item) {
+      if (m[i].english == item.english) {
         m.splice(i, 1);
       }
     }
@@ -377,72 +252,26 @@ suggestionTag = (elements, index) => {
 
   render() {
     const {
-      Anywhere,
-      name,
       suggesion,
       dataCheck,
-      dataCheckU,
-      show,edu,uni,rate
+      edu,rate
     } = this.state;
     console.log('this.sum',this.state.sum);
     return (
       <>
-          <View style={{flexDirection:"row",justifyContent:"space-between",width:wp(90),padding:10,marginHorizontal:wp(5),height:150,alignItems:"center"}}>
-          <View style={{width:wp(40),alignItems:"center",justifyContent:"center",}}>
-          <Image
-                    source={skillframe}
-                    style={{
-                      height: scale(100),
-                      width: scale(100),
-                    }}
-                    resizeMode={'cover'}
-                  />
-          </View>
-          <View
-              style={{
-                // width:wp(50) 
-                alignItems: 'center',
-                justifyContent:"center",
-                
-                // right: wp(10),
-              }}>
-              <CustomButton
-                title={'+Add Skiils'}
-                onPress={this.Add}
-                containerStyle={{
-                  // width: ,
-                  color: 'black',
-                  // fontFamily: FontRegular
-                }}
-                buttonStyle={{
-                  backgroundColor: '#333',
-                  height:30,
-                  borderRadius: scale(2),
-                  borderWidth: 0,
-                  // elevation: 6
-                }}
-                titleStyle={{
-                  color: themeWhite,
-                  position: 'absolute',
-                  fontFamily: FontBold,
-                  fontSize: scale(14),
-                }}
-              />
-            </View>
-          </View>
+          <AddExpSkillEdu source = {skillframe} title='Add_Skiils' onPress={this.Add}/>
           {edu && <View style = {
         {
             top: scale(10),
             marginHorizontal:wp(5),
             justifyContent:"center",
             alignItems:"center"
-        }}><Text style={{
+        }}><Texting style={{
             fontWeight: "bold",
             fontSize: scale(20),
             color: themeColor
-        }}>
-            What's Your Talent?
-        </Text></View>}
+        }} text='Whats_your_Talent' />
+        </View>}
           {edu && <EducationComponent name={this.state.name} placeHolder={'Enter Skills'} addskillStyle={{elevation:8,borderBottomWidth:0,borderWidth:0}}
           textChange={
             (text) => {
@@ -466,26 +295,8 @@ suggestionTag = (elements, index) => {
                 // top: scale(265),
                 marginHorizontal:wp(7)
             }}>
-            <FlatList
-            data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU}
-            keyboardShouldPersistTaps='always'
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => this.renderItem(item, index)}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('1%'),
-                offset: hp('1%') * index,
-                index
-            }
-            )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            /></View> }
+            <ListOfChoosed keyboardShouldPersistTaps='always' data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU} renderItem={({item, index}) => this.renderItem(item, index)} />
+            </View> }
             {rate && <EducationRate name={'Add Skill'} placeHolder={'Rate Your skill'} 
            starCount={this.state.rating} onStarRatingPress={(rating)=> this.setState({
              rating
@@ -494,7 +305,7 @@ suggestionTag = (elements, index) => {
             })} onFinish ={
               ()=> this.setState({
               uni:false,rate:false,edu:false
-            },()=> this.addsSkill(this.state.name,this.state.rating))
+            },()=> this.addsSkill(this.state.EduTitle,this.state.rating))
             }/>}
             
           <View
@@ -506,9 +317,7 @@ suggestionTag = (elements, index) => {
                   height: hp('50%'),
                   backgroundColor: themeWhite,
                   marginHorizontal: wp('2%'),
-                  // marginTop: scale(20),
                   borderRadius: scale(20),
-                  // elevation: 7,
                 }}>
                 <View
                   style={{
@@ -521,14 +330,11 @@ suggestionTag = (elements, index) => {
                 <ScrollView
                     style={{
                       backgroundColor: themeWhite,
-                      // marginTop: '-7%',
                       marginBottom: 30,
-                      // alignSelf: 'stretch',
                     }}
                     contentContainerStyle={{
                       alignItems: 'center',
                       justifyContent: 'center',
-                      // marginHorizontal: wp(7),
                     }}
                     nestedScrollEnabled={true}>
                     {this.state.addSkill.map((item, index) => {
@@ -543,7 +349,7 @@ suggestionTag = (elements, index) => {
             <View style={{
                 marginRight: scale(5)
             }}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
-              this.remove(item.name, index);
+              this.remove(item, index);
             }}/></View>
             
             <View style={{
@@ -556,7 +362,7 @@ suggestionTag = (elements, index) => {
                 fontFamily: FontBold,
                 fontSize: scale(16),
                 color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{item.name}</Text>
+            }} numberOfLines={1}>{items ? item.english : item.german}</Text>
             </View>
             <View>
             <StarRating
@@ -569,7 +375,6 @@ suggestionTag = (elements, index) => {
                 starSize={scale(17)}
                 rating={item.rating}
             starStyle={{marginLeft:2}}
-                // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
                 fullStarColor={'orange'}
               />
             </View>

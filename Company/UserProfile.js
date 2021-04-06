@@ -82,7 +82,8 @@ class UserProfile extends Component {
         this.props.navigation.goBack();
     };
     Edit = () => {
-        this.props.navigation.navigate('ComEdit')
+      console.log('uploadUri',global.uploadUri)
+        // this.props.navigation.navigate('ComEdit')
     }
     // Video = (item) => {
     //     console.log('hels');
@@ -152,7 +153,8 @@ class UserProfile extends Component {
                       alignItems: 'center',
                       zIndex: 5,
                     }}
-                    source={backgroundCorner}>
+                    source={backgroundCorner} >
+                    <TouchableOpacity onPress={()=> this.Edit()}>
                     <Image
                       source={
                         global.uploadUri ? {
@@ -166,7 +168,7 @@ class UserProfile extends Component {
                         // backgroundColor: "transparent"
                       }}
                       resizeMode={'contain'}
-                    />
+                    /></TouchableOpacity>
                   </ImageBackground>
                   <View style={{
                 flexDirection: "column",

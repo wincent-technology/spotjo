@@ -6,7 +6,7 @@ import { scale } from '../src/Util'
 import { play,library } from '../src/IconManager'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
-const All = {height:scale(45),borderRadius:scale(20),width:45,marginRight:-4,justifyContent:"center",alignItems:"center"}
+const All = {height:scale(44),borderRadius:scale(20),width:45,marginRight:-3,justifyContent:"center",alignItems:"center"}
 export default CustomInput = (props) => <Input
     containerStyle={[{
         width: '100%',
@@ -82,7 +82,7 @@ export default CustomInput = (props) => <Input
     }], props.righticonStyle}
     resizeMode={'contain'}
     />}
-    {props.Company && <View style={[{backgroundColor:props.Anywhere ? 'green' : '#cdf5fd'},All]} onStartShouldSetResponder={props.onPress}>
+    {props.Company && <View style={[{backgroundColor:props.Anywhere ? '#37c0d3' : '#cdf5fd'},All]} onStartShouldSetResponder={props.onPress}>
                         <Text style={{fontSize:scale(16),fontFamily:FontBold,color:props.Anywhere ? '#fff' : '#000'}}>{props.Company}</Text>
      </View>}
      {props.pass && <View style={{backgroundColor:"green"}}>

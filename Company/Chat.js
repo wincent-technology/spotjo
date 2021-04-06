@@ -54,49 +54,10 @@ import User from './User'
 import http from '../api'
 import SuggestionView from '../Component/SuggestionView'
 import CustomInput from '../Component/Input';
+import ListOfChoosed from '../Component/ListOfChoosed';
 var mg = [];
+import Texting from '../Constant/Text'
 
-// const sum = (item) => {
-// return Array.prototype.reduce(function(sum, item){
-// 	return sum = sum+item.totalunRead;
-// },0);
-// }
-
-
-const dataSource = [
-    {
-        avatar: 'https://facebook.github.io/react/img/logo.svg',
-        alt: 'Reactjs',
-        title: 'Facebook',
-        subtitle: 'What are you doing?',
-        date: new Date().toDateString(),
-        unread: 0,
-    },
-    {
-        avatar: 'https://facebook.github.io/react/img/logo.svg',
-        alt: 'Reactjs',
-        title: 'Facebook',
-        subtitle: 'What are you doing? What are you doingdoing What are you doing? What are you doing? What are you doing?',
-        date: new Date().toDateString(),
-        unread: 0,
-    },
-    {
-        avatar: 'https://facebook.github.io/react/img/logo.svg',
-        alt: 'Reactjs',
-        title: 'Facebook',
-        subtitle: 'What are you doing?',
-        date: new Date().toDateString(),
-        unread: 0,
-    },
-    {
-        avatar: 'https://facebook.github.io/react/img/logo.svg',
-        alt: 'Reactjs',
-        title: 'Facebook',
-        subtitle: 'What are you doing? What are you doingdoing What are you doing? What are you doing? What are you doing?',
-        date: new Date().toDateString(),
-        unread: 0,
-    },
-]
 
 class Chat extends React.Component {
   static navigationOptions = {
@@ -216,7 +177,7 @@ class Chat extends React.Component {
                 let total = res['data']['result'].reduce((tot, arr) => tot + arr.totalunRead,0)
                 console.log('total',total)
                 global.msgUnreadTotal = total != 0 && total 
-                this.arrayholder = res['data']['result'];
+                // this.arrayholder = res['data']['result'];
               } else {
                 snack(res['data']['message']);
               }
@@ -318,7 +279,7 @@ class Chat extends React.Component {
                 {item.isBlock == 1 ? 'Blocked' : 'Private'}
             </Text>
             <Text style={{color:themeColor,fontSize:14,fontFamily:FontBold}}>
-                {new Date(item.createdDate).toDateString()}
+                {new Date(item.updatedAt).toDateString()}
             </Text>
             </View>
             <Text style={{color:themeColor,fontSize:16,fontFamily:FontBold}}>
@@ -343,7 +304,7 @@ class Chat extends React.Component {
             companyId : global.Id
           }).then(
             (res) => {
-              // console.log('res>>>>>>>>>',res['data']['result']);
+              console.log('res>>>>>>>>>',res['data']['result']);
               if (res['data']['status']) {
                 // console.log('result', res['data']['result']);
                 this.setState({
@@ -388,10 +349,11 @@ class Chat extends React.Component {
         <NavigationEvents onDidFocus={this.checking}/>
                     <NavigationHead centerComponent='Messages' color ={true} rightComponent='edit' onPress={() => this.Back()} onExit={() => this.FindChat()} />
                     <View style={{width:"100%",paddingTop:5,backgroundColor:"#eeee",borderBottomWidth:1,
-                    borderBottomColor:'#eee',paddingBottom:3,justifyContent:"center",alignItems:"center"}}>
+                    borderBottomColor:'#eee',paddingBottom:3,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
                             <Text>
-                            {this.state.dataCheck.reduce((tot, arr) => tot + arr.totalunRead,0)} Message Unread
+                            {this.state.dataCheck.reduce((tot, arr) => tot + arr.totalunRead,0)} {''}
                             </Text>
+                            <Texting text='Message_Unread' />
                         </View>
                     <View style={{
                 height: hp(100) - scale(100)
@@ -476,31 +438,11 @@ class Chat extends React.Component {
                 <View
                   style={{
                     width: wp(87),
-                    // paddingHorizontal:10,
                     borderRadius: scale(5),
-                    // height: ,
-                    // backgroundColor: 'green',
-                    // position: 'absolute',
                     top: scale(5),marginBottom:20,
                     height:hp(100) - scale(255)
-                    // flexGrow:1
                   }}>
-                  <FlatList
-                    data={dataChecks}
-                    keyboardShouldPersistTaps="always"
-                    showsHorizontalScrollIndicator={false}
-                    removeClippedSubviews={true}
-                    renderItem={({item, index}) => this.renderItem(item, index)}
-                    initialNumToRender={5}
-                    maxToRenderPerBatch={10}
-                    updateCellsBatchingPeriod={70}
-                    getItemLayout={(data, index) => ({
-                      length: hp('1%'),
-                      offset: hp('1%') * index,
-                      index,
-                    })}
-                    keyExtractor={(item, index) => index + ''}
-                  />
+                  <ListOfChoosed data={dataChecks} keyboardShouldPersistTaps="always" renderItem={({item, index}) => this.renderItem(item, index)}/>
                 </View>
               )}
             </View>

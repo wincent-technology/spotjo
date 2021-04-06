@@ -47,7 +47,7 @@ const {
 import LinearGradient from 'react-native-linear-gradient'
 let Company = '';
 let min = 0;
-
+const Items = global.language == 'english' ? true : false
 class ItemMVJobbM extends PureComponent {
     // title, href, total_time, total_listen, image
     constructor(props) {
@@ -95,7 +95,7 @@ class ItemMVJobbM extends PureComponent {
         console.log(">>>>", items.workexp)
         let ary = [];
         let To;
-        if (items.workexp == undefined)
+        if (items.workexp == undefined || items.workexp == null)
             return min;
 
         for (let i in items.workexp) {
@@ -226,16 +226,16 @@ class ItemMVJobbM extends PureComponent {
             <Text style={{
                 marginLeft: scale(6),
                 marginTop: scale(-1),
-                width: this.props.item.skills != null && this.props.item.skills.length > 1 ? wp(30) : 'auto'
+                maxWidth:  wp(35)
             }} numberOfLines={1}>{this.props.item.skills != null && this.props.item.skills.map((item, index) => {
                 return (
                     <Text  key={index} style={{
                         fontFamily: 'Roboto-Regular',
                         fontSize: scale(12),
                     // marginTop: scale(-2)
-                    }}>{item.name} / </Text>
+                    }}>{Items ? item.english : item.german} / </Text>
                 )
-            })}</Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
+            })}</Text><Text style={styles.ItemMVDetailColor}>{this.props.item.skills != null && this.props.item.skills.length ==1 && <Text style={{color:'rgba(0,0,0,0.6)'}}>/</Text>} 100%</Text></View>
             <View style={styles.ItemMVDetailIcon}>
                 <View style={{
                 height: scale(14),

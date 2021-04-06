@@ -19,7 +19,7 @@ import GoogleSignIn from 'react-native-google-sign-in';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import PermissionHelper from '../Component/PermissionHelper'
-
+import Texting from '../Constant/Text'
 import {
     AccessToken,
     GraphRequest,
@@ -136,7 +136,6 @@ class Login extends Component {
                 longitude:global.long || 0
     }).then((res) => {
         if (res['data']['status']) {
-            console.log('responce user', res['data']['result'])
             global.Id = res['data']['result']['id'];
             // will get data in this    res['data']['result'] 
             global.firstName = res['data']['result']['first_name']
@@ -154,15 +153,46 @@ class Login extends Component {
             global.minSalary = res['data']['result']['minSal']
             global.maxSalary = res['data']['result']['maxSal']
             global.Experience = res['data']['result']['workexp']
-            global.let = parseFloat(res['data']['result']['latitude'])
-            global.long = parseFloat(res['data']['result']['longitude'])
+            global.let = parseFloat(res['data']['result']['latitude'] ) || 0
+            global.long = parseFloat(res['data']['result']['longitude']) || 0
+
+
+            let img1 = res['data']['result']['workexp']
+            console.log('img',img1)
+
+
+            // console.log('responce user', res['data']['result'])
+          //   let From,
+          //   To,
+          //   tot,
+          //   m = 0;
+          // let ary = [];
+            // console.log('length',res['data']['result']['skills'].length)
+            
+
+            // for (let j=0; j<img1.length;j++)
+            // {
+            //   console.log('done',img1[j])
+            // }
+
+            res['data']['result']['workexp'].filter((i,index)=>
+              console.log('klkjlj',index,i)
+            )
+
+            // for (let w of res['data']['result']['workexp']) {
+            //   // if (JSON.stringify(im[i]) != undefined)
+            //   // {From = im[i].From.split(' ');
+            //   // To = im[i].To.split(' ');
+            //   // ary.push(parseInt(To[1]));
+            //   // tot = To[1] - From[1];
+            //   // m = m + tot;}
+            // }
             AsyncStorage.setItem('UserLoggedInData', JSON.stringify(res['data']['result']));
             if (res['data']['result']['isLoggedFirstTime'] == 0) {
               this.props.navigation.navigate('JobTalentScreen');
             } else {
               this.callJob();
-
-              this.props.navigation.navigate('TabScreenJob');
+              // this.props.navigation.navigate('TabScreenJob');
             }
         } else {
             snack(res['data']['message'])
@@ -180,7 +210,7 @@ class Login extends Component {
           location: global.Place
         }).then(
           (res) => {
-            console.log('resssssssssssssssssssssssssssssssssssssssssssssssss',res)
+            // console.log('resssssssssssssssssssssssssssssssssssssssssssssssss',res)
             if (res['data']['status']) {
               global.all = res['data']['result'];
             } else {
@@ -223,7 +253,7 @@ class Login extends Component {
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
-           <Text style={styles.LookingFor}>Login</Text>
+           <Texting style={styles.LookingFor} text='Login' />
             </View>
             <View style={{
                 left: wp('10%'),
@@ -236,29 +266,31 @@ class Login extends Component {
             }]}><View style={{
                 marginLeft: scale(-95),
             // marginRight: scale(10)
-            }}><Text style={styles.CompanyOppoTalentText}>Your Email</Text></View></View></TouchableWithoutFeedback>
+            }}>
+            <Texting style={styles.CompanyOppoTalentText} text="Your_Email"/>
+            </View></View></TouchableWithoutFeedback>
        
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.GoogleSignIn}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('google', scale(20), 'red')}</View><Text style={styles.CompanyOppoTalentText}>Gmail</Text></View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.FbLog}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('facebook-square', scale(20), 'rgb(58, 85, 159)')}</View><Text style={styles.CompanyOppoTalentText}>FaceBook</Text></View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.LinkDInLogin}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('linkedin-square', scale(20), 'rgb(0, 119, 183)')}</View><Text style={styles.CompanyOppoTalentText}>Linkedin</Text></View></TouchableWithoutFeedback>
+            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.GoogleSignIn}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('google', 20, 'red')}</View><Texting style={styles.CompanyOppoTalentText} text='Gmail'/></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.FbLog}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('facebook-square', 20, 'rgb(58, 85, 159)')}</View><Texting style={styles.CompanyOppoTalentText} text='FaceBook'/></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.LinkDInLogin}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('linkedin-square', 20, 'rgb(0, 119, 183)')}</View><Texting style={styles.CompanyOppoTalentText} text='Linkedin'/></View></TouchableWithoutFeedback>
         </View>
-        <View style={styles.CompanyLoginAccountText}><Text style={[{
+        <View style={styles.CompanyLoginAccountText}>
+        <Texting style={[{
                 fontSize: scale(23),
-            }, styles.FontSty]}>Don't Have Account?</Text>
+            }, styles.FontSty]} text='Dont_Have_Account'/>
                 <View style={{
                 flexDirection: "row"
             }}>
-            <Text  style={[{
+           <Texting  style={[{
                 fontSize: scale(19),
-            }, styles.FontSty]}>Create new account </Text><TouchableWithoutFeedback onPress={this.create}><Text style={[{
+            }, styles.FontSty]} text='Create_new_account' /><TouchableWithoutFeedback onPress={this.create}><Texting style={[{
                 textDecorationLine: "underline",
                 // textDecorationColor: "#fff",
                 fontSize: scale(19),
-            }, styles.FontSty]}>Click here</Text></TouchableWithoutFeedback></View></View>
+            }, styles.FontSty]} text='Click_here' /></TouchableWithoutFeedback></View></View>
        </ImageBackground></SafeAreaView>
 
         );
     }
 }
-;
 export default withNavigationFocus(Login);

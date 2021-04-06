@@ -2,15 +2,8 @@ import React, {
   PureComponent
 } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
   StatusBar,
-  FlatList,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
   ImageBackground,
-  Text,
-  Image,
   View,
 } from 'react-native';
 import {
@@ -18,99 +11,85 @@ import {
   NavigationEvents
 } from 'react-navigation';
 import styles from './Style';
+
 import {
-  left,
-  library,
-  icon,
-  play,
-  leftVid
-} from './IconManager';
-import {
-  themeColor,
   themeWhite,
   Background,
-  sort,
-  filter,
-  TRANLINE,
-  FontBold,
   url,
-  Listed,
-  detailed,
 } from '../Constant/index';
 import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from '../Component/responsive-ratio';
-import {
-  scale
+  NoData
 } from './Util';
 import {
-  Rating,
   NavigationHeader
 } from '../Component/ViewManager.js';
 import ItemMV from './ItemMV';
-import CompanyProfile from './CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
-
-// import styles from './Style'
-
+import TopHeader from '../Component/TopHeader'
+import List from '../Component/List'
 class JobList extends PureComponent {
-  constructor(props) {
-    super(props);
-
-    this.state = {
+    state = {
       data: [],
+      fil :false,
+      srt : false
     };
-  }
-  componentDidMount() {
+
+    componentDidMount() {
     this.checking();
   }
   checking = () => {
-    const {
-      params
-    } = this.props.navigation.state;
-    const otherParam = params ? params.otherParam : null;
-    console.log('global.all>>>>>>>>>',global.all.length)
+    console.log('globalsdf',global.all)
     this.setState({ 
-      data: global.all,
+      data: JSON.parse(JSON.stringify(global.all)),
+      fil:false,
+      srt:false
     });
   };
+
   Filter = () => {
-    this.props.navigation.navigate('Filter');
+    this.setState({
+      fil:true
+    },()=> this.props.navigation.navigate('Filter'))
   };
+
+  Sort = () => {
+    this.setState({
+      srt:true
+    })
+  }
 
   push = (item, index) => {
-    // console.log("heelo", item);
-    // global.ig = item
-    console.log('item>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', item);
+    //  global.all  = 
+    
+
     this.props.navigation.navigate('CompanyProfile', {
       item: item,
+      length:this.state.data.length,
+      index:index
     });
   };
+  heart = (index) => {
+    let d = this.state.data
+    d[index].heart = true
+    this.setState({data:d});
+    setTimeout(() => {
+    this.props.navigation.navigate('LoginFirst')
+    }, 500);
+  }
 
   pushy = () => {
-    console.log('gggggg', global.all[0]);
     this.props.navigation.navigate('CompanyProfile', {
       item: global.all[0],
+      length:this.state.data.length
     });
   };
-  // pushy = () => {
-  //     // console.log("heelo", item);
-  //     // global.ig = item
-  //     // console.log('item', item);
-  //     this.props.navigation.navigate('CompanyProfile', {
-  //         item: item
-  //     })
-  // }
   Video = (item) => {
-    console.log('hels');
     let m = url + 'images/company/' + item.video;
     if (item)
       this.props.navigation.navigate('VideoPlayer', {
         vid: m,
       });
     else alert('not uploaded');
-    // this.props.navigation.navigate('VideoResume');
   };
   Back = () => {
     this.props.navigation.navigate('ChooseTalent');
@@ -134,138 +113,25 @@ class JobList extends PureComponent {
             onPress={() => this.Back()}
             text={global.Job_Title}
           />
-          <View style={styles.JoblistSecondViewHeading}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {data && data.length}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <View style={{marginRight: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={Listed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                        marginHorizontal: scale(10),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={this.pushy}>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={detailed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    tintColor={'#333'}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    tintColor={'#333'}
-                    
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-
+          <TopHeader data={data && this.state.data.length} sort={this.Sort} srtTint={this.state.srt} filTint={this.state.fil} Filter={this.Filter} detailed={this.pushy}/>
           {this.state.data != '' ? (
-            <FlatList
-              style={{
-                marginTop: 4,
+            <List style={{marginTop: 4,
                 marginBottom: 45,
-                backgroundColor: 'transparent',
-              }}
-              data={data}
-              showsHorizontalScrollIndicator={false}
-              removeClippedSubviews={true}
-              renderItem={({item, index}) => (
-                <ItemMV
+                backgroundColor: 'transparent',}} data={data} renderItem={({item, index}) => (
+                  <ItemMV
                   item={item}
                   index={index}
                   push={this.push}
+                  heart={this.heart}
                   Video={this.Video}
                 />
-              )}
-              initialNumToRender={5}
-              maxToRenderPerBatch={10}
-              updateCellsBatchingPeriod={70}
-              getItemLayout={(data, index) => ({
-                length: hp('28%'),
-                offset: hp('28%') * index,
-                index,
-              })}
-              keyExtractor={(item, index) => index + ''}
-            />
+              )} />
           ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: FontBold,
-                  color: themeColor,
-                  fontSize: scale(18),
-                  width: wp(60),
-                }}>
-                No Data found 😞
-              </Text>
-            </View>
+           <NoData/>
           )}
         </ImageBackground>
       </View>
     );
   }
 }
-
-// class CompanyProfile extends Component {
-//     render() {
-//         return <View><Text>{this.props.item.header}</Text></View>;
-//     }
-// }
-
 export default withNavigationFocus(JobList);

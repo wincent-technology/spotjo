@@ -20,13 +20,6 @@ import {
 } from 'react-navigation';
 import styles from '../src/Style';
 import {
-  left,
-  library,
-  icon,
-  play,
-  leftVid
-} from '../src/IconManager';
-import {
   scale,
   getStatusBarHeight
 } from '../src/Util';
@@ -44,29 +37,18 @@ import {
   blanks,
   Fulls,backgroundCorner,WhiteVideo,
   FontRegular,
-  FontBold,Companyavtar
+  FontBold,Companyavtar,Resource_Profile
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-  CheckBox,
-  DropDownItem,
-  Rating,
+import {
   NavigationHead,
   StarRating,
 } from '../Component/ViewManager';
-import CustomButton from '../Component/Button';
-// import { Rating } from '../Component/ViewManager'
 import { PieChart } from 'react-native-svg-charts'
-import io from "socket.io-client";
-
-// const socket = io('http://178.128.118.157:8091');
- const socket = io('http://192.168.0.169:8091');
+import Texting from '../Constant/Text'
 
 class CompanyEditProfile extends Component {
   constructor(props) {
@@ -103,10 +85,10 @@ class CompanyEditProfile extends Component {
     this.props.navigation.navigate('PersonalCompany');
   };
   Dashboard = () => {
-    // console.warn('hi')
-
-    // setRippleColor(this.state.rippleColor);
     this.props.navigation.navigate('Admin');
+  };
+  Resource = () => {
+    this.props.navigation.navigate('Resource');
   };
   CompanyService = () => {
     this.props.navigation.navigate('CompanyServices');
@@ -114,10 +96,14 @@ class CompanyEditProfile extends Component {
   User = () => {
     this.props.navigation.navigate('CompanyUser');
   };
-
+  Bulk = () => {
+    this.props.navigation.navigate('BulkUploadResume');
+  };
+  Setting = () => {
+    this.props.navigation.navigate('Setting');
+  };
   componentWillMount(){
-    socket.on('connect', () => console.log('connected companyEditprofile>>>>>>>>>>>>>>>>>>>>>>>>>'))
-    socket.emit("userOnApp", global.Id);
+    
 
     
     this.sum = this.sums();
@@ -156,7 +142,7 @@ class CompanyEditProfile extends Component {
     }
     
     let data = [arr.Email,arr.Branch,arr.uploadUri,arr.Mobile,arr.Company,arr.Video,arr.WebSite,arr.Address];
-    const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+    // const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
     let Piedata = [];
 
     return Piedata = data.map((value, index) => ({
@@ -179,7 +165,7 @@ class CompanyEditProfile extends Component {
             centerComponent="Edit Company Profile"
             onPress={() => this.Back()}
           />
-          <ScrollView style={{flex:1,alignSelf:"stretch"}}>
+          <ScrollView style={{flex:1,alignSelf:"stretch",marginBottom:hp(100) <= 600 ? 150 : 20}}>
           <View style={{ width: wp('96%'),
               height: hp('100%'),
               flexGrow:1,
@@ -209,7 +195,7 @@ class CompanyEditProfile extends Component {
                 alignItems: "center",
                 zIndex: 5,backgroundColor:"white",borderColor:themeColor,borderWidth:2,borderRadius:15
             }}
-    
+            onStartShouldSetResponder = {this.Personal}
             ><Image 
             source={
               global.uploadUri
@@ -243,11 +229,11 @@ class CompanyEditProfile extends Component {
                 width: scale(65),
             }}/>
             <View style={{height:1,width:wp(30),backgroundColor:"#333",marginTop:scale(0)}}/>
-            <View style={{marginTop:scale(5)}}><Text style={{
+            <View style={{marginTop:scale(5)}}><Texting style={{
                 color: "#333",
                 fontFamily: "Roboto-Bold",
                 fontSize: scale(12)
-            }}>Company Video</Text></View>
+            }} text='Company_Video'/></View>
             </View></TouchableWithoutFeedback>
             <View style={{marginTop:scale(5)}}>
             <StarRating
@@ -283,9 +269,7 @@ class CompanyEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Dashboard
-                      </Text>
+                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Dashboard'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -302,9 +286,7 @@ class CompanyEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Company Information
-                      </Text>
+                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Company_Information'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -321,9 +303,7 @@ class CompanyEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Company Services
-                      </Text>
+                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Company_Services'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -341,13 +321,63 @@ class CompanyEditProfile extends Component {
                         />
                       </View>
                       <View style={styles.NativeThirdView}>
-                        <Text style={styles.NativeFontSty} numberOfLines={1}>
-                          User Management
-                        </Text>
+                        <Texting style={styles.NativeFontSty} numberOfLines={1} text='User_Management'/>
                       </View>
                     </View>
                   </TouchableNativeFeedback>
                 )}
+                
+                <TouchableNativeFeedback
+                  onPress={this.Resource}
+                  background={TouchableNativeFeedback.Ripple('#a26e85')}>
+                  <View style={styles.NativeViewButton}>
+                    <View style={styles.NativeSecondView}>
+                      <Image
+                        source={Resource_Profile}
+                        resizeMethod={'resize'}
+                        style={styles.imageStyle}
+                        resizeMode={'contain'}
+                      />
+                    </View>
+                    <View style={styles.NativeThirdView}>
+                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Resource_Profile'/>
+                    </View>
+                  </View>
+                </TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                  onPress={this.Bulk}
+                  background={TouchableNativeFeedback.Ripple('#a26e85')}>
+                  <View style={styles.NativeViewButton}>
+                    <View style={styles.NativeSecondView}>
+                      <Image
+                        source={Resource_Profile}
+                        resizeMethod={'resize'}
+                        style={styles.imageStyle}
+                        resizeMode={'contain'}
+                      />
+                    </View>
+                    <View style={styles.NativeThirdView}>
+                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Resume_Upload'/>
+                    </View>
+                  </View>
+                </TouchableNativeFeedback>
+                <TouchableNativeFeedback
+                  onPress={this.Setting}
+                  background={TouchableNativeFeedback.Ripple('#a26e85')}>
+                  <View style={styles.NativeViewButton}>
+                    <View style={styles.NativeSecondView}>
+                      <Image
+                        source={Resource_Profile}
+                        resizeMethod={'resize'}
+                        style={styles.imageStyle}
+                        resizeMode={'contain'}
+                      />
+                    </View>
+                    <View style={styles.NativeThirdView}>
+                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Setting'/>
+                    </View>
+                  </View>
+                </TouchableNativeFeedback>
               </View>
           </View></ScrollView>
           <View style={{alignItems:"center",bottom:50,position:"absolute",justifyContent:"center",width:"100%"}}>
@@ -356,9 +386,7 @@ class CompanyEditProfile extends Component {
               <Text style={{color:themeColor,fontSize:scale(20),fontFamily:FontBold}}>
                   {this.sums()}
               </Text>
-              <Text style={{color:'gray',fontSize:scale(20),fontFamily:FontBold}}>
-                Profile Completion
-              </Text>
+              <Texting style={{color:'gray',fontSize:scale(20),fontFamily:FontBold}} text='Profile_Completion'/>
             </View> 
           </View>
         </ImageBackground>

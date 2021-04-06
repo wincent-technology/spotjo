@@ -1,12 +1,3 @@
-/**
- * toggle-switch-react-native
- * Toggle Switch component for react native, it works on iOS and Android
- * https://github.com/aminebenkeroum/toggle-switch-react-native
- * Email:amine.benkeroum@gmail.com
- * Blog: https://medium.com/@aminebenkeroum/
- * @benkeroumamine
- */
-
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Animated } from "react-native";
 

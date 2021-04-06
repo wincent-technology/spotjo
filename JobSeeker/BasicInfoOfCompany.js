@@ -50,6 +50,8 @@ import {
 } from '../Constant/index'
 import LinearGradient from 'react-native-linear-gradient';
 
+const Items = global.language == 'english' ? true:false
+
 
 class BasicInfoOfCompany extends Component {
     constructor(props) {
@@ -159,7 +161,7 @@ class BasicInfoOfCompany extends Component {
                 fontFamily: FontBold,
                 fontSize: scale(16),
                 color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{item.english}</Text>
+            }} numberOfLines={1}>{Items ? item.english : item.german}</Text>
             </View>
             <View style={{width:wp(39),alignItems:"flex-end"}}>
             <StarRating
@@ -221,7 +223,7 @@ class BasicInfoOfCompany extends Component {
                 fontFamily: FontBold,
                 fontSize: scale(16),
                 color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{item.english}</Text>
+            }} numberOfLines={1}>{Items ? item.english : item.german}</Text>
             </View>
             <View style={{width:wp(39),alignItems:"flex-end"}}>
             <StarRating

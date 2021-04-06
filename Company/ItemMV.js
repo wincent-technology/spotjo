@@ -52,10 +52,13 @@ const CompanyProfileIcon = {
     justifyContent: 'center',
     alignItems: 'flex-start',
   }
+const Items  = global.language == 'english' ? true : false;
+
 class ItemMV extends PureComponent {
     // title, href, total_time, total_listen, image
     constructor(props) {
         super(props);
+        console.log('this',this.props)
     }
     dateDiffInDays(dt) {
         const a = Date.parse(new Date(Date.now()))
@@ -154,16 +157,17 @@ class ItemMV extends PureComponent {
             })}
             </Text>
             <Text style={styles.ItemMVDetailColor}> 100%</Text></View>
-            <View style={styles.ItemMVDetailIcon}><View style={CompanyProfileIcon}><Image source ={edit} style={styles.imageStyle} resizeMode={'contain'} /></View><Text style={{
+            <View style={[styles.ItemMVDetailIcon,{maxWidth:wp(35)}]}><View style={CompanyProfileIcon}><Image source ={edit} style={styles.imageStyle} resizeMode={'contain'} /></View><Text style={{
                 marginLeft: scale(5)
-            }}>{this.props.item.skills && this.props.item.skills.map((item, index) => {
+            }} numberOfLines={1} >{this.props.item.skills && this.props.item.skills.map((item, index) => {
                 return (
                     <Text  key={index} style={{
                         fontFamily: 'Roboto-Regular',
                         fontSize: scale(12)
-                    }}>{item.name} / </Text>
+                    }}>{Items ? item.english : item.german} / </Text>
                 )
-            })}</Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
+            })}</Text>
+            <Text style={styles.ItemMVDetailColor}>{this.props.item.skills && this.props.item.skills.length ==1 && <Text style={{color:'rgba(0,0,0,0.6)'}}>/</Text>} 100%</Text></View>
             <View style={styles.ItemMVDetailIcon}>
                 
                 <View style={CompanyProfileIcon}><Image source ={bag} style={styles.imageStyle} resizeMode={'contain'} /></View>

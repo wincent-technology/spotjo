@@ -6,7 +6,6 @@ import React, {
     StatusBar,
     ImageBackground,
     Text,
-    Image,
     View,
   } from 'react-native';
   import {
@@ -15,7 +14,6 @@ import React, {
   import styles from '../src/Style';
 import { ScrollView } from 'react-native-gesture-handler'
   import {
-    scale,
     snack
   } from '../src/Util';
   import {
@@ -25,7 +23,6 @@ import { ScrollView } from 'react-native-gesture-handler'
   import {
     NavigationHead
   } from '../Component/ViewManager';
-  import CustomButton from '../Component/Button';
   import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -39,6 +36,7 @@ import { ScrollView } from 'react-native-gesture-handler'
   } from '../Constant/index';
   import http from '../api';
   import AsyncStorage from '@react-native-community/async-storage';
+import AddExpSkillEdu from '../Component/AddExpSkillEdu';
   
   class AddSalary extends Component {
     constructor(props) {
@@ -53,19 +51,15 @@ import { ScrollView } from 'react-native-gesture-handler'
     }
   
     Back = () => {
-      // console.log("hi");
       this.props.navigation.goBack();
     };
   
     componentDidMount() {
-      console.log('this.edu', global.minSalary, global.maxSalary);
-  
       this.setState({
         salary: parseInt(global.minSalary) || 0,
         salaryMax: Math.round(parseInt(global.maxSalary) || 0) *150/200,
         salaryrating: global.salaryrating || 1,
       });
-      console.log(this.state);
     }
     
   
@@ -110,24 +104,10 @@ import { ScrollView } from 'react-native-gesture-handler'
     };
     Add = () => {
       console.log('sal',this.state.salaryMax);
-      // this.setState({
-      //   salaryMax:Math.round((this.state.salaryMax * 200)/150),
-      // });
       this.save()
-      console.log('sal>>>>>>>>>>>>',);
-
     };
   
     render() {
-      const {
-        Anywhere,
-        name,
-        suggesion,
-        dataCheck,
-        dataCheckU,
-        show,edu,uni,rate,progress
-      } = this.state;
-      console.log('this.sum',this.state.sum);
       return (
         <SafeAreaView style={styles.backGround}>
           <ImageBackground
@@ -142,49 +122,7 @@ import { ScrollView } from 'react-native-gesture-handler'
               onPress={() => this.Back()}
               onExit={() => this.save()}
             />
-            <View style={{flexDirection:"row",justifyContent:"space-between",width:wp(90),padding:10,marginHorizontal:wp(5),height:150,alignItems:"center"}}>
-            <View style={{width:wp(40),alignItems:"center",justifyContent:"center",}}>
-            <Image
-                      source={salaryFrame}
-                      style={{
-                        height: scale(100),
-                        width: scale(100),
-                      }}
-                      resizeMode={'cover'}
-                    />
-            </View>
-            <View
-                style={{
-                  // width:wp(50) 
-                  alignItems: 'center',
-                  justifyContent:"center",
-                  
-                  // right: wp(10),
-                }}>
-                <CustomButton
-                  title={'Save Salary'}
-                  onPress={this.Add}
-                  containerStyle={{
-                    // width: ,
-                    color: 'black',
-                    // fontFamily: FontRegular
-                  }}
-                  buttonStyle={{
-                    backgroundColor: '#333',
-                    height:30,
-                    borderRadius: scale(2),
-                    borderWidth: 0,
-                    // elevation: 6
-                  }}
-                  titleStyle={{
-                    color: themeWhite,
-                    position: 'absolute',
-                    fontFamily: FontBold,
-                    fontSize: scale(14),
-                  }}
-                />
-              </View>
-            </View>
+            <AddExpSkillEdu source={salaryFrame} title='Save_Salary' onPress={this.Add} />
             <ScrollView style={{alignSelf:"stretch",flex:1,marginBottom:45}} nestedScrollEnabled>
             <View style={{flexDirection:"column",alignItems:"center",marginTop:-5}}>
             <Text style={{fontSize:18,fontFamily:FontBold}}>
@@ -193,10 +131,11 @@ import { ScrollView } from 'react-native-gesture-handler'
             <View style={{
                             opacity: 1,
                             // position: 'absolute',
-                            width: wp(80),
+                            width: hp(100) <= 600 ?  wp(70) : wp(80),
                             // top: scale(30),
                             backgroundColor: 'transparent',
-                            height: hp(40) * 1.5,marginHorizontal:wp(15)
+                            height: hp(100) <= 600 ? hp(30) * 1.5 : hp(40) * 1.5,
+                            marginHorizontal:wp(15)
                         }}>
                         
                         <Slider
@@ -217,9 +156,9 @@ import { ScrollView } from 'react-native-gesture-handler'
             }}
             minimumTrackTintColor = {'transparent'} />
               <LinearGradient style={{
-                            height: hp(40) * this.state.salaryMax / 100,
-                            marginTop:(hp((40) * 1.5)) - (hp(40) * this.state.salaryMax / 100),
-                            width: wp(80),
+                            height: hp(100) <=600 ? hp(30) * this.state.salaryMax / 100 : hp(40) * this.state.salaryMax / 100,
+                            marginTop:hp(100) <=600 ? (hp((30) * 1.5)) - (hp(30) * this.state.salaryMax / 100) : (hp((40) * 1.5)) - (hp(40) * this.state.salaryMax / 100),
+                            width: hp(100) <= 600 ?  wp(70) : wp(80),
                             transform: [{
                                     rotate: '-180deg'
                                 }],

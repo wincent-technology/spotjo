@@ -29,10 +29,10 @@ import {
   themeColor,
   themeWhite,
   TRANLINE,
-  educationCap,
+  educationCap,blanks,Fulls
 } from '../Constant/index';
 import {
-  Rating,
+  StarRating,
   NavigationHead
 } from '../Component/ViewManager';
 import CustomButton from '../Component/Button';
@@ -59,8 +59,10 @@ import CustomInput from '../Component/Input';
 import EducationComponent from '../Component/EducationComponent';
 import EducationComponentUni from '../Component/EducationComponentUni';
 import EducationRate from '../Component/EducationRate'
-
+import AddExpSkillEdu from '../Component/AddExpSkillEdu'
 import SuggestionView from '../Component/SuggestionView'
+import ListEdu from '../Component/ListEdu';
+import ListOfChoosed from '../Component/ListOfChoosed'
 
 var monthNames = [
   'Jan',
@@ -78,7 +80,7 @@ var monthNames = [
 ];
 var mg = []
 
-
+var items = global.language == 'english' ? true : false
 class EditWorkExperience extends Component {
   constructor(props) {
     super(props);
@@ -98,7 +100,7 @@ class EditWorkExperience extends Component {
       uni:false,
       uniVerityName:'',
       rate:false,
-      rating:3,
+      rating:3,Company:'',
     Anywhere: false,
     dataCheck: [],
     dataCheckU: [],
@@ -120,187 +122,81 @@ class EditWorkExperience extends Component {
     this.setState({
       sum: global.Experience,
     });
-
-
-    // let data = []
-    // try {
-    //     http.GET('api/webuser/degree/get').then((res) => {
-    //         if (res['data']['status']) {
-    //             // console.log('data>>>', res['data']['result'])
-    //             this.setState({
-    //                 dataCheck: res['data']['result'],
-    //             });
-    //             this.arrayholder = res['data']['result'];
-    //             //            //will get data in this    res['data']['result']
-    //         } else {
-    //             snack(res['data']['message'])
-    //         }
-    //     }, err => snack(err['message']));
-    // } catch (error) {
-    //     snack(error)
-
-    // }
-  
   }
 
-  AddUni = () => {
-    // try {
-  //     http.GET('api/webuser/unicol/get').then((res) => {
-  //         if (res['data']['status']) {
-  //             // console.log('data>>>', res['data']['result'])
-  //             this.setState({
-  //                 dataCheckU: res['data']['result'],
-  //             });
-  //             this.arrayholderU = res['data']['result'];
-  //             //            //will get data in this    res['data']['result']
-  //         } else {
-  //             snack(res['data']['message'])
-  //         }
-  //     }, err => snack(err['message']));
-  // } catch (error) {
-  //     snack(error)
-
-  // }
-
-  }
+    
 
 
 
-choose = (choose) => {
-    // console.log('choose')
-    // mg.push(choose)
-    // mg = [...new Set(mg)]
-    // console.log('sfdsff', mg)
-    // let mni = []
-    // for (let i in mg) {
-    //     if (mg[i] != choose || mg[i] != '')
-    //         mni.push(mg[i])
-    // }
-    // this.state.edu && this.setState({
-    //     suggesion: mni,
-    //     name:  choose,
-    //     EduTitle:choose,
-    //     show: !this.state.show
-    // })
-    // this.state.uni && this.setState({
-    //   suggesion: mni,
-    //   uniVerityName: choose,
-    //   show: !this.state.show
-    // })
-    // console.log('this.state>>>>>>>>>>>>>',this.state.EduTitle,)
-    // console.log('this.state>>>>>>>>>>>>>',choose)
-    // console.log('this.state>>>>>>>>>>>>>',this.state.name)
 
-}
+
 cheks = (text) => {
   // console.log('text')
-    var data = []
-    const newData = this.arrayholder.filter(item => {
-      // console.log('item',item)
-        const itemData = item != null && `${item.english.toUpperCase()}   
-                ${item.english.toUpperCase()} ${item.english.toUpperCase()}`;
-        const textData = text.toUpperCase();
-        // console.log('itemdata', itemData)
-        return itemData != null && itemData.toString().indexOf(textData) > -1;
-    });
-    for (let i in newData) {
-        data.push({
-            'name': newData[i],
-            'backGround': 'white'
-        })
-    }
-    if (newData != '') {
         this.setState({
-            dataCheck: newData,
             name: text,
-            EduTitle:text
+            })
 
-        })
-    } else {
-        newData.push(text)
-        this.setState({
-            dataCheck: newData,
-            name: text,
-            EduTitle:text
 
-        })
-    }
 }
 
-Unis = (text) => {
-  console.log('text')
-    var data = []
-    const newData = this.arrayholderU.filter(item => {
-      // console.log('item',item);
-        const itemData = item != null && item != '' ? `${item.english}` : `${item}`
-        const textData = text.toUpperCase();
-        // console.log('itemdata', itemData)
-        return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
-    });
-    for (let i in newData) {
-        data.push({
-            'name': newData[i],
-            'backGround': 'white'
-        })
-    }
-    if (newData != '') {
-        this.setState({
-            dataCheckU: newData,
-            uniVerityName: text
-        })
-    } else {
-        newData.push(text)
-        this.setState({
-            dataCheckU: newData,
-            uniVerityName: text
-
-        })
-    }
+Unis = (Company) => {
+    this.setState({Company})
 }
 
-renderItem = (item, index) => {
-    // return (
-    //     <View style={{
-    //         width: wp(80),
-    //         marginLeft: scale(34),
-    //     }}>
-    //     <TouchableWithoutFeedback onPress={() => this.choose(item.english)}>
-    //     <View style={{
-    //         flexDirection: 'row',
-    //         alignItems: "center"
-    //     }}>
-    //     <View style={{
-    //         alignItems: "flex-start",
-    //         width: wp(68)
-    //     }}><Text style={{
-    //         fontWeight: "bold",
-    //         fontSize: scale(18),
-    //         color: themeColor
-    //     }}>{item.english}</Text></View>
-    //     </View>
-    //     </TouchableWithoutFeedback>
-    //     </View>
-    // )
-}
-suggestionTag = (elements, index) => {
-    const {
-        suggesion,
-        dataCheck
-    } = this.state;
-    let m = suggesion
-    for (let i in suggesion) {
-        if (m[i] == elements) {
-            m.splice(i, 1),
-                mg.splice(i, 1)
-        }
-        // for (let j in dataCheck) {
-        //     if (dataCheck[j]['name'] == elements)
-        //         dataCheck[j]['backGround'] = 'white'
-        // }
-    }
-    this.setState({
-        suggesion: m
-    })
+
+renders = (item) => {
+  return <View style={{
+    flexDirection: "row",
+    alignItems: "center"
+}}>
+<View style={{
+    marginHorizontal: scale(5)
+}}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => this.remove(item.Role)}/></View>
+<View style={{
+    flexDirection: "column",
+    paddingTop: hp(1),
+    // height: hp(4),
+    width: wp('80%')
+}}><Text style={{
+    fontFamily: FontBold,
+    fontSize: scale(18),
+    color: themeColor
+}} numberOfLines={1}>{item.Role}</Text>
+<View style={{
+    flexDirection: 'row',
+    justifyContent:"space-between",
+    paddingBottom: hp(1),
+}}><View style={{alignItems:'flex-start',width:wp(55),flexDirection:"column"}}>
+<Text style={{
+    fontFamily: FontBold,
+    fontSize: scale(11),
+    color: '#000',
+}}>{item.Company} , {item.From} - {item.To}</Text>
+</View>
+<View style={{alignItems:"flex-end",marginTop:5,marginRight:5}}>
+<StarRating
+    emptyStar={blanks}
+    fullStar={Fulls}
+    halfStar={'star-half'}
+    iconSet={'MaterialIcons'}
+    disabled={false}
+    maxStars={5}
+    starSize={scale(15)}
+    rating={item.rating}
+starStyle={{marginLeft:2}}
+    // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+    fullStarColor={'orange'}
+  />
+</View>
+        </View>
+        
+<View style={{
+    borderBottomWidth: scale(2),
+    borderBottomColor: '#eee',
+    width: wp(78),
+    alignItems: "center"
+}}/></View>
+</View>
 }
 
   save = () => {
@@ -310,7 +206,6 @@ suggestionTag = (elements, index) => {
         .POST('api/user/editworkexp', {
           id: global.Id,
           workexp: global.Experience,
-          // totalExp: 1
         })
         .then(
           async (res) => {
@@ -341,36 +236,27 @@ suggestionTag = (elements, index) => {
 
   ads = () => {
     const {
-      EduTitle,
-      uniVerityName,
       fromDate,
       toDate,
-      sum,rating
+      rating
     } = this.state;
     var tempo = this.state.sum || [];
-    // let tempo = [] ;
-      console.log('thisss',this.state.EduTitle.toUpperCase(),this.state.uniVerityName.toUpperCase(),this.state.fromDate,this.state.toDate,this.state.rating)
-
-
-      // console.log('i>>>this.state',...this.state.sum);
     tempo.push({
-      heading : this.state.EduTitle.toUpperCase(),
-      Company : this.state.uniVerityName.toUpperCase(),
+      Role : this.state.name.toUpperCase(),
+      Company : this.state.Company.toUpperCase(),
       From : fromDate,
       To : toDate,
-      Rating : rating,
+      rating : rating,
     });
 
-    console.log('temp',tempo)
 
     this.setState({
       sum: tempo,
       show: !this.state.show,
-      fromDate: '',
-      toDate: '',
-      EduTitle: '',
-      EduUni: '',
-      uniVerityName:'',
+      fromDate: 'From Date',
+      toDate: 'To Date',
+      Company: '',
+      name:'',
     },()=> this.save());
 
   };
@@ -381,7 +267,7 @@ suggestionTag = (elements, index) => {
     } = this.state;
     let m = sum;
     for (let i in m) {
-      if (m[i].heading == item) {
+      if (m[i].Role == item) {
         m.splice(i, 1);
       }
     }
@@ -425,7 +311,7 @@ suggestionTag = (elements, index) => {
       Anywhere,
       name,
       suggesion,
-      dataCheck,
+      dataCheck,Company,
       dataCheckU,
       show,edu,uni,rate
     } = this.state;
@@ -444,49 +330,7 @@ suggestionTag = (elements, index) => {
             onPress={() => this.Back()}
             onExit={() => this.save()}
           />
-          <View style={{flexDirection:"row",justifyContent:"space-between",width:wp(90),padding:10,marginHorizontal:wp(5),height:150,alignItems:"center"}}>
-          <View style={{width:wp(40),alignItems:"center",justifyContent:"center",}}>
-          <Image
-                    source={expframe}
-                    style={{
-                      height: scale(100),
-                      width: scale(100),
-                    }}
-                    resizeMode={'cover'}
-                  />
-          </View>
-          <View
-              style={{
-                // width:wp(50) 
-                alignItems: 'center',
-                justifyContent:"center",
-                
-                // right: wp(10),
-              }}>
-              <CustomButton
-                title={'+Add Experience'}
-                onPress={this.Add}
-                containerStyle={{
-                  // width: ,
-                  color: 'black',
-                  // fontFamily: FontRegular
-                }}
-                buttonStyle={{
-                  backgroundColor: '#333',
-                  height:30,
-                  borderRadius: scale(2),
-                  borderWidth: 0,
-                  // elevation: 6
-                }}
-                titleStyle={{
-                  color: themeWhite,
-                  position: 'absolute',
-                  fontFamily: FontBold,
-                  fontSize: scale(14),
-                }}
-              />
-            </View>
-          </View>
+          <AddExpSkillEdu source = {expframe} title='Add_Experience' onPress={this.Add}/>
           {edu && <EducationComponent name={this.state.name} placeHolder={`What's your Role`} 
           textChange={
             (text) => {
@@ -499,9 +343,8 @@ suggestionTag = (elements, index) => {
                 edu:false,
                 uni:true
               })
-              this.AddUni();
             }} />}
-          {uni && <EducationComponentUni name={this.state.uniVerityName} placeHolder={'Enter Company name'} 
+          {uni && <EducationComponentUni name={this.state.Company} placeHolder={'Enter Company name'} 
           textChange={
             (text) => {
                 this.setState({
@@ -562,27 +405,10 @@ suggestionTag = (elements, index) => {
                 top: scale(260),
                 marginHorizontal:wp(7)
             }}>
-            
-            <FlatList
-            data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU}
-            keyboardShouldPersistTaps='always'
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => this.renderItem(item, index)}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('1%'),
-                offset: hp('1%') * index,
-                index
-            }
-            )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            /></View> }
+            <ListOfChoosed data={this.state.edu ? this.state.dataCheck : this.state.dataCheckU} 
+            keyboardShouldPersistTaps="always" 
+            renderItem={({item, index}) => this.renderItem(item, index)}/>
+           </View> }
           <View
                 style={{
                   width: '90%',
@@ -604,28 +430,11 @@ suggestionTag = (elements, index) => {
                     alignItems: 'center',
                   }}
                 />
-                <FlatList
-                  nestedScrollEnabled={true}
-                  style={{
+                <ListEdu style={{
                     backgroundColor: themeWhite,
-                  }}
-                  data={this.state.sum && this.state.sum}
-                  extraData={this.state.sum}
-                  showsHorizontalScrollIndicator={false}
-                  removeClippedSubviews={true}
-                  renderItem={({item, index}) => (
-                    <ItemMV item={item} index={index} remove={this.remove} />
-                  )}
-                  initialNumToRender={5}
-                  maxToRenderPerBatch={10}
-                  updateCellsBatchingPeriod={70}
-                  getItemLayout={(data, index) => ({
-                    length: hp('4%'),
-                    offset: hp('4%') * index,
-                    index,
-                  })}
-                  keyExtractor={(item, index) => index + ''}
-                />
+                  }} data={this.state.sum && this.state.sum}  renderItem={({item}) => (
+                    this.renders(item)
+                  )}/>
               </View>
         </ImageBackground>
       </SafeAreaView>

@@ -13,6 +13,7 @@ import {
   vw,
   vh,
 } from '../Component/responsive-ratio';
+import Texting from '../Constant/Text'
 
 const hitSlop = {top: 40, bottom: 40, left: 50, right: 50};
 const center = {justifyContent:"center",alignItems:"center",paddingTop:5};
@@ -27,15 +28,13 @@ const CreateJobIndexButton = ({onBack, onNext, ...props}) =>
         style={{
           flexDirection: 'row',
         }}>
-        <Text
+        <Texting
           style={{
             fontSize: scale(16),
             fontWeight: 'bold',
             color:  props.index  ? themeColor : '#000',
             // textDecorationLine: props.index == 0 ? 'underline' : 'none'
-          }}>
-          {props.name}{' '}
-        </Text>
+          }} text = {props.name}/>
         <Text
           style={{
             fontSize: scale(16),

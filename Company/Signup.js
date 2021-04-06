@@ -14,13 +14,17 @@ import styles from '../src/Style';
 import { scale, snack } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/TextInput'
-import { Background } from '../Constant/index'
+import { Background,url } from '../Constant/index'
 import http from '../api';
 import SnackBar from '../Component/SnackBar'
 import Geolocation from '@react-native-community/geolocation';
 import AsyncStorage from '@react-native-community/async-storage';
 import PermissionHelper from '../Component/PermissionHelper'
+import {WebView} from 'react-native-webview';
 
+const INJECTED_JAVASCRIPT = `(function() {
+    window.ReactNativeWebView.postMessage(JSON.parse(JSON.stringify(window.location)));
+})();`;
 
 class Signup extends Component {
     constructor(props) {
@@ -28,7 +32,10 @@ class Signup extends Component {
 
         this.state = {
             email: '',
-            password: ''
+            password: '',
+            source:'',
+            socialuserId:'',
+            name:''
         };
         console.log('global', global.let, global.long)
     }
@@ -49,84 +56,116 @@ class Signup extends Component {
       }
 
     onSignup = async () => {
-      this.permission();
+      // this.permission();
 
         const {email, password} = this.state;
-        try {
-            if (email.length > 0 && password.length > 0) {
-                http.POST('api/company/register', {
-                    email: email,
-                    password: password,
-                    latitude: global.let || 0,
-                    longitude: global.long || 0
-                }).then((res) => {
-                    if (res['data']['status']) {
-                        console.log('response', res['data']['result'], res['data']['result']);
-                        global.Id = res['data']['result'][0]['id']
-                        global.Email = res['data']['result'][0]['email']
-                        global.role = res['data']['result'][0]['role'] == '2' || res['data']['result'][0]['role'] == '3' ? 'Super Admin' : 'Staff'
-                        AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
-                        this.props.navigation.navigate('ComEdit')
-                    } else {
-                        snack(res['data']['message'])
-                    }
-                }, err => snack(err['message']))
-            } else {
-                snack('Required Email Password')
-            }
+
+
+        let social = http.POST('api/company/social/login', {
+            socialuserId: this.state.socialuserId,
+            name: this.state.name,
+            email: this.state.email,
+            latitude:global.let || 1,
+            longitude:global.long || 1
+        })
+
+        let self = http.POST('api/company/login', {
+            email: email,
+            password: password,
+          })
+          let Singup = this.state.socialuserId != 'null' ? social : self ;
+
+            try {
+               Singup.then(
+            (res) => {
+              if (res['data']['status']) {
+                if (res['data']['result']['role'] == '2' || res['data']['result']['role'] == '3') {
+                  global.role = res['data']['result']['role'] ? 'Super Admin' : ''
+                  global.Service = res['data']['result']['services'];
+                  global.Id = res['data']['result']['id'];
+                  global.Email = res['data']['result']['email'];
+                  global.Branch = res['data']['result']['branch'];
+                  global.uploadUri =res['data']['result']['logo'] != null ? url + 'images/company/' + res['data']['result']['logo'] : null;
+                  global.Mobile = res['data']['result']['mobile'];
+                  global.Company = res['data']['result']['name'];
+                  global.Video = res['data']['result']['video'] != null ? url + 'images/company/' + res['data']['result']['video'] : null;
+                  global.WebSite = res['data']['result']['website'];
+                  global.Address = res['data']['result']['address'];
+                  global.let = parseFloat(res['data']['result']['latitude']) || 1;
+                  global.long = parseFloat(res['data']['result']['longitude']) || 1;
+                  console.log('glo', global.let, global.long);
+                  
+                  AsyncStorage.setItem(
+                    'CompanyLoggedInData',
+                    JSON.stringify(res['data']['result']),
+                  );
+                    this.props.navigation.navigate('TalentCom');
+                } 
+              } else {
+                snack(res['data']['message']);
+              }
+            },
+            (err) => snack(err['message']),
+          );
         } catch ( error ) {
             snack("error while register" + error)
         }
     }
 
 
-    forgat = () => {
-        this.props.navigation.navigate('EmailSend')
+    componentDidMount() {
+        // console.log('this.props',this.props.navigation.state.params.source)
+        this.setState({
+            loading: true,
+            source:this.props.navigation.state.params.source
+        });
     }
 
+
+    _onLoad = (state) => {
+        console.log('state',state);
+        var n = state.url.startsWith('http://192.168.0.166:4200/#/authentication/app-signup?');
+        if (n) {
+                let m = state.url.split('?');
+                let g = m[1].split('&');
+                let i = g.map(i => i.split('='))
+                let b = i.map(i => i[1])
+                this.setState({
+                    email:b[0],
+                    password:b[1],
+                    socialuserId:b[2],
+                    name:b[3]
+                });
+                console.log('this.state',this.state);
+                this.onSignup()
+        }
+        else{
+
+        }
+    }
+    
 
     render() {
+        const {source} = this.state;
         return (
-            <SafeAreaView style={styles.backGround}>
-            <ImageBackground style={styles.ImageBlue}
-            source = {Background}
-            resizeMode = {
-            'stretch'
-            }><StatusBar hidden ={true}/>
-         <View style={[{
-                top: scale(30)
-            }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}
-            resizeMode={'contain'}
-            style={{
-                height: scale(150),
-                width: Dimensions.get('window').width / 2 + scale(80),
-            }}/></View>
-           <Text style={styles.LookingFor}>Signup</Text>
-           <Text style={[styles.LookingFor, {
-                fontSize: scale(17)
-            }]}>Signup with your email address</Text>
-            </View>
             <View style={{
-                // left: Dimensions.get('window').width / 7,
-                marginTop: scale(45),
-                justifyContent: "center",
-                alignItems: "center"
+                flex: 1
             }}>
-       <CustomInput placeholder = {'Email or Username'} textChange = {(text) => this.setState({
-                email: text
-            })} />
-       <CustomInput secureTextEntry={true} placeholder = {'Password'} textChange = {(text) => this.setState({
-                password: text
-            })} />
-            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onSignup}><View  style={[styles.CompanyLoginWithEmailView, {
-                borderRadius: scale(5),
-                justifyContent: "center",
-            }]}><View><Text style={styles.CompanyOppoTalentText}>Signup</Text></View></View></TouchableWithoutFeedback>
-        </View>
-      </ImageBackground></SafeAreaView>
-
+             <WebView
+            style={{
+                overflow: 'scroll'
+            }}
+            source={{
+                uri: source
+            }}
+            onNavigationStateChange={this._onLoad}
+            useWebKit={Platform.OS == 'ios'}
+            injectedJavaScript={INJECTED_JAVASCRIPT}
+            onMessage={this.onMessage}
+            />
+         </View>
         );
+
     }
 }
-;
 export default withNavigationFocus(Signup);

@@ -92,14 +92,15 @@ class MyProfile extends Component {
     g = new Date(g).getFullYear();
 
     let im = global.Experience
-    // console.log('im', im);
-    for (let i in im) {
-      // console.log(im[i])
-      From = im[i].From.split(' ');
+
+    // console.log('im>>>>>>>>>>>', im);
+    for (let i=0; i<im.length;i++) {
+      if (JSON.stringify(im[i]) != undefined)
+      {From = im[i].From.split(' ');
       To = im[i].To.split(' ');
       ary.push(parseInt(To[1]));
       tot = To[1] - From[1];
-      m = m + tot;
+      m = m + tot;}
     }
     this.setState({
       TotalExp: m,
@@ -108,14 +109,18 @@ class MyProfile extends Component {
       console.log('a,b', a, b);
       return b - a;
     });
-    for (let i in im) {
-      To = im[i].To.split(' ');
-      if (To[1] == jig[0]) {
-        this.setState({
-          CompanyName: im[i].Company,
-          JobHeading: im[i].heading,
-        });
-      }
+    for (let i=0; i<im.length;i++) {
+      // if (JSON.stringify(im[i]) != undefined)
+        {
+          To = im[i].To.split(' ');
+          if (To[1] == jig[0]) {
+            this.setState({
+              CompanyName: im[i].Company,
+              JobHeading: im[i].Role,
+            });
+          }
+        }
+     
     }
 
     // console.log('hi total', m, new Date(g).getFullYear());

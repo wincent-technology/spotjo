@@ -59,6 +59,7 @@ import {
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
 import {
+  NoData,
   scale,
   snack
 } from '../src/Util';
@@ -547,6 +548,7 @@ class PostedJobUser extends PureComponent {
             onPress={() => this.Back()}
             text={global.ig && data.heading}
           />
+          <TopHeader />
           <View style={styles.JoblistSecondViewHeading}>
             <View style={styles.JoblistSecondViewHeadingResult}>
               <Text style={styles.JoblistSecondViewHeadingText}>
@@ -1043,31 +1045,9 @@ class PostedJobUser extends PureComponent {
               )}
             </View>
           ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: FontBold,
-                  color: themeWhite,
-                  fontSize: scale(18),
-                  width: wp(60),
-                }}>
-                No Data found 😞
-              </Text>
-            </View>
+            <NoData />
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
+          
         </ImageBackground>
       </SafeAreaView>
     );

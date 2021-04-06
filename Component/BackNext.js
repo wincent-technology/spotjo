@@ -11,7 +11,7 @@ import {
   vw,
   vh,
 } from '../Component/responsive-ratio';
-
+import Texting from '../Constant/Text'
 const hitSlop = {top: 40, bottom: 40, left: 50, right: 50};
 const center = {justifyContent:"center",alignItems:"center",paddingTop:5};
 const BackNext = ({onBack, onNext, ...props}) => 
@@ -24,7 +24,9 @@ const BackNext = ({onBack, onNext, ...props}) =>
                   style={[styles.Size],{justifyContent:"center",alignItems:"center",}}
                   onPress={onBack}
                   hitSlop={hitSlop}>
-                  <View style={center}><Text style={[{fontSize: scale(20)},styles.FontSty]}>Back</Text></View>
+                  <View style={center}>
+                  <Texting style={[{fontSize: scale(20)},styles.FontSty]} text='Back'/>
+                  </View>
                 </TouchableOpacity>
                 </View>
               </View>
@@ -38,7 +40,9 @@ const BackNext = ({onBack, onNext, ...props}) =>
                   style={[styles.Size],{justifyContent:"center",alignItems:"center"}}
                   onPress={onNext}
                   hitSlop={hitSlop}>
-                  <View style={center}><Text style={[{fontSize: scale(20)},styles.FontSty]}>Next</Text></View>
+                  <View style={center}>
+                  <Texting style={[{fontSize: scale(20)},styles.FontSty]} text='Next'/>
+                  </View>
                 </TouchableOpacity>
                 </View>
               </View>

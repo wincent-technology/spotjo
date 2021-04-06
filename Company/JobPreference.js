@@ -48,12 +48,12 @@ import {
   library
 } from '../src/IconManager';
 import Slider from 'rn-range-slider';
-import MultiSelect from 'react-native-multiple-select';
-import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
-
+import SuggestionView from '../Component/SuggestionView'
+import ListOfChoosed from '../Component/ListOfChoosed'
 var mg = [];
+import Texting from '../Constant/Text'
 
-class JobBasicType extends Component {
+class JobPreference extends Component {
   constructor(props) {
     super(props);
 
@@ -161,7 +161,7 @@ class JobBasicType extends Component {
       });
     }
   };
-  renderItem = (item, index) => {
+  renderItem = (item,) => {
     return (
       <View
         style={{
@@ -214,7 +214,6 @@ class JobBasicType extends Component {
         (res) => {
           if (res['data']['status']) {
             //            //will get data in this    res['data']['result']
-            // console.log('res>>>>>>>>>>>>>>lang', res['data']['result']);
             this.setState({
               lang: res['data']['result'],
             });
@@ -241,10 +240,6 @@ class JobBasicType extends Component {
               city: mn,
             });
             this.arrayholder = mn;
-
-            // this.setState({
-            //     city: mn
-            // })
           } else {
             alert(res['data']['message']['message']);
           }
@@ -255,24 +250,9 @@ class JobBasicType extends Component {
       console.log('error while register' + error);
     }
   }
-
-  // setSelectedValue1 = (selectedValue) => {
-  //     this.setState({
-  //         selectedValue1: selectedValue
-  //     })
-  //     global.Language = selectedValue
-
-  // }
   render() {
     const {
-      FullTime,
-      PartTime,
-      Employed,
-      Internship,
-      StudentJobs,
-      HelpingVacancies,
-      Freelancer,
-      name,
+      
       show,
       selectedValue,
       show1,
@@ -315,7 +295,6 @@ class JobBasicType extends Component {
                 flexDirection: 'row',
                 height: scale(50),
                 alignItems: 'center',
-                // backgroundColor: themeColor,
                 borderBottomWidth:1,
                 borderColor:"#eee",
                 marginBottom: hp(2),
@@ -363,14 +342,11 @@ class JobBasicType extends Component {
             </View>
             <View
               style={{
-                // backgroundColor: themeColor,
                 width: wp(70),
                 height: scale(40),
-                // borderColor: themeColor,
                 borderBottomWidth:1,
                 borderColor:"#eee",
                 alignItems: 'center',
-                // borderWidth: scale(1),
                 borderRadius: scale(5),
                 flexDirection: 'row',
               }}
@@ -418,15 +394,12 @@ class JobBasicType extends Component {
             {selectedValue == 'Limited' && (
               <View
                 style={{
-                  // backgroundColor: themeColor,
                   borderBottomWidth:1,
                 borderColor:"#eee",
                   width: wp(70),
                   height: scale(40),
                   marginTop: hp(2),
-                  // borderColor: themeColor,
                   alignItems: 'center',
-                  // borderWidth: scale(1),
                   borderRadius: scale(5),
                   flexDirection: 'row',
                 }}
@@ -509,7 +482,6 @@ class JobBasicType extends Component {
             }}>
             <CustomInput
               placeholder={'City'}
-
               textChange={(text) => {
                 this.setState({
                   citys: text != '' ? true : false,
@@ -518,8 +490,6 @@ class JobBasicType extends Component {
               }}
               inputContainerStyle={{
                 height: scale(40),
-                // backgroundColor: themeColor,
-                // width: "100%",
                 borderColor: '#eee',
                 borderBottomWidth: scale(1),
                 borderRadius: scale(5),
@@ -551,43 +521,8 @@ class JobBasicType extends Component {
                 }}>
                 {suggesion &&
                   suggesion.map((elements, index) => (
-                    <TouchableWithoutFeedback
-                      onPress={() => this.suggestionTag(elements, index)}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          height: scale(30),
-                          borderRadius: scale(5),
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          marginLeft: scale(10),
-                          backgroundColor: 'rgba(255,255,255,0.8)',
-                          padding: scale(5),
-                          marginBottom: scale(2),
-                        }}>
-                        <View
-                          style={{
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            paddingLeft: scale(10),
-                          }}>
-                          <Text
-                            style={{
-                              color: themeColor,
-                              fontFamily: FontBold,
-                            }}>
-                            {elements}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            top: scale(-7),
-                            left: scale(5),
-                          }}>
-                          {library('highlight-off', scale(14), themeColor)}
-                        </View>
-                      </View>
-                    </TouchableWithoutFeedback>
+                    <SuggestionView onPress={() => this.suggestionTag(elements, index)} 
+                    elements={elements} index={index} />
                   ))}
               </ScrollView>
             </View>
@@ -603,25 +538,9 @@ class JobBasicType extends Component {
                   top: scale(55),
                   alignItems: 'center',
                 }}>
-                <FlatList
-                  nestedScrollEnabled
-                  style={{
+                <ListOfChoosed style={{
                     marginTop: scale(2),
-                  }}
-                  data={this.state.city}
-                  showsHorizontalScrollIndicator={false}
-                  removeClippedSubviews={true}
-                  renderItem={({item, index}) => this.renderItem(item, index)}
-                  initialNumToRender={5}
-                  maxToRenderPerBatch={10}
-                  updateCellsBatchingPeriod={70}
-                  getItemLayout={(data, index) => ({
-                    length: hp('1%'),
-                    offset: hp('1%') * index,
-                    index,
-                  })}
-                  keyExtractor={(item, index) => index + ''}
-                />
+                  }} data={this.state.city} renderItem={({item, index}) => this.renderItem(item, index)} />
               </View>
             )}
           </ScrollView>
@@ -636,16 +555,14 @@ class JobBasicType extends Component {
               borderColor:"#eee",paddingBottom:10,
               // backgroundColor: themeColor,
             }}>
-            <Text
+            <Texting
                 style={{
                   left: scale(15),
                   fontSize: scale(15),
                   fontFamily: FontRegular,
                   color: '#333',alignItems:"flex-start",
                   fontWeight: 'bold',marginBottom:5,
-                }}>
-               Select Experience
-              </Text>
+                }} text='Select_Experience'/>
             <View style={{
               justifyContent:"space-between",width:wp(70),flexDirection:"row"
             }}>
@@ -658,7 +575,7 @@ class JobBasicType extends Component {
                   fontWeight: 'bold',
                 }}>
                 {' '}
-                {this.state.minYear} Min Exp
+                {this.state.minYear} <Texting text='Min_Exp' />
               </Text>
               <Text
                 style={{
@@ -669,7 +586,7 @@ class JobBasicType extends Component {
                   color: '#333',
                   fontWeight: 'bold',
                 }}>
-                Max Exp {this.state.maxYear}y+
+                <Texting text='Max_Exp'/> {this.state.maxYear}y+
               </Text>
             </View>
             <Slider
@@ -706,7 +623,7 @@ class JobBasicType extends Component {
   }
 }
 
-export default withNavigationFocus(JobBasicType);
+export default withNavigationFocus(JobPreference);
 // {this.state.lang && this.state.lang.map(({item, key}) => {
 //                return (
 //                    <Picker.Item label = {this.state.lang ? item.title : ''} value = {this.state.lang ? item.title : ''} key={key} />

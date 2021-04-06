@@ -41,6 +41,8 @@ import {
     library
 } from '../src/IconManager';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
+import Texting from '../Constant/Text'
+import ListOfChoosed from '../Component/ListOfChoosed';
 
 
 var mg = []
@@ -197,12 +199,12 @@ class LocationCom extends Component {
             style={{
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
-            }}/></View><View style={styles.HeadingText}><Text style={[{
+            }}/></View><View style={styles.HeadingText}><Texting style={[{
                 fontSize: scale(24),
                 textAlign: 'center'
-            }, styles.FontSty]}>What's your favorite location?</Text></View><View style={{
+            }, styles.FontSty]} text='Whats_your_favorite_location'/></View><View style={{
                 top: scale(20)
-            }}><CustomInput placeholder = {'Place to Work'} value = {this.state.name} 
+            }}><CustomInput placeholder = {global.language == 'english' ? 'Place to Work' : 'Place to Work'} value = {this.state.name} 
             inputContainerStyle={{borderRadius:scale(20),height:scale(45),width:'92%',backgroundColor:"#fff",borderBottomColor: "#E5E5E5",
         borderBottomWidth: 0.3,}} textChange = {
             (text) => {
@@ -244,27 +246,9 @@ class LocationCom extends Component {
                 backgroundColor: "#fff",
                 position: "absolute",
                 top: scale(290)
-            }}><FlatList
-            data = {this.state.dataCheck}
-            keyboardShouldPersistTaps='always'
-            
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => this.renderItem(item, index)}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('1%'),
-                offset: hp('1%') * index,
-                index
-            }
-            )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            /></View> }
+            }}>
+            <ListOfChoosed data = {this.state.dataCheck} keyboardShouldPersistTaps='always' renderItem={({item, index}) => this.renderItem(item, index)}/>
+            </View> }
             </View>
             <BackNext onBack={this.back} onNext={this.next} />
             </View>

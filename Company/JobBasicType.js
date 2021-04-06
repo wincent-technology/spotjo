@@ -34,7 +34,7 @@ import {
 } from '../Constant/index'
 import styles from '../src/Style';
 import TalentButton from '../Component/TalentButton'
-
+import Texting from '../Constant/Text'
 
 
 class JobBasicType extends Component {
@@ -83,24 +83,24 @@ class JobBasicType extends Component {
                 width: wp(96),
                 marginVertical: hp(1)
 
-            }}><Text style={{
+            }}><Texting style={{
                 fontSize: scale(20),
                 fontFamily: "Roboto-Bold",
                 color: '#333'
-            }}>Job Basic Type</Text></View>
+            }} text={'Job_Basic_Type'}/></View>
             <View style={{
                 alignItems: "center",
                 width: wp(96),
                 marginTop: hp(1)
-            }}><Text style={{
+            }}><Texting style={{
                 fontSize: scale(19),
                 fontFamily: "Roboto-Regular",
                 textAlign: "center",
                 color: '#333'
-            }}>Please provide all the information mentioned below</Text></View>
+            }} text='Please_Provide'/></View>
             <View style={{
                 marginTop: hp(3)
-            }}><CustomInput placeholder = {'New Job Title'} textChange = {(text) => global.Job_Title = text}
+            }}><CustomInput placeholder = {global.language == 'english' ? 'New Job Title' : 'New Job Title' } textChange = {(text) => global.Job_Title = text}
             inputContainerStyle={{
                 // backgroundColor: themeColor,
                 // width: "100%",
@@ -121,11 +121,11 @@ class JobBasicType extends Component {
                 height: scale(40)
             }}
             /></View>
-            <Text style={[  styles.Employment ,{
+            <Texting style={[  styles.Employment ,{
                 fontSize: scale(18),
                 fontWeight: "bold",
                 color:"#333",marginTop:scale(15),
-            }]}>How will you use your talent?</Text>
+            }]} text='How_will_you_use_your_talent'/>
                             <View style={styles.PersonalInfoChoose}>
                             
                             <View style={styles.PersonalInfoRowChoose}>
@@ -134,7 +134,7 @@ class JobBasicType extends Component {
                                 FullTime: !this.state.FullTime
                             },() => global.FullTime = this.state.FullTime)
                                 } />
-                                 <TalentButton name='Part-time' job = {true} bool = {PartTime} onPress={
+                                 <TalentButton name='Part_time' job = {true} bool = {PartTime} onPress={
                                     () => this.setState({
                                         PartTime: !this.state.PartTime
                             },() => global.PartTime = this.state.PartTime)
@@ -144,11 +144,11 @@ class JobBasicType extends Component {
                 marginVertical: hp(4)
             }}><View style={{
                                     justifyContent:"center",alignItems:"center"
-                                }}><Text style={[  styles.Employment ,{
+                                }}><Texting style={[  styles.Employment ,{
                 fontSize: scale(22),
                 fontWeight: "bold",
                 color:"#333"
-            }]}>Employment</Text>
+            }]} text='Employment'/>
             </View></View>
             </View>
 
@@ -158,7 +158,7 @@ class JobBasicType extends Component {
                                 Employed: !this.state.Employed
                             },() => global.Employed = this.state.Employed)
                                 } />
-                                <TalentButton job = {true} name='Freelancer' bool = {Freelancer} onPress={
+                                <TalentButton job = {true} name='Freelancers' bool = {Freelancer} onPress={
                                     () => this.setState({
                                         Freelancer: !this.state.Freelancer
                             },() => global.Freelancer = this.state.Freelancer)
@@ -170,7 +170,7 @@ class JobBasicType extends Component {
                                         Internship: !this.state.Internship
                             },() => global.Internship = this.state.Internship)
                                 } />
-            <TalentButton name='Student jobs' job = {true} bool = {StudentJobs} onPress={
+            <TalentButton name='Student_jobs' job = {true} bool = {StudentJobs} onPress={
                                     () => this.setState({
                                 StudentJobs: !this.state.StudentJobs
                             },() => global.StudentJobs = this.state.StudentJobs)
@@ -186,11 +186,11 @@ class JobBasicType extends Component {
     onPress={ () => this.setState({
                                         HelpingVacancies: !this.state.HelpingVacancies
                             },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
-        <Text style={[styles.Employment, {
+        <Texting style={[styles.Employment, {
                 fontSize: scale(20),
                 color:HelpingVacancies ? '#fff':'#333',
                 fontWeight:"normal"
-            }]}>Helping Vacancies</Text>
+            }]} text='Helping_Vacancies' />
     </TouchableOpacity>
             </View><View style={[styles.PersonalInfoEndEmp, {
                 width: wp(20)

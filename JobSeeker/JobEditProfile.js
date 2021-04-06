@@ -49,7 +49,7 @@ import {
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
 import { PieChart } from 'react-native-svg-charts'
-
+import Texting from '../Constant/Text'
 class JobEditProfile extends Component {
   constructor(props) {
     super(props);
@@ -231,11 +231,13 @@ class JobEditProfile extends Component {
                 width: scale(65),
             }}/>
             <View style={{height:1,width:wp(30),backgroundColor:"#333",marginTop:scale(0)}}/>
-            <View style={{marginTop:scale(5)}}><Text style={{
+            <View style={{marginTop:scale(5)}}>
+            <Texting style={{
                 color: "#333",
                 fontFamily: "Roboto-Bold",
                 fontSize: scale(12)
-            }}>Video Resume</Text></View>
+            }} text='Video_Resume'/>
+            </View>
             </View></TouchableWithoutFeedback>
             <View style={{marginTop:scale(5)}}>
             <StarRating
@@ -277,9 +279,7 @@ class JobEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Dashboard
-                      </Text>
+                    <Texting style={styles.NativeFontSty} numberOfLines={1} text='Dashboard'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -296,9 +296,7 @@ class JobEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Skills
-                      </Text>
+                    <Texting style={styles.NativeFontSty} numberOfLines={1} text='Skills'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -315,9 +313,7 @@ class JobEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Work Experience
-                      </Text>
+                    <Texting style={styles.NativeFontSty} numberOfLines={1} text='Work_Experience'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -334,9 +330,7 @@ class JobEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Education
-                      </Text>
+                    <Texting style={styles.NativeFontSty} numberOfLines={1} text='Education'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -353,9 +347,7 @@ class JobEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Personal Information
-                      </Text>
+                    <Texting style={styles.NativeFontSty} numberOfLines={1} text='Personal_Information'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -372,9 +364,7 @@ class JobEditProfile extends Component {
                       />
                     </View>
                     <View style={styles.NativeThirdView}>
-                      <Text style={styles.NativeFontSty} numberOfLines={1}>
-                        Salary
-                      </Text>
+                    <Texting style={styles.NativeFontSty} numberOfLines={1} text='Salary'/>
                     </View>
                   </View>
                 </TouchableNativeFeedback>
@@ -388,9 +378,7 @@ class JobEditProfile extends Component {
               <Text style={{color:themeColor,fontSize:scale(20),fontFamily:FontBold}}>
                   {this.sums()}
               </Text>
-              <Text style={{color:'gray',fontSize:scale(20),fontFamily:FontBold}}>
-                Profile Completion
-              </Text>
+              <Texting style={{color:'gray',fontSize:scale(20),fontFamily:FontBold}} text='Profile_Completion'/>
             </View> 
           </View>
         </ImageBackground>

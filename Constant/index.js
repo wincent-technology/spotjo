@@ -43,6 +43,7 @@ export const education = require('../Img/education.png');
 export const personalInfo = require('../Img/skill.png');
 export const languages = require('../Img/languages.png');
 export const qualification = require('../Img/qualification.png');
+export const Resource_Profile = require('../Img/icon1.png');
 
 //user Avtar
 
@@ -106,7 +107,7 @@ export const Mail = require('../Img/mail.png');
 export const splashVid = require('../Img/01.mp4');
 export const createJ = require('../Img/createjob.png')
 // export const url = "https://sportjo.herokuapp.com/" //http://192.168.0.169:8090/"
-export const url = 'http://192.168.0.169:8091/';
+export const url = 'http://192.168.1.14:8091/';
 // export const url = "http://192.168.43.166:8091/"
 // export const url = 'http://178.128.118.157:8091/'; //last live
 // export const url = 'http://192.168.1.13:8091/';
@@ -131,21 +132,12 @@ export const InActive = {
 }
 
 
-// outlook clientId - 3151a984-44e1-423d-96ce-38aada715e67 
-// redirectUri -  msauth://com.spotjo/Xo8WBi6jzSxKDVR4drqm84yr9iU%3D
-// "tenant_id": "75f3941f-f5ae-4416-adba-55cd4b4e1cbb"
-// client secret - 0801bc08-0781-45f9-a62d-a96dbd673a7e
-// need to follow
-//https://stackoverflow.com/questions/54347728/calendar-endpoint-returns-organizationfromtenantguidnotfound 
-//Authorization code for microsoft outlook
-// 0.AAAAH5Tzda71FkStulXNS04cu4SpUTHhRD1Cls44qtpxXmdxAAA.AQABAAIAAAD--DLA3VO7QrddgJg7Wevrtc8lN8dp5IwnPZ-8V99NBhY9Q4DFExT573P4UNjUdkigB9k0rtVS0tGCVw97WqLjR7fHNqkv_8GajMJ1vkoeHyhs-cPME0mKwL-RGgjU5oPGInwD90bHhX0etmJLU9bCL14ZTzVy6J5Hqwfx85PFJs9uUOCkkh99g7m9LTV8QmNCRdFO_MGTfawtu2X7AE05ohvLVChNe2oXRqHp4lwvccsGo58f-SiZPoRAAkEKstv8DjkfAGW9XdsAi3zPU5BtHbk9QGYhByjMWJ6t2nphWFwEyPHYXlSygf5NxAeJHtXQhJGQlh1x0wWbdYC3nfaBhrQa1_SKJq22oR1KN7oBo_b5w5DidUwouoPamnAZYvszvvmL3tJU2A-ZBuqydWiZSIs-b0xQes4qRItBMJmjHEo4rBgyQoluAxDtHcIpd2BS_UYOJSm3v4ZZMBNFsPR3iNM9hlEzaZG1xPUbxZtCrmGU4H-18uNHmw7-pEayiOj8jTBMWxkH-2zj9gU2pAxDV7uqPr-p72ONdLrTGX2CbQxtwtvbRsdA5Df3Y4vvtZcyJFCcCwoEE4ZM59dW12c_CoSGm7DjjJkz4z8At7ZoXotOXKCISCU3s59tcYVGnn1L8TNwNIJ1DD1e0ns8ty-HnENV_0TI9IAcqRrqov9fytD-Sws-QS0TVJnP78NjzK7YzXzfQ1QiabzOlBekqb14YZWR258TMTccs04Gx9xduuchFeXd4hSXJrJFXChDZ512yzyohuVld5aliXpP8w8w_mxBH5O_gVGV0XNKk0aU3f9IsB-sqs3v60GDyckfad8rySGGeUjIoAtS3lYBG2KhDN9RcIX-Jsr-aX1v1VsI5m1MMxrpBSjGuQs91wubsMjYHRwWQVsJCcheUApbNNd7f0aGRzFxyZk0css2191eautF265lTYU7lm6tNAXMaGIRf38RAc_U6LZS1N909gtyYKTvmFTMoCL2wO2sXVztx8xnf1w6fvDfsRHuGL5dUi85IgZ9Ey-FA1CD59wcYu-5xi7DEp2O_zm0q03rJHrBLOdj_FZp31IGe-LgFSFmfolkpT6F0lX1Yyen7ftMr_b-HQhrI-QkvRM6ly3nlKKSFqqzUptX7oBakX9A2dKFa3IbfCkiX5OakCRGUeolJweTNkAwXIJFb8w4sgwZ4n9_oLB0zBqtLhhP2Mvqa3yzD8Efjpk780_VBQTevvSdZTWxDioU7J3ONOYTceAG5POKAiAA
-
-// Access token for microsoft outlook
-// eyJ0eXAiOiJKV1QiLCJub25jZSI6Ik1TU2I4RXhCbnhwODQwNWFtTnZvT1ZNbWNNTDZzc2dIU3hEbkJ1SDBIY3ciLCJhbGciOiJSUzI1NiIsIng1dCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyIsImtpZCI6Im5PbzNaRHJPRFhFSzFqS1doWHNsSFJfS1hFZyJ9.eyJhdWQiOiIwMDAwMDAwMy0wMDAwLTAwMDAtYzAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJodHRwczovL3N0cy53aW5kb3dzLm5ldC83NWYzOTQxZi1mNWFlLTQ0MTYtYWRiYS01NWNkNGI0ZTFjYmIvIiwiaWF0IjoxNjE1NDQ0OTcyLCJuYmYiOjE2MTU0NDQ5NzIsImV4cCI6MTYxNTQ0ODg3MiwiYWNjdCI6MCwiYWNyIjoiMSIsImFjcnMiOlsidXJuOnVzZXI6cmVnaXN0ZXJzZWN1cml0eWluZm8iLCJ1cm46bWljcm9zb2Z0OnJlcTEiLCJ1cm46bWljcm9zb2Z0OnJlcTIiLCJ1cm46bWljcm9zb2Z0OnJlcTMiLCJjMSIsImMyIiwiYzMiLCJjNCIsImM1IiwiYzYiLCJjNyIsImM4IiwiYzkiLCJjMTAiLCJjMTEiLCJjMTIiLCJjMTMiLCJjMTQiLCJjMTUiLCJjMTYiLCJjMTciLCJjMTgiLCJjMTkiLCJjMjAiLCJjMjEiLCJjMjIiLCJjMjMiLCJjMjQiLCJjMjUiXSwiYWlvIjoiQVRRQXkvOFRBQUFBdVBLeFlyZG9ibER1Uzltb3FmNHJrcUJDNTB5eEFXMFBTTUlBQjBuT2RJbVVkY1VIQ2p6NFE5YVVxZ2Nyb3VRRCIsImFsdHNlY2lkIjoiMTpsaXZlLmNvbTowMDAzQkZGRDM4RTVBQjIwIiwiYW1yIjpbInB3ZCJdLCJhcHBfZGlzcGxheW5hbWUiOiJTcG90am8iLCJhcHBpZCI6IjMxNTFhOTg0LTQ0ZTEtNDIzZC05NmNlLTM4YWFkYTcxNWU2NyIsImFwcGlkYWNyIjoiMCIsImVtYWlsIjoidGVzdHNwb3QyMDIxQGdtYWlsLmNvbSIsImZhbWlseV9uYW1lIjoic3BvdGpvIiwiZ2l2ZW5fbmFtZSI6InRlc3RzcG90MjAyMUBnbWFpbC5jb20iLCJpZHAiOiJsaXZlLmNvbSIsImlkdHlwIjoidXNlciIsImlwYWRkciI6IjI3LjU0LjE2MS4yMzAiLCJuYW1lIjoidGVzdHNwb3QyMDIxQGdtYWlsLmNvbSBzcG90am8iLCJvaWQiOiI2NTljYTUyMy1mNWQxLTQzMjgtOGU2OC1lM2FmZGJhZTk4MjciLCJwbGF0ZiI6IjEiLCJwdWlkIjoiMTAwMzIwMDEyMEQzM0M4QSIsInJoIjoiMC5BQUFBSDVUemRhNzFGa1N0dWxYTlMwNGN1NFNwVVRIaFJEMUNsczQ0cXRweFhtZHhBSDguIiwic2NwIjoiTWFpbC5SZWFkIFVzZXIuUmVhZCBwcm9maWxlIG9wZW5pZCBlbWFpbCIsInNpZ25pbl9zdGF0ZSI6WyJrbXNpIl0sInN1YiI6IktGeGhJZVV0VFpYMHVUdnJoNk1fR1FjcmloUXhNbWMyNnJMd0pVeHdKUHMiLCJ0ZW5hbnRfcmVnaW9uX3Njb3BlIjoiQVMiLCJ0aWQiOiI3NWYzOTQxZi1mNWFlLTQ0MTYtYWRiYS01NWNkNGI0ZTFjYmIiLCJ1bmlxdWVfbmFtZSI6ImxpdmUuY29tI3Rlc3RzcG90MjAyMUBnbWFpbC5jb20iLCJ1dGkiOiJaMGNkemNLRmRFeXRpcWI5UEJJTUFBIiwidmVyIjoiMS4wIiwid2lkcyI6WyI2MmU5MDM5NC02OWY1LTQyMzctOTE5MC0wMTIxNzcxNDVlMTAiLCJiNzlmYmY0ZC0zZWY5LTQ2ODktODE0My03NmIxOTRlODU1MDkiXSwieG1zX3N0Ijp7InN1YiI6Im54T2pFbm1OaUw0amVHRk0zaTFTa1h5bE95YWRYSHY3bnhTSm1yNHZRbmcifSwieG1zX3RjZHQiOjE2MTUzODU4Mzh9.A_DDDWp6-CfXg_mjKxA8-9t8ZhZs4Ij5wqWQjR4W-AfTH7dqlLbcyuOAq2g2KP2lGvfzqE-Pv3XUM7_bGclKfjP0K8_qIIoseU_GwUnAePzBpBIw9FYbPfBuru5_nqDvuCNtr8x4ddAYsT3rrzStRfCrof99PDtrLOLWA04YEC5MR8cjO40B9ViBNwX63ifJFeuR1Et9Qi3q0d8OBtayDzvtYsYwEE0IWdNzHEQ8VaJTjsq7VUmHzHmtJJhYNIETR1SJxvrC9Csbd8-UYzSBa6xh4O_wj0D8R6ddFBRlP8I9Z6PdGfIOxXPO4iChVPC0voFzlVyQQTGeHk7LUAXtuA
-
-
-
-
+// Display name
+// client app Id - 78055508-f184-40cd-bc71-56a8d908ce16
+// deractory tanent Id - 75f3941f-f5ae-4416-adba-55cd4b4e1cbb
+// object id - 91cd63c0-db9e-49c5-a3a6-85b947dae18b
+// app secret - 608b2084-7e9f-4603-b1bf-deac6baa0e37
+// redirect uri - msauth://com.spotjo/Xo8WBi6jzSxKDVR4drqm84yr9iU%3D
 
 
 // Email Id :- testspot2021@gmail.com

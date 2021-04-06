@@ -38,6 +38,8 @@ import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import PermissionHelper from '../Component/PermissionHelper'
+import Texting from '../Constant/Text'
+
 
 class LoginWithEmail extends Component {
   constructor(props) {
@@ -72,7 +74,7 @@ class LoginWithEmail extends Component {
 
 
   onLogin = async () => {
-    this.permission();
+    // this.permission();
     const {
       email,
       password
@@ -104,8 +106,8 @@ class LoginWithEmail extends Component {
                   global.WebSite = res['data']['result']['website'];
                   global.Address = res['data']['result']['address'];
                   global.Service = res['data']['result']['services'];
-                  global.let = parseFloat(res['data']['result']['latitude']) || global.let;
-                  global.long = parseFloat(res['data']['result']['longitude']) || global.long;
+                  global.let = parseFloat(res['data']['result']['latitude']) || 1;
+                  global.long = parseFloat(res['data']['result']['longitude']) || 1;
                   console.log('glo', global.let, global.long);
                   AsyncStorage.setItem(
                     'CompanyLoggedInData',
@@ -131,8 +133,8 @@ class LoginWithEmail extends Component {
                     url + 'images/company/' + res['data']['result']['video'];
                   global.WebSite = res['data']['result']['website'];
                   global.Address = res['data']['result']['address'];
-                  global.let = parseFloat(res['data']['result']['latitude']) || global.let;
-                  global.long = parseFloat(res['data']['result']['longitude']) || global.long;
+                  global.let = parseFloat(res['data']['result']['latitude']) || (global.let || 10);
+                  global.long = parseFloat(res['data']['result']['longitude']) || (global.long || 10);
                   console.log('glo', global.let, global.long);
                   // AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
                   this.props.navigation.navigate('TalentCom');
@@ -150,6 +152,55 @@ class LoginWithEmail extends Component {
       snack('error while register' + error);
     }
   };
+// CallApiJob = () => {
+//   try {
+//     http.POST('api/jobseeker/get', {
+//         ComId:global.Id,
+//     }).then((res) => {
+//         if (res['data']['status']) {
+//             let data = []
+//             let From,
+//                 To,
+//                 tmpobj,
+//                 jobs = res['data']['result'];
+//                 let items=global.language =='english' ? true:false
+//                 for (let i =0; i<jobs.length; i++) {
+
+//                     if (jobs[i]['workexp']) {
+//                         for (let j = 0; j<jobs[i]['workexp'].length;j++)
+//            {
+//                         if (global.Job_Title.indexOf(items ? (jobs[i]['workexp'][j]['Role']) : (jobs[i]['workexp'][j]['Role'])  != -1)) {
+//                             tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+
+//                             From = jobs[i]['workexp'][j]['From'].split(' ');
+//                             To = jobs[i]['workexp'][j]['To'].split(' ');
+
+//                             tmpobj.Company = jobs[i]['workexp'][j]['Company'];
+//                             tmpobj.Role = jobs[i]['workexp'][j]['Role'];
+//                             tmpobj.totalExp = To[1] - From[1];
+
+//                             data.push(tmpobj);
+//                         }
+//                     }
+//                 }
+//             }
+
+//             console.log("data >>>", data);
+
+//             global.all = global.Job_Title && global.Job_Location != [] || '' ? data : [];
+//             this.props.navigation.navigate('TabScreenCompany')
+//         } else {
+//             console.log('sf', res['data']['message'])
+
+//         }
+//     }, err => console.log('dgfgdg', err['message']));
+// } catch (error) {
+//     console.log('err', error)
+
+// }
+// }
+
+
 
   render() {
     const {pass} = this.state
@@ -177,16 +228,14 @@ class LoginWithEmail extends Component {
                 }}
               />
             </View>
-            <Text style={styles.LookingFor}>Login</Text>
-            <Text
+            <Texting style={styles.LookingFor} text='Login'/>
+            <Texting
               style={[
                 styles.LookingFor,
                 {
                   fontSize: scale(17),
                 },
-              ]}>
-              Login with your email address
-            </Text>
+              ]} text='Login_with_your_email_address'/>
           </View>
           <View
             style={{
@@ -213,15 +262,13 @@ class LoginWithEmail extends Component {
               }
             />
             <TouchableWithoutFeedback onPress={this.forgat}>
-              <Text
+              <Texting
                 style={{
                   marginTop: scale(-8),
                   marginLeft: scale(115),
                   marginBottom: scale(40),
                   color: '#fff',
-                }}>
-                Forget Password?
-              </Text>
+                }} text='Forget_Password'/>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback
               style={styles.CompanyLoginOpportunityView}
@@ -235,36 +282,32 @@ class LoginWithEmail extends Component {
                   },
                 ]}>
                 <View>
-                  <Text style={styles.CompanyOppoTalentText}>Login</Text>
+                  <Texting style={styles.CompanyOppoTalentText} text='Login'/>
                 </View>
               </View>
             </TouchableWithoutFeedback>
           </View>
           <View style={styles.CompanyLoginAccountText}>
-            <Text
+            <Texting
               style={[
                 {
                   fontSize: scale(23),
                 },
                 styles.FontSty,
-              ]}>
-              Don't Have Account?
-            </Text>
+              ]} text='Dont_Have_Account'/>
             <View
               style={{
                 flexDirection: 'row',
               }}>
-              <Text
+              <Texting
                 style={[
                   {
                     fontSize: scale(19),
                   },
                   styles.FontSty,
-                ]}>
-                Create new account{' '}
-              </Text>
+                ]} text='Create_new_account'/>
               <TouchableWithoutFeedback onPress={this.create}>
-                <Text
+                <Texting
                   style={[
                     {
                       textDecorationLine: 'underline',
@@ -272,9 +315,8 @@ class LoginWithEmail extends Component {
                       fontSize: scale(19),
                     },
                     styles.FontSty,
-                  ]}>
-                  Click here
-                </Text>
+                  ]} text='Click_here'/>
+                  
               </TouchableWithoutFeedback>
             </View>
           </View>

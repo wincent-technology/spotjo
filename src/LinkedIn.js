@@ -35,13 +35,12 @@ export default class LinkedIn extends Component {
     _onLoad(state) {
     
         console.log('state',state);
-        var n = state.url.startsWith('https://www.spotjo.com?code');
-        // console.log("nnnnnnnnnn",n)
+        var n = state.url.startsWith('https://www.spotjo.com/?code');
         if (n) {
                 // console.log(state.url.split('='))
                 let m = state.url.split('=');
                 let g = m[1].split('&');
-                // console.log('g',g);
+                console.log('g',g);
                 // this.props.navigation.navigate('CompanyLogin',{
                 //     code:g[0]
                 // });

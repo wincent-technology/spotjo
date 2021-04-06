@@ -27,6 +27,7 @@ import {
   TopBar
 } from '../Component/ViewManager.js'
 import { appendFile } from 'react-native-fs';
+import Texting from '../Constant/Text'
 if (!window.location) {
   // App is running in simulator
   window.navigator.userAgent = 'ReactNative';
@@ -34,59 +35,27 @@ if (!window.location) {
 
 
 // This must be below your `window.navigator` hack above
-// const socket = io('http://178.128.118.157:8091');
- const socket = io('http://192.168.0.169:8091');
+// io.connect('http://178.128.118.157:8091', { transports: ['websocket'] })
+// const socket = io.connect('http://178.128.118.157:8091', { transports: ['websocket'] });
+ const socket = io('http://192.168.0.112:8091');
 
 
 
-let show = false
 class ChatOne extends Component{
   constructor(props) {
     super(props);
 
     this.state = {
-        data: [],
         name: '',
-        dataCheck: [],
-        show: false,
-        add:false,
-        suggesion: [],
         messages:[],
         show:false,
         flag:false,
-        read : null
+        read : null,
+        mesg :{}
+
       };
-
-      // socket.on("new_message_alert",(content) => 
-      //   {
-      //     console.log('content',content)
-      //     // this.onMessage(content)
-      //     // socket.emit("message_read", content);
-
-      //   });
-        
-      this.arrayholder = [];
 }
  
-  //  static navigationOptions = ({ navigation }) => {
-  //   const { params } = navigation.state;
-  //   return {
-  //     title: params ? params.thread.firstName : 'Unknown',
-  //     headerRight: () => (
-  //       <TouchableOpacity
-  //       onPress={() =>  this.setState({show:!this.state.show})}
-  //       style={{marginRight:15,height:20,width:20}}
-  //     >
-  //      {leftVid('ellipsis-v',20,themeWhite)}
-  //     </TouchableOpacity>
-  //     ),
-  //     headerStyle: {
-  //       backgroundColor: themeColor
-  //     },
-  //     headerTintColor: themeWhite
-  //   }
-  // };
-  
 
   setHeaderRight = () => {
     // console.log("setHeaderRight", this.state.secureTextEntry);
@@ -105,42 +74,33 @@ class ChatOne extends Component{
   
 
 
-componentDidMount(){
+UNSAFE_componentWillMount(){
  
-  // this.props.navigation.setParams({
-  //   headerRight: this.setHeaderRight()
-  // });
         socket.on('connect', () => console.log('connected'))
-        socket.on('error', console.error)
-        socket.on('connect_error', console.error)
+        socket.on('error', console.log('error'))
+        socket.on('connect_error', console.log('error>>>>>>>'))
         socket.emit("userOnApp", global.Id);
+        socket.onAny((event) => {
+          console.log(`got ${event}`);
+        });
         socket.on("new_message_alert",(content) => 
         {
 
-          console.log('content',content)
           content.isRead = 0
           this.onMessage(content)
-
           socket.emit("message_read", content);
 
         });
         
-
-       
-      var data = [];
-      // console.log('io("ws://<LOCAL HOME NETWORK IP>:<PORT ON SERVER>"',socket)
-      // console.log(this.props.navigation.state.params.thread)
       try {
         http.POST('api/webuser/chat/get',{
           loginId : global.Id,
           userId : this.props.navigation.state.params.thread.id
         }).then(
           (res) => {
-            // console.log('res>>>>>>>>>',res['data']['result']);
-
             if (res['data']['status']) {
-              // console.log('result', res['data']['result']);
               let DATA  = [];
+
               for (let i in res['data']['result'])
                 {
                   if(res['data']['result'][i].receiverDelete == 0 || res['data']['result'][i].senderDelete == 0)
@@ -152,9 +112,6 @@ componentDidMount(){
                   res['data']['result'][i].text = res['data']['result'][i].message
                   res['data']['result'][i]._id = res['data']['result'][i].senderId
                   res['data']['result'][i].name = this.props.navigation.state.params.thread.firstName
-                  
-                  // delete res['data']['result'][i].message
-                  // delete res['data']['result'][i].senderId
                   let user = {
                     _id :res['data']['result'][i]._id == global.Id ? global.Id : res['data']['result'][i].receiverId,
                     name:res['data']['result'][i]._id == global.Id ? global.Company : this.props.navigation.state.params.thread.firstName,
@@ -170,10 +127,7 @@ componentDidMount(){
                 this.setState({
                   messages:dm
                 })
-                // this.giftedChatRef.current.scrollToTop();
-
-              // setMessages(dm);
-              // console.log('datacheck',DATA);
+                this.giftedChatRef.scrollToBottom()
             } else {
               snack(res['data']['message']);
             }
@@ -187,14 +141,22 @@ componentDidMount(){
 
       
       socket.on("message_read", (data) => {
-        console.log('data',data)
-        let messages = this.state.messages
-        messages.length && messages.filter(i => {if(i.id == data.id)i.isRead=1});
-        this.setState({messages});
+        console.log('data>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+        this.setState({
+          mesg: data
+        },()=> {
+          let messages = this.state.messages
+          messages.length && messages.filter(i => 
+            {
+              if (i.id == data.id)
+                  i.isRead = 1;
+            });
+          this.setState({messages});
+        });
       })
 
         socket.on("message_read_all", (data) => {
-          console.log('data Read all>>>>>>>>',data)
+          console.log('data')
           if (this.props.navigation.state.params.thread && this.props.navigation.state.params.thread.id == data.senderId || data.receiverId) {
             let messages = this.state.messages
             messages.length && messages.filter(i => {i.isRead = 1;this.renderTicks(i)});
@@ -204,40 +166,42 @@ componentDidMount(){
 
 
 }
-
-
-// check = (msg) => {
-//   console.log('hi')
-//   // socket.connect()
-//   socket.on('connect', (som) => 
-//   {
-//     console.log('som',som)
-    
-// }
-//   )
-// }
  
 onMessage = (msg) => {
-                  if(msg.receiverDelete == 0 || msg.senderDelete == 0)
+                  if(msg.receiverDelete == 0 || msg.senderDelete == 0  )
                   {
 
                   }
-                  else {
+                  else if(this.state.mesg.id != msg.id) {
+                    console.log('hi')
                   msg.text = msg.message
                   msg._id = msg.senderId
                   msg.name = this.props.navigation.state.params.thread.firstName
                   let user = {
-                    _id :msg._id == global.Id ? global.Id : msg.receiverId,
-                    name:msg._id == global.Id ? global.Company :  this.props.navigation.state.params.thread.firstName
+                    _id :+msg.senderId ==  global.Id ? global.Id : msg.receiverId,
+                    name:+msg.senderId ==  global.Id ? global.Company :  this.props.navigation.state.params.thread.firstName
                   }
                   msg['user'] = user
                   let dm = [...this.state.messages,msg ]
-                    
-                  
-                  this.setState({ messages: dm,flag:true})
+                  this.setState({ messages: dm})
                   
                   
+                }else {
+                  console.log('hi else')
+                  msg.text = this.state.mesg.message
+                  msg._id = this.state.mesg.senderId
+                  msg.isRead = 1
+                  msg.name = this.props.navigation.state.params.thread.firstName
+                  let user = {
+                    _id :+this.state.mesg.senderId ==  global.Id ? global.Id : this.state.mesg.receiverId,
+                    name:+this.state.mesg.senderId ==  global.Id ? global.Company :  this.props.navigation.state.params.thread.firstName
+                  }
+                  msg['user'] = user
+                  let dm = [...this.state.messages,msg ]
+                  this.setState({ messages: dm})
                 }
+                
+               
                
 
 }
@@ -297,10 +261,6 @@ onMessage = (msg) => {
     );
   }
    handleSend(newMessage = []) {
-    console.log('message>>>>>>>>>',newMessage);
-    // this.setState({
-    //   messages:GiftedChat.append(this.state.messages, newMessage)
-    // })
      try {
       this.props.navigation.state.params.thread.isBlock != 1 && http.POST('api/webuser/chat/post',{
         senderId : global.Id,
@@ -310,30 +270,8 @@ onMessage = (msg) => {
         (res) => {
           if (res['data']['status']) {
             console.log('result', res['data']['result']);
-            // let cd = []
-            // cd.push(res['data']['result']);
+            
             this.onMessage(res['data']['result'])
-            // socket.emit('new_message_alert', newMessage[0].text);
-             
-            // let DATA  = [];
-            // for (let i in res['data']['result'])
-            //   {
-            //     res['data']['result'][i].text = res['data']['result'][i].message
-            //     res['data']['result'][i]._id = res['data']['result'][i].senderId
-            //     res['data']['result'][i].name = props.navigation.state.params.thread.firstName
-            //     delete res['data']['result'][i].message
-            //     delete res['data']['result'][i].senderId
-            //     let user = {
-            //       _id :res['data']['result'][i]._id == global.Id ? res['data']['result'][i].receiverId : global.Id,
-            //       name:res['data']['result'][i]._id == global.Id ? props.navigation.state.params.thread.firstName : global.Company
-            //     }
-            //     res['data']['result'][i]['user'] = user
-
-            //     DATA.push(res['data']['result'][i])
-            //   }
-            //   let dm = DATA.reverse()
-            // setMessages(dm);
-            // console.log('datacheck',DATA);
           } else {
             snack(res['data']['message']);
           }
@@ -434,7 +372,7 @@ onMessage = (msg) => {
   }
   onPress= (context,message) => {
 
-   console.log('message',message);
+  //  console.log('message',message);
    for (let i in this.state.messages)
    {
      if (message.id == this.state.messages[i].id)
@@ -516,8 +454,8 @@ onMessage = (msg) => {
 
 renderChatFooter = () => {
   if (this.props.navigation.state.params.thread.isBlock == 1) {
-    console.log('hi>>>>>>>>>');
-    return <Text style={{color:'red',textAlign:"center",fontSize:16}}>This User Is Blocked</Text>;
+    // console.log('hi>>>>>>>>>');
+    return <Texting style={{color:'red',textAlign:"center",fontSize:16}} text='This_User_Is_Blocked'/ >;
   } 
 return null;
 };
@@ -581,9 +519,9 @@ render(){
             <View style={styles.AllPLeftIconText}>
             {leftVid('lock',20,'white')}
             </View>
-            <View style={styles.AllPLeftIconText}><Text style={styles.AllPtextColor}>
-            {thread.isBlock == 1 ? 'UnBlock' : 'Block'}
-            </Text></View>
+            <View style={styles.AllPLeftIconText}>
+            <Texting style={styles.AllPtextColor} text={thread.isBlock == 1 ? 'UnBlock' : 'Block'}/>
+            </View>
             </View>
             </TouchableHighlight>
             </Animatable.View>}
@@ -592,7 +530,9 @@ render(){
                 <View  style={styles.AllPLeftIconText}>
                 {leftVid('trash',20,'white')}
                 </View>
-                <View  style={styles.AllPLeftIconText}><Text style={styles.AllPtextColor}>Delete</Text></View>
+                <View  style={styles.AllPLeftIconText}>
+                <Texting style={styles.AllPtextColor} text='Delete'/>
+                </View>
             </Animatable.View>
             </TouchableHighlight></Animatable.View> : <View/>
                }
@@ -606,9 +546,6 @@ render(){
       placeholder='Type your message here...'
       showUserAvatar
       alwaysShowSend
-      shouldUpdateMessage={(props, nextProps) =>
-        props.extraData !== nextProps.extraData
- }
       inverted={false}
       onLongPress={this.onLongPress}
       onPress={this.state.flag && this.onPress}

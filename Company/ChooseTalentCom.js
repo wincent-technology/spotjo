@@ -30,10 +30,12 @@ import {
 import {
     switchColor,
     Background,
-    themeColor
+    themeColor,themeWhite
 } from '../Constant/index'
 import styles from '../src/Style';
 import http from '../api';
+import Texting from '../Constant/Text'
+
 class ChooseTalentCom extends Component {
     constructor(props) {
         super(props);
@@ -51,15 +53,7 @@ class ChooseTalentCom extends Component {
 
 
     componentDidMount() {
-        this.setState({
-            FullTime: global.FullTime,
-            PartTime: global.PartTime,
-            Employed: global.Employed,
-            Internship: global.Internship,
-            StudentJobs: global.StudentJobs,
-            HelpingVacancies: global.HelpingVacancies,
-            Freelancer: global.Freelancer,
-        })
+        this.checking();
     }
     checking = () => {
         this.setState({
@@ -76,6 +70,7 @@ class ChooseTalentCom extends Component {
     next = () => {
         try {
             http.POST('api/jobseeker/get', {
+                ComId:global.Id,
                 workexp: global.Job_Title,
                 place: global.Job_Location,
                 FullTime: this.state.FullTime,
@@ -92,19 +87,20 @@ class ChooseTalentCom extends Component {
                         To,
                         tmpobj,
                         jobs = res['data']['result'];
+                        let items=global.language =='english' ? true:false
+                        for (let i =0; i<jobs.length; i++) {
 
-                    for (let i in jobs) {
-
-                        if (jobs[i]['workexp']) {
-                            for (let j in jobs[i]['workexp']) {
-                                if (global.Job_Title.indexOf(jobs[i]['workexp'][j]['heading']) != -1) {
+                            if (jobs[i]['workexp']) {
+                                for (let j = 0; j<jobs[i]['workexp'].length;j++)
+                   {
+                                if (global.Job_Title.indexOf(items ? (jobs[i]['workexp'][j]['Role']) : (jobs[i]['workexp'][j]['Role'])  != -1)) {
                                     tmpobj = JSON.parse(JSON.stringify(jobs[i]));
 
                                     From = jobs[i]['workexp'][j]['From'].split(' ');
                                     To = jobs[i]['workexp'][j]['To'].split(' ');
 
                                     tmpobj.Company = jobs[i]['workexp'][j]['Company'];
-                                    tmpobj.heading = jobs[i]['workexp'][j]['heading'];
+                                    tmpobj.Role = jobs[i]['workexp'][j]['Role'];
                                     tmpobj.totalExp = To[1] - From[1];
 
                                     data.push(tmpobj);
@@ -117,9 +113,6 @@ class ChooseTalentCom extends Component {
 
                     global.all = global.Job_Title && global.Job_Location != [] || '' ? data : [];
                     this.props.navigation.navigate('TabScreenCompany')
-
-                    // will get data in this    res['data']['result']             
-                    // this.props.navigation.navigate('TabScreenJob')
                 } else {
                     console.log('sf', res['data']['message'])
 
@@ -129,9 +122,6 @@ class ChooseTalentCom extends Component {
             console.log('err', error)
 
         }
-        // this.props.navigation.navigate('TabScreen')
-
-
     }
     back = () => {
         this.props.navigation.goBack();
@@ -166,52 +156,52 @@ class ChooseTalentCom extends Component {
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View><View style={{
                 width: wp('80%')
-            }}><Text style={[{
+            }}><Texting style={[{
                 fontSize: scale(24),
                 textAlign: 'center'
-            }, styles.FontSty]}>How will you use your talent?</Text></View>
+            }, styles.FontSty]} text='How_will_you_use_your_talent'/></View>
             <View style={styles.PersonalInfoChoose}>
                             <View style={styles.PersonalInfoRowChoose}>
-                                <TalentButton name='FullTime' bool = {FullTime} onPress={
+                                <TalentButton name={'FullTime'} bool = {FullTime} onPress={
                                     () => this.setState({
                                 FullTime: !this.state.FullTime
                             },() => global.FullTime = this.state.FullTime)
                                 } />
-                                 <TalentButton name='Part-time' bool = {PartTime} onPress={
+                                 <TalentButton name={"Part_time"} bool = {PartTime} onPress={
                                     () => this.setState({
                                         PartTime: !this.state.PartTime
                             },() => global.PartTime = this.state.PartTime)
                                 } />
             </View>
              <View style={{
-                marginVertical: hp(7)
+                marginVertical: hp(4)
             }}><View style={{
                                     justifyContent:"center",alignItems:"center"
-                                }}><Text style={[{
+                                }}><Texting style={[{
                 fontSize: scale(22),
                 fontWeight: "bold"
-            }, styles.Employment]}>Employment</Text>
+            }, styles.Employment]} text='Employment' />
             </View></View>
             </View>
             <View style={styles.PersonalInfoRowChoose}>
-            <TalentButton name='Employed' bool = {Employed} onPress={
+            <TalentButton name={'Employed'} bool = {Employed} onPress={
                                     () => this.setState({
                                 Employed: !this.state.Employed
                             },() => global.Employed = this.state.Employed)
                                 } />
-                                <TalentButton name='Freelancer' bool = {Freelancer} onPress={
+                                <TalentButton name={'Freelancers'} bool = {Freelancer} onPress={
                                     () => this.setState({
                                         Freelancer: !this.state.Freelancer
                             },() => global.Freelancer = this.state.Freelancer)
                                 } /></View>
 
             <View style={styles.PersonalInfoRowChoose}>
-            <TalentButton name='Internship' bool = {Internship} onPress={
+            <TalentButton name={'Internship'} bool = {Internship} onPress={
                                     () => this.setState({
                                         Internship: !this.state.Internship
                             },() => global.Internship = this.state.Internship)
                                 } />
-            <TalentButton name='Student jobs' bool = {StudentJobs} onPress={
+            <TalentButton name={'Student_jobs'} bool = {StudentJobs} onPress={
                                     () => this.setState({
                                 StudentJobs: !this.state.StudentJobs
                             },() => global.StudentJobs = this.state.StudentJobs)
@@ -223,13 +213,14 @@ class ChooseTalentCom extends Component {
                 width: wp(55)
             }]}>
             <TouchableOpacity style={{
-        borderRadius: HelpingVacancies ? 20 : 0,backgroundColor: HelpingVacancies ? "green" : 0,paddingHorizontal:scale(10),}} 
+        borderRadius: HelpingVacancies ? 20 : 0,backgroundColor: HelpingVacancies ? "#fff" : 0,paddingHorizontal:scale(10),}} 
     onPress={ () => this.setState({
                                         HelpingVacancies: !this.state.HelpingVacancies
                             },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
-        <Text style={[styles.Employment, {
-                fontSize: scale(20)
-            }]}>Helping Vacancies</Text>
+        <Texting style={[styles.Employment, {
+                fontSize: scale(20),
+                color:HelpingVacancies ? themeColor : themeWhite
+            }]} text='Helping_Vacancies'/>
     </TouchableOpacity>
             </View>
                                 <View style={[styles.PersonalInfoEndEmp, {
@@ -238,11 +229,11 @@ class ChooseTalentCom extends Component {
                                 </View>
                                 
             </View>
-            <BackNext onBack={this.back} onNext={this.next} />
             </View>
+            <BackNext onBack={this.back} onNext={this.next} />
         </ImageBackground></SafeAreaView>
         )
     }
 };
 
-export default withNavigationFocus(ChooseTalentCom);
+export default withNavigationFocus(ChooseTalentCom); 

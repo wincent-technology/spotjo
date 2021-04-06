@@ -56,8 +56,9 @@ import http from '../api'
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-community/async-storage';
 import BackNext from '../Component/BackNext'
-
+import Texting from '../Constant/Text'
 import Video from 'react-native-video';
+const Items = global.language == 'english' ? true : false
 class VideoResume extends Component {
     constructor(props) {
         super(props);
@@ -229,7 +230,7 @@ class VideoResume extends Component {
            {
             play('videocam', scale(80), '#fff')
             }
-       <CustomButton title = {'Upload Company Video'}
+       <CustomButton title = {Items ? 'Upload Company Video' : 'Upload Company Video' }
             onPress = {this.OpenImage}
             containerStyle = {{
                 width: wp('80%'),
@@ -248,7 +249,7 @@ class VideoResume extends Component {
                 fontSize: scale(17)
             }}
             />
-             <CustomButton title = {'Record Company Video'}
+             <CustomButton title = {Items ? 'Record Company Video' : 'Record Company Video'}
             onPress = {()=> this.Record()}
             containerStyle = {{
                 width: wp('80%'),

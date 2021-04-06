@@ -42,7 +42,7 @@ import {
 } from '../Component/responsive-ratio';
 import {
   scale,
-  snack
+  snack,NoData
 } from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
@@ -50,6 +50,7 @@ import {
   NavigationHeader
 } from '../Component/ViewManager.js';
 import ItemMV from './ItemMV';
+import List from '../Component/List'
 import DeviceInfo from 'react-native-device-info';
 import http from '../api';
 
@@ -374,53 +375,21 @@ class PostedJobList extends PureComponent {
           </TouchableWithoutFeedback>
         </View>
         {this.state.dataitem != '' ? (
-          <FlatList
-            style={{
-              marginTop: 4,
+          <List style={{marginTop: 4,
               marginBottom: 40,
-              backgroundColor: 'transparent',
-            }}
-            data={this.state.dataitem}
-            showsHorizontalScrollIndicator={false}
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => (
-              <ItemMV
+              backgroundColor: 'transparent',}} data={this.state.dataitem} renderItem={({item, index}) => (
+                <ItemMV
                 item={item}
                 index={index}
                 push={this.push}
                 Video={this.Video}
-                // getAudioTimeString={this.getAudioTimeString}
               />
-            )}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => ({
-              length: hp('28%'),
-              offset: hp('28%') * index,
-              index,
-            })}
-            keyExtractor={(item, index) => index + ''}
-          />
+              )} />
         ) : (
-          <View
-            style={{
-              justifyContent: 'center',
+          <NoData style={{justifyContent: 'center',
               alignItems: 'center',
               height: hp(50),
-              width: wp(100),
-            }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: FontBold,
-                color: themeColor,
-                fontSize: scale(18),
-                width: wp(60),
-              }}>
-              No Data found 😞
-            </Text>
-          </View>
+              width: wp(100)}} />
         )}
       </View>
     );

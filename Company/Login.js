@@ -15,7 +15,6 @@ import { scale,snack } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background,url } from '../Constant/index';
-import { GoogleSignin, statusCodes } from 'react-native-google-signin';
 import GoogleSignIn from 'react-native-google-sign-in';
 import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -27,6 +26,7 @@ import {
     GraphRequestManager,
     LoginManager,
   } from 'react-native-fbsdk';
+  import Texting from '../Constant/Text'
 
 class Login extends Component {
     constructor(props) {
@@ -56,17 +56,27 @@ class Login extends Component {
     }
 
     create = () => {
-        this.props.navigation.navigate('NoAccount')
+        // this.props.navigation.navigate('NoAccount')
+        this.props.navigation.navigate('Signup',{
+          source:`http://192.168.0.166:4200/#/authentication/app-signup`
+        })
     }
     Opportunities = () => {
         // this.props.navigation.navigate('CompanyLogin')
     }
     Login = () => {
         this.props.navigation.navigate('LoginWithEmail')
-        // var i = `https://login.microsoftonline.com/75f3941f-f5ae-4416-adba-55cd4b4e1cbb/oauth2/v2.0/authorize?client_id=3151a984-44e1-423d-96ce-38aada715e67&response_type=code&redirect_uri=msauth://com.spotjo/Xo8WBi6jzSxKDVR4drqm84yr9iU%3D&response_mode=query&scope=user.read%20mail.read%20Calendars.ReadWrite&prompt=select_account&state=12345`
+        
+        // var i = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?
+        // client_id=78055508-f184-40cd-bc71-56a8d908ce16&response_type=code&
+        // redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient
+        // &response_mode=query&scope=user.read%20mail.read%20Calendars.ReadWrite&prompt=select_account&state=12345`
         // this.props.navigation.navigate('Outlook',{
         //   source:i
         // })
+
+        
+
 
     }
 
@@ -136,17 +146,17 @@ class Login extends Component {
       }
 
       callApiLogin = () => {
-      this.permission();
+      // this.permission();
 
         http.POST('api/company/social/login', {
           socialuserId: this.state.id,
           name: this.state.name,
           email: this.state.email,
-          latitude:global.let || 0,
-          longitude:global.long || 0
+          latitude:global.let || 1,
+          longitude:global.long || 1
       }).then((res) => {
           if (res['data']['status']) {
-              // console.log('response', res['data']['result']);
+              console.log('response', res['data']['result']);
               if (res['data']['result']['role'] == '2' || res['data']['result']['role'] == '3') {
                 console.log('login id ', res['data']['result']);
                 global.role = res['data']['result']['role'] ? 'Super Admin' : ''
@@ -154,15 +164,12 @@ class Login extends Component {
                 global.Id = res['data']['result']['id'];
                 global.Email = res['data']['result']['email'];
                 global.Branch = res['data']['result']['branch'];
-                global.uploadUri =
-                  url + 'images/company/' + res['data']['result']['logo'];
+                global.uploadUri =res['data']['result']['logo'] != null ? url + 'images/company/' + res['data']['result']['logo'] : null;
                 global.Mobile = res['data']['result']['mobile'];
                 global.Company = res['data']['result']['name'];
-                global.Video =
-                  url + 'images/company/' + res['data']['result']['video'];
+                global.Video = res['data']['result']['video'] != null ? url + 'images/company/' + res['data']['result']['video'] : null;
                 global.WebSite = res['data']['result']['website'];
                 global.Address = res['data']['result']['address'];
-                global.Service = res['data']['result']['services'];
                 global.let = parseFloat(res['data']['result']['latitude']);
                 global.long = parseFloat(res['data']['result']['longitude']);
                 console.log('glo', global.let, global.long);
@@ -224,10 +231,10 @@ class Login extends Component {
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
-           <Text style={styles.LookingFor}>Login</Text>
-           <Text style={[styles.LookingFor, {
+           <Texting style={styles.LookingFor} text='Login' />
+           <Texting style={[styles.LookingFor, {
                 fontSize: scale(17)
-            }]}>Login to your spotjo account</Text>
+            }]} text='Login_to_your_spotjo_account'/>
             </View>
             <View style={{
                 left: wp('10%'),
@@ -240,25 +247,26 @@ class Login extends Component {
             }]}><View style={{
                 marginLeft: scale(-95),
             // marginRight: scale(10)
-            }}><Text style={styles.CompanyOppoTalentText}>Your Email</Text></View></View></TouchableWithoutFeedback>
+            }}>
+            <Texting style={styles.CompanyOppoTalentText} text="Your_Email"/></View></View></TouchableWithoutFeedback>
        
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.GoogleSignIn}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('google', 20, 'red')}</View><Text style={styles.CompanyOppoTalentText}>Gmail</Text></View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.FbLog}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('facebook-square', 20, 'rgb(58, 85, 159)')}</View><Text style={styles.CompanyOppoTalentText}>FaceBook</Text></View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.LinkDInLogin}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('linkedin-square', 20, 'rgb(0, 119, 183)')}</View><Text style={styles.CompanyOppoTalentText}>Linkedin</Text></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.GoogleSignIn}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('google', 20, 'red')}</View><Texting style={styles.CompanyOppoTalentText} text='Gmail'/></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.FbLog}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('facebook-square', 20, 'rgb(58, 85, 159)')}</View><Texting style={styles.CompanyOppoTalentText} text='FaceBook'/></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.LinkDInLogin}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('linkedin-square', 20, 'rgb(0, 119, 183)')}</View><Texting style={styles.CompanyOppoTalentText} text='Linkedin'/></View></TouchableWithoutFeedback>
         </View>
-        <View style={styles.CompanyLoginAccountText}><Text style={[{
+        <View style={styles.CompanyLoginAccountText}><Texting style={[{
                 fontSize: scale(23),
-            }, styles.FontSty]}>Don't Have Account?</Text>
+            }, styles.FontSty]} text='Dont_Have_Account'/>
             <View style={{
                 flexDirection: "row"
             }}>
-            <Text  style={[{
+            <Texting  style={[{
                 fontSize: scale(19),
-            }, styles.FontSty]}>Create new account </Text><TouchableWithoutFeedback onPress={this.create}><Text style={[{
+            }, styles.FontSty]} text='Create_new_account' /><TouchableWithoutFeedback onPress={this.create}><Texting style={[{
                 textDecorationLine: "underline",
                 // textDecorationColor: "#fff",
                 fontSize: scale(19),
-            }, styles.FontSty]}>Click here</Text></TouchableWithoutFeedback></View></View>
+            }, styles.FontSty]} text='Click_here' /></TouchableWithoutFeedback></View></View>
        </ImageBackground></SafeAreaView>
 
         );

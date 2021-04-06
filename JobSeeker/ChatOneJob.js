@@ -34,8 +34,8 @@ if (!window.location) {
 
 
 // This must be below your `window.navigator` hack above
-// const socket = io('http://178.128.118.157:8091');
- const socket = io('http://192.168.0.169:8091');
+const socket = io('http://178.128.118.157:8091');
+//  const socket = io('http://192.168.0.169:8091');
 
 
 

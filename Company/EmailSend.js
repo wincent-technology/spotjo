@@ -17,7 +17,7 @@ import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background } from '../Constant/index'
 import http from '../api'
-
+import Texting from '../Constant/Text'
 class EmailSend extends Component {
     constructor(props) {
         super(props);
@@ -80,11 +80,11 @@ class EmailSend extends Component {
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
-           <Text style={[styles.LookingFor, {
+           <Texting style={[styles.LookingFor, {
                 textAlign: "center",
                 width: wp('80%'),
                 fontSize: scale(17)
-            }]}>We will send you a link reset your password to this email address</Text>
+            }]} tet='forget_Pass_Detail'/>
             </View>
             <View style={{
                 // left: Dimensions.get('window').width / 7,
@@ -105,13 +105,9 @@ class EmailSend extends Component {
             }}
             containerStyle={{
                 elevation: 7,
-                // alignSelf: "center",
                 width: wp(100)
             }}
             inputStyle={{
-                // width: wp(100),
-                // alignSelf: "center",
-                // alignItems: "center",
                 textAlign: "center"
             }}
             />
@@ -121,9 +117,9 @@ class EmailSend extends Component {
                 position: "absolute"
             }}><TouchableWithoutFeedback style={styles.Size} onPress={this.Reset}><View  style={[styles.Size, {
                 alignItems: 'flex-end'
-            }]}><Text style={[{
+            }]}><Texting style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Send</Text></View></TouchableWithoutFeedback></View>
+            }, styles.FontSty]} text='Send'/></View></TouchableWithoutFeedback></View>
         </View>
        </ImageBackground></SafeAreaView>
 

@@ -86,10 +86,26 @@ class JobSeekerlist extends PureComponent {
     // const {params} = this.props.navigation.state;
     // const otherParam = params ? params.otherParam : null;
     // console.log('other item', otherParam);
+    let userdata  = global.all;
+    userdata =global.all.map(item => {
+      return {
+        ...item,
+        heart:false
+      }
+    })
+    global.all = userdata
     this.setState({
       userdata: global.all,
     });
   };
+
+  heart = (index) => {
+    let d = this.state.userdata
+    d[index].heart = true
+    this.setState({userdata:d});
+    
+  }
+
   push = (item, index) => {
     console.log('heelo', item, index);
 
@@ -222,6 +238,7 @@ class JobSeekerlist extends PureComponent {
                 item={item}
                 index={index}
                 push={this.push}
+                heart={this.heart}
                 Video={this.Video}
               />
             )}

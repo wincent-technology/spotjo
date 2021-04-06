@@ -238,7 +238,8 @@ module.exports = {
   },
   FilterMainView: {
     width: wp('96%'),
-    height: hp('100%') - scale(100),
+    height: hp('100%') - scale(7),
+    // marginBottom:scale(50),
     // flexGrow:1,
     // backgroundColor: themeWhite,
     marginHorizontal: wp('2%'),
@@ -249,7 +250,7 @@ module.exports = {
   },
   FilterScroll: {
     alignSelf: 'stretch',
-    marginBottom: scale(150),
+    
     // marginTop: scale(5),
   },
   FilterDropDown: {
@@ -263,18 +264,21 @@ module.exports = {
     borderRadius: scale(5),
     // borderBottomWidth: scale(2),
     overflow: 'hidden',
+    // height:100
+    // height:"auto"
     // elevation: scale(4)
   },
   FilterDropDownInnerView: {
-    height: scale(60),
+    height: hp(8),
     // width: scale(25),
     alignItems: 'center',
     marginLeft: scale(10),
     flexDirection: 'row',
-    // flex:1
+    // marginBottom:20
+    flex:1
   },
   DropDownHeader: {
-    fontSize: scale(21),
+    fontSize: hp(3.5),
     fontFamily: FontRegular,
     color: '#000',
     marginLeft: scale(5),
@@ -347,12 +351,12 @@ module.exports = {
     justifyContent: 'space-around',
     flexDirection:"row",
     alignItems: 'center',
-    height: scale(40),
+    height: hp(6),
   },
   SaveFilterButtonView: {
     width: wp('35%'),
     backgroundColor: themeColor,
-    borderRadius: scale(20),
+    borderRadius: hp(5),
   },
   ItemMVMainView: {
     flex: 1,
@@ -458,15 +462,17 @@ module.exports = {
     // marginTop: scale(8),
     marginTop: scale(20),
     backgroundColor: 'transparent',
+    justifyContent:'space-between',
+    paddingHorizontal:10,
   },
   ItemMVTimeStampView: {
-    left: scale(20),
-    position: 'absolute',
+    // left: scale(20),
+    // position: 'absolute',
   },
   ItemMVRatingView: {
-    right: scale(12),
+    // right: scale(12),
     marginTop: scale(-2),
-    position: 'absolute',
+    // position: 'absolute',
     backgroundColor: 'transparent',
   },
   JoblistMainView: {
@@ -510,6 +516,7 @@ module.exports = {
     height: scale(40),
     alignItems: 'center',
     elevation: 5,
+    justifyContent:'space-between'
   },
   JoblistSecondViewHeadingResult: {
     backgroundColor: themeWhite,
@@ -529,8 +536,8 @@ module.exports = {
   },
   JobListUpperButtonView: {
     right: scale(10),
-    position: 'absolute',
-    justifyContent: 'center',
+    // position: 'absolute',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     // marginHorizontal: scale(5)
   },
@@ -674,15 +681,8 @@ module.exports = {
   NativeViewButton: {
     width: wp(84),
     height: scale(40),
-    // borderRadius: scale(10),
-    // borderLeftWidth: scale(8),
     borderBottomWidth: scale(1.5),
-    // elevation: scale(2),
-    // marginHorizontal: wp(7),
     marginVertical: wp(1),
-    // borderLeftColor: 'rgba(55,192,211,0.4)',
-    // borderRightColor: '#b0b0b0',
-    // borderTopColor: '#b0b0b0',
     borderBottomColor: '#b0b0b0',
     flexDirection: 'row',
     alignItems: 'center',

@@ -146,13 +146,13 @@ class DropDownItem extends Component {
     }
 
     runAnimation = () => {
-        console.log('this.state', this.state)
+        // console.log('this.state', this.state)
         initialValue = this.state.contentVisible ?
             this.state.headerHeight + this.state.contentHeight : this.state.headerHeight;
         finalValue = this.state.contentVisible ?
             this.state.headerHeight : this.state.contentHeight + this.state.headerHeight;
         this.animated.setValue(initialValue);
-        console.log('sfsfsfsfsfintial', initialValue, finalValue)
+        // console.log('sfsfsfsfsfintial', initialValue, finalValue)
         this.setState({
             contentVisible: !this.state.contentVisible,
         });

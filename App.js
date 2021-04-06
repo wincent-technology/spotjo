@@ -78,7 +78,7 @@ global.role;
 global.item;
 global.Job_Location = [];
 global.msgUnreadTotal=0
-
+global.language = 'english'
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -98,6 +98,8 @@ export default class App extends Component {
      * Why? For better performance as they are made on every render.  
      */
     data.changeLanguage(language);
+    global.language = language
+
   }
 
 

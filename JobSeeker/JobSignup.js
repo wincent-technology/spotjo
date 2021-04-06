@@ -34,12 +34,12 @@ class JobSignup extends Component {
           }
         else
         {const granted = await PermissionHelper.Storage.requestLocationPermission();
-            !granted && this.permission();  }
+            console.log(granted)
+            }
       }
 
     onSignup = async () => {
-
-this.permission();
+            this.permission();
         const {email, password} = this.state;
         try {
             if (email.length > 0 && password.length > 0) {
@@ -59,7 +59,6 @@ this.permission();
                 }, err => snack(err['message']))
             } else {
                 snack('Required Email Password')
-
             }
         } catch ( error ) {
             snack(error)

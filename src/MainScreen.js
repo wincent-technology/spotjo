@@ -1,38 +1,21 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React, {
   Component
 } from 'react';
 import {
-  Dimensions,
-  StyleSheet,
-  Platform,
   View,
   SafeAreaView,
-  Text,
   StatusBar,
-  PermissionsAndroid,
   ImageBackground,
   Image,
   TouchableWithoutFeedback,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
-  // import Text from '../Constant/Text'
-
-// import Icon from 'react-native-vector-icons/Ionicons';
 import {
   withNavigationFocus
 } from 'react-navigation';
 import styles from './Style';
 import {
   scale,
-  snack
 } from './Util';
 import {
   play
@@ -41,102 +24,42 @@ import {
   Background,
   themeColor
 } from '../Constant/index';
-import LanguageProvider, { LanguageContext } from '../Constant/LanguageContext';
+import Texting from '../Constant/Text'
 
-import Geolocation from '@react-native-community/geolocation';
-import RNNotchInfo from 'react-native-notch-info';
+
+
 
 class MainScreen extends Component {
-  constructor(props) {
-    super(props);
 
-    // this.state = {};
-  }
-
-  talent = async () => {
-    RNNotchInfo.hasNotch((hasNotch) => console.log('hasnotch', hasNotch))
-    // this.props.navigation.navigate('TalentScreen');
-
-    // try {
-    //   const granted = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    //   );
-    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //     console.log('???', granted);
-    //     Geolocation.getCurrentPosition(
-    //       (info) => {
-    //         console.log('inf', info);
-    //         global.let = info.coords.latitude;
-    //         global.long = info.coords.longitude;
-    //         this.props.navigation.navigate('TalentScreen');
-    //       },
-    //       (err) => {
-    //         snack('Please Enable Location');
-    //       },
-    //     );
-    //   } else {
-    //     snack('Location permission denied');
-    //   }
-    // } catch (err) {
-    //   console.log('>>>>>>>', err);
-    // }
-  };
   Opportunities = async () => {
-    // try {
-    //   const granted = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    //   );
-    //   console.log('???', granted);
-    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //     console.log('???', granted);
+    // let aoa = [['one',1],['two','2']]
 
-    //     Geolocation.getCurrentPosition(
-    //       (info) => {
-    //         console.log('inf', info);
-    //         global.let = info.coords.latitude;
-    //         global.long = info.coords.longitude;
-    // DevSettings.reload()
-            this.props.navigation.navigate('TalentScreen');
-            
-    //       },
-    //       (err) => {
-    //         snack('Please Enable Location');
-    //       },
-    //     );
-    //   } else {
-    //     snack('Location permission denied');
-    //   }
-    // } catch (err) {
-    //   console.log('>>>>>>>', err);
-    // }
+
+    // aoa.filter(item => {
+    //   let b = item.map(i => i.shift())
+    //   console.log('b',b)
+    // })
+
+    // const columnNames = aoa.shift(); // Separate first row with column names
+    // const objs = aoa.map((row) => { // Map the rest of the rows into objects
+    //   const obj = {}; // Create object literal for current row
+    //   row.filter((cell, i) => obj[columnNames[i]] = cell );// Use index from current cell to get column name, add current cell to new object
+    //   return obj;
+    // });
+    // console.log(objs); // Display the array of objects on the console
+
+            // this.props.navigation.navigate('TalentScreen');
+            this.props.navigation.navigate('test');
+
   };
-
   Login = async () => {
-    // try {
-    //   const granted = await PermissionsAndroid.request(
-    //     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    //   );
-    //   console.log('???', granted);
-    //   if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-    //     Geolocation.getCurrentPosition((info) => {
-    //       console.log('inf', info);
-    //       global.let = info.coords.latitude;
-    //       global.long = info.coords.longitude;
-    //     });
         this.props.navigation.navigate('LoginFirst');
-    //   } else {
-    //     snack('Location permission denied');
-    //   }
-    // } catch (err) {
-    //   console.log('>>>>>>>', err);
-    // }
   };
-
   playVideo = () => {
     this.props.navigation.navigate('Youtube');
   };
   create = () => {
-    this.props.navigation.navigate('NoAccount');
+    this.props.navigation.navigate('LoginFirst');
   };
 
   render() {
@@ -148,17 +71,8 @@ class MainScreen extends Component {
           resizeMode={'stretch'}>
           <StatusBar hidden={true} />
           <TouchableOpacity style={styles.Homeplay} onPress={this.playVideo}>
-            <Text
-              style={[
-                {
-                  fontSize: 15,
-                },
-                styles.Hometext,
-              ]}>
-              Play Now
-            </Text>
-            <View style={styles.MainScreenPlayLogo}>
-              {play('logo-youtube', scale(20), '#37c0d3')}
+            <View style={{paddingLeft:5}}>
+              {play('videocam', scale(20), '#fff')}
             </View>
           </TouchableOpacity>
           <View
@@ -171,16 +85,14 @@ class MainScreen extends Component {
               },
             ]}>
             <TouchableWithoutFeedback onPress={this.Login}>
-              <Text
+              <Texting
                 style={[
                   {
                     fontSize: scale(20),
                     fontWeight: 'bold',
                   },
                   styles.Hometext,
-                ]}>
-                Login
-              </Text>
+                ]} text='Login'/>
             </TouchableWithoutFeedback>
           </View>
           <View style={styles.HomeLogo}>
@@ -196,35 +108,31 @@ class MainScreen extends Component {
               style={styles.OpportunityView}
               onPress={this.Opportunities}>
               <View style={styles.TalentView}>
-                <Text style={styles.OppoTalentText}>Guest</Text>
+                <Texting style={styles.OppoTalentText} text='Guest'/>
               </View>
             </TouchableWithoutFeedback>
           </View>
           <View style={styles.CompanyLoginAccountText}>
-            <Text
+            <Texting
               style={[
                 {
                   fontSize: scale(23),
                 },
                 styles.FontSty,
-              ]}>
-              Don't Have Account?
-            </Text>
+              ]} text='Dont_Have_Account'/>
             <View
               style={{
                 flexDirection: 'row',
               }}>
-              <Text
+              <Texting
                 style={[
                   {
                     fontSize: scale(19),
                   },
                   styles.FontSty,
-                ]}>
-                Create new account{' '}
-              </Text>
+                ]} text='Create_new_account'/>
               <TouchableWithoutFeedback onPress={this.create}>
-                <Text
+                <Texting
                   style={[
                     {
                       textDecorationLine: 'underline',
@@ -232,32 +140,13 @@ class MainScreen extends Component {
                       fontSize: scale(19),
                     },
                     styles.FontSty,
-                  ]}>
-                  Click here
-                </Text>
+                  ]} text='Click_here'/>
               </TouchableWithoutFeedback>
             </View>
           </View>
-         
         </ImageBackground>
       </SafeAreaView>
     );
   }
 }
-
 export default withNavigationFocus(MainScreen);
-
-
-
-// <View style={styles.Homelooking}>
-//             <Text style={styles.LookingFor}>Looking for</Text>
-//           </View>
-{/* <View style={styles.HomeTel}>
-<TouchableWithoutFeedback
-  style={styles.OpportunityView}
-  onPress={this.talent}>
-  <View style={styles.TalentView}>
-    <Text style={styles.OppoTalentText}>Talent</Text>
-  </View>
-</TouchableWithoutFeedback>
-</View> */}

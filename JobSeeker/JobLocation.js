@@ -55,6 +55,12 @@ import MapView, {
   AnimatedRegion,
 } from 'react-native-maps';
 
+
+const ASPECT_RATIO = wp(96) / (hp('100%') - (100 + wp(14) + 50));
+const LATITUDE_DELTA = Platform.OS === 'ios' ? 1.5 : 0.5;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+
+
 class JobLocation extends Component {
     constructor(props) {
         super(props);
@@ -80,7 +86,7 @@ class JobLocation extends Component {
     }
 
     checking = () => {
-        console.log('sfsfsfsfsffffffffffffffffffffffffffffffff>>>>>>>>>>>>>>>>>....');
+        // console.log('sfsfsfsfsffffffffffffffffffffffffffffffff>>>>>>>>>>>>>>>>>....');
         const {
             params
         } = this.props.navigation.state;
@@ -131,15 +137,22 @@ class JobLocation extends Component {
               }}
               provider={PROVIDER_GOOGLE}
               onMapReady={() => {
-                //alert('dfdf');
                 this.map.animateToRegion(
                   {
-                    latitude: global.item.latitude,
-                    longitude: global.item.longitude,
+                    latitude:+global.item.latitude,
+                    longitude: +global.item.longitude,
+                    latitudeDelta : LATITUDE_DELTA,
+                    longitudeDelta:LONGITUDE_DELTA
                   },
                   100,
                 );
               }}
+              initialRegion={{
+                    latitude: +global.item.latitude,
+                    longitude: +global.item.longitude,
+                    latitudeDelta : LATITUDE_DELTA,
+                    longitudeDelta:LONGITUDE_DELTA
+                  }}
               showsUserLocation={true}>
             </MapView.Animated>
             </View>

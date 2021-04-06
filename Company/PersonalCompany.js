@@ -45,6 +45,7 @@ import {
     Background
 } from '../Constant/index'
 import ImagePicker from 'react-native-image-picker';
+import Texting from '../Constant/Text'
 
 class PersonalCompany extends Component {
     constructor(props) {
@@ -118,6 +119,7 @@ class PersonalCompany extends Component {
             Cell: global.Mobile,
             WebSite: global.WebSite
         })
+
     }
     next = () => {
         this.props.navigation.navigate('VideoResume');
@@ -164,11 +166,12 @@ class PersonalCompany extends Component {
                 height: hp(100) < 600 ? hp(33) : 'auto'
             }}>
                             <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoStart}>
+                                <Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
-            }]}>Company</Text></View>
+            }]} text='Company'/></View>
                                 <View style={styles.PersonalInfoEnd}>
                                 <CustomInput textAlign={'right'} value = {this.state.CompanyName} textChange = {(text) => this.setState({
                 CompanyName: text
@@ -182,11 +185,12 @@ class PersonalCompany extends Component {
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoStart}>
+                                <Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
-            }]}>Branch</Text></View>
+            }]} text='Branch'/></View>
                                 <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {this.state.Branch} textChange = {(text) => this.setState({
                 Branch: text
             }, () => {
@@ -201,11 +205,12 @@ class PersonalCompany extends Component {
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoStart}>
+                                <Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
-            }]}>Email</Text></View>
+            }]} text='Email'/></View>
                                 <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {this.state.Email} textChange = {(text) => this.setState({
                 Email: text
             }, () => {
@@ -220,11 +225,11 @@ class PersonalCompany extends Component {
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoStart}><Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
-            }]}>Mobile Number</Text></View>
+            }]} text='Mobile_Number'/></View>
                                 <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {this.state.Cell} textChange = {(text) => this.setState({
                 Cell: text
             }, () => {
@@ -238,11 +243,11 @@ class PersonalCompany extends Component {
             keyboardType={'phone-pad'}
             /></View></View>
             <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoStart}><Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
 
-            }]}>WebSite</Text></View>
+            }]} text='WebSite'/></View>
                                 <View style={styles.PersonalInfoEnd}>
                                 <CustomInput textAlign={'right'} value = {this.state.WebSite} 
                                 textChange = {(text) => this.setState({
@@ -259,10 +264,10 @@ class PersonalCompany extends Component {
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
-                                <View style={styles.PersonalInfoStart}><Text style={[styles.PersonalInfoText, {
+                                <View style={styles.PersonalInfoStart}><Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
                 fontSize: scale(18),
-            }]}>Address</Text></View>
+            }]} text='Address'/></View>
                                 <View style={styles.PersonalInfoEnd}><TextInput
             multiline={true}
             value={this.state.Address}

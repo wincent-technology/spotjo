@@ -20,7 +20,12 @@ const SuggestionView = ({onPress, ...props}) =>
                         onPress={onPress}>
                         <View
                           key={props.index}
-                          style={styles.SuggestionView}>
+                          style={{
+                            alignItems: 'flex-start',borderWidth:1,borderColor:themeColor,
+                borderRadius:10,paddingHorizontal:10,height:'auto',
+                width: 'auto',backgroundColor:props.backGroundC ? props.backGroundC : 'white',borderColor:"#fff",flexDirection:"row",
+                justifyContent:"center",alignItems:"center",margin:2
+                          }}>
                           <View
                             style={{
                               justifyContent: 'center',
@@ -28,16 +33,19 @@ const SuggestionView = ({onPress, ...props}) =>
                               paddingLeft: scale(10),
                             }}>
                             <Text
-                              style={styles.SuggestionViewText}>
+                              style={{
+                                fontWeight: 'bold',
+                  fontSize: scale(18),
+                  color:props.textColor ? props.textColor : themeColor,
+                              }}>
                               {props.elements}
                             </Text>
                           </View>
                           <View
                             style={{
-                              top: scale(-7),
-                              left: scale(5),
+                              left: scale(5),justifyContent:"center",alignItems:"center"
                             }}>
-                            {library('highlight-off', scale(14), themeColor)}
+                            {library('highlight-off', scale(14), props.textColor ? props.textColor : themeColor)}
                           </View>
                         </View>
                       </TouchableWithoutFeedback>

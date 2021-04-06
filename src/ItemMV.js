@@ -43,51 +43,15 @@ const {
   height,
   width
 } = Dimensions.get('window');
+import TimeAgo from '../Component/TimeAgo'
 import LinearGradient from 'react-native-linear-gradient';
+import Texting from '../Constant/Text'
 
-class ItemMV extends PureComponent {
-  // title, href, total_time, total_listen, image
-  constructor(props) {
-    super(props);
-    console.log('this.props.item.skills', this.props.item.skills);
-  }
 
-  dateDiffInDays(dt) {
-    const a = Date.parse(new Date(Date.now()));
-    const b = Date.parse(new Date(dt));
-    // global.CompanyExp = Math.floor(b - a)
-    return Math.floor(a - b);
-  }
-
-  timeConversion = (millisec) => {
-    let today = new Date(millisec);
-    var mil = this.dateDiffInDays(today);
-    let day, hour, minute, month, year, seconds;
-    seconds = Math.floor(mil / 1000);
-    minute = Math.floor(seconds / 60);
-    hour = Math.floor(minute / 60);
-    day = Math.floor(hour / 24);
-    month = Math.floor(day / 30);
-    year = Math.floor(month / 12);
-    if (seconds < 60) {
-      return seconds + ' Sec' + ' ago';
-    } else if (minute < 60) {
-      return minute + ' Min' + ' ago';
-    } else if (hour < 24) {
-      return hour + ' Hrs' + ' ago';
-    } else if (day < 30) {
-      return day + ' Days' + ' ago';
-    } else if (month < 12) {
-      return month + ' months' + ' ago';
-    } else {
-      return year + ' years' + ' ago';
-    }
-  };
-
-  render() {
+  const ItemMV = (props) => {
     return (
       <TouchableWithoutFeedback
-        onPress={() => this.props.push(this.props.item, this.props.index)}>
+        onPress={() => props.push(props.item, props.index)}>
         <LinearGradient
           colors={['#fff', '#f3f2f2']}
           style={[styles.ItemMVMainView,{elevation:4}]}>
@@ -97,7 +61,7 @@ class ItemMV extends PureComponent {
                 width: wp(80),
                 justifyContent: 'center',
               }}>
-              <Text style={styles.ItemMVHeader}>{this.props.item.title}</Text>
+              <Text style={styles.ItemMVHeader}>{props.item.title}</Text>
             </View>
             <View
               style={{
@@ -106,7 +70,7 @@ class ItemMV extends PureComponent {
                 justifyContent: 'center',
               }}>
               <TouchableWithoutFeedback
-                onPress={() => this.props.Video(this.props.item)}>
+                onPress={() => props.Video(props.item)}>
                 <View style={styles.ItemMVPlayNowView}>
                   <View
                     style={{
@@ -124,10 +88,10 @@ class ItemMV extends PureComponent {
                 justifyContent: 'center',
               }}>
               <TouchableWithoutFeedback
-                onPress={() => this.props.Video(this.props.item)}>
+                onPress={() => props.heart(props.index)}>
                 <View style={styles.ItemMVPlayNowView}>
                   <View style={styles.ItemMVPlayIcon}>
-                    {play('heart-outline', scale(20), themeColor)}
+                    {play(props.item.heart ? 'heart' : 'heart-outline', scale(20), props.item.heart ? themeColor : '#333')}
                   </View>
                 </View>
               </TouchableWithoutFeedback>
@@ -136,14 +100,14 @@ class ItemMV extends PureComponent {
           <View style={styles.ItemMVImage}>
             <Image
               source={
-                this.props.item.logo
+                props.item.logo
                   ? {
-                      uri: url + 'images/company/' + this.props.item.logo,
+                      uri: url + 'images/company/' + props.item.logo,
                     }
                   : Companyavtar
               }
               style={styles.imageStyle}
-              resizeMode={this.props.item.logo ? 'cover' : 'contain'}
+              resizeMode={props.item.logo ? 'cover' : 'contain'}
             />
           </View>
           <View style={styles.ItemMVDetail}>
@@ -154,7 +118,7 @@ class ItemMV extends PureComponent {
                   fontFamily: 'Roboto-Bold',
                   fontWeight: 'bold',
                 }}>
-                {this.props.item.name}
+                {props.item.name}
               </Text>
             </View>
 
@@ -173,15 +137,15 @@ class ItemMV extends PureComponent {
                 />
               </View>
               <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-                {this.props.item.isEmployed == 1 ? (
-                  <Text style={styles.ItemDetailLabel}>Employed</Text>
+                {props.item.isEmployed == 1 ? (
+                  <Texting style={styles.ItemDetailLabel} text='Employed'/>
                 ) : (
                   ''
                 )}
               </Text>
               <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-                {this.props.item.isFreelancer == 1 ? (
-                  <Text style={styles.ItemDetailLabel}>/ Freelancer</Text>
+                {props.item.isFreelancer == 1 ? (
+                  <Texting style={styles.ItemDetailLabel} text='Freelancer'/>
                 ) : (
                   ''
                 )}
@@ -202,7 +166,7 @@ class ItemMV extends PureComponent {
                 />
               </View>
               <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-                {this.props.item.city != null && this.props.item.city.map((item, index) => {
+                {props.item.city != null && props.item.city.map((item, index) => {
                   return (
                     <Text
                       key={index}
@@ -239,11 +203,10 @@ class ItemMV extends PureComponent {
               <Text
                 style={{
                   marginLeft: scale(6),
-
-                  width: this.props.item.skills && this.props.item.skills.length > 2 ? wp(38) : 'auto',
+                  width: wp(35),
                 }}
                 numberOfLines={1}>
-                {this.props.item.skills && this.props.item.skills.map((item, index) => {
+                {props.item.skills && props.item.skills.map((item, index) => {
                   return (
                     <Text
                       key={index}
@@ -252,12 +215,12 @@ class ItemMV extends PureComponent {
                         fontSize: scale(12),
                         // marginTop: scale(-2)
                       }}>
-                      {item.name} /{' '}
+                      {global.language == 'english' ? item.english : item.german} /{' '}
                     </Text>
                   );
                 })}
               </Text>
-              <Text style={styles.ItemMVDetailColor}> 100%</Text>
+              <Text style={styles.ItemMVDetailColor}>{props.item.skills && props.item.skills.length ==1 && <Text style={{color:'rgba(0,0,0,0.6)'}}>/</Text>} 100%</Text>
             </View>
             <View style={styles.ItemMVDetailIcon}>
               <View
@@ -275,20 +238,20 @@ class ItemMV extends PureComponent {
               </View>
 
               <Text style={styles.ItemDetailLabel}>
-                {this.props.item.minExp}-{this.props.item.maxExp} Years /{' '}
+                {props.item.minExp}-{props.item.maxExp}
+              </Text>
+              <Texting style={styles.ItemDetailLabel} text='Years'/>
+              <Text style={styles.ItemDetailLabel}>
+                {' '}/{' '}
               </Text>
               <Text style={styles.ItemMVDetailColor}> 100%</Text>
             </View>
           </View>
           <View style={styles.ItemMVTimeStamp}>
             <View style={styles.ItemMVTimeStampView}>
-              <Text
-                style={{
-                  fontFamily: 'Roboto-Regular',
-                  fontSize: scale(12),
-                }}>
-                {this.timeConversion(this.props.item.createdAt)}
-              </Text>
+                <TimeAgo   style={{
+                  fontFamily: 'Roboto-Regular',}}
+                   time={props.item.createdAt} />
             </View>
             <View style={styles.ItemMVRatingView}>
               <StarRating
@@ -300,7 +263,7 @@ class ItemMV extends PureComponent {
                 maxStars={5}
                 starSize={scale(20)}
                 rating={5}
-                // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+                // selectedStar={(rating) => props.onStarRatingPress(rating)}
                 fullStarColor={'orange'}
               />
             </View>
@@ -308,7 +271,6 @@ class ItemMV extends PureComponent {
         </LinearGradient>
       </TouchableWithoutFeedback>
     );
-  }
 }
 
 export default ItemMV;

@@ -9,13 +9,8 @@ import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import PermissionHelper from '../Component/PermissionHelper'
-import {
-    left,
-    library,
-    icon,
-    play,
-    leftVid
-  } from '../src/IconManager';
+import Texting from '../Constant/Text'
+
 
 class LoginWithEmail extends Component {
     constructor(props) {
@@ -75,7 +70,15 @@ class LoginWithEmail extends Component {
                         global.let = parseFloat(res['data']['result']['latitude']) || global.let
                         global.long = parseFloat(res['data']['result']['longitude']) || global.long
                         AsyncStorage.setItem('UserLoggedInData', JSON.stringify(res['data']['result']));
-
+                        for (let w in res['data']['result']['workexp']) {
+                            console.log('klkjlj',res['data']['result']['workexp'][w])
+                            // if (JSON.stringify(im[i]) != undefined)
+                            // {From = im[i].From.split(' ');
+                            // To = im[i].To.split(' ');
+                            // ary.push(parseInt(To[1]));
+                            // tot = To[1] - From[1];
+                            // m = m + tot;}
+                          }
                         this.props.navigation.navigate('TabScreenJob')
                     } else {
                         snack(res['data']['message'])
@@ -118,10 +121,14 @@ class LoginWithEmail extends Component {
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
-           <Text style={styles.LookingFor}>Login</Text>
-           <Text style={[styles.LookingFor, {
-                fontSize: scale(17)
-            }]}>Login with your email address</Text>
+            <Texting style={styles.LookingFor} text='Login'/>
+            <Texting
+              style={[
+                styles.LookingFor,
+                {
+                  fontSize: scale(17),
+                },
+              ]} text='Login_with_your_email_address'/>
             </View>
             <View style={{
                 // left: Dimensions.get('window').width / 7,
@@ -135,33 +142,46 @@ class LoginWithEmail extends Component {
        <CustomInput placeholder = {'Password'} passs={true} pass={pass} onPress={()=> this.setState({pass:!this.state.pass})} textChange = {(text) => this.setState({
                 password: text
             })}/>
-        <TouchableWithoutFeedback onPress={this.forgat}><Text style={{
-                marginTop: scale(-8),
-                marginLeft: scale(115),
-                marginBottom: scale(40),
-                color: '#fff'
-            }}>Forget Password?</Text></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={this.forgat}><Texting
+                style={{
+                  marginTop: scale(-8),
+                  marginLeft: scale(115),
+                  marginBottom: scale(40),
+                  color: '#fff',
+                }} text='Forget_Password'/></TouchableWithoutFeedback>
             <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onLogin}><View  style={[styles.CompanyLoginWithEmailView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
             }]}><View style={{
                 // marginLeft: scale(-45),
                 // marginRight: scale(10)
-            }}><Text style={styles.CompanyOppoTalentText}>Login</Text></View></View></TouchableWithoutFeedback>
+            }}><Texting style={styles.CompanyOppoTalentText} text='Login'/></View></View></TouchableWithoutFeedback>
         </View>
-        <View style={styles.CompanyLoginAccountText}><Text style={[{
-                fontSize: scale(23),
-            }, styles.FontSty]}>Don't Have Account?</Text>
+        <View style={styles.CompanyLoginAccountText}><Texting
+              style={[
+                {
+                  fontSize: scale(23),
+                },
+                styles.FontSty,
+              ]} text='Dont_Have_Account'/>
              <View style={{
                 flexDirection: "row"
             }}>
-            <Text  style={[{
-                fontSize: scale(19),
-            }, styles.FontSty]}>Create new account </Text><TouchableWithoutFeedback onPress={this.create}><Text style={[{
-                textDecorationLine: "underline",
-                // textDecorationColor: "#fff",
-                fontSize: scale(19),
-            }, styles.FontSty]}>Click here</Text></TouchableWithoutFeedback></View></View>
+            <Texting
+                style={[
+                  {
+                    fontSize: scale(19),
+                  },
+                  styles.FontSty,
+                ]} text='Create_new_account'/><TouchableWithoutFeedback onPress={this.create}><Texting
+                  style={[
+                    {
+                      textDecorationLine: 'underline',
+                      // textDecorationColor: "#fff",
+                      fontSize: scale(19),
+                    },
+                    styles.FontSty,
+                  ]} text='Click_here'/></TouchableWithoutFeedback></View></View>
        </ImageBackground></SafeAreaView>
 
         );

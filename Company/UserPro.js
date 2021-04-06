@@ -58,6 +58,7 @@ import {
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
 import {
+  NoData,
   scale,
   snack
 } from '../src/Util';
@@ -73,10 +74,20 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Share from 'react-native-share';
+import TopHeader from '../Component/TopHeader';
 const {
   height,
   width
 } = Dimensions.get('window');
+import Texting from '../Constant/Text'
+const wrapper = {
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+}
+const LanguageCheck = global.language == 'english' ? true : false
+
+
 class UserPro extends Component {
   constructor(props) {
     super(props);
@@ -379,9 +390,8 @@ class UserPro extends Component {
       console.log(err);
     }
   };
-  renderCard = (data, index) => {
-    this.setState({userHeading:data.heading})
-    // console.log('dat >>>>>>>>',hp(100),StatusBar.currentHeight,hp(10),scale(100),height,hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)));
+  renderCard = (data,) => {
+    this.setState({userHeading:data.Role})
     return (
       
         <ImageBackground
@@ -426,8 +436,6 @@ class UserPro extends Component {
             style={{
                 height: wp('29'),
                 width: wp('29'),
-            // alignItems: "stretch",
-            // backgroundColor: "transparent"
             }} resizeMode={'contain'}/></ImageBackground>
             <View style={{
                 flexDirection: "column",
@@ -446,11 +454,11 @@ class UserPro extends Component {
             }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
                 height: scale(65),
                 width: scale(65),
-            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+            }}/><View style={{marginTop:scale(-10)}}><Texting style={{
                 color: themeColor,
                 fontFamily: "Roboto-Regular",
                 fontSize: scale(10)
-            }}>Company Profile</Text></View>
+            }} text='Company_Profile' /></View>
             </View></TouchableWithoutFeedback>
             <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
             <View style={{marginTop:scale(5)}}>
@@ -492,7 +500,7 @@ class UserPro extends Component {
           <View style={styles.CompanyProfileDetail}>
           <ListShow name={data.Company} image={company} />
           <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
-          <ListShow name={data.heading} image={skillCategory} />
+          <ListShow name={data.Role} image={skillCategory} />
           <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -546,77 +554,8 @@ class UserPro extends Component {
             onPress={() => this.Back()}
             text={global.ig && this.state.userHeading}
           />
-          <View style={styles.JoblistSecondViewHeading}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {global.ig && data.length}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <View style={{marginRight: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback onPress={() => this.Back()}>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={Listed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                        marginHorizontal: scale(10),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={detailed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
+          <TopHeader data={global.ig && data.length} Filter={this.Filter} Listed={() => this.Back()}/>
+
           {global.ig ? (
             <View style={styles.CompanyProfileMainImage1}>
               {!this.state.fleg ? (
@@ -663,11 +602,7 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              },
+                              wrapper,
                             },
                           },
                           left: {
@@ -681,11 +616,7 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              },
+                              wrapper,
                             },
                           },
                           right: {
@@ -699,11 +630,7 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              },
+                              wrapper,
                             },
                           },
                           top: {
@@ -717,13 +644,7 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                // marginTop: (hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)))/2,
-                                // marginLeft: -48,
-                              },
+                               wrapper,
                             },
                           },
                         }
@@ -740,13 +661,7 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                // marginTop: (hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)))/2,
-                                // marginLeft: -48,
-                              },
+                               wrapper,
                             },
                           },
                         }
@@ -762,11 +677,7 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              },
+                              wrapper,
                             },
                           },
                           right: {
@@ -780,68 +691,19 @@ class UserPro extends Component {
                                 borderRadius: 5,
                                 textAlign: 'center',
                               },
-                              wrapper: {
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                              },
+                              wrapper,
                             },
                           },
                         }
                   }
                 />
               ) : (
-                <View
-                  style={{
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    marginTop:
-                      (hp('100%') -
-                        (StatusBar.currentHeight + scale(100) + hp(5))) /
-                      2,
-                    marginHorizontal: wp(20),
-                    position: 'absolute',
-                  }}>
-                  <Text
-                    style={{
-                      textAlign: 'center',
-                      fontFamily: FontBold,
-                      color: themeColor,
-                      fontSize: scale(18),
-                      width: wp(60),
-                    }}>
-                    No More Jobs...😞
-                  </Text>
-                  <NavigationEvents onDidFocus={this.checking} />
-                </View>
+                <NoData text={'No_More_JobSeeker'} />
               )}
             </View>
           ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: FontBold,
-                  color: themeWhite,
-                  fontSize: scale(18),
-                  width: wp(60),
-                }}>
-                No Data found 😞
-              </Text>
-            </View>
+            <NoData />
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </SafeAreaView>
     );

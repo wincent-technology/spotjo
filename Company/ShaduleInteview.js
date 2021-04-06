@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SafeAreaView, TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
+import { SafeAreaView,TouchableWithoutFeedback, StatusBar, ImageBackground, Dimensions, Text, Image, View, TextInput } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import { scale,snack } from '../src/Util';
 import CustomInput from '../Component/Input'
@@ -90,33 +90,71 @@ class ShaduleInterview extends Component {
         this.Configure();
         // console.log('res',res);
      const user = await GoogleSignIn.signInPromise();
+     console.log('user',user)
      this.setState({user});
-     let start = this.state.date.slice(0,-1) + '-07:00'
+     let start = this.state.date.slice(0,-1)
      let hours = new Date(this.state.date).getHours();
       let dm = new Date(new Date(this.state.date).setHours(hours - 5)).toISOString();
-     let end = dm && dm.slice(0,-1) + '-07:00'
+     let end = dm && dm.slice(0,-1)
      
-// console.log('end',end,this.state.first_name,this.state.last_name);
+console.log('end',end);
 
      if(this.state.user != ''){
       //  console.log('this',this.state.date.slice(0,-1),end,this.state.user.accessToken)
-
+      const event = {
+        subject: 'interView Scheduled for ' + this.state.first_name +' '+ this.state.last_name,
+        body: {
+          content: 'interView is scheduled for you !'
+        },
+        start: {
+            dateTime: end,
+            timeZone: 'Pacific Standard Time'
+        },
+        end: {
+            dateTime: start,
+            timeZone: 'Pacific Standard Time'
+        },
+        location: {
+            displayName: global.Address
+        },
+        attendees: [
+          {
+            emailAddress: {
+              address: user.email,
+              name: this.state.first_name +' '+ this.state.last_name
+            },
+            type: 'required'
+          }
+        ],
+      };
      axios.post('https://www.googleapis.com/calendar/v3/calendars/primary/events', {
       'summary': 'interView Scheduled for ' + this.state.first_name +' '+ this.state.last_name,
-      'description':this.state.first_name + ' ' + this.state.last_name,
-      'start': {
-        'dateTime': end,
-      },
-      'end': {
-        'dateTime': start,
-      },
+        'description':this.state.first_name + ' ' + this.state.last_name,
+        'start': {
+          'dateTime': end + '-07:00',
+        },
+        'end': {
+          'dateTime': start + '-07:00',
+        },
      },
        {headers: {
            'Authorization': 'Bearer ' + this.state.user.accessToken
        },
       
-           }).then(res => console.log('res>>>>>>>>',res)).catch(e => console.log('eeeeeeeee',JSON.stringify(e)))
+           }).then(res => {console.log('res>>>>>>>>',res)
+            var i = `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?
+        client_id=78055508-f184-40cd-bc71-56a8d908ce16&response_type=code&
+        redirect_uri=https://login.microsoftonline.com/common/oauth2/nativeclient
+        &response_mode=query&scope=user.read%20mail.read%20Calendars.ReadWrite&prompt=select_account&state=12345`
+        this.props.navigation.navigate('Outlook',{
+          source:i,event:event
+        })
+
+          }).catch(e => console.log('eeeeeeeee',JSON.stringify(e)))
          }
+
+
+
 }
 
 

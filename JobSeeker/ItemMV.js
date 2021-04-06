@@ -29,7 +29,7 @@ class ItemMV extends PureComponent {
             <View style={{
                 marginHorizontal: scale(5)
             }}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
-                this.props.remove(this.props.item.heading, this.props.index)
+                this.props.remove(this.props.item, this.props.index)
             }}/></View>
             <View style={{
                 flexDirection: "column",
@@ -40,7 +40,7 @@ class ItemMV extends PureComponent {
                 fontFamily: FontBold,
                 fontSize: scale(18),
                 color: themeColor
-            }} numberOfLines={1}>{this.props.item.heading}</Text>
+            }} numberOfLines={1}>{global.language == 'english' ? this.props.item.Degree.english : this.props.item.Degree.german}</Text>
             <View style={{
                 flexDirection: 'row',
                 justifyContent:"space-between",
@@ -50,7 +50,7 @@ class ItemMV extends PureComponent {
                 fontFamily: FontBold,
                 fontSize: scale(11),
                 color: '#000',
-            }}>{this.props.item.Company} , {this.props.item.From} - {this.props.item.To}</Text>
+            }}>{global.language == 'english' ? this.props.item.University.english : this.props.item.University.german} , {this.props.item.From} - {this.props.item.To}</Text>
             </View>
             <View style={{alignItems:"flex-end",marginTop:5,marginRight:5}}>
             <StarRating
@@ -61,7 +61,7 @@ class ItemMV extends PureComponent {
                 disabled={false}
                 maxStars={5}
                 starSize={scale(15)}
-                rating={this.props.item.Rating}
+                rating={this.props.item.rating}
             starStyle={{marginLeft:2}}
                 // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
                 fullStarColor={'orange'}

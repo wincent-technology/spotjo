@@ -13,7 +13,7 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from './Style';
 import { scale } from './Util';
 import { Background } from '../Constant/index'
-
+import Texting from '../Constant/Text'
 // const {
 //     height,
 //     width
@@ -49,12 +49,12 @@ class LoginFirst extends Component {
         <View style={styles.HomeLogo}><Image source = {require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={styles.imageStyle}/></View>
-        <View style={styles.Homelooking}><Text style={styles.LookingFor}>Looking for</Text></View>
+        <View style={styles.Homelooking}><Texting style={styles.LookingFor} text='Looking_for'/></View>
         <View style={styles.Homebut}>
-        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.Opportunities}><View  style={styles.TalentView}><Text style={styles.OppoTalentText}>Opportunities</Text></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.Opportunities}><View  style={styles.TalentView}><Texting style={styles.OppoTalentText} text='Opportunities'/></View></TouchableWithoutFeedback>
         </View>
         <View style={styles.HomeTel}>
-        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.talent}><View  style={styles.TalentView}><Text style={styles.OppoTalentText}>Talent</Text></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.talent}><View  style={styles.TalentView}><Texting style={styles.OppoTalentText} text='Talent'/></View></TouchableWithoutFeedback>
         </View>
        </ImageBackground></View>
         );

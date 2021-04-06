@@ -50,7 +50,7 @@ import DeviceInfo from 'react-native-device-info';
 import JobListCompany from './JobListCompany';
 import JobMatches from './JobMatches';
 import PostedJobList from './PostedJobList';
-
+import Texting from '../Constant/Text'
 class AdminDashboard extends PureComponent {
   constructor(props) {
     super(props);
@@ -160,7 +160,7 @@ class AdminDashboard extends PureComponent {
                   }}
                   resizeMode={'contain'}
                 />
-                <Text
+                <Texting
                   style={{
                     fontSize: scale(16),
                     fontFamily: 'Roboto-Regular',
@@ -168,9 +168,7 @@ class AdminDashboard extends PureComponent {
                     textAlign: 'center',
                     // width: wp(97) / 3,
                   }}
-                  numberOfLines={1}>
-                  Posted Jobs
-                </Text>
+                  numberOfLines={1} text='Posted_Jobs' />
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.Interviews}>
@@ -192,13 +190,11 @@ class AdminDashboard extends PureComponent {
                   }}
                   resizeMode={'contain'}
                 />
-                <Text
+                <Texting
                   style={{
                     fontSize: scale(18),
                     fontFamily: 'Roboto-Regular',
-                  }}>
-                  Interviews
-                </Text>
+                  }} text='Interviews' />
               </View>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={this.Matches}>
@@ -219,13 +215,11 @@ class AdminDashboard extends PureComponent {
                   }}
                   resizeMode={'contain'}
                 />
-                <Text
+                <Texting
                   style={{
                     fontSize: scale(18),
                     fontFamily: 'Roboto-Regular',
-                  }}>
-                  Matches
-                </Text>
+                  }} text='Matches' />
               </View>
             </TouchableWithoutFeedback>
           </View>

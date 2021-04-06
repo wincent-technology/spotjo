@@ -92,6 +92,10 @@ import ChatOneJob from '../JobSeeker/ChatOneJob'
 import Camera from '../Company/Camera'
 import CameraRecord from '../JobSeeker/CameraRecord'
 import Outlook from '../src/Outlook'
+import Resource from '../Company/Resource'
+import BulkUploadResume from '../Company/BulkUploadResume'
+import Setting from '../Company/Setting'
+import test from '../src/test'
 import {
   createBottomTabNavigator
 } from 'react-navigation-tabs';
@@ -118,10 +122,23 @@ import {
 import {
   scale
 } from '../src/Util';
+import SettingGuest from '../src/SettingsGuest';
+
+
+
+const JobLists = createStackNavigator({
+  JobList:JobList,
+  CompanyProfile: CompanyProfile,
+  Filter: Filter,
+}, {
+  headerMode: 'none',
+  initialRouteName: 'JobList',
+}, );
+
 
 const TabScreen = createBottomTabNavigator({
   Home: {
-    screen: JobList,
+    screen: JobLists,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -140,7 +157,7 @@ const TabScreen = createBottomTabNavigator({
     },
   },
   CompanyProfiles: {
-    screen: CompanyProfiles,
+    screen: LoginFirst,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -151,8 +168,8 @@ const TabScreen = createBottomTabNavigator({
       },
     },
   },
-  Filter: {
-    screen: Filter,
+  FilterGuest: {
+    screen: SettingGuest,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -164,7 +181,7 @@ const TabScreen = createBottomTabNavigator({
     },
   },
   ScreenMap: {
-    screen: Filter,
+    screen: ScreenMap,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -175,12 +192,17 @@ const TabScreen = createBottomTabNavigator({
       },
     },
   },
-  CompanyProfile: {
-    screen: CompanyProfile,
+ 
+  ChatGuest: {
+    screen: LoginFirst,
     navigationOptions: {
-      tabBarButton: () => null,
-      tabBarButtonComponent: () => null,
-      tabBarLabel: () => null,
+      tabBarColor: 'transparent',
+      tabBarIcon: ({
+        focused,state,props
+      }) => {
+        const image = focused ? Active.Chat : InActive.Chat;
+        return <TabBarIcon icon={image} />
+      },
     },
   },
 }, {
@@ -188,7 +210,7 @@ const TabScreen = createBottomTabNavigator({
   swipeEnabled: true,
   animationEnabled: true,
   initialRouteName: 'Home',
-  order: ['Home', 'CompanyProfiles', 'Filter', 'ScreenMap', 'CompanyProfile'],
+  order: ['Home', 'CompanyProfiles','ChatGuest','ScreenMap','FilterGuest',],
   tabBarPosition: 'bottom',
   lazy: false,
   tabBarOptions: {
@@ -389,7 +411,6 @@ const ComAd = createStackNavigator({
   UserPro: UserPro,
   FilterUser: FilterUser,
   // UserScreenMap: UserScreenMap,
-  ShaduleInterView:ShaduleInterView
 }, {
   headerMode: 'none',
   initialRouteName: 'FirstJobList',
@@ -401,7 +422,8 @@ const Admin = createStackNavigator({
   PostedJobUser: PostedJobUser,
   JobListCompany: JobListCompany,
   CreateJob: CreateJob,
-  UserPros:UserPros
+  UserPros:UserPros,
+  ShaduleInterView:ShaduleInterView
 }, {
   headerMode: 'none',
   initialRouteName: 'AdminDashboard',
@@ -409,7 +431,10 @@ const Admin = createStackNavigator({
 
 const CompanyEditProfile = createStackNavigator({
   CompanyEditProfile: CompanyEditProfiles,
-  Admin:Admin
+  Admin:Admin,
+  Resource:Resource,
+  BulkUploadResume:BulkUploadResume,
+  Setting:Setting
 }, {
   headerMode: 'none',
   initialRouteName: 'CompanyEditProfile',
@@ -648,7 +673,8 @@ const AppNavigator = createStackNavigator({
   OtpScreen:OtpScreen,
   Camera:Camera,
   CameraRecord:CameraRecord,
-  Outlook:Outlook
+  Outlook:Outlook,
+  test:test
 }, {
   headerMode: 'none',
   animationEnabled: true,

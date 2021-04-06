@@ -2,10 +2,7 @@ import React, {
   PureComponent
 } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
   StatusBar,
-  FlatList,
   TouchableWithoutFeedback,
   TouchableOpacity,
   ImageBackground,
@@ -13,26 +10,13 @@ import {
   Image,
   View,ScrollView,
 } from 'react-native';
-import {
-  withNavigationFocus
-} from 'react-navigation';
+
 import styles from '../src/Style';
-import {
-  left,
-  library,
-  icon,
-  play,
-  leftVid
-} from '../src/IconManager';
+
 import {
   themeColor,
   themeWhite,
   Background,
-  sort,
-  filter,
-  TRANLINE,
-  overlayimage,
-  rightWrongBack,
   rite,
   FontBold,
 } from '../Constant/index';
@@ -44,32 +28,22 @@ import {
   scale,
   snack
 } from '../src/Util';
-// import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
-  Rating,
   NavigationHead
 } from '../Component/ViewManager.js';
 import CreateJobIndexButton from '../Component/CreateJobIndexButton'
-import ItemMV from '../src/ItemMV';
-import DeviceInfo from 'react-native-device-info';
 import JobBasicType from './JobBasicType';
 import JobPreference from './JobPreference';
 import JobTaskDescription from './JobTaskDescription';
 import JobTaskRequirement from './JobTaskRequirement';
-import JobHiddenCritearia from './JobHiddenCritearia';
 import CompanyEditEducation from './CompanyEditEducation';
 import CompanyAddSalary from './CompanyAddSalary';
 import CompanyAddSkillJob from './CompanyAddSkilJob';
 import CompanyAddLanguage from './CompanyAddLanguage';
-
-
 import PreviewJob from './PreviewJob';
 import Swiper from 'react-native-swiper';
 import http from '../api';
-
-// import PostedJobList from './PostedJobList';
-// import styles from './Style'
-
+import Texting from '../Constant/Text'
 class CreateJob extends PureComponent {
   constructor(props) {
     super(props);
@@ -147,29 +121,6 @@ class CreateJob extends PureComponent {
     }
   };
 
-  // callPostedJob = () => {
-  //   try {
-  //     http.GET('api/job/get').then(
-  //       (res) => {
-  //         if (res['data']['status']) {
-  //           console.log(
-  //             '>>>>>>>>>>>>',
-  //             JSON.stringify(res['data']['result'][3]['description']),
-  //           );
-  //         } else {
-  //           console.log('res', res);
-  //           alert(res[0]['data']['message']['message']);
-  //         }
-  //       },
-  //       (err) => alert(JSON.stringify(err)),
-  //     );
-  //   } catch (error) {
-  //     console.log('error while register' + error);
-  //   }
-  // };
-  // componentDidMount() {
-  //   this.callPostedJob();
-  // }
   render() {
     const {
       index
@@ -266,7 +217,7 @@ class CreateJob extends PureComponent {
                           color:themeColor
                         }
                       ]}>
-                      {this.state.index == 8 ? '' : <Text>Back</Text>}
+                      {this.state.index == 8 ? '' : <Texting text='Back'/>}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -290,11 +241,11 @@ class CreateJob extends PureComponent {
                       ]}
                       numberOfLines={1}>
                       {this.state.index == 7? (
-                        <Text numberOfLines={1}>Preview</Text>
+                        <Texting numberOfLines={1} text='Preview'/>
                       ) : this.state.index == 8 ? (
                         ''
                       ) : (
-                        <Text>Next</Text>
+                        <Texting text='Next' />
                       )}
                     </Text>
                   </View>
@@ -351,14 +302,12 @@ class CreateJob extends PureComponent {
                         }}
                         resizeMode={'contain'}
                       />
-                      <Text
+                      <Texting
                         style={{
                           fontSize: scale(22),
                           fontFamily: FontBold,
                           color: themeColor,
-                        }}>
-                        Go Live
-                      </Text>
+                        }} text='Go_Live'/>
                     </View>
                   </TouchableWithoutFeedback>
                 </View>

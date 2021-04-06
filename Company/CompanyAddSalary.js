@@ -38,7 +38,8 @@ import React, {
   } from '../Constant/index';
   import http from '../api';
   import AsyncStorage from '@react-native-community/async-storage';
-  
+  import Texting from '../Constant/Text'
+  import AddExpSkillEdu from '../Component/AddExpSkillEdu'
   class CompanyAddSalary extends Component {
     constructor(props) {
       super(props);
@@ -73,38 +74,6 @@ import React, {
       global.maxSalary = Math.round((this.state.salaryMax * 200)/150);
       global.minSalary =  this.state.salary;
       global.salaryrating = this.state.salaryrating
-      // try {
-      //   http
-      //     .POST('api/user/editskill', {
-      //       id: global.Id,
-      //       salRatting: global.salaryrating,
-      //       minSal: Math.round(this.state.salary),
-      //       maxSal: global.maxSalary,
-      //       skills: global.UserSkill,
-      //     })
-      //     .then(
-      //       async(res) => {
-      //         console.log('res',res)
-      //         if (res['data']['status']) {
-      //           console.log('responce user', res['data']['result']);
-      //           var result = await AsyncStorage.getItem('UserLoggedInData');
-      //           result = JSON.parse(result);
-      //           result.salRatting =global.salaryrating 
-      //           result.minSal =global.minSalary
-      //           result.maxSal =global.maxSalary
-      //           await AsyncStorage.setItem('UserLoggedInData', JSON.stringify(result));
-      //           console.log('ress',result)
-      //           // this.props.navigation.navigate('JobEditProfile');
-      //         } else {
-      //           snack(res['data']['message']);
-      //         }
-      //       },
-      //       (err) => snack(err['message']),
-      //     );
-      // } catch (error) {
-      //   snack(error);
-      // }
-      // alert('video is coming soon');
     };
     Add = () => {
       console.log('sal',this.state.salaryMax);
@@ -117,70 +86,16 @@ import React, {
     };
   
     render() {
-      const {
-        Anywhere,
-        name,
-        suggesion,
-        dataCheck,
-        dataCheckU,
-        show,edu,uni,rate,progress
-      } = this.state;
-      console.log('this.sum',this.state.sum);
       return (
         <>
-          
-            <View style={{flexDirection:"row",justifyContent:"space-between",width:wp(90),padding:10,marginHorizontal:wp(5),height:150,alignItems:"center"}}>
-            <View style={{width:wp(40),alignItems:"center",justifyContent:"center",}}>
-            <Image
-                      source={salaryFrame}
-                      style={{
-                        height: scale(100),
-                        width: scale(100),
-                      }}
-                      resizeMode={'cover'}
-                    />
-            </View>
-            <View
-                style={{
-                  // width:wp(50) 
-                  alignItems: 'center',
-                  justifyContent:"center",
-                  
-                  // right: wp(10),
-                }}>
-                <CustomButton
-                  title={'Save Salary'}
-                  onPress={this.Add}
-                  containerStyle={{
-                    // width: ,
-                    color: 'black',
-                    // fontFamily: FontRegular
-                  }}
-                  buttonStyle={{
-                    backgroundColor: '#333',
-                    height:30,
-                    borderRadius: scale(2),
-                    borderWidth: 0,
-                    // elevation: 6
-                  }}
-                  titleStyle={{
-                    color: themeWhite,
-                    position: 'absolute',
-                    fontFamily: FontBold,
-                    fontSize: scale(14),
-                  }}
-                />
-              </View>
-            </View>
+          <AddExpSkillEdu source = {salaryFrame} title='Save_Salary' onPress={this.Add}/>
             <View style={{flexDirection:"column",alignItems:"center",marginTop:-5}}>
             <Text style={{fontSize:18,fontFamily:FontBold}}>
                           {Math.round((this.state.salaryMax * 200)/150)} K
                         </Text>
             <View style={{
                             opacity: 1,
-                            // position: 'absolute',
                             width: wp(60),
-                            // top: scale(30),
                             backgroundColor: 'transparent',
                             height: hp(30) * 1.5,marginHorizontal:wp(15)
                         }}>
@@ -198,7 +113,6 @@ import React, {
                 }],
                 height:hp(61),
                 zIndex:1,
-                // width: scale(screenWidth - scale(80))
 
             }}
             minimumTrackTintColor = {'transparent'} />

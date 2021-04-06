@@ -34,7 +34,7 @@ import {
   place,
   screen,
   edit,
-  earth,
+  Mail,
   dollor,
   user,
   bag,
@@ -44,7 +44,7 @@ import {
   filter,
   TRANLINE,
   url,
-  Companyavtar,facebook,linkedin,whatsapp,
+  Companyavtar,facebook,linkedin,whatsapp,web,
   FontBold,
   Listed,blanks,Fulls,
   detailed,backgroundCorner,settingTab,WhiteVideo
@@ -64,25 +64,31 @@ import {
 // import ItemMV from './ItemMV'
 import Swipers from 'react-native-swiper';
 import ListShow from '../Component/ListShow'
+import Texting from '../Constant/Text'
+import TopHeader from '../Component/TopHeader'
+import Swiper from 'react-native-deck-swiper';
+
 class CompanyProfile extends Component {
   constructor(props) {
     super(props);
     this.state = {
       data: '',
+      length:'',id:''
     };
   }
 
   checking = () => {
-    console.log('hey###########################################')
     const {
       params
     } = this.props.navigation.state;
     const item = params ? params.item : null;
-    // console.log('other item', item);
+    console.log('length',params.length)
     this.setState({
       data: item != undefined || '' ? item : '',
+      length : params.length,
+      id:params.index
     });
-
+    
 
     // console.log('<<<<<<<<<<<<<',this.state.data.city.map(item => console.log(item)))
   };
@@ -90,117 +96,32 @@ class CompanyProfile extends Component {
     console.log('global.all>>>>>>>>>>>>', global.all);
     this.props.navigation.goBack();
   };
+  Filter = () => {
+    this.props.navigation.navigate('Filter');
+  };
 
+  renderCard = (data, index) => {
+    // this.setState({
+    //     id: index
+    // })
 
-  render() {
-    const {
-      data
-    } = this.state;
-    return data != '' ? (
-      <SafeAreaView style={styles.backGround}>
-        <NavigationEvents onDidFocus={this.checking} />
-
-        <ImageBackground
-          style={styles.ImageBlue}
-          source={Background}
-          tintColor={themeWhite}
-          resizeMode={'stretch'}>
-          <NavigationHeader onPress={() => this.Back()} text={data.title} />
-          <View style={styles.JoblistSecondViewHeading}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {data.length}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <View style={{marginRight: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback onPress={this.Back}>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={Listed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                        marginHorizontal: scale(10),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={detailed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-          <View style={styles.CompanyProfileMainImage1}>
-            <Swipers
-              scrollEnabled={true}
-              showsPagination={false}
-              onIndexChanged={(index) => console.log('index', index)}
-              ref={'swiper'}
-              index={this.state.changedindex}>
-                       
-                <View>
-                  <ImageBackground
-                    style={{
-                      width: wp('96%'),
+    return (
+      <ScrollView
+        style={{
+          alignSelf: 'stretch',
+        }}>
+        <View onStartShouldSetResponder={() => true}>
+          <ImageBackground
+            style={{
+              width: wp('96%'),
               height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-
-                    // flex:1,
-                        paddingBottom:20
-                      // overflow: 'hidden',
-                    }}
-                    source={require('../Img/ract.png')}
-                    resizeMode={'stretch'}>
-                    <ScrollView style={{height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
-                    <View style={{
-                top: hp(4),
+              paddingBottom:15
+            }}
+            source={require('../Img/ract.png')}
+            resizeMode={'stretch'}>
+            <ScrollView removeClippedSubviews={true} keyboardShouldPersistTaps={'handled'} style={{height:hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
+            <View style={{
+                top: hp(2),
                 marginHorizontal: wp(7)
             }}><Text style={{
                 color: '#333',
@@ -221,12 +142,11 @@ alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                 zIndex: 5
             }}
             source={backgroundCorner}><Image 
-            source={
-                            data.logo
-                              ? {
-                                  uri: url + 'images/company/' + data.logo,
-                                }
-                              : Companyavtar
+            source={data.logo
+                    ? {
+                        uri: url + 'images/company/' + data.logo,
+                      }
+                    : Companyavtar
                           }
             style={{
                 height: wp('29'),
@@ -241,7 +161,7 @@ alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                 marginTop: hp(3),marginHorizontal:wp(2),
             }}>
             <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
-                vid: global.Video
+                vid: url + '/images/company/' + data.video
             })}><View style={{
                 flexDirection: "column",
                 // height: hp(9),
@@ -294,8 +214,8 @@ alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                 width: scale(25)
             }}/>
             </View>
-                    <View style={[styles.CompanyProfileDetail,{marginTop:10}]}>
-                    <ListShow name={data.name} image={company} />
+            <View style={styles.CompanyProfileDetail}>
+            <ListShow name={data.name} image={company} />
                     <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
                     <ListShow name={data.title} image={skillCategory} />
                       <View style={styles.CompanyDetailIcon}>
@@ -307,10 +227,15 @@ alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                           />
                         </View>
                         <Text style={styles.ItemDetailLabel1}>
-                          {data.minExp} - {data.maxExp} Years /
+                        {data.minExp != '' && data.minExp != null
+                  ? data.minExp
+                  : 0 } 
+                 -{ data.maxExp != '' && data.maxExp != null
+                  ? data.maxExp
+                  : 0 }
+                {' '}Years /{' '}
                         </Text>
                         <Text style={styles.CompanyProfileDetailLabel100}>
-                          {' '}
                           100%
                         </Text>
                       </View>
@@ -323,20 +248,14 @@ alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                             resizeMode={'contain'}
                           />
                         </View>
-                        <Text style={[styles.ItemDetailLabel1,{width:wp(50)}]}numberOfLines ={1}>
-                        {data.city.map((item, index) => {
-                          return (
-                        <Text
-                      key={index}
-                      style={{
-                        fontFamily: 'Roboto-Regular',
-                        fontSize: scale(16),
-                      }}>
-                      {item} /{' '}
-                    </Text>
-                      );
-                                         })}
+                        <Text style={styles.ItemDetailLabel1}>
+                        {data != null || data && data.city.map((item, index) => {
+                      return (
+                        <Text key={index} style={styles.ItemDetailLabel1}>
+                          {item} /
                         </Text>
+                      );
+                    })}</Text>
                         <Text style={styles.CompanyProfileDetailLabel100}>
                           {' '}
                           100%
@@ -356,32 +275,139 @@ alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
                         </Text>
                       </View>
                       <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
-                    <ListShow name={data.website} image={earth} />
-                    </View>
-                    </ScrollView>
-                  </ImageBackground>
-                </View>
-              {/* </ScrollView> */}
-              <View
-                style={{
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  // flex: 1,
-                  height:
-                    hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-                }}>
-                <Text
-                  style={{
-                    textAlign: 'center',
-                    fontFamily: FontBold,
-                    color: themeColor,
-                    fontSize: scale(18),
-                    width: wp(60),
-                  }}>
-                  Please login to our app
-                </Text>
-              </View>
-            </Swipers>
+                    <ListShow name={data.website} image={web} />
+            </View>
+            </ScrollView>
+          </ImageBackground></View>
+      </ScrollView>
+    );
+  };
+
+  onSwiped = (type, index) => {
+      this.props.navigation.navigate('LoginFirst')
+  };
+
+
+  render() {
+    const {
+      data,id
+    } = this.state;
+    return data != '' ? (
+      <SafeAreaView style={styles.backGround}>
+        <NavigationEvents onDidFocus={this.checking} />
+
+        <ImageBackground
+          style={styles.ImageBlue}
+          source={Background}
+          tintColor={themeWhite}
+          resizeMode={'stretch'}>
+          <NavigationHeader onPress={() => this.Back()} text={data.title} />
+          <TopHeader data={this.state.length && this.state.length} Listed = {this.Back} Filter={this.Filter} detailed={this.pushy}/>
+          <View style={styles.CompanyProfileMainImage1}>
+          <Swiper
+                    ref={(swiper) => {
+                      this.swiper = swiper;
+                    }}
+                    cardStyle={{
+                      width: wp('96%'),
+                      flex:1,marginBottom:10
+                    }}
+                    inputOverlayLabelsOpacityRangeX={[wp(-100) / 3, -1, 0, 1, wp(100) / 3]}
+                  overlayOpacityHorizontalThreshold={1}
+                    backgroundColor={'transparent'}
+                    cardHorizontalMargin={0}
+                    cardVerticalMargin={0}
+                    onSwiped={(g) => this.onSwiped('general',g)}
+                    onSwipedLeft={(index) => this.onSwiped('left', index)}
+                    onSwipedRight={(index) => this.onSwiped('right', index)}
+                    onSwipedTop={(index) => this.onSwiped('top', index)}
+                    onSwipedBottom={(index) => this.onSwiped('bottom', index)}
+                    cards={global.all}
+                    cardIndex={id}
+                    stackSize={2}
+                    showSecondCard={true}
+                    renderCard={this.renderCard}
+                    animateOverlayLabelsOpacity
+                    animateCardOpacity
+                    swipeBackCard
+                    overlayLabels={{
+                      bottom: {
+                        title: 'Save',
+                        style: {
+                          label: {
+                            borderColor: themeColor,
+                            color: themeColor,
+                            borderWidth: 5,
+                            fontSize: 32,
+                            borderRadius: 5,
+                            textAlign: 'center',
+                          },
+                          wrapper: {
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          },
+                        },
+                      },
+
+                      left: {
+                        title: 'Not Interested',
+                        style: {
+                          label: {
+                            borderColor: 'red',
+                            color: 'red',
+                            borderWidth: 5,
+                            fontSize: 32,
+                            borderRadius: 5,
+                            textAlign: 'center',
+                          },
+                          wrapper: {
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          },
+                        },
+                      },
+                      right: {
+                        title: 'Applied',
+                        style: {
+                          label: {
+                            borderColor: 'green',
+                            color: 'green',
+                            borderWidth: 5,
+                            fontSize: 32,
+                            borderRadius: 5,
+                            textAlign: 'center',
+                          },
+                          wrapper: {
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                          },
+                        },
+                      },
+                      top: {
+                        title: 'Share',
+                        style: {
+                          label: {
+                            borderColor: '#fcba03',
+                            color: '#fcba03',
+                            borderWidth: 5,
+                            fontSize: 32,
+                            borderRadius: 5,
+                            textAlign: 'center',
+                          },
+                          wrapper: {
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            // marginTop: (hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)))/2,
+                            // marginLeft: -48,
+                          },
+                        },
+                      },
+                    }}
+                  />
           </View>
         </ImageBackground>
       </SafeAreaView>

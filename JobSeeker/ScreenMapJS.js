@@ -71,19 +71,19 @@ class ScreenMapJS extends PureComponent {
       radius: 5000,
       zoom: 0,
       circlecenter: {
-        latitude: global.let,
-        longitude: global.long,
+        latitude: global.let || 10,
+        longitude: global.long || 10,
       },
       granted:false,
       region: {
-        latitude: global.let,
-        longitude: global.long,
+        latitude: global.let || 10,
+        longitude: global.long || 10,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       },
       coordi: {
-        latitude: global.let,
-        longitude: global.long,
+        latitude: global.let || 10,
+        longitude: global.long || 10,
       },
       markers: [
         {
@@ -342,7 +342,8 @@ class ScreenMapJS extends PureComponent {
           </View>
           <PlacesInput
             // googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
-            googleApiKey={'AIzaSyDVScOwopPXw_Seu28wNHVo0UJAukwqo3E'}
+            
+            googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
             placeHolder={'Search Place'}
             language={'en-US'}
             onSelect={(place) => {
@@ -564,7 +565,7 @@ class ScreenMapJS extends PureComponent {
               maximumTrackTintColor={'#333'}
             />
           </View>
-          {this.state.data != '' ? (
+          {this.state.data ? (
             <FlatList
               style={styles.MapVerticalList}
               data={this.state.data}

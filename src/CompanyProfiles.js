@@ -43,7 +43,9 @@ import {scale} from './Util';
 import {Rating, NavigationHeader} from '../Component/ViewManager.js';
 // import ItemMV from './ItemMV'
 import Swipers from 'react-native-swiper';
-
+import Texting from '../Constant/Text'
+import TopHeader from '../Component/TopHeader'
+import * as Animatable from 'react-native-animatable';
 class CompanyProfiles extends Component {
   constructor(props) {
     super(props);
@@ -54,92 +56,46 @@ class CompanyProfiles extends Component {
 
   checking = () => {
     // console.log('hey')
-    const {params} = this.props.navigation.state;
-    const item = params ? params.item : null;
-    // console.log('other item', item);
-    this.setState({
-      data: item != undefined || '' ? item : '',
-    });
+    this.props.navigation.navigate('LoginFirst')
+
   };
   Back = () => {
     console.log('global.all>>>>>>>>>>>>', global.all);
     this.props.navigation.goBack();
   };
 
+  
+
   render() {
     const {data} = this.state;
     return (
       <SafeAreaView style={styles.backGround}>
+        <NavigationEvents onDidFocus={this.checking} />
         <ImageBackground
         tintColor={themeWhite}
           style={styles.ImageBlue}
           source={Background}
           resizeMode={'stretch'}>
-          <NavigationHeader onPress={() => this.Back()} text={data.title} />
-          <View style={styles.JoblistSecondViewHeading}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {data.length}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-          <View style={styles.CompanyProfileMainImage1}>
-            <ScrollView>
-              <View
+          {/* <NavigationHeader onPress={() => this.Back()} text={data.title} /> */}
+         {/* <TopHeader data={data && data.length} /> */}
+          <View style={[styles.CompanyProfileMainImage1],{flex:1}}>
+          <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('LoginFirst')}><Animatable.View
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',
-                  // flex: 1,
-                  height:
-                    hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-                }}>
-                <Text
+                  flex: 1,
+                  // height:
+                    // hp('100%') - (StatusBar.currentHeight + scale(100)),
+                }} animation="pulse" easing="ease-out" duration = {1500} useNativeDriver={true} iterationCount="infinite">
+                <Texting
                   style={{
                     textAlign: 'center',
                     fontFamily: FontBold,
                     color: themeColor,
                     fontSize: scale(18),
                     width: wp(60),
-                  }}>
-                  Please login to our app
-                </Text>
-              </View>
-            </ScrollView>
+                  }} text='Please_login_to_our_app' />
+              </Animatable.View></TouchableWithoutFeedback>
           </View>
         </ImageBackground>
       </SafeAreaView>

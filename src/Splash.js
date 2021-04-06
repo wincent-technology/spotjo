@@ -28,7 +28,6 @@ class Splash extends Component {
             isFullScreen: false,
             isLoading: true,
             paused: false,
-            // playerState: PLAYER_STATES.PLAYING,
             screenType: 'cover',
             data: ''
         };
@@ -92,9 +91,9 @@ class Splash extends Component {
             global.let = parseFloat(result['latitude'])
             navigate = result['isLoggedFirstTime']  == 0 ? 'TalentCom' : 'ComEdit'
         }
-    setTimeout(() => {
-        this.props.navigation.navigate(navigate)
-    }, this.state.duration)
+    // setTimeout(() => {
+    //     this.props.navigation.navigate(navigate)
+    // }, this.state.duration)
     }
 
     callJob = () => {

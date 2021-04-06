@@ -45,6 +45,9 @@ import {
     darkract
 } from '../Constant/index'
 var m = ''
+
+import Texting from '../Constant/Text'
+const Items = global.language == 'english' ? true : false
 class PreviewJob extends Component {
     constructor(props) {
         super(props);
@@ -93,12 +96,12 @@ class PreviewJob extends Component {
             <View style={{
                 alignItems: "center",
                 top: hp(1)
-            }}><Text style={{
+            }}><Texting style={{
                 color: themeColor,
                 fontWeight: 'bold',
                 fontSize: scale(18),
                 fontFamily: FontBold
-            }}>BASIC INFO</Text></View>
+            }} text = 'BASIC_INFO'/></View>
             <View style={{
                 alignItems: "center",
                 justifyContent: "center",
@@ -134,11 +137,11 @@ class PreviewJob extends Component {
             <View style={{
                 alignItems: "flex-start",
             }}>
-            <Text style={{
+            <Texting style={{
                 fontSize: scale(18),
                 fontFamily: FontBold,
                 color: themeColor
-            }}>Company</Text>
+            }} text='Company'/>
             </View>
              <View style={{
                 alignItems: "flex-start",
@@ -167,11 +170,11 @@ class PreviewJob extends Component {
             <View style={{
                 alignItems: "flex-start",
             }}>
-            <Text style={{
+            <Texting style={{
                 fontSize: scale(18),
                 fontFamily: FontBold,
                 color: themeColor
-            }}>Location</Text>
+            }} text='Location'/>
             </View>
              <View style={{
                 alignItems: "flex-start",
@@ -200,11 +203,11 @@ class PreviewJob extends Component {
             <View style={{
                 alignItems: "flex-start",
             }}>
-            <Text style={{
+            <Texting style={{
                 fontSize: scale(18),
                 fontFamily: FontBold,
                 color: themeColor
-            }}>Function</Text>
+            }} text='Function'/>
             </View>
              <View style={{
                 alignItems: "flex-start",
@@ -220,7 +223,7 @@ class PreviewJob extends Component {
                         fontFamily: FontBold,
                         fontSize: scale(16),
                         color: '#000'
-                    }}>{item.name},</Text>
+                    }}>{Items ? item.english : item.german},</Text>
                 )
             })}</Text>
             </View>
@@ -241,11 +244,11 @@ class PreviewJob extends Component {
             <View style={{
                 alignItems: "flex-start",
             }}>
-            <Text style={{
+            <Texting style={{
                 fontSize: scale(18),
                 fontFamily: FontBold,
                 color: themeColor
-            }}>Experience</Text>
+            }} text='Experience'/>
             </View>
              <View style={{
                 alignItems: "flex-start",
@@ -274,11 +277,11 @@ class PreviewJob extends Component {
             <View style={{
                 alignItems: "flex-start",
             }}>
-            <Text style={{
+            <Texting style={{
                 fontSize: scale(18),
                 fontFamily: FontBold,
                 color: themeColor
-            }}>Work Type</Text>
+            }}  text='Work_Type'/>
             </View>
              <View style={{
                 alignItems: "flex-start",
@@ -289,7 +292,7 @@ class PreviewJob extends Component {
                 fontSize: scale(16),
                 fontFamily: FontBold,
 
-            }}>{global.FullTime ? <Text>FullTime</Text> : ''}</Text>
+            }}>{global.FullTime ? <Texting text='FullTime' /> : ''}</Text>
             <Text style={{
                 color: '#000',
                 fontSize: scale(16),

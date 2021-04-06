@@ -132,7 +132,7 @@ class User extends PureComponent {
             <View style={styles.CompanyProfileIcon}>
             <Image source ={employedtheme} style={styles.imageStyle} resizeMode={'contain'} /></View>
             <Text style={styles.ItemDetailLabel}>
-            {this.props.item.role}</Text>
+            {this.props.item.role == 4 && 'Staff'}</Text>
             </View>
             <View style={styles.ItemMVDetailIcon}><View style={styles.CompanyProfileIcon}>
             <Image source ={mailtheme} style={styles.imageStyle} resizeMode={'contain'} /></View>

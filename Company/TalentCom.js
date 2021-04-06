@@ -31,7 +31,8 @@ import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import AsyncStorage from '@react-native-community/async-storage';
 import BackNext from '../Component/BackNext'
 import SuggestionView from '../Component/SuggestionView'
-
+import Texting from '../Constant/Text'
+import ListOfChoosed from '../Component/ListOfChoosed'
 var mg = [];
 class TalentCom extends Component {
   constructor(props) {
@@ -48,14 +49,7 @@ class TalentCom extends Component {
   }
 
   next = () => {
-    // let min = ['sum', 'sum', 'min', 'two'];
-    // let ing = [...new Set(min)];
-    // console.log('ing', ing);
-
-    // mg = this.state.name.split(',')
     mg = [...new Set(this.state.suggesion)];
-    console.log('mg', mg);
-
     global.Job_Title = mg;
     this.props.navigation.navigate('LocationCom');
   };
@@ -118,13 +112,6 @@ class TalentCom extends Component {
       http.GET('api/userwejson/get').then(
         (res) => {
           if (res['data']['status']) {
-            console.log('result', res['data']['result']);
-            // for (let i in res['data']['result']) {
-            //     data.push({
-            //         'name': res['data']['result'][i],
-            //         'backGround': 'white'
-            //     })
-            // }
             this.setState({
               dataCheck: res['data']['result'],
             });
@@ -150,12 +137,6 @@ class TalentCom extends Component {
       const textData = text.toUpperCase();
       return itemData.toString().indexOf(textData) > -1;
     });
-    // for (let i in newData) {
-    //     data.push({
-    //         'name': newData[i],
-    //         'backGround': 'white'
-    //     })
-    // }
     if (newData != '') {
       this.setState({
         dataCheck: newData,
@@ -216,23 +197,21 @@ class TalentCom extends Component {
                 style={{
                   top: scale(20),
                 }}>
-                <Text
+                <Texting
                   style={[
                     {
                       fontSize: scale(24),
                       fontFamily: 'Roboto-Bold',
                     },
                     styles.FontSty,
-                  ]}>
-                  Which talent do you want?
-                </Text>
+                  ]} text='Which_talent_do_you_want' />
               </View>
               <View
                 style={{
                   top: scale(20),
                 }}>
                 <CustomInput
-                  placeholder={'E.g (Java Developer)'}
+                  placeholder={global.language == 'english' ? 'E.g (Java Developer)' : 'E.g (Java-Developer)'}
                   value={this.state.name}
                   inputContainerStyle={{borderRadius:scale(20),height:scale(45),width:'92%',backgroundColor:"#fff",borderBottomColor: "#E5E5E5",
         borderBottomWidth: 0.3,}}
@@ -283,22 +262,7 @@ class TalentCom extends Component {
                     position: 'absolute',
                     top: scale(260),
                   }}>
-                  <FlatList
-                    data={dataCheck}
-                    keyboardShouldPersistTaps="always"
-                    showsHorizontalScrollIndicator={false}
-                    removeClippedSubviews={true}
-                    renderItem={({item, index}) => this.renderItem(item, index)}
-                    initialNumToRender={5}
-                    maxToRenderPerBatch={10}
-                    updateCellsBatchingPeriod={70}
-                    getItemLayout={(data, index) => ({
-                      length: hp('1%'),
-                      offset: hp('1%') * index,
-                      index,
-                    })}
-                    keyExtractor={(item, index) => index + ''}
-                  />
+                  <ListOfChoosed data={dataCheck} keyboardShouldPersistTaps="always" renderItem={({item, index}) => this.renderItem(item, index)} />
                 </View>
               )}
             </View>

@@ -21,11 +21,11 @@ import {
     scale,
     snack
 } from './Util';
-import CustomInput from '../Component/Input'
+// import CustomInput from '../Component/Input'
 import BackNext from '../Component/BackNext'
 
 import TalentButton from '../Component/TalentButton'
-import ToggleSwitch from '../Component/ToggleSwitch'
+// import ToggleSwitch from '../Component/ToggleSwitch'
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -38,7 +38,8 @@ import {
 } from '../Constant/index'
 import styles from './Style';
 import http from '../api';
-import { ScrollView } from 'react-native-gesture-handler'
+// import { ScrollView } from 'react-native-gesture-handler'
+import Texting from '../Constant/Text'
 
 
 class ChooseTalent extends Component {
@@ -58,15 +59,7 @@ class ChooseTalent extends Component {
 
 
     componentDidMount() {
-        this.setState({
-            FullTime: global.FullTime,
-            PartTime: global.PartTime,
-            Employed: global.Employed,
-            Internship: global.Internship,
-            StudentJobs: global.StudentJobs,
-            HelpingVacancies: global.HelpingVacancies,
-            Freelancer: global.Freelancer,
-        })
+       this.checking();
     }
     checking = () => {
         this.setState({
@@ -99,9 +92,15 @@ class ChooseTalent extends Component {
             }).then((res) => {
                 if (res['data']['status']) {
                     console.log('rrrrrrrrr', res['data']['result']);
-                    global.all = res['data']['result']
+                    // global.all = res['data']['result']
+                        let p = res['data']['result']
+
+                        let i = p.map(item => {
+                            return {...item,
+                            heart:false}});
+                        global.all = i
                     this.props.navigation.navigate('TabScreen', {
-                        otherParam: res['data']['result'],
+                        otherParam: i,
                     })
 
                     // will get data in this    res['data']['result']             
@@ -151,18 +150,18 @@ class ChooseTalent extends Component {
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View><View style={{
                 width: wp('80%')
-            }}><Text style={[{
+            }}><Texting style={[{
                 fontSize: scale(24),
                 textAlign: 'center'
-            }, styles.FontSty]}>How will you use your talent?</Text></View>
+            }, styles.FontSty]} text='How_will_you_use_your_talent'/></View>
             <View style={styles.PersonalInfoChoose}>
                             <View style={styles.PersonalInfoRowChoose}>
-                                <TalentButton name='FullTime' bool = {FullTime} onPress={
+                                <TalentButton name={'FullTime'} bool = {FullTime} onPress={
                                     () => this.setState({
                                 FullTime: !this.state.FullTime
                             },() => global.FullTime = this.state.FullTime)
                                 } />
-                                 <TalentButton name='Part-time' bool = {PartTime} onPress={
+                                 <TalentButton name={'Part_time'} bool = {PartTime} onPress={
                                     () => this.setState({
                                         PartTime: !this.state.PartTime
                             },() => global.PartTime = this.state.PartTime)
@@ -172,31 +171,31 @@ class ChooseTalent extends Component {
                 marginVertical: hp(4)
             }}><View style={{
                                     justifyContent:"center",alignItems:"center"
-                                }}><Text style={[{
+                                }}><Texting style={[{
                 fontSize: scale(22),
                 fontWeight: "bold"
-            }, styles.Employment]}>Employment</Text>
+            }, styles.Employment]} text='Employment' />
             </View></View>
             </View>
             <View style={styles.PersonalInfoRowChoose}>
-            <TalentButton name='Employed' bool = {Employed} onPress={
+            <TalentButton name={'Employed'} bool = {Employed} onPress={
                                     () => this.setState({
                                 Employed: !this.state.Employed
                             },() => global.Employed = this.state.Employed)
                                 } />
-                                <TalentButton name='Freelancer' bool = {Freelancer} onPress={
+                                <TalentButton name={'Freelancers'} bool = {Freelancer} onPress={
                                     () => this.setState({
                                         Freelancer: !this.state.Freelancer
                             },() => global.Freelancer = this.state.Freelancer)
                                 } /></View>
 
             <View style={styles.PersonalInfoRowChoose}>
-            <TalentButton name='Internship' bool = {Internship} onPress={
+            <TalentButton name={'Internship'} bool = {Internship} onPress={
                                     () => this.setState({
                                         Internship: !this.state.Internship
                             },() => global.Internship = this.state.Internship)
                                 } />
-            <TalentButton name='Student jobs' bool = {StudentJobs} onPress={
+            <TalentButton name={'Student_jobs'} bool = {StudentJobs} onPress={
                                     () => this.setState({
                                 StudentJobs: !this.state.StudentJobs
                             },() => global.StudentJobs = this.state.StudentJobs)
@@ -212,10 +211,10 @@ class ChooseTalent extends Component {
     onPress={ () => this.setState({
                                         HelpingVacancies: !this.state.HelpingVacancies
                             },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
-        <Text style={[styles.Employment, {
+        <Texting style={[styles.Employment, {
                 fontSize: scale(20),
                 color:HelpingVacancies ? themeColor : themeWhite
-            }]}>Helping Vacancies</Text>
+            }]} text='Helping_Vacancies'/>
     </TouchableOpacity>
             </View>
                                 <View style={[styles.PersonalInfoEndEmp, {

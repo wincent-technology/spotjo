@@ -2,13 +2,8 @@ import React, {
   PureComponent
 } from 'react';
 import {
-  SafeAreaView,
-  StyleSheet,
   StatusBar,
   Platform,
-  Dimensions,
-  FlatList,
-  PermissionsAndroid,
   TouchableWithoutFeedback,
   TouchableOpacity,
   ImageBackground,
@@ -23,10 +18,6 @@ import {
 import styles from '../src/Style';
 import {
   left,
-  library,
-  icon,
-  play,
-  leftVid
 } from '../src/IconManager';
 import {
   themeColor,
@@ -34,7 +25,6 @@ import {
   Background,
   sort,
   filter,
-  TRANLINE,
   FontBold,
   url,
 } from '../Constant/index';
@@ -44,40 +34,33 @@ import {
 } from '../Component/responsive-ratio';
 import {
   scale,
-  snack
+  snack,NoData
 } from '../src/Util';
-import {
-  NavigationHeader
-} from '../Component/ViewManager';
 import Slider from '@react-native-community/slider';
 import ItemMVJobb from './ItemMVJobb';
 import MapView, {
   PROVIDER_GOOGLE,
   Circle,
   Marker,
-  AnimatedRegion,
 } from 'react-native-maps';
 import flagBlueImg from '../Img/circle-16.png';
 import Geolocation from '@react-native-community/geolocation';
 import http from '../api';
-// import Svg, { Circle } from 'react-native-svg';
 const SPACE = 0.01;
 
-// let LATITUDE_DELTA = 0.0922;
-// const LONGITUDE_DELTA = 0.0421;
-
-// const {width, height} = Dimensions.get('window');
+const DEFAULT_PADDING = { top: 100, right: 100, bottom: 100, left: 100 };
 const ASPECT_RATIO = wp(96) / wp(65);
 const LATITUDE_DELTA = Platform.OS === 'ios' ? 1.5 : 0.5;
 let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 import PlacesInput from '../Component/PlacesInput';
-import DeviceInfo from 'react-native-device-info';
 import PermissionHelper from '../Component/PermissionHelper'
-
-let hasNotch = DeviceInfo.hasNotch();
+import List from '../Component/List'
 // Use the below code to zoom to particular location with radius.
 
 var flag = false;
+import Texting from "../Constant/Text";
+
+const colorPin =  ['red','blue','green']
 
 class UserScreenMap extends PureComponent {
   constructor(props) {
@@ -87,51 +70,69 @@ class UserScreenMap extends PureComponent {
       radius: 5000,
       zoom: 0,
       granted:false,
-      circlecenter: {
-        latitude: global.let,
-        longitude: global.long,
-      },
-      region: {
-        latitude: global.let,
-        longitude: global.long,
+      circlecenter: [{
+        latitude: global.let || 10,
+        longitude: global.long || 10,
+      }],
+      region: [{
+        latitude: global.let || 10,
+        longitude: global.long || 10,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
-      },
-      coordi: {
-        latitude: global.let,
-        longitude: global.long,
-      },
+      }],
+      titleCity : [
+        'unknown'
+      ],
+      coordi: [{
+        latitude: global.let || 10,
+        longitude: global.long || 10,
+      }],
       markers: [{
         coordinate: {
           latitude: global.let+SPACE,
           longitude: global.long + SPACE,
+          _id:0
         },
       }, {
         coordinate: {
           latitude: global.let+SPACE,
           longitude: global.long - SPACE,
+          _id:1
         },
-      }, ],
+      }],
     };
     this.watchId = '';
     this.onMarkerDrag = this.onMarkerDrag.bind(this);
   }
 
-  async onMarkerDrag(e) {
-    this.setState({
-        circlecenter: e.nativeEvent.coordinate,
-        markers: [],
-        data: [],
-        coordi: {
-          latitude: e.nativeEvent.coordinate.latitude,
+  async onMarkerDrag(e,index) {
+    console.log('index',index)
+
+let coordi = this.state.coordi
+coordi[index] = {
+  latitude: e.nativeEvent.coordinate.latitude,
           longitude: e.nativeEvent.coordinate.longitude,
-        },
-        region: {
-          latitude: e.nativeEvent.coordinate.latitude,
+}
+let circlecenter = this.state.circlecenter
+circlecenter[index] = {
+  latitude: e.nativeEvent.coordinate.latitude,
+          longitude: e.nativeEvent.coordinate.longitude,
+}
+
+let region = this.state.region
+region[index]={
+  latitude: e.nativeEvent.coordinate.latitude,
           longitude: e.nativeEvent.coordinate.longitude,
           latitudeDelta: LATITUDE_DELTA,
           longitudeDelta: LONGITUDE_DELTA,
-        },
+}
+
+    this.setState({
+        circlecenter,
+        markers: [],
+        data: [],
+        coordi,
+        region,
       },
       () => {
         this.call();
@@ -157,6 +158,7 @@ class UserScreenMap extends PureComponent {
       }
     else
     {const granted = await PermissionHelper.Storage.requestLocationPermission();
+      !granted &&  alert('please enable location')
         !granted && this.permission();  }
   }
 
@@ -167,16 +169,16 @@ class UserScreenMap extends PureComponent {
           global.let = info.coords.latitude;
           global.long = info.coords.longitude;
           this.setState({
-            region: {
+            region: [{
               latitude: global.let,
               longitude: global.long,
               latitudeDelta: LATITUDE_DELTA,
               longitudeDelta: LONGITUDE_DELTA,
-            },
-            coordi: {
+            }],
+            coordi: [{
               latitude: global.let,
               longitude: global.long,
-            },
+            }],
           });
         });
         console.log('this.state>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',this.state)
@@ -199,38 +201,70 @@ class UserScreenMap extends PureComponent {
       http
         .POST('api/user/radius', {
           kilometer: this.state.radius / 1000,
-          latitude: this.state.region.latitude,
-          longitude: this.state.region.longitude,
+          location:this.state.region
+          // latitude: this.state.region.latitude,
+          // longitude: this.state.region.longitude,
         })
         .then(
           (res) => {
             if (res['data']['status']) {
-              console.log('rrrrrrrrr >>>>>>>>>>>> 210', res['data']['result']);
-              global.all = res['data']['result'];
-              this.setState({
-                data: global.all,
-              });
+              // console.log('rrrrrrrrr >>>>>>>>>>>> 210', res['data']['result']);
+              
               let array = [];
-              for (let i in res['data']['result']) {
-                array.push({
+              // let datas = [];
+              let totalJob =[]
+              for (let i=0; i<res['data']['result'].length; i++) {
+              for (let j=0;j<res['data']['result'][i]['data'].length;j++) {
+                 array.push({
                   coordinate: {
                     latitude: parseFloat(
-                      res['data']['result'][i]['latitude'] || 0,
+                      res['data']['result'][i]['data'][j]['latitude'] || 0,
                     ),
                     longitude: parseFloat(
-                      res['data']['result'][i]['longitude'] || 0,
+                      res['data']['result'][i]['data'][j]['longitude'] || 0,
                     ),
                   },
+                  _id:j
                 });
+                totalJob.push(res['data']['result'][i]['data'][j]);
+                                }
               }
-              array &&
-                this.setState({
-                    markers: array,
-                  },
-                  () => console.log('asfsf 177', this.state.markers),
-                );
-              // global.all = res['data']['result']
-              // will get data in this    res['data']['result']
+              console.log('datas',totalJob.length)
+
+              let data = []
+                    let From,
+                        To,
+                        tmpobj,
+                        jobs = totalJob;
+
+              for (let i =0; i<jobs.length; i++) {
+
+                  if (jobs[i]['workexp']) {
+                      for (let j = 0; j<jobs[i]['workexp'].length;j++) {
+                              tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+
+                              From = jobs[i]['workexp'][j]['From'].split(' ');
+                              To = jobs[i]['workexp'][j]['To'].split(' ');
+
+                              tmpobj.Company = jobs[i]['workexp'][j]['Company'];
+                                    tmpobj.Role = jobs[i]['workexp'][j]['Role'];
+                                    tmpobj.totalExp = To[1] - From[1];
+                      }
+                  }
+                  tmpobj = JSON.parse(JSON.stringify(jobs[i]));
+                  data.push(tmpobj)
+              }
+              console.log("data >>>", data);
+              global.all = data
+              // global.all = res['data']['result'];
+              data && this.setState({
+                data: global.all,
+                markers: array,
+
+              },() => this.map.fitToCoordinates(this.state.markers.map(item => item.coordinate), {
+                edgePadding: DEFAULT_PADDING,
+                animated: true,
+              }))
             } else {
               snack(res['data']['message']);
             }
@@ -279,76 +313,39 @@ class UserScreenMap extends PureComponent {
     let given = await this.map.getCamera();
     console.log('given', given);
 
-    // this.setState({
-    //     zoom: given.zoom,
-    // })
-    // console.log('zoom', this.state.zoom);
-    // const {
-    //     zoom,
-    //     radius
-    // } = this.state
-    // console.log('zoom', zoom);
-    // if (value < (radius / 1000)) {
-    //     this.setState({
-    //         radius: Math.round(value) * 1000
-    //     }, () => {
-    //         let reg = {
-    //             latitude: this.state.region.latitude,
-    //             longitude: this.state.region.longitude,
-    //             latitudeDelta: this.state.region.latitudeDelta / zoom,
-    //             longitudeDelta: this.state.region.longitudeDelta / zoom
-    //         }
-    //         console.log('reg <<<<<<', reg);
-    //         this.setState({
-    //             region: reg
-    //         }, () => this.map.animateToRegion(this.state.region, 500))
-    //         this.call();
-    //     })
 
-    // } else {
-    //     this.setState({
-    //         radius: Math.round(value) * 1000
-    //     }, () => {
-    //         let reg = {
-    //             latitude: this.state.region.latitude,
-    //             longitude: this.state.region.longitude,
-    //             latitudeDelta: this.state.region.latitudeDelta * zoom,
-    //             longitudeDelta: this.state.region.longitudeDelta * zoom
-    //         }
-    //         console.log('reg >>>>>>>', reg);
-    //         this.setState({
-    //             region: reg
-    //         }, () => this.map.animateToRegion(this.state.region, 500))
-    //         this.call();
-    //     })
-    // }
     console.log('longi', this.state.region);
     var circum = 40075;
     var ond = 111.32 * 1000;
     var distance = value * 1000;
     var angle = distance / circum;
-
-    var latitudeDelta = distance / ond;
-    var longitudeDelta = Math.abs(
-      Math.atan(
-        Math.sin(angle) * Math.cos(this.state.region.latitude),
-        Math.cos(angle) -
-        Math.sin(this.state.region.latitude) *
-        Math.sin(this.state.region.latitude),
-      ),
-    );
-
-    var result = {
-      latitude: this.state.region.latitude,
-      longitude: this.state.region.longitude,
+    let region = this.state.region
+    let r = region.map(reg => {
+      var latitudeDelta = distance / ond;
+      var longitudeDelta = Math.abs(
+        Math.atan(
+          Math.sin(angle) * Math.cos(reg.latitude),
+          Math.cos(angle) -
+          Math.sin(reg.latitude) *
+          Math.sin(reg.latitude),
+        ),
+      );
+    return {
+      latitude: reg.latitude,
+      longitude: reg.longitude,
       latitudeDelta: latitudeDelta + 0.7,
       longitudeDelta: longitudeDelta + 0.7,
-    };
+     } 
+    });
+
     this.setState({
-        region: result,
+        region:r,
         radius: Math.round(distance),
       },
-      () => this.map.animateToRegion(this.state.region, 500),
+      () => this.map.fitToCoordinates(this.state.markers.map(item => item.coordinate), {
+        edgePadding: DEFAULT_PADDING,
+        animated: true,
+      }),
     );
     this.call();
   };
@@ -356,10 +353,7 @@ class UserScreenMap extends PureComponent {
   render() {
     const {
       region,
-      redius,
-      markers
     } = this.state;
-    console.log("this.state.granted>>>>>>>>>>>>>>>>>>>>>>>>>>",this.state.granted)
     if(!this.state.granted || region.latitude == NaN)
     return <ActivityIndicator size={'large'} color={themeColor} />
 else
@@ -396,24 +390,37 @@ else
             placeHolder={'Search Place'}
             language={'en-US'}
             onSelect={(place) => {
-              console.log('place', place.result.geometry.location);
+              console.log('place', place.result.name);
+              let region = this.state.region
+              let titleCity = this.state.titleCity;
+              titleCity.push(place.result.name)
+
+              region.push({
+                    latitude: place.result.geometry.location.lat,
+                    longitude: place.result.geometry.location.lng,
+                    latitudeDelta: this.state.region[0].latitudeDelta,
+                    longitudeDelta: this.state.region[0].longitudeDelta,
+                  })
+
+                  let coordi = this.state.coordi
+                  coordi.push({
+                    latitude: place.result.geometry.location.lat,
+                    longitude: place.result.geometry.location.lng,
+                  })
               this.setState(
                 {
                   markers: [],
                   data: [],
-                  region: {
-                    latitude: place.result.geometry.location.lat,
-                    longitude: place.result.geometry.location.lng,
-                    latitudeDelta: this.state.region.latitudeDelta,
-                    longitudeDelta: this.state.region.longitudeDelta,
-                  },
-                  coordi: {
-                    latitude: place.result.geometry.location.lat,
-                    longitude: place.result.geometry.location.lng,
-                  },
+                  region,
+                  coordi,titleCity
                 },
                 () => {
-                  this.map.animateToRegion(this.state.region, 500);
+                  console.log('this.state.region>>>>>',this.state.region)
+                  this.map.fitToCoordinates(this.state.coordi.map(item => item), {
+                  edgePadding: DEFAULT_PADDING,
+                  animated: true,
+                })
+                  // this.map.animateToRegion(this.state.region[0], 500);
                   this.call();
                 },
               );
@@ -449,9 +456,10 @@ else
           />
           <View
             style={[{marginTop: scale(5)}, styles.JoblistSecondViewHeading]}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
+            <View style={[styles.JoblistSecondViewHeadingResult,{flexDirection:"row"}]}>
+              <Texting style={styles.JoblistSecondViewHeadingText} text='Results'/>
               <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {this.state.data ? this.state.data.length : 0}
+                - {this.state.data ? this.state.data.length : 0}
               </Text>
             </View>
             <View style={styles.JobListUpperButtonView}>
@@ -469,9 +477,10 @@ else
                       height: scale(20),
                       width: scale(16),
                     }}
+                    tintColor={'#333'}
                     resizeMode={'contain'}
                   />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
+                  <Texting style={styles.JoblistUpperButton} text='Sort' />
                 </View>
               </TouchableWithoutFeedback>
               <TouchableWithoutFeedback onPress={this.Filter}>
@@ -483,9 +492,10 @@ else
                       width: scale(14),
                       marginTop: scale(1),
                     }}
+                    tintColor={'#333'}
                     resizeMode={'contain'}
                   />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
+                  <Texting style={styles.JoblistUpperButton} text='Filter'/>
                 </View>
               </TouchableWithoutFeedback>
             </View>
@@ -501,74 +511,91 @@ else
               }}
               style={styles.MapViewStyle}
               provider={PROVIDER_GOOGLE}
-              onMapReady={() => {
-                this.map.animateToRegion(
-                  {
-                    latitude: global.let || 10,
-                    longitude: global.long || 10,
-                    latitudeDelta: this.state.region.latitudeDelta,
-                    longitudeDelta: this.state.region.longitudeDelta,
-                  },
-                  1000,
-                );
+              // onMapReady={() => {
+              //   this.map.animateToRegion(
+              //     [{
+              //       latitude: global.let || 10,
+              //       longitude: global.long || 10,
+              //       latitudeDelta: this.state.region.latitudeDelta,
+              //       longitudeDelta: this.state.region.longitudeDelta,
+              //     }],
+              //     1000,
+              //   );
+              // }}
+              onRegionChange={(reg) => {
+                // console.log(519,reg)
+                // let region = this.state.region
+                // region.push(reg)
+
+                //   let coordi = this.state.coordi
+                //   coordi.push = ({
+                //     latitude: reg.letitude,
+                //     longitude: reg.longitude,
+                //   })
+                // this.setState({
+                //   region,
+                //   coordi,
+                //   markers: [],
+                //   data: [],
+                // });
               }}
-              onRegionChange={(region) => {
-                this.setState({
-                  region,
-                  coordi: {
-                    latitude: region.latitude,
-                    longitude: region.longitude,
-                  },
-                  markers: [],
-                  data: [],
-                });
+              onRegionChangeComplete={async (reg) => {
+                // let given = await this.map.getCamera();
+                console.log('this.state', reg);
+                // let region = this.state.region
+                // region.push(reg)
+                // let coordi = this.state.coordi
+                // coordi.push({latitude: reg.latitude,
+                //     longitude: reg.longitude});
+                // this.setState({
+                //   region : region,
+                //   markers: [],
+                //   data: [],
+                //   zoom: given.zoom,
+                //   coordi,
+                // });
+                // this.call();
               }}
-              onRegionChangeComplete={async (region) => {
-                let given = await this.map.getCamera();
-                console.log('this.state', this.state.region);
-                this.setState({
-                  region,
-                  markers: [],
-                  data: [],
-                  zoom: given.zoom,
-                  coordi: {
-                    latitude: region.latitude,
-                    longitude: region.longitude,
-                  },
-                  circlecenter: region,
-                });
-                this.call();
-              }}
-              initialRegion={region}
+              initialRegion={region[0]}
               showsUserLocation={true}>
-              <MapView.Marker.Animated
+                 {
+                this.state.coordi.map((coordi,index) => 
+                (<MapView.Marker.Animated
                 draggable
-                coordinate={this.state.coordi}
+                coordinate={coordi}
+                pinColor={'red'}
+                title={this.state.titleCity[index]}
                 onDragEnd={(e) => {
                   console.log('dragEnd', e.nativeEvent.coordinate);
-                  this.onMarkerDrag(e);
+                  console.log('this.state.coordi',this.state.coordi)
+                  this.onMarkerDrag(e,index);
                   //this.call();
                 }}
-                ref={(marker) => {
-                  this.marker = marker;
-                }}
-              />
-              {this.state.markers.map((marker) => (
-                <Marker.Animated
-                  key={new Date().getTime().toString() + (Math.floor(Math.random() * Math.floor(new Date().getTime()))).toString()}
-                  coordinate={marker.coordinate}
-                  pinColor={'#000'}
-                  image={flagBlueImg}
-                />
-              ))}
-              <Circle
-                center={this.state.circlecenter}
+              />)
+                )}
+              {this.state.markers.map((marker,index) => (
+                  <Marker
+                    key={new Date().getTime().toString() + (Math.floor(Math.random() * Math.floor(new Date().getTime()))).toString()}
+                    coordinate={marker.coordinate}
+                    pinColor={'green'}
+                    // icon={play('ellipse',15,'red')}
+                    image={flagBlueImg}
+                  />
+                )
+              )}
+              {this.state.region.map(cir => 
+                   (
+                  <Circle
+                center ={{latitude: cir.latitude,
+                      longitude: cir.longitude}}
                 radius={this.state.radius}
                 strokeColor={themeColor}
                 strokeWidth={2}
                 fillColor="rgba(255,255,255,0.3)"
                 // zIndex={2}
-              />
+              />)
+             )}
+             
             </MapView.Animated>
           </View>
           <View style={styles.MapSliderText}>
@@ -612,57 +639,18 @@ else
               maximumTrackTintColor={'#333'}
             />
           </View>
-          {this.state.data != '' ? (
-            <FlatList
-              style={styles.MapVerticalList}
-              data={this.state.data}
-              showsHorizontalScrollIndicator={false}
-              removeClippedSubviews={true}
-              renderItem={({item, index}) => (
-                <ItemMVJobb
+          {this.state.data.length ? (
+            <List style={styles.MapVerticalList} data={this.state.data} renderItem={({item, index}) => (
+                  <ItemMVJobb
                   item={item}
                   index={index}
                   push={this.push}
                   Video={this.Video}
                 />
-              )}
-              initialNumToRender={5}
-              maxToRenderPerBatch={10}
-              updateCellsBatchingPeriod={70}
-              getItemLayout={(data, index) => ({
-                length: hp('28%'),
-                offset: hp('28%') * index,
-                index,
-              })}
-              keyExtractor={(item, index) => index + ''}
-            />
+              )} />
           ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: FontBold,
-                  color: themeColor,
-                  fontSize: scale(18),
-                  width: wp(60),
-                }}>
-                No Data found 😞
-              </Text>
-              <NavigationEvents onDidFocus={this.checking} />
-            </View>
+            <NoData />
           )}
-          <View style={styles.TranLingImage}>
-            <Image
-              source={TRANLINE}
-              style={styles.imageStyle}
-              resizeMode={'stretch'}
-            />
-          </View>
         </ImageBackground>
       </View>
     )

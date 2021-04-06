@@ -16,6 +16,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Compon
 import { Background,url } from '../Constant/index'
 import http from '../api'
 import AsyncStorage from '@react-native-community/async-storage';
+import Texting from "../Constant/Text";
 
 class OtpScreen extends Component {
     constructor(props) {
@@ -75,8 +76,6 @@ class OtpScreen extends Component {
         } catch ( error ) {
             snack("error while verifacation" + error)
         }
-    // this.props.navigation.navigate('ForgatPass')
-    // this.props.navigation.navigate('JobForgatPass')
     }
 
     render() {
@@ -97,20 +96,18 @@ class OtpScreen extends Component {
                 height: scale(150),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
-           <Text style={[styles.LookingFor, {
+           <Texting style={[styles.LookingFor, {
                 textAlign: "center",
                 width: wp('80%'),
                 fontSize: scale(17)
-            }]}>We have sent you  otp in your registered email address</Text>
+            }]} text='OTP_Screen' />
             </View>
             <View style={{
-                // left: Dimensions.get('window').width / 7,
                 marginTop: hp(50) / 2,
-                // position: "absolute",
                 justifyContent: "center",
                 alignItems: "center"
             }}>
-       <CustomInput placeholder = {'Enter Otp'} textChange = {(text) => this.setState({
+       <CustomInput placeholder = {'- - - -'} textChange = {(text) => this.setState({
                 name: text
             })}
             keyboardType={"numeric"}
@@ -121,23 +118,27 @@ class OtpScreen extends Component {
             }}
             containerStyle={{
                 elevation: 7,
-                // alignSelf: "center",
                 width: wp(100)
             }}
             inputStyle={{
-                // width: wp(100),
-                // alignSelf: "center",
-                // alignItems: "center",
                 textAlign: "center"
             }}
             />
+            <TouchableWithoutFeedback style={styles.Size} onPress={this.Reset}>
+            <View  style={[styles.Size, styles.CenterLogo,],{width:'auto'}}>
+            <Texting style={[{
+                fontSize: scale(20),
+            }, styles.FontSty]} text='Not_Received_OTP' />
+            </View></TouchableWithoutFeedback>
       <View style={{
                 top: scale(150),
                 right: scale(20),
                 position: "absolute"
-            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.Reset}><View  style={[styles.Size, styles.CenterLogo]}><Text style={[{
+            }}><TouchableWithoutFeedback style={styles.Size} onPress={this.Reset}>
+            <View  style={[styles.Size, styles.CenterLogo]}>
+            <Texting style={[{
                 fontSize: scale(20),
-            }, styles.FontSty]}>Send</Text></View></TouchableWithoutFeedback></View>
+            }, styles.FontSty]} text='Send'/></View></TouchableWithoutFeedback></View>
         </View>
        </ImageBackground></SafeAreaView>
 

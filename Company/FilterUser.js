@@ -70,6 +70,8 @@ import Itemskill from './Itemskill';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 // import Slider from 'react-native-range-slider'
 import Slider from 'rn-range-slider';
+import Texting from '../Constant/Text'
+import ApplyFilterButton from '../Component/ApplyFilterButton'
 
 var radio_props = [{
   label: '  By Distance',
@@ -80,6 +82,46 @@ var radio_props = [{
 }, ];
 
 var mg = [];
+
+
+const Categoryskill = ({name,...props}) => {
+  return (
+            <View
+            style={{
+              flexDirection: 'row',
+              width: wp(35),
+              marginLeft: wp(5),
+            }}>
+            <View
+              style={{
+                alignItems: 'flex-start',
+                width: wp(25),
+              }}>
+              <Texting
+                style={{
+                  fontSize: scale(16),
+                }} numberOfLines={1} text={name}/>
+            </View>
+            <View
+              style={{
+                alignItems: 'flex-end',
+                width: wp(10),
+              }}>
+              <Icon2
+                name={
+                  props.bool
+                    ? 'check-box'
+                    : 'check-box-outline-blank'
+                }
+                size={scale(20)}
+                color={themeColor}
+                onPress={props.onPress}
+              />
+            </View>
+          </View>
+  )
+}
+
 
 class FilterUser extends Component {
   constructor(props) {
@@ -162,18 +204,18 @@ class FilterUser extends Component {
                         tmpobj,
                         jobs = res['data']['result'];
 
-              for (let i in jobs) {
+              for (let i =0; i<jobs.length; i++) {
 
                   if (jobs[i]['workexp']) {
-                      for (let j in jobs[i]['workexp']) {
+                      for (let j = 0; j<jobs[i]['workexp'].length;j++) {
                               tmpobj = JSON.parse(JSON.stringify(jobs[i]));
 
                               From = jobs[i]['workexp'][j]['From'].split(' ');
                               To = jobs[i]['workexp'][j]['To'].split(' ');
 
                               tmpobj.Company = jobs[i]['workexp'][j]['Company'];
-                              tmpobj.heading = jobs[i]['workexp'][j]['heading'];
-                              tmpobj.totalExp = To[1] - From[1];
+                                    tmpobj.Role = jobs[i]['workexp'][j]['Role'];
+                                    tmpobj.totalExp = To[1] - From[1];
 
                               data.push(tmpobj);
                       }
@@ -426,7 +468,7 @@ class FilterUser extends Component {
                           resizeMode={'contain'}
                         />
                       </View>
-                      <Text style={styles.DropDownHeader}>Minimum Salary</Text>
+                      <Texting style={styles.DropDownHeader} text='Minimum_Salary' />
                     </View>
                   }>
                   <View style={styles.FilterMinimumSalary}>
@@ -486,7 +528,7 @@ class FilterUser extends Component {
                           resizeMode={'contain'}
                         />
                       </View>
-                      <Text style={styles.DropDownHeader}>Salary Type</Text>
+                      <Texting style={styles.DropDownHeader}  text='Salary_Type'/>
                     </View>
                   }>
                   <View style={{
@@ -503,18 +545,14 @@ class FilterUser extends Component {
                           Hourly: !Hourly,
                         });
                       }} style={{borderColor: Hourly ? themeColor : '#000', backgroundColor : Hourly ? themeColor : themeWhite ,width:"44%",justifyContent:"center",alignItems:"center",borderRadius:scale(30),borderWidth:1,paddingHorizontal:scale(10)}}>
-                        <Text style={[{color:Hourly ? 'white' : '#000'},styles.CheckBoxLabelFont]}>
-                          Hourly
-                        </Text>
+                        <Texting style={[{color:Hourly ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='Hourly' />
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => {
                         this.setState({
                           Monthly: !Monthly,
                         });
                       }} style={{borderColor: Monthly ? themeColor : '#000', backgroundColor : Monthly ? themeColor : themeWhite, width:"44%",borderWidth:1,justifyContent:"center",alignItems:"center",borderRadius:scale(30),paddingHorizontal:scale(10),marginRight:"8%"}}>
-                        <Text style={[{color:Monthly ? 'white' : '#000'},styles.CheckBoxLabelFont]}>
-                          Monthly
-                        </Text>
+                        <Texting style={[{color:Monthly ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='Monthly' />
                       </TouchableOpacity>
                       
                     </View>
@@ -524,70 +562,9 @@ class FilterUser extends Component {
                           Yearly: !Yearly,
                         });
                       }} style={{borderColor: Yearly ? themeColor : '#000', backgroundColor : Yearly ? themeColor : themeWhite ,width:"44%",borderWidth:1,justifyContent:"center",alignItems:"center",borderRadius:scale(30),paddingHorizontal:scale(10)}}>
-                        <Text style={[{color:Yearly ? 'white' : '#000'},styles.CheckBoxLabelFont]}>
-                          Yearly
-                        </Text>
+                        <Texting style={[{color:Yearly ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='Yearly'/>
                       </TouchableOpacity>
                       </View>
-                  </View>
-                </DropDownItem>
-                <DropDownItem
-                  // key={i}
-                  style={styles.FilterDropDown}
-                  contentVisible={false}
-                  invisibleImage={IC_ARR_DOWN}
-                  visibleImage={IC_ARR_UP}
-                  header={
-                    <View style={styles.FilterDropDownInnerView}>
-                      <View style={styles.fliterIcon}>
-                        <Image
-                          source={company}
-                          style={styles.imageStyle}
-                          resizeMode={'contain'}
-                        />
-                      </View>
-                      <Text style={styles.DropDownHeader}>Company</Text>
-                    </View>
-                  }>
-                  <View>
-                    <CustomInput
-                      editable={false}
-                      value={this.state.company}
-                      placeholder={global.Company}
-                      textChange={(text) => {
-                        this.setState({
-                          show: text != '' ? true : false,
-                        });
-                        this.cheks(text);
-                      }}
-                      inputContainerStyle={{
-                        backgroundColor: themeColor,
-                        // width: "100%",
-                        height: scale(40),
-                        borderColor: themeColor,
-                        justifyContent: 'center',
-                        borderWidth: scale(1),
-                        borderRadius: scale(5),
-                      }}
-                      inputStyle={{
-                        color: 'white',
-                        fontSize: scale(18),
-                        fontFamily: 'Roboto-Bold',
-                        fontWeight: 'bold',
-                      }}
-                      placeholderTextColor={themeWhite}
-                      containerStyle={{
-                        width: wp(85),
-                        marginBottom: scale(-17),
-                        // position: "absolute"
-                      }}
-                      iconName={iconSearch}
-                      iconStyle={{
-                        height: 25,
-                        width: 25,
-                      }}
-                      iconColor={'#fff'}
-                    />
                   </View>
                 </DropDownItem>
                 <DropDownItem
@@ -605,7 +582,7 @@ class FilterUser extends Component {
                           resizeMode={'contain'}
                         />
                       </View>
-                      <Text style={styles.DropDownHeader}>Skill</Text>
+                      <Texting style={styles.DropDownHeader} text='Skill'/>
                     </View>
                   }>
                   <View
@@ -722,7 +699,7 @@ class FilterUser extends Component {
                           resizeMode={'contain'}
                         />
                       </View>
-                      <Text style={styles.DropDownHeader}>Skill Category</Text>
+                      <Texting style={styles.DropDownHeader} text='Skill_Category' />
                     </View>
                   }>
                   <View
@@ -752,406 +729,41 @@ class FilterUser extends Component {
                             flexDirection: 'row',
                             width: wp(80),
                           }}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              width: wp(35),
-                              marginLeft: wp(5),
-                            }}>
-                            <View
-                              style={{
-                                alignItems: 'flex-start',
-                                width: wp(25),
-                              }}>
-                              <Text
-                                style={{
-                                  fontSize: scale(16),
-                                }}>
-                                Employed
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                alignItems: 'flex-end',
-                                width: wp(10),
-                              }}>
-                              <Icon2
-                                name={
-                                  Employed
-                                    ? 'check-box'
-                                    : 'check-box-outline-blank'
-                                }
-                                size={scale(20)}
-                                color={themeColor}
-                                onPress={() =>
+                          <Categoryskill name='Employed' bool={Employed} onPress={() =>
                                   this.setState({
                                     Employed: !this.state.Employed,
-                                  })
-                                }
-                              />
-                            </View>
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              width: wp(35),
-                              marginLeft: wp(5),
-                            }}>
-                            <View
-                              style={{
-                                alignItems: 'flex-start',
-                                width: wp(25),
-                              }}>
-                              <Text
-                                style={{
-                                  fontSize: scale(16),
-                                }}>
-                                Internship
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                alignItems: 'flex-end',
-                                width: wp(10),
-                              }}>
-                              <Icon2
-                                name={
-                                  Internship
-                                    ? 'check-box'
-                                    : 'check-box-outline-blank'
-                                }
-                                size={scale(20)}
-                                color={themeColor}
-                                onPress={() =>
+                                  })} />
+                          <Categoryskill name='Internship' bool={Internship} onPress={() =>
                                   this.setState({
                                     Internship: !this.state.Internship,
-                                  })
-                                }
-                              />
-                            </View>
-                          </View>
+                                  })} />
                         </View>
                         <View
                           style={{
                             flexDirection: 'row',
                             width: wp(80),
                           }}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              width: wp(35),
-                              marginLeft: wp(5),
-                            }}>
-                            <View
-                              style={{
-                                alignItems: 'flex-start',
-                                width: wp(25),
-                              }}>
-                              <Text
-                                style={{
-                                  fontSize: scale(16),
-                                }}
-                                numberOfLines={1}>
-                                StudentJobs
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                alignItems: 'flex-end',
-                                width: wp(10),
-                              }}>
-                              <Icon2
-                                name={
-                                  StudentJobs
-                                    ? 'check-box'
-                                    : 'check-box-outline-blank'
-                                }
-                                size={scale(20)}
-                                color={themeColor}
-                                onPress={() =>
+                          <Categoryskill name='StudentJobs' bool={StudentJobs} onPress={() =>
                                   this.setState({
                                     StudentJobs: !this.state.StudentJobs,
-                                  })
-                                }
-                              />
-                            </View>
-                          </View>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              width: wp(35),
-                              marginLeft: wp(5),
-                            }}>
-                            <View
-                              style={{
-                                alignItems: 'flex-start',
-                                width: wp(25),
-                              }}>
-                              <Text
-                                style={{
-                                  fontSize: scale(16),
-                                }}>
-                                Freelancer
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                alignItems: 'flex-end',
-                                width: wp(10),
-                              }}>
-                              <Icon2
-                                name={
-                                  Freelancer
-                                    ? 'check-box'
-                                    : 'check-box-outline-blank'
-                                }
-                                size={scale(20)}
-                                color={themeColor}
-                                onPress={() =>
+                                  })} />
+                          <Categoryskill name='Freelancer' bool={Freelancer} onPress={() =>
                                   this.setState({
                                     Freelancer: !this.state.Freelancer,
-                                  })
-                                }
-                              />
-                            </View>
-                          </View>
+                                  })} />
                         </View>
                         <View
                           style={{
                             flexDirection: 'row',
                             width: wp(80),
                           }}>
-                          <View
-                            style={{
-                              flexDirection: 'row',
-                              width: wp(35),
-                              marginLeft: wp(5),
-                            }}>
-                            <View
-                              style={{
-                                alignItems: 'flex-start',
-                                width: wp(25),
-                              }}>
-                              <Text
-                                style={{
-                                  fontSize: scale(16),
-                                }}
-                                numberOfLines={1}>
-                                HelpingVacancies
-                              </Text>
-                            </View>
-                            <View
-                              style={{
-                                alignItems: 'flex-end',
-                                width: wp(10),
-                              }}>
-                              <Icon2
-                                name={
-                                  HelpingVacancies
-                                    ? 'check-box'
-                                    : 'check-box-outline-blank'
-                                }
-                                size={scale(20)}
-                                color={themeColor}
-                                onPress={() =>
+                           <Categoryskill name='HelpingVacancies' bool={HelpingVacancies} onPress={() =>
                                   this.setState({
-                                    HelpingVacancies: !this.state
-                                      .HelpingVacancies,
-                                  })
-                                }
-                              />
-                            </View>
-                          </View>
+                                    HelpingVacancies: !this.state.HelpingVacancies,
+                                  })} />
                         </View>
                       </View>
                     </ScrollView>
-                  </View>
-                </DropDownItem>
-                <DropDownItem
-                  // key={i}
-                  style={styles.FilterDropDown}
-                  contentVisible={false}
-                  invisibleImage={IC_ARR_DOWN}
-                  visibleImage={IC_ARR_UP}
-                  header={
-                    <View style={styles.FilterDropDownInnerView}>
-                      <View style={styles.fliterIcon}>
-                        <Image
-                          source={skillLavel}
-                          style={styles.imageStyle}
-                          resizeMode={'contain'}
-                        />
-                      </View>
-                      <Text style={styles.DropDownHeader}>Skill Level</Text>
-                    </View>
-                  }>
-                  <View
-                    Style={{
-                      flex: 1,
-                      flexDirection: 'column',
-                    }}>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        width: wp(80),
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          width: wp(35),
-                          marginLeft: wp(5),
-                        }}>
-                        <View
-                          style={{
-                            alignItems: 'flex-start',
-                            width: wp(25),
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: scale(16),
-                            }}>
-                            Trainee
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            alignItems: 'flex-end',
-                            width: wp(10),
-                          }}>
-                          <Icon2
-                            name={
-                              Trainee ? 'check-box' : 'check-box-outline-blank'
-                            }
-                            size={scale(20)}
-                            color={themeColor}
-                            onPress={() =>
-                              this.setState({
-                                Trainee: !this.state.Trainee,
-                              })
-                            }
-                          />
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          width: wp(35),
-                          marginLeft: wp(5),
-                        }}>
-                        <View
-                          style={{
-                            alignItems: 'flex-start',
-                            width: wp(25),
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: scale(16),
-                            }}>
-                            Novice
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            alignItems: 'flex-end',
-                            width: wp(10),
-                          }}>
-                          <Icon2
-                            name={
-                              Novice ? 'check-box' : 'check-box-outline-blank'
-                            }
-                            size={scale(20)}
-                            color={themeColor}
-                            onPress={() =>
-                              this.setState({
-                                Novice: !this.state.Novice,
-                              })
-                            }
-                          />
-                        </View>
-                      </View>
-                    </View>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        width: wp(80),
-                      }}>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          width: wp(35),
-                          marginLeft: wp(5),
-                        }}>
-                        <View
-                          style={{
-                            alignItems: 'flex-start',
-                            width: wp(25),
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: scale(16),
-                            }}>
-                            Proficient
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            alignItems: 'flex-end',
-                            width: wp(10),
-                          }}>
-                          <Icon2
-                            name={
-                              Proficient
-                                ? 'check-box'
-                                : 'check-box-outline-blank'
-                            }
-                            size={scale(20)}
-                            color={themeColor}
-                            onPress={() =>
-                              this.setState({
-                                Proficient: !this.state.Proficient,
-                              })
-                            }
-                          />
-                        </View>
-                      </View>
-                      <View
-                        style={{
-                          flexDirection: 'row',
-                          width: wp(35),
-                          marginLeft: wp(5),
-                        }}>
-                        <View
-                          style={{
-                            alignItems: 'flex-start',
-                            width: wp(25),
-                          }}>
-                          <Text
-                            style={{
-                              fontSize: scale(16),
-                            }}>
-                            Expert
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            alignItems: 'flex-end',
-                            width: wp(10),
-                          }}>
-                          <Icon2
-                            name={
-                              Expert ? 'check-box' : 'check-box-outline-blank'
-                            }
-                            size={scale(20)}
-                            color={themeColor}
-                            onPress={() =>
-                              this.setState({
-                                Expert: !this.state.Expert,
-                              })
-                            }
-                          />
-                        </View>
-                      </View>
-                    </View>
                   </View>
                 </DropDownItem>
                 <DropDownItem
@@ -1169,7 +781,7 @@ class FilterUser extends Component {
                           resizeMode={'contain'}
                         />
                       </View>
-                      <Text style={styles.DropDownHeader}>Job Type</Text>
+                      <Texting style={styles.DropDownHeader} text='Job_Type'/>
                     </View>
                   }>
                   <View
@@ -1190,14 +802,12 @@ class FilterUser extends Component {
                               width: '40%',
                             },
                           ]}>
-                          <Text
+                          <Texting
                             style={{
                               marginRight: scale(5),
                               fontSize: scale(18),
                               color: '#000',
-                            }}>
-                            Fulltime
-                          </Text>
+                            }} text='Fulltime'/>
                           <View style={styles.SwitchView}>
                             <ToggleSwitch
                               isOn={FullTime}
@@ -1219,14 +829,12 @@ class FilterUser extends Component {
                               flexDirection: 'row',
                             },
                           ]}>
-                          <Text
+                          <Texting
                             style={{
                               marginRight: scale(5),
                               fontSize: scale(18),
                               color: '#000',
-                            }}>
-                            Part-time
-                          </Text>
+                            }} text='Part_time'/>
                           <View style={styles.SwitchView}>
                             <ToggleSwitch
                               isOn={PartTime}
@@ -1260,7 +868,7 @@ class FilterUser extends Component {
                           resizeMode={'contain'}
                         />
                       </View>
-                      <Text style={styles.DropDownHeader}>Search Type</Text>
+                      <Texting style={styles.DropDownHeader} text='Search_Type'/>
                     </View>
                   }>
                   <View
@@ -1284,7 +892,7 @@ class FilterUser extends Component {
                           },
                         );
                       }}
-                      text="By Distance"
+                      text={global.language == 'english' ? "By Distance" : 'By Distance'}
                     />
                     <CheckBox
                       selected={ByLocation}
@@ -1295,77 +903,18 @@ class FilterUser extends Component {
                           ByLocation: !ByLocation,
                         });
                       }}
-                      text="By Location"
+                      text={global.language == 'english' ? "By Location" : 'By Location'}
                     />
                   </View>
                 </DropDownItem>
               </ScrollView>
           </View>
-          <View
-                  style={
-                    {
-                      bottom: scale(80),position:"absolute",
-                      borderTopWidth:1,
-                      height:80,width:wp(100),justifyContent: 'space-around',
-                    flexDirection:"row",
-                    alignItems: 'center',
-                      backgroundColor:"rgba(255,255,255,0.2)"
-                    }
-                  }>
-                  <TouchableWithoutFeedback
-                    style={[
-                      {
-                        width: wp('40%')
-                      },
-                      styles.SaveFilterButton,
-                    ]}
-                    onPress={()=> this.setState({
+          <ApplyFilterButton reset='Reset' apply='Apply' onReset ={()=> this.setState({
                         ...this.defaultState
                     },()=> {
                       this.slider.current.setHighValue(150000)
                       this.slider.current.setLowValue(0)
-                    })}>
-                    <View
-                      style={[
-                        styles.SaveFilterButtonView,
-                        styles.SaveFilterButton,
-                      ]}>
-                      <Text
-                        style={[
-                          {
-                            fontSize: scale(20),
-                          },
-                          styles.FontSty,
-                        ]}>
-                        Reset
-                      </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <TouchableWithoutFeedback
-                    style={[
-                      {
-                        width: wp('40%'),
-                      },
-                      styles.SaveFilterButton,
-                    ]}
-                    onPress={this.save}>
-                    <View
-                      style={[
-                        styles.SaveFilterButtonView,
-                        styles.SaveFilterButton,
-                      ]}>
-                      <Text
-                        style={[
-                          {
-                            fontSize: scale(20),
-                          },
-                          styles.FontSty,
-                        ]}>
-                        Apply
-                      </Text>
-                    </View>
-                  </TouchableWithoutFeedback>
-                </View>
+                    })} onApply={this.save}/>
         </ImageBackground>
       </SafeAreaView>
     );

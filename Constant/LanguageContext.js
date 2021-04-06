@@ -12,6 +12,8 @@ class LanguageProvider extends React.Component {
         }
     }
     changeLanguage = (language) => {
+        console.log('language>>>>>>>',language)
+        global.language = language
         this.setState({ language, translations: translations[language] })
     }
     render() {
