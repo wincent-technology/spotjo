@@ -14,13 +14,15 @@ import {
 import Texting from '../Constant/Text'
 
 const hitSlop = {top: 40, bottom: 40, left: 50, right: 50};
-const center = {bottom:40,position:"absolute",
-borderTopWidth:1,
-width:wp(100),justifyContent: 'space-around',
-flexDirection:"row",
-paddingVertical:30,
-alignItems: 'center',
-backgroundColor:"rgba(255,255,255,0.2)"};
+const center = {
+  bottom:40,
+  position:"absolute",
+  borderTopWidth:1,
+  width:wp(100),justifyContent: 'space-around',
+  flexDirection:"row",
+  paddingVertical:30,
+  alignItems: 'center',
+  backgroundColor:"transparent"};
 const ApplyFilterButton = ({onReset, onApply, ...props}) => 
 (
     <View

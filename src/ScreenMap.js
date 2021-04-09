@@ -292,12 +292,12 @@ region[index]={
     // this.props.navigation.navigate('VideoResume');
   };
   Filter = () => {
-    this.props.navigation.navigate('FilterUser');
+    this.props.navigation.navigate('Filter');
   };
   push = (item, index) => {
     // console.log("heelo", item);
     global.ig = global.all;
-    this.props.navigation.navigate('UserPro', {
+    this.props.navigation.navigate('CompanyProfile', {
       item: item,
       index: index,
       status: 'undefined',

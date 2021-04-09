@@ -157,7 +157,7 @@ const TabScreen = createBottomTabNavigator({
     },
   },
   CompanyProfiles: {
-    screen: LoginFirst,
+    screen: CompanyProfiles,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -194,7 +194,7 @@ const TabScreen = createBottomTabNavigator({
   },
  
   ChatGuest: {
-    screen: LoginFirst,
+    screen: CompanyProfiles,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({

@@ -107,9 +107,9 @@ export const Mail = require('../Img/mail.png');
 export const splashVid = require('../Img/01.mp4');
 export const createJ = require('../Img/createjob.png')
 // export const url = "https://sportjo.herokuapp.com/" //http://192.168.0.169:8090/"
-export const url = 'http://192.168.1.14:8091/';
+// export const url = 'http://192.168.1.17:8091/';
 // export const url = "http://192.168.43.166:8091/"
-// export const url = 'http://178.128.118.157:8091/'; //last live
+export const url = 'http://178.128.118.157:8091/'; //last live
 // export const url = 'http://192.168.1.13:8091/';
 
 // http://192.168.0.169:8091/images/user/lpbihogc9a.jpg

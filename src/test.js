@@ -1,5 +1,6 @@
 
 import React,{useState,useEffect} from 'react'
+import { Alert } from 'react-native';
 import {FlatList,View,Text,TouchableHighlight} from 'react-native'
 
 
@@ -37,11 +38,22 @@ const [state,setdata] = useState([{
 const [suggestion,setSuggestion] = useState([]);
 
 useEffect(() => {
-    console.log('hi')
+    var book = new Book ('man','name');
+alert(book.getd());
     
 },[suggestion.length > 1])
 
 
+
+function Book (type,name){
+
+this.type = type;
+this.name = name;
+this.getd = function () {
+    return this.type + ' sddf ' + this.name; 
+}
+
+}
        const choose = (item,index) => {
                 let mg = suggestion
                 mg.push(item)
@@ -56,6 +68,14 @@ useEffect(() => {
 
 
                         console.log('this.suggestion.length',suggestion.length)
+
+
+        let bg = [1,2,3].reduce((prev , cur) => prev.concat(prev.map(k => k.concat(cur))),[[]])
+        console.log('b,g',bg)
+
+        const dm = (arr) => arr.map((x,y,z) => z.filter(w=>w>x))
+        console.log(dm([10.5,10,15,16]))
+
 
     }
 

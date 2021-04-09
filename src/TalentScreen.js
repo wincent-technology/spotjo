@@ -31,6 +31,7 @@ import styles from './Style';
 import {library} from './IconManager';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import Texting from '../Constant/Text'
+import ListOfChoosed from '../Component/ListOfChoosed'
 // Array.prototype.move = function(from, to) {
 //   this.splice(to, 0, this.splice(from, 1)[0]);
 // };
@@ -173,27 +174,7 @@ console.log('mg',mg)
     } catch (error) {
       snack(error);
     }
-  //   this.arrayholder = [{
-  //     'cell':'one',
-  //     'right':false
-  // },
-  // {
-  //     'cell':'two',
-  //     'right':false
-  // },
-  // {
-  //     'cell':'three',
-  //     'right':false
-  // },{
-  //     'cell':'four',
-  //     'right':false
-  // },{
-  //     'cell':'five',
-  //     'right':false
-  // },{
-  //     'cell':'six',
-  //     'right':false
-  // }]
+ 
   }
   cheks = (text) => {
     if (text != '') {
@@ -318,6 +299,7 @@ console.log('mg',mg)
                 }}>
                 <CustomInput
                   value={this.state.name}
+                  onSubmitEditing={()=> this.setState({name:''})}
                   placeholder={global.language == 'english' ? 'E.g (Java Developer)' : 'E.g (Java-Developer)'}
                   inputContainerStyle={{borderRadius:scale(20),height:scale(45),width:'92%',backgroundColor:"#fff",borderBottomColor: "#E5E5E5",
         borderBottomWidth: 0.3,}}
@@ -371,23 +353,9 @@ console.log('mg',mg)
                     position: 'absolute',
                     top: scale(260),
                   }} onLayout={(e)=> this.setState({natHeight:e.nativeEvent.layout.height})}>
-                  <FlatList
-                    data={dataCheck}
-                    keyboardShouldPersistTaps="always"
-                    showsHorizontalScrollIndicator={false}
-                    removeClippedSubviews={true}
-                    renderItem={({item, index}) => this.renderItem(item, index)}
-                    contentContainerStyle={{flexGrow:1,justifyContent:"flex-start",paddingLeft:30,flexDirection:'row',flexWrap:"wrap"}}
-                    initialNumToRender={5}
-                    maxToRenderPerBatch={10}
-                    updateCellsBatchingPeriod={70}
-                    getItemLayout={(data, index) => ({
-                      length: hp('1%'),
-                      offset: hp('1%') * index,
-                      index,
-                    })}
-                    keyExtractor={(item, index) => index + ''}
-                  />
+                  <ListOfChoosed 
+                  contentContainerStyle={{flexGrow:1,justifyContent:"flex-start",paddingLeft:30,flexDirection:'row',flexWrap:"wrap"}}
+                  data={dataCheck} keyboardShouldPersistTaps="always" renderItem={({item, index}) => this.renderItem(item, index)} />
                 </View>
               )}
             </View>

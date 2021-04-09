@@ -21,6 +21,7 @@ const ListOfChoosed = ({...props}) => <>
                     index,
                   })}
                   keyExtractor={(item, index) => index + ''}
+                  {...props}
                 />
   </>
 

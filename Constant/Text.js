@@ -29,3 +29,4 @@ export default function CustomText({ text, ...rest }) {
     )
 }
 
+ 8

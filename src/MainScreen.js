@@ -28,10 +28,19 @@ import Texting from '../Constant/Text'
 
 
 
+// function Book(type,name){
+          
+//   this.type = type;
+//   this.name = name;
+//   this.getd = function () {
+//       return this.type + ' sddf ' + this.name; 
+//   }
+  
+//   }
 
-class MainScreen extends Component {
+const MainScreen = (props) => {
 
-  Opportunities = async () => {
+  const Opportunities = async () => {
     // let aoa = [['one',1],['two','2']]
 
 
@@ -46,23 +55,33 @@ class MainScreen extends Component {
     //   row.filter((cell, i) => obj[columnNames[i]] = cell );// Use index from current cell to get column name, add current cell to new object
     //   return obj;
     // });
-    // console.log(objs); // Display the array of objects on the console
+    // console.log('objs'); // Display the array of objects on the console
 
-            // this.props.navigation.navigate('TalentScreen');
-            this.props.navigation.navigate('test');
+            props.navigation.navigate('TalentScreen');
+            // props.navigation.navigate('test');
+
+
+          //     var book = new Book ('man','name');
+          //     var m = new Book ('maan','name');
+
+          // console.log('>>',book.getd(),m);
+              
+          
+          
+          
+          
 
   };
-  Login = async () => {
-        this.props.navigation.navigate('LoginFirst');
+  const Login = async () => {
+        props.navigation.navigate('LoginFirst');
   };
-  playVideo = () => {
-    this.props.navigation.navigate('Youtube');
+  const playVideo = () => {
+    props.navigation.navigate('Youtube');
   };
-  create = () => {
-    this.props.navigation.navigate('LoginFirst');
+  const create = () => {
+    props.navigation.navigate('LoginFirst');
   };
 
-  render() {
     return (
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
@@ -70,7 +89,7 @@ class MainScreen extends Component {
           source={Background}
           resizeMode={'stretch'}>
           <StatusBar hidden={true} />
-          <TouchableOpacity style={styles.Homeplay} onPress={this.playVideo}>
+          <TouchableOpacity style={styles.Homeplay} onPress={playVideo}>
             <View style={{paddingLeft:5}}>
               {play('videocam', scale(20), '#fff')}
             </View>
@@ -81,10 +100,10 @@ class MainScreen extends Component {
               {
                 borderBottomWidth: scale(0.5),
                 borderBottomColor: 'white',
-                paddingBottom: scale(0.5),
+                paddingBottom: scale(0.5),  
               },
             ]}>
-            <TouchableWithoutFeedback onPress={this.Login}>
+            <TouchableWithoutFeedback onPress={Login}>
               <Texting
                 style={[
                   {
@@ -106,7 +125,7 @@ class MainScreen extends Component {
           <View style={styles.HomebutGuest}>
             <TouchableWithoutFeedback
               style={styles.OpportunityView}
-              onPress={this.Opportunities}>
+              onPress={Opportunities}>
               <View style={styles.TalentView}>
                 <Texting style={styles.OppoTalentText} text='Guest'/>
               </View>
@@ -131,7 +150,7 @@ class MainScreen extends Component {
                   },
                   styles.FontSty,
                 ]} text='Create_new_account'/>
-              <TouchableWithoutFeedback onPress={this.create}>
+              <TouchableWithoutFeedback onPress={create}>
                 <Texting
                   style={[
                     {
@@ -147,6 +166,5 @@ class MainScreen extends Component {
         </ImageBackground>
       </SafeAreaView>
     );
-  }
 }
 export default withNavigationFocus(MainScreen);

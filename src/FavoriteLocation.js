@@ -42,7 +42,7 @@ import {
 } from './IconManager';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import Texting from '../Constant/Text'
-
+import ListOfChoosed from '../Component/ListOfChoosed'
 
 var mg = []
 
@@ -200,6 +200,7 @@ class FavoriteLocation extends Component {
     }
     back = () => {
         this.props.navigation.goBack();
+        
     }
     renderItem = (item, index) => {
         return (
@@ -312,27 +313,13 @@ class FavoriteLocation extends Component {
                     backgroundColor: 'transparent',
                     position: 'absolute',
                 top: scale(290),
-            }}  onLayout={(e)=> this.setState({natHeight:e.nativeEvent.layout.height})}><FlatList
-            data = {this.state.dataCheck}
-            keyboardShouldPersistTaps='always'
-            showsHorizontalScrollIndicator = { false  }
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => this.renderItem(item, index)}
-            contentContainerStyle={{justifyContent:"flex-start",paddingLeft:30,flexDirection:'row',flexWrap:"wrap"}}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => (
-            {
-                length: hp('1%'),
-                offset: hp('1%') * index,
-                index
-            }
-            )}
-            keyExtractor = {
-            (item, index) => index + ''
-            }
-            /></View> }
+            }}  onLayout={(e)=> this.setState({natHeight:e.nativeEvent.layout.height})}>
+            <ListOfChoosed  
+            contentContainerStyle={{justifyContent:"flex-start",paddingLeft:30,flexDirection:'row',flexWrap:"wrap"}} 
+            data = {this.state.dataCheck} 
+            keyboardShouldPersistTaps='always' 
+            renderItem={({item, index}) => this.renderItem(item, index)}/>
+                </View> }
             </View>
             <BackNext onBack={this.back} onNext={this.next} />
             </View>

@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   FlatList,
   Text,
+  Keyboard,
   Image,
   View,
 } from 'react-native';
@@ -73,17 +74,11 @@ import Slider from 'rn-range-slider';
 import Texting from '../Constant/Text'
 import ApplyFilterButton from '../Component/ApplyFilterButton'
 
-var radio_props = [{
-  label: '  By Distance',
-  value: 0,
-}, {
-  label: '  By Location',
-  value: 1,
-}, ];
+
 
 var mg = [];
 
-
+let Items = global.language == 'english' ? true : false
 const Categoryskill = ({name,...props}) => {
   return (
             <View
@@ -153,8 +148,15 @@ class FilterUser extends Component {
       Expert: false,
       suggesion: [],
       show: false,
+      skillCheck:[],
+      suggestionSkill:[],
+      showSkill:false,
+      natHeight:1,
+      keyboardShown:false
     };
     this.arrayholder = [];
+    this.arrayholders = [];
+
     this.slider = React.createRef();
 
   }
@@ -163,6 +165,12 @@ class FilterUser extends Component {
     mg = [...new Set(this.state.suggesion)];
     console.log('mg', global.Job_Location);
     console.log('mg', this.state);
+    let sk = this.state.addSkill.map(item => {
+      let temp = {}
+      temp.name = Items ? item.cell.english : item.cell.german,
+      temp.rating = item.rating
+      return temp
+    })
 
     try {
       http
@@ -173,7 +181,7 @@ class FilterUser extends Component {
           ByDistance: this.state.ByDistance,
           ByLocation: this.state.ByLocation,
           Company: mg,
-          skill: this.state.addSkill,
+          skill: this.state.sk,
           FullTime: this.state.FullTime,
           PartTime: this.state.PartTime,
           salMin: this.state.salary,
@@ -243,44 +251,54 @@ class FilterUser extends Component {
   Exit = () => {
     this.props.navigation.goBack();
   };
-  addsSkill = (text) => {
-    var i = text.toUpperCase();
-    let gems = this.state.addSkill;
-    // var in =  this.state.addSkill;
-    gems.push({
-      name: i,
-      rating: 1,
-    });
-    this.setState({
-      addSkill: gems,
-    });
-  };
+
   handleChange = (value, index) => {
     var arr = [];
-    arr = this.state.addSkill;
+    arr = this.state.suggestionSkill;
+    console.log('suggestionskill',this.state.suggestionSkill,value,index)
     arr[index].rating = value;
     this.setState({
-      addSkill: arr,
+      suggestionSkill: arr,
     });
+
+    console.log('suggestionskill',this.state.suggestionSkill)
   };
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+    
+  _keyboardDidShow =  () => {
+    this.setState({
+      keyboardShown:true
+    });
+    console.log('Keyboard Shown');
+  }
+    
+  _keyboardDidHide = () => {
+    this.setState({
+      keyboardShown:false
+    });
+
+    console.log('Keyboard Hidden');
+  }
 
   componentDidMount() {
-    let data = [];
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     try {
-      http.GET('api/appcomjson/get').then(
+      http.GET('api/skill/get').then(
         (res) => {
           if (res['data']['status']) {
-            // for (let i in res['data']['result']) {
-            //     data.push({
-            //         'name': res['data']['result'][i],
-            //         'backGround': 'white'
-            //     })
-            // }
-            // console.log('data', data)
             this.setState({
-              dataCheck: res['data']['result'],
+              skillCheck: res['data']['result'],
             });
-            this.arrayholder = res['data']['result'];
+            let p = res['data']['result'];
+          this.arrayholders = p.map((cell,i) => {
+              let temp = {}
+              temp = {cell,right:false,rating:1}
+              return temp
+            } )
             //            //will get data in this    res['data']['result']
           } else {
             snack(res['data']['message']);
@@ -292,53 +310,123 @@ class FilterUser extends Component {
       snack(error);
     }
   }
-  choose = (choose) => {
-    console.log('choose');
-    mg.push(choose);
-    mg = [...new Set(mg)];
-    console.log('sfdsff', mg);
-    let mni = [];
-    for (let i in mg) {
-      if (mg[i] != choose || mg[i] != '') mni.push(mg[i]);
-    }
-    this.setState({
-      suggesion: mni,
-      company: '',
-      show: !this.state.show,
-    });
-  };
-  cheks = (text) => {
-    var data = [];
-    const newData =
-      this.arrayholder &&
-      this.arrayholder.filter((item) => {
-        console.log('item', item);
-        const itemData =
-          item != null &&
-          `${item.toUpperCase()}   
-                    ${item.toUpperCase()} ${item.toUpperCase()}`;
-        const textData = text.toUpperCase();
-        return itemData != null && itemData.toString().indexOf(textData) > -1;
-      });
-    // for (let i in newData) {
-    //     data.push({
-    //         'name': newData[i],
-    //         'backGround': 'white'
-    //     })
-    // }
-    if (newData != '') {
+  // choose = (choose) => {
+  //   console.log('choose');
+  //   mg.push(choose);
+  //   mg = [...new Set(mg)];
+  //   console.log('sfdsff', mg);
+  //   let mni = [];
+  //   for (let i in mg) {
+  //     if (mg[i] != choose || mg[i] != '') mni.push(mg[i]);
+  //   }
+  //   this.setState({
+  //     suggesion: mni,
+  //     company: '',
+  //     show: !this.state.show,
+  //   });
+  // };
+  // cheks = (text) => {
+  //   var data = [];
+  //   const newData =
+  //     this.arrayholder &&
+  //     this.arrayholder.filter((item) => {
+  //       console.log('item', item);
+  //       const itemData =
+  //         item != null &&
+  //         `${item.toUpperCase()}   
+  //                   ${item.toUpperCase()} ${item.toUpperCase()}`;
+  //       const textData = text.toUpperCase();
+  //       return itemData != null && itemData.toString().indexOf(textData) > -1;
+  //     });
+  //   // for (let i in newData) {
+  //   //     data.push({
+  //   //         'name': newData[i],
+  //   //         'backGround': 'white'
+  //   //     })
+  //   // }
+  //   if (newData != '') {
+  //     this.setState({
+  //       dataCheck: newData,
+  //       company: text,
+  //     });
+  //   } else {
+  //     newData.push(text);
+  //     this.setState({
+  //       dataCheck: newData,
+  //       company: text,
+  //     });
+  //   }
+  // };
+  chooseskill = (choose,index) => {
+    let mgs = this.state.suggestionSkill
+     mgs.push(choose);
+     mgs = [...new Set(mgs)];
+ console.log('mg',mgs)
+ 
+     let mni = [];
+     mgs.filter((i) => i.cell != choose.cell || i != '' && mni.push(i) )
+ 
+     this.setState({
+       suggestionSkill: mgs,
+       name: '',
+       showSkill: !this.state.showSkill,
+     });
+   };
+   chekskill = (text) => {
+
+    let newData = this.arrayholders.filter(item => {
+      const itemData = Items ? item && item.cell != '' ? item.cell.english : `${item}` : item && item.cell != '' ? item.cell.german : `${item}`
+      const textData = text.toUpperCase();
+      return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
+    }); 
+    console.log('new',newData)
+    const {suggestionSkill} = this.state
+    newData = newData.filter(item => !suggestionSkill.includes(item))
+      newData = newData.length && newData.length < 10 ? newData : newData.slice(0,10);
+
+    if (newData.length) {
       this.setState({
-        dataCheck: newData,
-        company: text,
+        skillCheck:newData,
+        name : text,
       });
     } else {
-      newData.push(text);
       this.setState({
-        dataCheck: newData,
-        company: text,
+        name: text,
       });
     }
-  };
+};
+suggestionTagskill = (elements, index) => {
+
+  const {suggestionSkill} = this.state;
+  let m = suggestionSkill;
+  for (let i in suggestionSkill) {
+    if (m[i] == elements.cell) {
+      m.splice(i, 1);
+    }
+ }
+  mg = m;
+
+  this.arrayholders.filter((iterm) => {
+    if(iterm.cell == elements.cell)
+    iterm.right = false
+  })
+
+  let mp =this.arrayholders
+  let i = index
+    const map = function (mp,index){
+      if (index + 2 < mp.length && mp[index + 2].right == true)
+          {mp.swap(index,index+2);
+          i = index + 2
+        i < mp.length && map(mp,i)
+        }
+    }
+    i < this.arrayholders.length ? map(mp,i) : i = index
+
+    this.setState({
+    suggestionSkill: m,
+    skillCheck:this.arrayholders,
+    });
+};
   suggestionTag = (elements, index) => {
     const {
       suggesion,
@@ -354,55 +442,55 @@ class FilterUser extends Component {
       suggesion: m,
     });
   };
-  remove = (item, index) => {
-    console.log(index, item);
-    const {
-      addSkill
-    } = this.state;
-    let m = addSkill;
-    for (let i in m) {
-      if (m[i].name == item) {
-        m.splice(i, 1);
-      }
-    }
-    this.setState({
-      addSkill: m,
-    });
-  };
-  renderItem = () => {
-    let result;
-    result = this.state.dataCheck.map((item, index) => (
+  // remove = (item, index) => {
+  //   console.log(index, item);
+  //   const {
+  //     addSkill
+  //   } = this.state;
+  //   let m = addSkill;
+  //   for (let i in m) {
+  //     if (m[i].name == item) {
+  //       m.splice(i, 1);
+  //     }
+  //   }
+  //   this.setState({
+  //     addSkill: m,
+  //   });
+  // };
+  renderItems = (item, index) => {
+    return (
       <View
-        style={{
-          width: wp(70),
-          marginLeft: scale(44),
-        }}>
-        <TouchableWithoutFeedback onPress={() => this.choose(item)}>
+      style={{
+        width: 'auto',
+        flexWrap:'wrap',flexDirection:"row",margin:2
+      }}>
+      <TouchableWithoutFeedback onPress={() => !item.right ? this.chooseskill(item,index):this.suggestionTagskill(item,index)}>
           <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              alignItems: 'flex-start',borderWidth:item.cell != '' ? 1 : 0,borderColor:themeColor,
+              borderRadius:10,paddingHorizontal:10,
+              width: 'auto',backgroundColor:item.right ? 'white':"transparent",borderColor:"#fff",flexDirection:"row",justifyContent:"center",alignItems:"center"
             }}>
-            <View
+            <Text
               style={{
-                alignItems: 'flex-start',
-                width: wp(60),
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: scale(18),
-                  color: themeWhite,
-                }}>
-                {item}
+                fontWeight: 'bold',
+                fontSize: scale(18),
+                color:item.right ? themeColor : themeWhite,
+                width:wp(25)
+              }} numberOfLines={1}>
+                {Items ? item.cell.english : item.cell.german}
               </Text>
+              { item.right && <View
+                            style={{
+                              // top: scale(-7),
+                              right: scale(5),justifyContent:"center",alignItems:"center"
+                            }}>
+                            {library('highlight-off', scale(17), themeColor)}
+                          </View>}
             </View>
-          </View>
         </TouchableWithoutFeedback>
       </View>
-    ));
-
-    return result;
+    );
   };
 
   render() {
@@ -428,7 +516,7 @@ class FilterUser extends Component {
       Freelancer,
       skillCategorylist,
       FullTime,
-      PartTime,
+      PartTime,showSkill,suggestionSkill
     } = this.state;
     return (
       <SafeAreaView style={styles.backGround}>
@@ -585,19 +673,16 @@ class FilterUser extends Component {
                       <Texting style={styles.DropDownHeader} text='Skill'/>
                     </View>
                   }>
-                  <View
-                    style={
-                      {
-                        // width: "80%",
-                      }
-                    }>
+                  <ScrollView style={{alignSelf:"stretch",height:hp(30)}} nestedScrollEnabled
+                  >
                     <CustomInput
                       placeholder={'Add Skill'}
-                      textChange={(text) =>
+                      textChange={(text) => {
                         this.setState({
-                          name: text,
-                        })
-                      }
+                          showSkill: text != '' ? true : false,
+                        });
+                        this.chekskill(text);
+                      }}
                       inputContainerStyle={{
                         backgroundColor: themeColor,
                         height: scale(40),
@@ -622,67 +707,74 @@ class FilterUser extends Component {
                         width: 25,
                       }}
                       iconColor={'#fff'}
-                      onSubmitEditing={(event) =>
-                        this.addsSkill(event.nativeEvent.text)
-                      }
+                      // onSubmitEditing={(event) =>
+                      //   this.addsSkill(event.nativeEvent.text)
+                      // }
                     />
-                    <ScrollView
-                      style={{
-                        backgroundColor: 'transparent',
-                        marginTop: '-5%',
-                        marginBottom: 20,
-                        height: scale(50),
-                      }}
-                      contentContainerStyle={{
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        width: wp(82),
-                      }}>
-                      {this.state.addSkill.map((item, index) => {
-                        return (
-                          <View style={styles.itemsHiddenView}>
-                            <View
-                              style={
-                                ([styles.itemsHiddenSView],
-                                {marginLeft: scale(15)})
-                              }>
-                              <Icon2
-                                name={'highlight-off'}
-                                size={scale(20)}
-                                color={themeColor}
-                                onPress={() => {
-                                  this.remove(item.name, index);
-                                }}
-                              />
-                            </View>
-                            <View style={styles.itemsHiddenTView}>
-                              <Text
-                                style={styles.addSkillFont}
-                                numberOfLines={1}>
-                                {item.name}
-                              </Text>
-                            </View>
-                            <View style={styles.itemsHiddenViewRate}>
-                              <StarRating
-                                emptyStar={blanks}
-                                fullStar={Fulls}
-                                // halfStar={'star-half'}
-                                iconSet={'MaterialIcons'}
-                                disabled={false}
-                                maxStars={5}
-                                starSize={scale(20)}
-                                rating={item.rating}
-                                selectedStar={(rating) =>
-                                  this.handleChange(rating, index)
-                                }
-                                fullStarColor={'orange'}
-                              />
-                            </View>
-                          </View>
-                        );
-                      })}
+                    {showSkill && (
+                      <View
+                        style={{
+                          alignItems: 'flex-start',
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          flexGrow:0,
+                          flex:1,
+                          // height:hp(20),
+                          marginTop:this.state.showSkill ? -10 : 1,
+                          width: wp(80),
+                          // width: wp(80),
+                          marginHorizontal: wp(2.5),
+                          // borderRadius: scale(5),
+                          // height:hp(20),
+                          // top: scale(42),
+                          // position: 'absolute',
+                          backgroundColor: themeColor
+                        }}
+                        >
+                        <FlatList
+                        nestedScrollEnabled
+                    data={this.state.skillCheck}
+                    style={{flex:1}}
+                    keyboardShouldPersistTaps="always"
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{justifyContent:"flex-start",flexDirection:'row',paddingLeft:30,flexWrap:"wrap"}}
+                    removeClippedSubviews={true}
+                    renderItem={({item, index}) => this.renderItems(item, index)}
+                    initialNumToRender={5}
+                    maxToRenderPerBatch={10}
+                    updateCellsBatchingPeriod={70}
+                    getItemLayout={(data, index) => ({
+                      length: hp('1%'),
+                      offset: hp('1%') * index,
+                      index,
+                    })}
+                    keyExtractor={(item, index) => index + ''}
+                  />
+                      </View>
+                    )}
+                    {!showSkill && (
+                     
+                      <FlatList
+                    data={this.state.suggestionSkill}
+                    extraData={this.state.suggestionSkill}
+                    nestedScrollEnabled
+                    style={{flex:1}}
+                    keyboardShouldPersistTaps="always"
+                    contentContainerStyle={{paddingLeft:5}}
+                    showsHorizontalScrollIndicator={false}
+                    removeClippedSubviews={true}
+                    renderItem={({item, index}) => <Itemskill item={item} index={index} handleChange={this.handleChange} remove={this.remove}/>}
+                    initialNumToRender={5}
+                    maxToRenderPerBatch={10}
+                    updateCellsBatchingPeriod={70}
+                    getItemLayout={(data, index) => ({
+                      length: hp('1%'),
+                      offset: hp('1%') * index,
+                      index,
+                    })}
+                    keyExtractor={(item, index) => index + ''}
+                  />) }
                     </ScrollView>
-                  </View>
                 </DropDownItem>
                 <DropDownItem
                   // key={i}
@@ -772,6 +864,9 @@ class FilterUser extends Component {
                   contentVisible={false}
                   invisibleImage={IC_ARR_DOWN}
                   visibleImage={IC_ARR_UP}
+                  HeaderStyle={{ flexDirection: 'column',
+                                justifyContent: 'center',
+                                alignItems: 'flex-start',}}
                   header={
                     <View style={styles.FilterDropDownInnerView}>
                       <View style={styles.fliterIcon}>
@@ -784,77 +879,37 @@ class FilterUser extends Component {
                       <Texting style={styles.DropDownHeader} text='Job_Type'/>
                     </View>
                   }>
-                  <View
-                    style={{
-                      width: '80%',
-                      marginLeft: '10%',
-                      height: scale(50),
-                      marginTop: scale(-30),
-                      marginBottom: scale(5),
-                    }}>
+                  <View style={{
+                    flexDirection: 'row',
+                    marginBottom: scale(10),
+                    marginLeft:scale(10),
+                    alignItems:"center",
+                    flexWrap:"wrap"
+                    // paddingHorizontal:"5%"
+                  }}>
                     <View style={styles.PersonalInfoChoose}>
-                      <View style={styles.PersonalInfoRowChoose}>
-                        <View
-                          style={[
-                            styles.PersonalInfoStartChoose,
-                            {
-                              flexDirection: 'row',
-                              width: '40%',
-                            },
-                          ]}>
-                          <Texting
-                            style={{
-                              marginRight: scale(5),
-                              fontSize: scale(18),
-                              color: '#000',
-                            }} text='Fulltime'/>
-                          <View style={styles.SwitchView}>
-                            <ToggleSwitch
-                              isOn={FullTime}
-                              onColor={switchColor}
-                              offColor="#b4b4b4"
-                              size="small"
-                              onToggle={(toggle) =>
-                                this.setState({
-                                  FullTime: toggle,
-                                })
-                              }
-                            />
-                          </View>
-                        </View>
-                        <View
-                          style={[
-                            styles.PersonalIn100foEndChoose,
-                            {
-                              flexDirection: 'row',
-                            },
-                          ]}>
-                          <Texting
-                            style={{
-                              marginRight: scale(5),
-                              fontSize: scale(18),
-                              color: '#000',
-                            }} text='Part_time'/>
-                          <View style={styles.SwitchView}>
-                            <ToggleSwitch
-                              isOn={PartTime}
-                              onColor={switchColor}
-                              offColor="#b4b4b4"
-                              size="small"
-                              onToggle={(toggle) =>
-                                this.setState({
-                                  PartTime: toggle,
-                                })
-                              }
-                            />
-                          </View>
-                        </View>
-                      </View>
+                    <View style ={{flexDirection:"row",justifyContent:"space-between",height:40,width:"100%"}}>
+                      <TouchableOpacity  onPress={() => {
+                        this.setState({
+                          FullTime: !FullTime,
+                        });
+                      }} style={{borderColor: FullTime ? themeColor : '#000', backgroundColor : FullTime ? themeColor : themeWhite ,width:"44%",justifyContent:"center",alignItems:"center",borderRadius:scale(30),borderWidth:1,paddingHorizontal:scale(10)}}>
+                        <Texting style={[{color:FullTime ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='FullTime' />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => {
+                        this.setState({
+                          PartTime: !PartTime,
+                        });
+                      }} style={{borderColor: PartTime ? themeColor : '#000', backgroundColor : PartTime ? themeColor : themeWhite, width:"44%",borderWidth:1,justifyContent:"center",alignItems:"center",borderRadius:scale(30),paddingHorizontal:scale(10),marginRight:"8%"}}>
+                        <Texting style={[{color:PartTime ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='Part_time' />
+                      </TouchableOpacity>
+                    </View>
                     </View>
                   </View>
                 </DropDownItem>
                 <DropDownItem
                   // key={i}
+                  flag={true}
                   style={styles.FilterDropDown}
                   contentVisible={false}
                   invisibleImage={IC_ARR_DOWN}
@@ -871,50 +926,43 @@ class FilterUser extends Component {
                       <Texting style={styles.DropDownHeader} text='Search_Type'/>
                     </View>
                   }>
-                  <View
-                    style={[
-                      styles.RadioSearchType,
-                      {
-                        flexDirection: 'row',
-                      },
-                    ]}>
-                    <CheckBox
-                      selected={ByDistance}
-                      style={styles.CheckBoxLabel}
-                      textStyle={styles.CheckBoxLabelFont}
-                      onPress={() => {
-                        this.setState(
-                          {
-                            ByDistance: !ByDistance,
-                          },
-                          () => {
-                            this.props.navigation.navigate('UserScreenMap');
-                          },
-                        );
-                      }}
-                      text={global.language == 'english' ? "By Distance" : 'By Distance'}
-                    />
-                    <CheckBox
-                      selected={ByLocation}
-                      style={styles.CheckBoxLabel}
-                      textStyle={styles.CheckBoxLabelFont}
-                      onPress={() => {
+                  <View style={{
+                    flexDirection: 'row',
+                    marginBottom: scale(10),
+                    marginLeft:scale(10),
+                    alignItems:"center",
+                    flexWrap:"wrap"
+                    // paddingHorizontal:"5%"
+                  }}>
+                    <View style={styles.PersonalInfoChoose}>
+                    <View style ={{flexDirection:"row",justifyContent:"space-between",height:40,width:"100%"}}>
+                      <TouchableOpacity  onPress={() => {
+                        this.setState({
+                          ByDistance: !ByDistance,
+                        },() => this.props.navigation.navigate('UserScreenMap'));
+                      }} style={{borderColor: ByDistance ? themeColor : '#000', backgroundColor : ByDistance ? themeColor : themeWhite ,width:"44%",justifyContent:"center",alignItems:"center",borderRadius:scale(30),borderWidth:1,paddingHorizontal:scale(10)}}>
+                        <Texting style={[{color:ByDistance ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='ByDistance' />
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => {
                         this.setState({
                           ByLocation: !ByLocation,
                         });
-                      }}
-                      text={global.language == 'english' ? "By Location" : 'By Location'}
-                    />
+                      }} style={{borderColor: ByLocation ? themeColor : '#000', backgroundColor : ByLocation ? themeColor : themeWhite, width:"44%",borderWidth:1,justifyContent:"center",alignItems:"center",borderRadius:scale(30),paddingHorizontal:scale(10),marginRight:"8%"}}>
+                        <Texting style={[{color:ByLocation ? 'white' : '#000'},styles.CheckBoxLabelFont]} text='ByLocation' />
+                      </TouchableOpacity>
+                    </View>
+                    </View>
                   </View>
                 </DropDownItem>
+                <View style={{height:scale(200),width:"100%",backgroundColor:"transparent"}} />
               </ScrollView>
           </View>
-          <ApplyFilterButton reset='Reset' apply='Apply' onReset ={()=> this.setState({
+          {this.state.keyboardShown == false && <ApplyFilterButton reset='Reset' apply='Apply' onReset ={()=> this.setState({
                         ...this.defaultState
                     },()=> {
                       this.slider.current.setHighValue(150000)
                       this.slider.current.setLowValue(0)
-                    })} onApply={this.save}/>
+                    })} onApply={this.save}/> }
         </ImageBackground>
       </SafeAreaView>
     );

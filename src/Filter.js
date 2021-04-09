@@ -7,6 +7,7 @@ import {
   StatusBar,
   ScrollView,
   ImageBackground,
+  Keyboard,
   TouchableWithoutFeedback,
   TouchableOpacity,
   FlatList,
@@ -19,21 +20,14 @@ import {
 } from 'react-navigation';
 import styles from './Style';
 import {
-  left,
   library,
-  icon,
-  play,
-  leftVid
 } from './IconManager';
 import {
   scale,
   snack,p
 } from './Util';
 import {
-  FontBold,
   iconSearch,
-  TRANLINE,
-  switchColor,
   themeColor,
   themeWhite,
   Background,
@@ -44,41 +38,27 @@ import {
   company,
   skill,
   skillCategory,
-  skillLavel,
   Filterjobtype,
   searchType,
-  blanks,
-  Fulls,
 } from '../Constant/index';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from '../Component/responsive-ratio';
-import ToggleSwitch from '../Component/ToggleSwitch';
 import CustomInput from '../Component/Input';
 import  {
-   CheckBox,
   DropDownItem,
   NavigationHead,
-  StarRating,
 } from '../Component/ViewManager.js';
 import http from '../api';
-// import Items from './Items';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
-// import Slider from 'react-native-range-slider'
 import Slider from 'rn-range-slider';
 import Texting from '../Constant/Text'
 import ApplyFilterButton from '../Component/ApplyFilterButton';
 import Itemskill from '../Company/Itemskill'
 import SuggestionView from '../Component/SuggestionView'
 
-var radio_props = [{
-  label: '  By Distance',
-  value: 0,
-}, {
-  label: '  By Location',
-  value: 1,
-}, ];
+
 
 var mg = [];
 
@@ -89,8 +69,9 @@ Array.prototype.swap = function (x,y) {
   return this;
 }
 
+
 const Compon = ({...props}) => {
-  return <Scrollj style={{alignSelf:"stretch"}} nestedScrollEnabled>
+  return <ScrollView style={{alignSelf:"stretch"}} nestedScrollEnabled>
   <CustomInput
     value={props.value}
     Company= {global.language == 'english' ? 'All' : 'All'}
@@ -156,7 +137,7 @@ contentContainerStyle={{
 />
     </View>
   )}
-</Scrollj>
+</ScrollView>
 }
 
 const Items =  global.language == 'english' ? true : false
@@ -234,6 +215,7 @@ class Filter extends Component {
     showSkill:false,
     natHeight:1,
     Anywhere: false,
+    keyboardShown : false
   }
 
   constructor(props) {
@@ -242,6 +224,7 @@ class Filter extends Component {
     this.state = this.defaultState;
     this.arrayholder = [];
     this.arrayholders = [];
+    
 
     this.slider = React.createRef();
     console.log('filter Height',hp(25),p(25),scale(100))
@@ -313,18 +296,7 @@ class Filter extends Component {
   Exit = () => {
     this.props.navigation.goBack();
   };
-  addsSkill = (text) => {
-    var i = text.toUpperCase();
-    let gems = this.state.addSkill;
-    // var in =  this.state.addSkill;
-    gems.push({
-      name: i,
-      rating: 1,
-    });
-    this.setState({
-      addSkill: gems,
-    });
-  };
+ 
   handleChange = (value, index) => {
     var arr = [];
     arr = this.state.suggestionSkill;
@@ -336,8 +308,31 @@ class Filter extends Component {
 
     console.log('suggestionskill',this.state.suggestionSkill)
   };
+ 
+    
+  componentWillUnmount () {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+    
+  _keyboardDidShow =  () => {
+    this.setState({
+      keyboardShown:true
+    });
+    console.log('Keyboard Shown');
+  }
+    
+  _keyboardDidHide = () => {
+    this.setState({
+      keyboardShown:false
+    });
+
+    console.log('Keyboard Hidden');
+  }
 
   componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', this._keyboardDidShow);
+    this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
     let data = [];
     try {
       http.GET('api/appcomjson/get').then(
@@ -347,12 +342,12 @@ class Filter extends Component {
               dataCheck: res['data']['result'],
             });
             let p = res['data']['result'];
-          this.arrayholder = p.map((cell,i) => {
+            this.arrayholder = p.map((cell,i) => {
               let temp = {}
               temp = {cell,right:false}
               return temp
             } )
-            //            //will get data in this    res['data']['result']
+                     //will get data in this    res['data']['result']
           } else {
             snack(res['data']['message']);
           }
@@ -388,7 +383,7 @@ class Filter extends Component {
 
   }
   choose = (choose,index) => {
-
+    mg = this.state.suggesion
     mg.push(choose.cell);
     mg = [...new Set(mg)];
 console.log('mg',mg)
@@ -397,7 +392,7 @@ console.log('mg',mg)
     mg.filter((i) => i != choose.cell || i != '' && mni.push(i) )
     this.setState({
       suggesion: mg,
-      name: '',
+      company: '',
       show: !this.state.show,
     },()=> {
       // if (this.arrayholder.length /2 == this.state.suggesion.length)
@@ -428,56 +423,32 @@ console.log('mg',mg)
   };
 
   chooseskill = (choose,index) => {
-
-    mg.push(choose);
-    mg = [...new Set(mg)];
-console.log('mg',mg)
+   let mgs = this.state.suggestionSkill
+    mgs.push(choose);
+    mgs = [...new Set(mgs)];
+console.log('mg',mgs)
 
     let mni = [];
-    mg.filter((i) => i != choose.cell || i != '' && mni.push(i) )
+    mgs.filter((i) => i.cell != choose.cell || i != '' && mni.push(i) )
+
     this.setState({
-      suggestionSkill: mg,
+      suggestionSkill: mgs,
       name: '',
       showSkill: !this.state.showSkill,
-    },()=> {
-      if (this.arrayholders.length /2 == this.state.suggestionSkill.length)
-      {
-        // return
-        this.arrayholders.push({cell : '',right:false})
-        this.arrayholders.push({cell : '',right:false})
-      }
-      let Toind = (((this.state.suggestionSkill.length * 2) / 2 - 1) * 2 / (2-1) + 1)
-
-      this.arrayholders.filter((item,index)=> {
-        if (index == Toind)
-          {
-            console.log('item',index)
-            this.arrayholders[index].right == true  ? Toind + 2 :Toind
-          }
-      })
-
-    this.arrayholders.filter(iterm => {
-        if(iterm.cell == choose.cell)
-        iterm.right = true
-      })
-
-      console.log('tpind',Toind)
-          this.arrayholders.swap(index, Toind)
     });
-
   };
 
   cheks = (text) => {
       let newData = this.arrayholder.filter((item) => {
           console.log('item',item)
         const itemData =
-          item != null &&
+          item.cell != null &&
           `${item.cell.toUpperCase()}   
                     ${item.cell.toUpperCase()} ${item.cell.toUpperCase()}`;
         const textData = text.toUpperCase();
         return itemData != null && itemData.toString().indexOf(textData) > -1;
       });
-      newData = newData.filter(item => !mg.includes(item.cell))
+      newData = newData.filter(item => !this.state.suggesion.includes(item.cell))
       console.log('newData',newData)
       
       
@@ -495,14 +466,19 @@ console.log('mg',mg)
   };
   chekskill = (text) => {
 
-    const newData = this.arrayholders.filter(item => {
+    let newData = this.arrayholders.filter(item => {
       const itemData = Items ? item && item.cell != '' ? item.cell.english : `${item}` : item && item.cell != '' ? item.cell.german : `${item}`
       const textData = text.toUpperCase();
       return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
-    });
-    if (newData != '') {
+    }); 
+    console.log('new',newData)
+    const {suggestionSkill} = this.state
+    newData = newData.filter(item => !suggestionSkill.includes(item))
+      newData = newData.length && newData.length < 10 ? newData : newData.slice(0,10);
+
+    if (newData.length) {
       this.setState({
-        skillCheck:this.arrayholders,
+        skillCheck:newData,
         name : text,
       });
     } else {
@@ -579,21 +555,7 @@ console.log('mg',mg)
       });
   };
 
-  remove = (item, index) => {
-    console.log(index, item);
-    const {
-      addSkill
-    } = this.state;
-    let m = addSkill;
-    for (let i in m) {
-      if (m[i].name == item) {
-        m.splice(i, 1);
-      }
-    }
-    this.setState({
-      addSkill: m,
-    });
-  };
+  
 
   renderItem = (item, index) => {
     return (
@@ -614,7 +576,7 @@ console.log('mg',mg)
                   fontWeight: 'bold',
                   fontSize: scale(18),
                   color:item.right ? themeColor : themeWhite,
-                }}>
+                }} >
                 {item.cell}
               </Text>
               { item.right && <View
@@ -632,24 +594,25 @@ console.log('mg',mg)
 
   renderItems = (item, index) => {
     return (
-    <View
-        style={{
-          width: wp(38),
-          paddingRight:5,
-          paddingLeft:index%2 == 0 ? scale(34):scale(5),flexWrap:'wrap',flexDirection:"row",margin:2
-        }}>
-        <TouchableWithoutFeedback onPress={() => !item.right ? this.chooseskill(item,index):this.suggestionTagskill(item,index)}>
-            <View
+      <View
+      style={{
+        width: 'auto',
+        flexWrap:'wrap',flexDirection:"row",margin:2
+      }}>
+      <TouchableWithoutFeedback onPress={() => !item.right ? this.chooseskill(item,index):this.suggestionTagskill(item,index)}>
+          <View
+            style={{
+              alignItems: 'flex-start',borderWidth:item.cell != '' ? 1 : 0,borderColor:themeColor,
+              borderRadius:10,paddingHorizontal:10,
+              width: 'auto',backgroundColor:item.right ? 'white':"transparent",borderColor:"#fff",flexDirection:"row",justifyContent:"center",alignItems:"center"
+            }}>
+            <Text
               style={{
-                alignItems: 'flex-start',borderWidth:item.cell != '' ? 1 : 0,borderColor:themeColor,borderRadius:index%2 == 0 ?10:15,paddingHorizontal:10,
-                width: 'auto',backgroundColor:item.right ? 'white':"transparent",borderColor:"#fff",flexDirection:"row",justifyContent:"center",alignItems:"center"
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: scale(18),
-                  color:item.right ? themeColor : themeWhite,
-                }}>
+                fontWeight: 'bold',
+                fontSize: scale(18),
+                color:item.right ? themeColor : themeWhite,
+                width:wp(25)
+              }} numberOfLines={1}>
                 {Items ? item.cell.english : item.cell.german}
               </Text>
               { item.right && <View
@@ -688,8 +651,11 @@ console.log('mg',mg)
       Freelancer,
       skillCategorylist,
       FullTime,
-      PartTime,showSkill
+      PartTime,showSkill,suggestionSkill
     } = this.state;
+
+
+    console.log('suges',this.state.show,this.state.showSkill)
     return (
       <SafeAreaView style={styles.backGround}>
         <ImageBackground
@@ -706,7 +672,7 @@ console.log('mg',mg)
           <View style={{borderBottomWidth:scale(1),borderColor:"rgba(169,169,169,0.8)",width:"100%",marginTop:5}}/>
           <View style={styles.FilterMainView}>
               <ScrollView
-                style={[styles.FilterScroll],{marginBottom: hp(100) <= 600 ? hp(35) : hp(27)}}
+                style={[styles.FilterScroll],{marginBottom: hp(100) <= 600 ? scale(100) : scale(100)}}
                 scrollEnabled={this.state.enableScrollViewScroll}
                 ref={myScroll => (this._myScroll = myScroll)}
                 onScroll = {(e)=> console.log('e.nativeEvent.contentOffset.x / w',e.nativeEvent)}
@@ -868,6 +834,7 @@ style={{
   marginTop:this.state.show ? 50 : 1,
   width: wp(87),
   height:suggesion != [] && 100,
+  paddingLeft:7
   }}
 
   suggesion ={suggesion}
@@ -885,6 +852,7 @@ style={{
   }}
   onLayout={(e)=> this.setState({natHeight:e.nativeEvent.layout.height})}
   dataCheck={dataCheck}
+
   renderItem={({item, index}) => this.renderItem(item, index)}
   />
                 </DropDownItem>
@@ -907,7 +875,8 @@ style={{
                       <Texting style={styles.DropDownHeader} text='Skill'/>
                     </View>
                   }>
-                  <View>
+                  <ScrollView style={{alignSelf:"stretch",height:hp(30)}} nestedScrollEnabled
+                  >
                     <CustomInput
                       placeholder={'Add Skill'}
                       textChange={(text) => {
@@ -947,21 +916,30 @@ style={{
                     {showSkill && (
                       <View
                         style={{
+                          alignItems: 'flex-start',
+                          flexDirection: 'row',
+                          flexWrap: 'wrap',
+                          flexGrow:0,
+                          flex:1,
+                          // height:hp(20),
+                          marginTop:this.state.showSkill ? -10 : 1,
                           width: wp(80),
+                          // width: wp(80),
                           marginHorizontal: wp(2.5),
-                          borderRadius: scale(5),
-                          height:hp(20),
-                          top: scale(42),
-                          position: 'absolute',
-                          backgroundColor: themeColor,
+                          // borderRadius: scale(5),
+                          // height:hp(20),
+                          // top: scale(42),
+                          // position: 'absolute',
+                          backgroundColor: themeColor
                         }}
                         >
                         <FlatList
                         nestedScrollEnabled
                     data={this.state.skillCheck}
-                    numColumns={2}
+                    style={{flex:1}}
                     keyboardShouldPersistTaps="always"
                     showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{justifyContent:"flex-start",flexDirection:'row',paddingLeft:30,flexWrap:"wrap"}}
                     removeClippedSubviews={true}
                     renderItem={({item, index}) => this.renderItems(item, index)}
                     initialNumToRender={5}
@@ -976,9 +954,15 @@ style={{
                   />
                       </View>
                     )}
-                    {!show && (<FlatList
+                    {!showSkill && (
+                     
+                      <FlatList
                     data={this.state.suggestionSkill}
+                    extraData={this.state.suggestionSkill}
+                    nestedScrollEnabled
+                    style={{flex:1}}
                     keyboardShouldPersistTaps="always"
+                    contentContainerStyle={{paddingLeft:5}}
                     showsHorizontalScrollIndicator={false}
                     removeClippedSubviews={true}
                     renderItem={({item, index}) => <Itemskill item={item} index={index} handleChange={this.handleChange} remove={this.remove}/>}
@@ -992,11 +976,11 @@ style={{
                     })}
                     keyExtractor={(item, index) => index + ''}
                   />) }
-                    </View>
+                    </ScrollView>
                 </DropDownItem>
                 <DropDownItem
                   // key={i}
-                  flag={false}
+                  flag={true}
                   style={styles.FilterDropDown}
                   contentVisible={false}
                   invisibleImage={IC_ARR_DOWN}
@@ -1175,14 +1159,17 @@ style={{
                     </View>
                   </View>
                 </DropDownItem>
+                <View style={{height:100,width:"100%",backgroundColor:"transparent"}} />
               </ScrollView>
             </View>
-            <ApplyFilterButton reset='Reset' apply='Apply' onReset ={()=> this.setState({
+            {this.state.keyboardShown == false && (<ApplyFilterButton reset='Reset' apply='Apply' onReset ={()=> this.setState({
                         ...this.defaultState
                     },()=> {
                       this.slider.current.setHighValue(150000)
                       this.slider.current.setLowValue(0)
-                    })} onApply={this.save}/>
+                    })} onApply={this.save}
+
+                    />)}
         </ImageBackground>
       </SafeAreaView>
     );

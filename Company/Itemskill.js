@@ -17,8 +17,6 @@ class Itemskill extends Component {
     // title, href, total_time, total_listen, image
     constructor(props) {
         super(props);
-
-
     }
     render() {
         return (

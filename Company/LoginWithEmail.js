@@ -32,7 +32,7 @@ import {
 import CustomInput from '../Component/TextInput';
 import {
   Background,
-  url
+  url,themeWhite,themeColor
 } from '../Constant/index';
 import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -116,6 +116,8 @@ class LoginWithEmail extends Component {
                   if (res['data']['result']['isLoggedFirstTime'] == 0) {
                     this.props.navigation.navigate('TalentCom');
                   } else {
+                    // this.props.navigation.navigate('TalentCom');
+
                     this.props.navigation.navigate('ComEdit');
                   }
                 } else {
