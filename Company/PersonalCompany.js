@@ -28,7 +28,7 @@ import {
 } from 'react-navigation';
 import styles from '../src/Style'
 import {
-    scale
+    scale,HideKeyboard
 } from '../src/Util'
 import CustomInput from '../Component/TextInput'
 import {
@@ -138,38 +138,40 @@ class PersonalCompany extends Component {
 
     render() {
         return (
+            <HideKeyboard>
             <SafeAreaView style={styles.backGround}>
             <ImageBackground style={styles.ImageBlue}
             source={Background}
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
                     <View style={[{
-                top: scale(40)
+                top: hp(5)
             }, styles.CenterLogo]}><View><Image source={require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={{
-                height: scale(150),
+                height: hp(20),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }} /></View>
                         <ImageBackground style={styles.AvtarView} source={backgroundCorner}><TouchableWithoutFeedback onPress={this.profile}>
                         <Image source={global.uploadUri ? {
                 uri: global.uploadUri
             } : Companyavtar} style={{
-                height: wp('29'),
-                width: wp('29'),
+                height: wp(26),
+                width: wp(26),
+                borderRadius:wp(2)
             // backgroundColor: "transparent"
             }} resizeMode={'cover'}/></TouchableWithoutFeedback></ImageBackground>
            
                         <View style={styles.PersonalInfo}>
                          <ScrollView showsVerticalScrollIndicator={true} style={{
                 alignSelf: "stretch",flexGrow:1,
-                height: hp(100) < 600 ? hp(33) : 'auto'
+                height: 'auto'
             }}>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}>
                                 <Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
-                fontSize: scale(18),
+                fontSize: hp(2.7),
 
             }]} text='Company'/></View>
                                 <View style={styles.PersonalInfoEnd}>
@@ -181,14 +183,14 @@ class PersonalCompany extends Component {
             inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16)
+                fontSize: hp(2.5)
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}>
                                 <Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
-                fontSize: scale(18),
+                fontSize: hp(2.7),
 
             }]} text='Branch'/></View>
                                 <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {this.state.Branch} textChange = {(text) => this.setState({
@@ -201,14 +203,14 @@ class PersonalCompany extends Component {
             inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16)
+                fontSize: hp(2.6)
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}>
                                 <Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
-                fontSize: scale(18),
+                fontSize: hp(2.7),
 
             }]} text='Email'/></View>
                                 <View style={styles.PersonalInfoEnd}><CustomInput  textAlign={'right'} value = {this.state.Email} textChange = {(text) => this.setState({
@@ -221,13 +223,13 @@ class PersonalCompany extends Component {
             inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16)
+                fontSize: hp(2.6)
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
-                fontSize: scale(18),
+                fontSize: hp(2.7),
 
             }]} text='Mobile_Number'/></View>
                                 <View style={styles.PersonalInfoEnd}><CustomInput textAlign={'right'} value = {this.state.Cell} textChange = {(text) => this.setState({
@@ -238,14 +240,14 @@ class PersonalCompany extends Component {
             inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16) 
+                fontSize: hp(2.6) 
             }]}
             keyboardType={'phone-pad'}
             /></View></View>
             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
-                fontSize: scale(18),
+                fontSize: hp(2.7),
 
             }]} text='WebSite'/></View>
                                 <View style={styles.PersonalInfoEnd}>
@@ -260,13 +262,13 @@ class PersonalCompany extends Component {
             inputStyle={[styles.PersonalInfoText, {
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16)
+                fontSize: hp(2.6)
             }]}
             /></View></View>
                             <View style={styles.PersonalInfoRow}>
                                 <View style={styles.PersonalInfoStart}><Texting style={[styles.PersonalInfoText, {
                 fontFamily: FontBold,
-                fontSize: scale(18),
+                fontSize: hp(2.7),
             }]} text='Address'/></View>
                                 <View style={styles.PersonalInfoEnd}><TextInput
             multiline={true}
@@ -283,15 +285,15 @@ class PersonalCompany extends Component {
                 textAlignVertical: 'top',
                 fontFamily: FontRegular,
                 fontWeight: '700',
-                fontSize: scale(16)
+                fontSize: hp(2.6)
             }]}
             onChangeText ={(text) => this.handleChange(text)}
             /></View></View>
                         </ScrollView></View>
                     </View>
-                    <BackNext onBack={this.back} onNext={this.next} />
+                    <BackNext onBack={this.back} onNext={this.next} show={true} />
 
-                </ImageBackground></SafeAreaView>
+                </ImageBackground></SafeAreaView></HideKeyboard>
         );
     }
 };

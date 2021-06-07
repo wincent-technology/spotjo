@@ -36,8 +36,8 @@ if (!window.location) {
 
 // This must be below your `window.navigator` hack above
 // io.connect('http://178.128.118.157:8091', { transports: ['websocket'] })
-// const socket = io.connect('http://178.128.118.157:8091', { transports: ['websocket'] });
- const socket = io('http://192.168.0.112:8091');
+const socket = io.connect('http://178.128.118.157:8091', { transports: ['websocket'] });
+//  const socket = io('http://192.168.0.112:8091');
 
 
 
@@ -99,9 +99,9 @@ UNSAFE_componentWillMount(){
         }).then(
           (res) => {
             if (res['data']['status']) {
-              let DATA  = [];
-
-              for (let i in res['data']['result'])
+              let DATA  = []; 
+              console.log(' res[data][result]', res['data']['result'])
+              for (let i=0;i<res['data']['result'].length;i++)
                 {
                   if(res['data']['result'][i].receiverDelete == 0 || res['data']['result'][i].senderDelete == 0)
                   {
@@ -299,8 +299,6 @@ onMessage = (msg) => {
       });
   })
         console.log('data',data);
-
-
      try {
       data.length && http.POST('api/webuser/chat/delchat',{
         loginId : global.Id,
@@ -310,7 +308,7 @@ onMessage = (msg) => {
         (res) => {
           if(res['data']['status']) {
           let DATA  = [];
-                for (let i in res['data']['result'])
+                for (let i=0;i<res['data']['result'].length;i++)
                 {
                   if(res['data']['result'][i].receiverDelete == 0 || res['data']['result'][i].senderDelete == 0)
                   {
@@ -373,7 +371,7 @@ onMessage = (msg) => {
   onPress= (context,message) => {
 
   //  console.log('message',message);
-   for (let i in this.state.messages)
+   for (let i=0;i<this.state.messages.length;i++)
    {
      if (message.id == this.state.messages[i].id)
      this.state.messages[i] = {
@@ -408,7 +406,7 @@ onMessage = (msg) => {
                 }).then(
                   (res) => {
                     let DATA  = [];
-                    for (let i in res['data']['result'])
+                    for (let i=0;i<res['data']['result'].length;i++)
                     {
                       if(res['data']['result'][i].receiverDelete == 0 || res['data']['result'][i].senderDelete == 0)
                       {

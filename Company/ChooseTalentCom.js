@@ -82,6 +82,8 @@ class ChooseTalentCom extends Component {
                 Freelancer: this.state.Freelancer
             }).then((res) => {
                 if (res['data']['status']) {
+                    console.log("data >>>", res['data']['result'].length);
+
                     let data = []
                     let From,
                         To,
@@ -109,7 +111,7 @@ class ChooseTalentCom extends Component {
                         }
                     }
 
-                    console.log("data >>>", data);
+                    console.log("data >>>", data.length);
 
                     global.all = global.Job_Title && global.Job_Location != [] || '' ? data : [];
                     this.props.navigation.navigate('TabScreenCompany')
@@ -174,11 +176,11 @@ class ChooseTalentCom extends Component {
                                 } />
             </View>
              <View style={{
-                marginVertical: hp(4)
+                marginTop:hp(2) , marginBottom: hp(4)
             }}><View style={{
                                     justifyContent:"center",alignItems:"center"
                                 }}><Texting style={[{
-                fontSize: scale(22),
+                fontSize: hp(3.5),
                 fontWeight: "bold"
             }, styles.Employment]} text='Employment' />
             </View></View>
@@ -218,7 +220,7 @@ class ChooseTalentCom extends Component {
                                         HelpingVacancies: !this.state.HelpingVacancies
                             },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
         <Texting style={[styles.Employment, {
-                fontSize: scale(20),
+                fontSize: hp(3),
                 color:HelpingVacancies ? themeColor : themeWhite
             }]} text='Helping_Vacancies'/>
     </TouchableOpacity>
@@ -230,7 +232,7 @@ class ChooseTalentCom extends Component {
                                 
             </View>
             </View>
-            <BackNext onBack={this.back} onNext={this.next} />
+            <BackNext onBack={this.back} onNext={this.next} show={true}/>
         </ImageBackground></SafeAreaView>
         )
     }

@@ -89,7 +89,7 @@ class UserManagement extends PureComponent {
         this.props.navigation.navigate('Filter')
     }
     Back = () => {
-        this.props.navigation.navigate('ComEdit')
+        this.props.navigation.navigate('UserProfile')
     }
     createJob = () => {
         console.log('hey');
@@ -156,7 +156,7 @@ class UserManagement extends PureComponent {
             {data != '' ? (<FlatList
             style={{
                 marginTop: 4,
-                marginBottom: 45,
+                marginBottom: 50,
                 backgroundColor: 'transparent',
             }}
             data = {data}

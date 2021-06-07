@@ -124,8 +124,10 @@ class Signup extends Component {
 
     _onLoad = (state) => {
         console.log('state',state);
-        var n = state.url.startsWith('http://192.168.0.166:4200/#/authentication/app-signup?');
+        // https://test-web.envspotjo.com/#/authentication/signup
+        var n = state.url.startsWith('https://spotjo-test.envspotjo.com/#/authentication/signup?');
         if (n) {
+          
                 let m = state.url.split('?');
                 let g = m[1].split('&');
                 let i = g.map(i => i.split('='))

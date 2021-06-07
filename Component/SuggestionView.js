@@ -17,14 +17,14 @@ const center = {justifyContent:"center",alignItems:"center",paddingTop:5};
 const SuggestionView = ({onPress, ...props}) => 
 (
     <TouchableWithoutFeedback
-                        onPress={onPress}>
+                        onPress={onPress} key={props.index}>
                         <View
                           key={props.index}
                           style={{
                             alignItems: 'flex-start',borderWidth:1,borderColor:themeColor,
                 borderRadius:10,paddingHorizontal:10,height:'auto',
                 width: 'auto',backgroundColor:props.backGroundC ? props.backGroundC : 'white',borderColor:"#fff",flexDirection:"row",
-                justifyContent:"center",alignItems:"center",margin:2
+                justifyContent:"space-around",alignItems:"center",margin:2,flexShrink:1
                           }}>
                           <View
                             style={{
@@ -35,7 +35,7 @@ const SuggestionView = ({onPress, ...props}) =>
                             <Text
                               style={{
                                 fontWeight: 'bold',
-                  fontSize: scale(18),
+                  fontSize: props.fontscale ? props.fontscale:hp(2.7),
                   color:props.textColor ? props.textColor : themeColor,
                               }}>
                               {props.elements}

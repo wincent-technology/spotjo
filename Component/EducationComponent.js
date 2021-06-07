@@ -19,36 +19,37 @@ const EducationComponent = ({onBack, onFinish , textChange , onNext, ...props}) 
 return (
      <><View style = {
         {
-            top: scale(20),
+            top: hp(1),
             marginHorizontal:wp(5)
         }}>
         <CustomInput value = {props.name} placeholder={props.placeHolder} 
-        inputContainerStyle={[{borderRadius:scale(20),height:scale(45),backgroundColor:"#fff",borderColor: "#333",
+        inputContainerStyle={[{borderRadius:scale(20),height:hp(5.5),backgroundColor:"#fff",borderColor: "#333",
     borderWidth: 1},props.addskillStyle]}
         textChange = {textChange} inputStyle={{
             fontWeight: "bold",
-            fontSize: scale(18),
+            fontSize: hp(2.7),
             color: themeColor
         }}
         iconStyle={{
-            height: 25,
-            width: 25
+            height: hp(3),
+            width: hp(3)
         }}
         /></View>
-        <View style={{justifyContent:"space-between",alignItems:"flex-end",marginHorizontal:wp(8)}}>
+        {!props.show && <View style={{justifyContent:"space-between",alignItems:"flex-end",marginHorizontal:wp(8)}}>
               <TouchableOpacity 
-              style={{borderWidth:1,paddingVertical:7,paddingHorizontal:15,borderRadius:20,borderColor:"#333",justifyContent:"center",alignItems:"center"}} 
+              style={{borderWidth:0.5,paddingVertical:hp(0.5),marginTop:hp(-1),paddingHorizontal:hp(2),borderRadius:20,
+              borderColor:"#333",justifyContent:"center",alignItems:"center"}} 
               onPress={onNext}>
                 <Text style={{
                   fontWeight: "bold",
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 color: themeColor
 
                 }}>
                   Next
                 </Text>
               </TouchableOpacity>
-            </View>
+            </View>}
             <View style={{
                 alignItems: "flex-start",
                 flexDirection: "row",

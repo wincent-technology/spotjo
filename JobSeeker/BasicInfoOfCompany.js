@@ -103,13 +103,13 @@ class BasicInfoOfCompany extends Component {
             style={{
               width: wp('96%'),
               marginHorizontal: wp(2),
-              height: hp('100%') - (100 + wp(14) + 50),
+              height: hp('80%'),
               top: wp(14)
             }}
             >
             <View style={{
                 alignItems: "center",
-                top: hp(1)
+                top: hp(1),backgroundColor:"white"
             }}><Text style={{
                 color: themeColor,
                 fontWeight: 'bold',
@@ -118,15 +118,15 @@ class BasicInfoOfCompany extends Component {
             }}>Detail Skills</Text></View>
              <View style={{
                 width: '90%',
-                top: hp(2),
-                height: hp('50%'),
+                top: hp(5),
+                height: hp('40%'),
                 // backgroundColor: "#eee",
                 marginHorizontal: wp('5%'),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
             // elevation: 7,
             }}>
-                <Text style={{fontSize:scale(18),color:"#333",fontFamily:FontBold}}>
+                <Text style={{fontSize:hp(2.7),color:"#333",fontFamily:FontBold}}>
                     SKILLS
                 </Text>
                 <ScrollView
@@ -142,14 +142,14 @@ class BasicInfoOfCompany extends Component {
                     //   marginHorizontal: wp(7),
                     }}
                     nestedScrollEnabled={true}>
-                   {global.item.skills.length && global.item.skills.map((item, index) => {
+                   {global.item.skills && global.item.skills.map((item, index) => {
                       return (
                         <View style={{
                 flexDirection: "row",
                 alignItems: "center",
                 width:wp(82),
-                    borderBottomWidth: scale(1),
-                height:50,borderBottomColor:'#eee',
+                    borderBottomWidth: scale(1),paddingVertical:5,
+                height:'auto',borderBottomColor:'#eee',
             }} key={index}>
             <View style={{
                 flexDirection: 'row',
@@ -159,9 +159,9 @@ class BasicInfoOfCompany extends Component {
             }}><View style={{width:wp(45)}}>
 <Text style={{
                 fontFamily: FontBold,
-                fontSize: scale(16),
+                fontSize: hp(2.5),
                 color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{Items ? item.english : item.german}</Text>
+            }} numberOfLines={1}>{global.language == 'english' ? item.english : item.german}</Text>
             </View>
             <View style={{width:wp(39),alignItems:"flex-end"}}>
             <StarRating
@@ -171,7 +171,7 @@ class BasicInfoOfCompany extends Component {
                 iconSet={'MaterialIcons'}
                 disabled={false}
                 maxStars={5}
-                starSize={scale(17)}
+                starSize={hp(2.5)}
                 rating={item.rating}
                 starStyle={{marginLeft:2}}
                 // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
@@ -188,15 +188,16 @@ class BasicInfoOfCompany extends Component {
                       );
                     })}
                   </ScrollView>
-                <Text style={{fontSize:scale(18),color:"#333",fontFamily:FontBold}}>
+                <Text style={{fontSize:hp(2.7),color:"#333",fontFamily:FontBold}}>
                     LANGUAGE SKILLS
                 </Text>
                 <ScrollView
                     style={{
                       backgroundColor: themeWhite,
+                      height:"auto",
                       // marginTop: '-7%',
-                      marginBottom: 30,
-                      // alignSelf: 'stretch',
+                      // marginBottom: 30,
+                      alignSelf: 'stretch',
                     }}
                     contentContainerStyle={{
                       alignItems: 'center',
@@ -209,9 +210,9 @@ class BasicInfoOfCompany extends Component {
                         <View style={{
                 flexDirection: "row",
                 alignItems: "center",
-                width:wp(82),
+                width:wp(82),paddingVertical:5,
                     borderBottomWidth: scale(1),
-                height:50,borderBottomColor:'#eee',
+                height:'auto',borderBottomColor:'#eee',
             }} key={index}>
             <View style={{
                 flexDirection: 'row',
@@ -221,7 +222,7 @@ class BasicInfoOfCompany extends Component {
             }}><View style={{width:wp(45)}}>
 <Text style={{
                 fontFamily: FontBold,
-                fontSize: scale(16),
+                fontSize: hp(2.5),
                 color: themeColor,width:wp(40)
             }} numberOfLines={1}>{Items ? item.english : item.german}</Text>
             </View>
@@ -252,16 +253,16 @@ class BasicInfoOfCompany extends Component {
                   </ScrollView>
             </View>
             </View>
-            <LinearGradient style={{top:hp('100%') - (100 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+            <LinearGradient style={{bottom:48,backgroundColor:"white",justifyContent:"center",
               // zIndex: 5,
               height: 10,
               width: wp(100),}} colors={['white', 'rgba(171,171,171,0.1)', 'rgba(171,171,171,0.4)']}/>
           <View
             style={{
               // top: hp(6),
-              top:hp('100%') - (90 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              bottom:47,backgroundColor:"white",justifyContent:"center",justifyContent:"center",
               // zIndex: 5,
-              height: 50,
+              height: hp(5),
               width: wp(100),
               // left: wp(-2),
               // transform: [{ rotate: "90deg" }]
@@ -279,8 +280,8 @@ class BasicInfoOfCompany extends Component {
                   <Image
                     source={wrong}
                     style={{
-                      height: scale(30),
-                      width: scale(30),
+                      height: hp(3.5),
+                      width: hp(3.5),
                     }}
                     resizeMode={'contain'}
                   />
@@ -289,8 +290,8 @@ class BasicInfoOfCompany extends Component {
                   <Image
                     source={rite}
                     style={{
-                      height: scale(35),
-                      width: scale(35),
+                      height: hp(3.5),
+                      width: hp(3.5),
                     }}
                     resizeMode={'contain'}
                   />

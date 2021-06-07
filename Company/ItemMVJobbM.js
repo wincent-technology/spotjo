@@ -45,6 +45,8 @@ const {
     width
 } = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
+import TimeAgo from '../Component/TimeAgo'
+
 let Company = '';
 let min = 0;
 const Items = global.language == 'english' ? true : false
@@ -62,6 +64,18 @@ class ItemMVJobbM extends PureComponent {
         return Math.floor(a - b)
     }
 
+    timeConversion = (a,b,c,d,e) => {
+        let result = []
+       if (a == 1) result.push('Employed')
+       if (b == 1) result.push('FreeLancer')
+       if (c == 1) result.push('Helping Vacancies')
+       if (d == 1) result.push('Internship')
+       if (e == 1) result.push('StudentJob')
+    
+       result = result.reduce((name,arr,index) => name + (result.length != 1 && index != 0 ? ' / ' + arr : arr),'')
+        return result.length ? result : 'Fresher'
+    }
+
     Companyname() {
         let items = this.props.item;
         let ary = [];
@@ -69,7 +83,7 @@ class ItemMVJobbM extends PureComponent {
         console.log('item>>>69', items.workexp)
         if (items.workexp == undefined)
             return;
-        for (let i in items.workexp) {
+        for (let i=0;i<items.workexp.length;i++) {
             To = items.workexp[i].To.split(' ');
             ary.push(parseInt(To[1]));
         }
@@ -78,11 +92,11 @@ class ItemMVJobbM extends PureComponent {
         // console.log('ary', ary[ary.length - 1]);
         // return a
 
-        for (let i in items.workexp) {
+        for (let i=0;i<items.workexp.length;i++) {
             To = items.workexp[i].To.split(' ');
             if (ary[ary.length - 1] == To[1]) {
                 console.log(">>>>", items.workexp[i])
-                return Company = items.workexp[i].Company
+                return Company = items.workexp[i].Company || 'Unknown'
                 // let From = items.workexp[i].From.split(' ');
                 // To = items.workexp[i].To.split(' ');
                 // min = To[1] -/ From[1];
@@ -92,65 +106,60 @@ class ItemMVJobbM extends PureComponent {
     }
     ExpYears() {
         let items = this.props.item;
-        console.log(">>>>", items.workexp)
         let ary = [];
         let To;
         if (items.workexp == undefined || items.workexp == null)
             return min;
 
-        for (let i in items.workexp) {
+        for (let i=0;i<items.workexp.length;i++) {
             To = items.workexp[i].To.split(' ');
             ary.push(parseInt(To[1]));
         }
         ary.sort();
 
-        for (let i in items.workexp) {
+        for (let i=0;i<items.workexp.length;i++) {
             To = items.workexp[i].To.split(' ');
             if (ary[ary.length - 1] == To[1]) {
-                // console.log(">>>>", items.workexp[i])
-                // Company = items.workexp[i].Company
                 let From = items.workexp[i].From.split(' ');
                 To = items.workexp[i].To.split(' ');
                 min = To[1] - From[1];
-                // console.log('min', min)
-                // if ()
                 return <Text>{min != 0 ? min - 1 : 0} - {min != 0 ? min : 0}</Text>
             }
         }
     }
 
-    timeConversion = (millisec) => {
+    // timeConversion = (millisec) => {
 
 
 
-        let today = new Date(millisec);
-        var mil = this.dateDiffInDays(today)
-        let day,
-            hour,
-            minute,
-            month,
-            year,
-            seconds;
-        seconds = Math.floor(mil / 1000);
-        minute = Math.floor(seconds / 60);
-        hour = Math.floor(minute / 60);
-        day = Math.floor(hour / 24);
-        month = Math.floor(day / 30)
-        year = Math.floor(month / 12)
-        if (seconds < 60) {
-            return seconds + " Sec" + " ago";
-        } else if (minute < 60) {
-            return minute + " Min" + " ago";
-        } else if (hour < 24) {
-            return hour + " Hrs" + " ago";
-        } else if (day < 30) {
-            return day + " Days" + " ago"
-        } else if (month < 12) {
-            return month + " months" + " ago"
-        } else {
-            return year + ' years' + ' ago'
-        }
-    }
+    //     let today = new Date(millisec);
+    //     var mil = this.dateDiffInDays(today)
+    //     let day,
+    //         hour,
+    //         minute,
+    //         month,
+    //         year,
+    //         seconds;
+    //     seconds = Math.floor(mil / 1000);
+    //     minute = Math.floor(seconds / 60);
+    //     hour = Math.floor(minute / 60);
+    //     day = Math.floor(hour / 24);
+    //     month = Math.floor(day / 30)
+    //     year = Math.floor(month / 12)
+    //     if (seconds < 60) {
+    //         return seconds + " Sec" + " ago";
+    //     } else if (minute < 60) {
+    //         return minute + " Min" + " ago";
+    //     } else if (hour < 24) {
+    //         return hour + " Hrs" + " ago";
+    //     } else if (day < 30) {
+    //         return day + " Days" + " ago"
+    //     } else if (month < 12) {
+    //         return month + " months" + " ago"
+    //     } else {
+    //         return year + ' years' + ' ago'
+    //     }
+    // }
 
 
     render() {
@@ -163,7 +172,7 @@ class ItemMVJobbM extends PureComponent {
                 width: wp(80),
                 justifyContent: "center",
             }}>
-            <Text style={styles.ItemMVHeader}>{this.props.item.first_name} {this.props.item.last_name}</Text></View>
+            <Text style={styles.ItemMVHeader}>{this.props.item.first_name || 'Unknown'} {this.props.item.last_name || 'Unknown'}</Text></View>
             <View style={{
                 width: wp(18),
                 justifyContent: "center",
@@ -201,7 +210,8 @@ class ItemMVJobbM extends PureComponent {
             }}>
             <Image source ={user} style={styles.imageStyle} resizeMode={'contain'} /></View>
             <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-            Employed</Text>
+            {this.timeConversion(this.props.item.isEmployed,this.props.item.isFreelancer,this.props.item.isHelping,this.props.item.isInternship,
+                this.props.item.isStudentJob)}</Text>
             </View>
             <View style={styles.ItemMVDetailIcon}>
             <View style={{
@@ -211,7 +221,7 @@ class ItemMVJobbM extends PureComponent {
                 alignItems: 'center',
             }}><Image source ={place} style={styles.imageStyle} resizeMode={'contain'} /></View>
             <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-            {this.props.item.place}</Text>
+            {this.props.item.place || 'Unknown'}</Text>
             <Text styles={styles.ItemDetailLabel}> /</Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
             <View style={{
                 marginTop: scale(-1),
@@ -227,7 +237,9 @@ class ItemMVJobbM extends PureComponent {
                 marginLeft: scale(6),
                 marginTop: scale(-1),
                 maxWidth:  wp(35)
-            }} numberOfLines={1}>{this.props.item.skills != null && this.props.item.skills.map((item, index) => {
+            }} numberOfLines={1}>
+            {!this.props.item.skills || this.props.item.skills.length == 0 && 'Unknown'}
+            {this.props.item.skills != null && this.props.item.skills.map((item, index) => {
                 return (
                     <Text  key={index} style={{
                         fontFamily: 'Roboto-Regular',
@@ -247,10 +259,12 @@ class ItemMVJobbM extends PureComponent {
                 <Text style={styles.ItemDetailLabel}>{this.ExpYears()} Years / </Text><Text style={styles.ItemMVDetailColor}> 100%</Text></View>
    
       </View>
-            <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}><Text style={{
-                fontFamily: 'Roboto-Regular',
-                fontSize: scale(12)
-            }}>{this.timeConversion(this.props.item.createdAt)}</Text></View>
+            <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}>
+            <TimeAgo style={{
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: scale(12),
+                }} time={this.props.item.createdAt}/>
+            </View>
             <View style={styles.ItemMVRatingView}>
             <StarRating
             emptyStar={blanks}

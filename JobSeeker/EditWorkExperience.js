@@ -159,7 +159,7 @@ renders = (item) => {
     width: wp('80%')
 }}><Text style={{
     fontFamily: FontBold,
-    fontSize: scale(18),
+    fontSize: hp(2.5),
     color: themeColor
 }} numberOfLines={1}>{item.Role}</Text>
 <View style={{
@@ -173,7 +173,7 @@ renders = (item) => {
     color: '#000',
 }}>{item.Company} , {item.From} - {item.To}</Text>
 </View>
-<View style={{alignItems:"flex-end",marginTop:5,marginRight:5}}>
+<View style={{alignItems:"flex-end",marginTop:0,marginRight:0}}>
 <StarRating
     emptyStar={blanks}
     fullStar={Fulls}

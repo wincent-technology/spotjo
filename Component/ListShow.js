@@ -26,7 +26,7 @@ const ListShow = ({...props}) =>
     </View>
     <Text style={styles.ItemDetailLabel1}>{props.name}</Text>
   </View>
-  <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:2,}}/></>
+  <View style={{height:0.5,width:wp(85)-wp(5),backgroundColor:themeColor,marginLeft:5,marginTop:2,}}/></>
 )
 
 export default ListShow

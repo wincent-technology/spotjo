@@ -9,6 +9,7 @@ import {
   ImageBackground,
   Text,
   Image,
+  ScrollView,
   View,ActivityIndicator
 } from 'react-native';
 import {
@@ -17,7 +18,7 @@ import {
 } from 'react-navigation';
 import styles from '../src/Style';
 import {
-  left,
+  left,play
 } from '../src/IconManager';
 import {
   themeColor,
@@ -38,6 +39,8 @@ import {
 } from '../src/Util';
 import Slider from '@react-native-community/slider';
 import ItemMVJobb from './ItemMVJobb';
+import AsyncStorage from '@react-native-community/async-storage';
+import ModalSort from '../Component/ModalSort'
 import MapView, {
   PROVIDER_GOOGLE,
   Circle,
@@ -55,54 +58,67 @@ let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 import PlacesInput from '../Component/PlacesInput';
 import PermissionHelper from '../Component/PermissionHelper'
 import List from '../Component/List'
+import TopHeader from '../Component/TopHeader'
+import SuggestionView from '../Component/SuggestionView'
+import Modal from 'react-native-modal'
+import WebRegisterCompanyCheck from '../Component/WebRegisterCompanyCheck'
 // Use the below code to zoom to particular location with radius.
 
 var flag = false;
 import Texting from "../Constant/Text";
 
 const colorPin =  ['red','blue','green']
-
-class UserScreenMap extends PureComponent {
+const Lat = 52.520008
+  const  Long = 13.404954
+class UserScreenMap extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      fil: false,
+      role:false,
+      srt: false,
       data: [],
+      detailed: false,
+      message:'No_data',
+      openModal:false,
       radius: 5000,
       zoom: 0,
-      granted:false,
+      granted:true,
       circlecenter: [{
-        latitude: global.let || 10,
-        longitude: global.long || 10,
+        latitude: Lat,
+        longitude:  Long,
       }],
       region: [{
-        latitude: global.let || 10,
-        longitude: global.long || 10,
+        latitude:  Lat,
+        longitude:  Long,
         latitudeDelta: LATITUDE_DELTA,
         longitudeDelta: LONGITUDE_DELTA,
       }],
-      titleCity : [
-        'unknown'
-      ],
+      titleCity : [],
       coordi: [{
-        latitude: global.let || 10,
-        longitude: global.long || 10,
+        latitude:  Lat,
+        longitude:  Long,
       }],
       markers: [{
         coordinate: {
-          latitude: global.let+SPACE,
-          longitude: global.long + SPACE,
+          latitude: Lat + SPACE,
+          longitude: Long + SPACE,
           _id:0
         },
       }, {
         coordinate: {
-          latitude: global.let+SPACE,
-          longitude: global.long - SPACE,
+          latitude: Lat + SPACE,
+          longitude:  Long - SPACE,
           _id:1
         },
       }],
     };
     this.watchId = '';
     this.onMarkerDrag = this.onMarkerDrag.bind(this);
+    this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
+      this.checking()
+      // do something like this.setState() to update your view
+    })
   }
 
   async onMarkerDrag(e,index) {
@@ -150,16 +166,93 @@ region[index]={
   componentWillUnmount() {
     Geolocation.clearWatch(this.watchID);
   }
+  suggestionTag = (elements, index) => {
+
+    let {titleCity, region, coordi} = this.state;
+    index = index;
+    titleCity = titleCity.filter((item) => item != elements);
+    global.Favorite_Location = global.Favorite_Location.filter((item) => item.place != elements)
+    region = region.filter((i, id) => id != index);
+    coordi = coordi.filter((i, id) => id != index);
+
+    console.log ('tile',titleCity,region,coordi)
+    if (titleCity.length == 0)
+     {
+     this.setState({
+      circlecenter: [
+        {
+          latitude: Lat,
+          longitude:  Long,
+        },
+      ],
+      region: [
+        {
+          latitude:  Lat,
+          longitude: Long,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+      ],
+      coordi: [
+        {
+          latitude: Lat,
+          longitude:  Long,
+        },
+      ],
+      titleCity:[]
+     },() => {
+      global.Job_Location = global.Favorite_Location
+    this.map.animateToRegion(region[0], 1000);
+     });
+    }
+    else {
+      this.setState({
+        titleCity,
+        region,
+        coordi,
+      },()=> {
+        global.Job_Location = global.Favorite_Location
+        if (region.length == 1)
+        this.map.animateToRegion(region[0], 1000);
+        else
+        this.map.fitToCoordinates(
+          coordi.map((item) => item),
+       { 
+         edgePadding: DEFAULT_PADDING,
+         animated: true,
+       },
+     );
+      });
+    }
+
+
+//     if (this.state.region.length == 1)
+//     this.map.animateToRegion(region[0], 1000);
+// else
+//    this.map.fitToCoordinates(
+//      coordi.map((item) => item),
+//        { 
+//          edgePadding: DEFAULT_PADDING,
+//          animated: true,
+//        },
+//      );
+
+   
+
+
+  };
+
   permission = async () => {
-    const granted = await PermissionHelper.Storage.isLocationPermissionGranted();
-    if (granted)
-       { this.setState({granted:true})
-          this.LATLong()
-      }
-    else
-    {const granted = await PermissionHelper.Storage.requestLocationPermission();
-      !granted &&  alert('please enable location')
-        !granted && this.permission();  }
+    const f = await PermissionHelper.Storage.isLocationPermissionGranted();
+    if (f) {
+      this.setState({granted: true});
+      this.LATLong();
+    } else {
+      const f = await PermissionHelper.Storage.requestLocationPermission();
+      !f && alert('please enable location');
+      !f && this.permission();
+      f && this.LATLong();
+    }
   }
 
   LATLong = async () => {
@@ -180,8 +273,11 @@ region[index]={
               longitude: global.long,
             }],
           });
-        });
-        console.log('this.state>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>',this.state)
+          console.log('region',this.state.region)
+          this.map.animateToRegion(this.state.region[0], 500);
+        },
+        (error) => snack(error.message + 'please on the the location'),
+      );
     } catch (err) {
       console.warn(err);
     }
@@ -189,12 +285,51 @@ region[index]={
 
 
    componentDidMount() {
-       this.permission()
-    const {
+      //  this.permission() 
+    let {
       radius,
-      zoom
+      zoom,region,titleCity,coordi
     } = this.state;
-    this.checking();
+    // this.checking();
+    
+    console.log('global.joblocation',global.Job_Location)
+
+    if (global.Job_Location.length){
+    region = global.Job_Location.length && global.Job_Location.map(item => {
+      let temp = {}
+      temp.latitude=item.latitude
+      temp.longitude=item.longitude
+      temp.latitudeDelta=LATITUDE_DELTA
+      temp.longitudeDelta=LONGITUDE_DELTA
+      return temp;
+    })
+
+    titleCity = global.Job_Location.length && global.Job_Location.map(item => item.place)
+
+    coordi =  global.Job_Location.length && global.Job_Location.map(item => {
+      let temp = {}
+      temp.latitude=item.latitude
+      temp.longitude=item.longitude
+      return temp;
+    })
+  }
+
+    if (region.length == 1)
+    this.map.animateToRegion(region[0], 1000);
+else
+   this.map.fitToCoordinates(
+     coordi.map((item) => item),
+       { 
+         edgePadding: DEFAULT_PADDING,
+         animated: true,
+       },
+     );
+
+    this.setState({
+      titleCity,
+      region,
+      coordi,
+    });
   }
   call = () => {
     try {
@@ -261,10 +396,23 @@ region[index]={
                 data: global.all,
                 markers: array,
 
-              },() => this.map.fitToCoordinates(this.state.markers.map(item => item.coordinate), {
-                edgePadding: DEFAULT_PADDING,
-                animated: true,
-              }))
+              },() => 
+              {if (this.state.region.length == 1)
+                this.map.animateToRegion(this.state.region[0], 1000);
+            else
+              this.map.fitToCoordinates(
+                this.state.coordi.map((item) => item),
+                  { 
+                    edgePadding: DEFAULT_PADDING,
+                    animated: true,
+                  },
+                )}
+                // this.map.fitToCoordinates(this.state.markers.map(item => item.coordinate), {
+                // edgePadding: DEFAULT_PADDING,
+                // animated: true,
+              // })
+              )
+             
             } else {
               snack(res['data']['message']);
             }
@@ -275,11 +423,129 @@ region[index]={
       snack(error);
     }
   };
-  checking = () => {
-    this.permission()
-    console.log('hey', global.all);
+  checking = async () => {
+
+    global.reset == true && this.setState({
+      fil: false,
+      srt: false,
+      message:'No_data',
+      openModal:false,
+      relevance:false,
+      Date:false,
+      data: [],
+      detailed: false,
+      radius: 5000,
+      zoom: 0,
+      granted: true,
+      circlecenter: [
+        {
+          latitude: Lat,
+          longitude: Long,
+        },
+      ],
+      region: [
+        {
+          latitude: Lat,
+          longitude: Long,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+      ],
+      titleCity: [],
+      coordi: [
+        {
+          latitude: Lat,
+          longitude: Long,
+        },
+      ],
+      markers: [
+        {
+          coordinate: {
+            latitude: Lat + SPACE,
+            longitude: Long + SPACE,
+            _id: 0,
+          },
+        },
+        {
+          coordinate: {
+            latitude: Lat + SPACE,
+            longitude:Long - SPACE,
+            _id: 1,
+          },
+        },
+      ],
+    },() => this.map.animateToRegion(region[0], 1000))
+
+  console.log('after', this.state,global.reset);
+
+    // global.reset && this.map.animateToRegion(region[0], 1000);
+
+
+    // console.log('hey', global.Job_Location);
+    // let {region,titleCity,coordi} = this.state
+
+    // if (global.Job_Location.length){
+    //   region = global.Job_Location.map(item => {
+    //     let temp = {}
+    //     temp.latitude=item.latitude
+    //     temp.longitude=item.longitude
+    //     temp.latitudeDelta=LATITUDE_DELTA
+    //     temp.longitudeDelta=LONGITUDE_DELTA
+    //     return temp;
+    //   })
+  
+    //   titleCity = global.Job_Location.map(item => item.place)
+  
+    //   coordi =  global.Job_Location.map(item => {
+    //     let temp = {}
+    //     temp.latitude=item.latitude
+    //     temp.longitude=item.longitude
+    //     return temp;
+    //   })
+    // }
+
+
+    if (this.state.region.length == 1)
+    this.map.animateToRegion(this.state.region[0], 1000);
+    else
+this.map.fitToCoordinates(
+this.state.coordi.map((item) => item),
+{
+  edgePadding: DEFAULT_PADDING,
+  animated: true,
+},
+)
+
+    if (this.state.fil)
+      {
+        global.Role.length != 0 && this.setState({message:"no data found please try with another Role"})
+        global.CompanyGuest.length != 0 && this.setState({message:"no data found please try with another Skill"})
+      }
+      global.Role = []
+      global.CompanyGuest = []
+
+      let keys = []
+      var result = []
+          try {
+              keys = await AsyncStorage.getAllKeys()
+              if (keys.indexOf("SelectUserList") !== -1) {
+                result = await AsyncStorage.getItem('SelectUserList');
+                result = JSON.parse(result);
+              }
+          } catch ( e ) {
+              // read key error
+          }
+
+          console.log('result',result)
+        let data = JSON.parse(JSON.stringify(global.all));
+        data = data.filter((elem) => !result.find(({ id }) => elem.id === id) ? elem : elem.heart = true);
+
     this.setState({
-      data: global.all,
+      data,
+      fil: false,
+      srt: false,
+      detailed: false,
+      // region,titleCity,coordi
     });
     this.call();
   };
@@ -287,27 +553,117 @@ region[index]={
   Video = (item) => {
     console.log('hels');
     let m = url + '/images/user/' + item.video;
-    if (item)
+    if (item.video)
       this.props.navigation.navigate('VideoPlayer', {
         vid: m,
       });
-    else alert('not uploaded');
+    else alert('video snot uploaded');
     // this.props.navigation.navigate('VideoResume');
   };
   Filter = () => {
-    this.props.navigation.navigate('FilterUser');
+    this.setState({
+      fil: true,
+    });
+    setTimeout(() => {
+      this.props.navigation.navigate('FilterUser');
+    }, 300);
   };
+
+  date = () => {
+    this.setState({
+      Date:!this.state.Date,
+      relevance:false
+    })
+       let data = this.state.data;
+    data = this.state.Date ? data.sort((a,b) => a.createdAt > b.createdAt ? 1 : -1) : data.sort((a,b) => a.createdAt < b.createdAt ? 1 : -1);
+    
+    this.setState({data,openModal:!this.state.openModal})
+    
+  }
+  relevance = () => {
+
+    this.setState({relevance:!this.state.relevance,Date:false})
+    let data = this.state.data;
+    if (global.CompanyGuest.length === 0)
+    {
+    
+      alert('please select some skills for relevance search')
+      this.props.navigation.navigate('FilterUser')
+      
+    }
+     else
+     { 
+    data = global.CompanyGuest.map(skill => data.filter(item => item.skills.filter(item => item.english === skill.cell.english)))
+    console.log('data',data[0]);
+    data = data[0];
+     }
+    this.setState({data,openModal:false})
+  }
+
+  Sort = () => {
+    this.setState({
+      srt: true,
+      openModal:!this.state.openModal
+
+    });
+    // let data = this.state.data;
+    // data = this.state.srt ? data.sort((a,b) => a.createdAt > b.createdAt ? 1 : -1) : data.sort((a,b) => a.createdAt < b.createdAt ? 1 : -1);
+    // this.setState({data})
+  };
+
+  select = async (item,index) =>{
+
+    let d = JSON.parse(JSON.stringify(this.state.data))
+    d[index].heart = !d[index].heart
+    this.setState({data:JSON.parse(JSON.stringify(d))});
+
+    var result = []
+
+        try {
+              result = await AsyncStorage.getItem('SelectUserList');
+              result = JSON.parse(result) || [];
+              if (d[index].heart)
+                result.push(item)
+                else
+                result = result.filter(item => !item == d[index])
+
+            await AsyncStorage.setItem(
+              'SelectUserList',
+              JSON.stringify(result),
+            );
+        } catch ( e ) {
+            // read key error
+        }
+  }
+
+  pushy = (item,index) => {
+    this.setState({
+      detailed: true,
+    });
+    setTimeout(() => {
+      this.props.navigation.navigate('UserPro', {
+        item: global.all[0],
+        length: this.state.data.length,
+      });
+    }, 300);
+}
+
+
   push = (item, index) => {
     // console.log("heelo", item);
     global.ig = global.all;
-    this.props.navigation.navigate('UserPro', {
+    global.role == 'Super Admin' ? this.props.navigation.navigate('UserPro', {
       item: item,
       index: index,
       status: 'undefined',
-    });
+    }) : this.setState({role:true}) 
+    
+      
   };
+
+
   Back = () => {
-    this.props.navigation.goBack();
+    this.props.navigation.navigate('FilterUser');
   };
   change = async (value) => {
     let given = await this.map.getCamera();
@@ -358,51 +714,86 @@ region[index]={
     return <ActivityIndicator size={'large'} color={themeColor} />
 else
     return (
-      region.latitude!= NaN && <View style={styles.backGround}>
+      region.latitude!= NaN && <View style={styles.backGround} onStartShouldSetResponder={()=> global.role != 'Super Admin' && this.setState({role:true})}>
+        <WebRegisterCompanyCheck onPress={()=> this.setState({role:false})} role={this.state.role} />
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
           tintColor={themeWhite}
           resizeMode={'stretch'}>
-          <StatusBar hidden={false} backgroundColor={themeWhite} />
+          <StatusBar hidden={true} backgroundColor={themeWhite} />
+          <NavigationEvents onDidFocus={this.checking} />
+          <ModalSort isVisible={this.state.openModal} onBackdropPress={()=>this.setState({openModal:false})} 
+          relevance={()=>this.relevance()} bydate={()=> this.date()} date={this.state.Date} rel={this.state.relevance}/>
           <View
             style={{
-              // height: scale(40),
-              flexDirection: 'row',
-              width: 30,
+              // height:  scale(40),
+              // flexDirection: 'row',
+              height:'auto',
+                  width:wp(6),
               backgroundColor: 'transparent',
               alignItems: 'center',
               marginTop: scale(5),
+              zIndex: 500,
             }}>
             <TouchableOpacity
               style={{
                 backgroundColor: 'transparent',
                 alignItems: 'flex-start',
-                marginTop: scale(7),
-                zIndex: 10,
+                marginTop: scale(8),
               }}
-              onPress={() => this.Back()}>
-              {left(scale(30), themeColor)}
+              onPress={()=> this.Back()}
+                   hitSlop={{top:20,bottom:20,left:20,right:20}}>
+              {left(hp(4), themeColor)}
             </TouchableOpacity>
           </View>
           <PlacesInput
             googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
             placeHolder={'Search Place'}
             language={'en-US'}
+            mainStyle={false}
+            clearQueryOnSelect={true}
+            calla={() => this.permission()}
             onSelect={(place) => {
               console.log('place', place.result.name);
               let region = this.state.region
               let titleCity = this.state.titleCity;
-              titleCity.push(place.result.name)
+              let coordi = this.state.coordi;
+              let markers = this.state.markers;
+
+
+              if(titleCity.length == 0)
+                          {
+                            // let coordi = this.state.coordi;
+              // let markers = this.state.markers;
+                            region = []; 
+                            coordi = [];
+                            global.Favorite_Location = [];
+                            markers = [];
+                           }
+
+                           let p = titleCity.find(item => item === place.result.name)
+                                          if (p)
+                                          {
+                                            alert('You have selected same city..please select different city')
+                                            return
+                                          }
+                                          else{
+                                            titleCity.push(place.result.name);
+
+                           global.Favorite_Location.push({place : place.result.name,kilometer:this.state.radius / 1000,latitude:place.result.geometry.location.lat,
+                  longitude:place.result.geometry.location.lng});
+
+              // titleCity.push(place.result.name)
 
               region.push({
                     latitude: place.result.geometry.location.lat,
                     longitude: place.result.geometry.location.lng,
-                    latitudeDelta: this.state.region[0].latitudeDelta,
-                    longitudeDelta: this.state.region[0].longitudeDelta,
+                    latitudeDelta:  LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
                   })
 
-                  let coordi = this.state.coordi
+                  // let coordi = this.state.coordi
                   coordi.push({
                     latitude: place.result.geometry.location.lat,
                     longitude: place.result.geometry.location.lng,
@@ -415,6 +806,7 @@ else
                   coordi,titleCity
                 },
                 () => {
+                  global.Job_Location = global.Favorite_Location
                   console.log('this.state.region>>>>>',this.state.region)
                   this.map.fitToCoordinates(this.state.coordi.map(item => item), {
                   edgePadding: DEFAULT_PADDING,
@@ -424,6 +816,7 @@ else
                   this.call();
                 },
               );
+                                          }
             }}
             stylesList={{
               marginTop: scale(40),
@@ -434,8 +827,8 @@ else
               // alignItems:"center",
               // marginLeft: scale(10),
               justifyContent: 'center',
-              fontSize: scale(17),
-              height: scale(40),
+              fontSize: hp(2.6),
+                  height: hp(8),
               width: wp(80),
               fontFamily: FontBold,
               fontWeight: 'bold',
@@ -447,63 +840,66 @@ else
               width: wp(86),
               borderRadius: wp(10),
               marginBottom: scale(2),
-              height: scale(40),
-              marginLeft: wp(7),
-              marginTop: scale(5),
+              height: hp(6),
+              marginHorizontal: wp(8),
+              marginTop: scale(3),
               justifyContent: 'center',flexDirection:"row",
               // marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
             }}
           />
           <View
-            style={[{marginTop: scale(5)}, styles.JoblistSecondViewHeading]}>
-            <View style={[styles.JoblistSecondViewHeadingResult,{flexDirection:"row"}]}>
-              <Texting style={styles.JoblistSecondViewHeadingText} text='Results'/>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                - {this.state.data ? this.state.data.length : 0}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    tintColor={'#333'}
-                    resizeMode={'contain'}
-                  />
-                  <Texting style={styles.JoblistUpperButton} text='Sort' />
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    tintColor={'#333'}
-                    resizeMode={'contain'}
-                  />
-                  <Texting style={styles.JoblistUpperButton} text='Filter'/>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
+                style={[
+                  {marginTop: scale(5)},
+                  styles.JoblistSecondViewHeading,
+                ]}>
+                <TopHeader
+                  data={this.state.data && this.state.data.length}
+                  sort={this.Sort}
+                  srtTint={this.state.srt}
+                  filTint={this.state.fil}
+                  Filter={this.Filter}
+                  detailedTint={this.state.detailed}
+                  detailed={this.pushy}
+                />
+              </View>
+          <View
+                style={{
+                  alignItems: 'flex-start',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  flexGrow: 0,
+                  marginTop: this.state.titleCity.length ? 0 : 1,
+                  width: wp(98),
+                  paddingHorizontal: wp(2),
+                  marginHorizontal: wp(1),
+                  height: this.state.titleCity.length === 0 ? 0 : 'auto',
+                  borderRadius: this.state.titleCity.length === 0 ? 0 : 30,
+                  borderWidth: this.state.titleCity.length === 0 ? 0 : 1,
+                  padding: 2,
+                  marginTop: 2,
+                }}>
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{
+                    flexDirection: 'row',
+                    marginHorizontal: 2,
+                  }}>
+                  {this.state.titleCity &&
+                    this.state.titleCity.map((elements, index) => (
+                      <SuggestionView
+                        backGroundC={'#afafaf'}
+                        textColor={themeWhite}
+                        onPress={() => this.suggestionTag(elements, index)}
+                        elements={elements}
+                        index={index}
+                      />
+                    ))}
+                </ScrollView>
+              </View>
           <View
             style={{
               width: wp('100%'),
-              height: wp('65%'),
+              height: hp(30),
             }}>
             <MapView.Animated
               ref={(ref) => {
@@ -511,50 +907,16 @@ else
               }}
               style={styles.MapViewStyle}
               provider={PROVIDER_GOOGLE}
-              // onMapReady={() => {
-              //   this.map.animateToRegion(
-              //     [{
-              //       latitude: global.let || 10,
-              //       longitude: global.long || 10,
-              //       latitudeDelta: this.state.region.latitudeDelta,
-              //       longitudeDelta: this.state.region.longitudeDelta,
-              //     }],
-              //     1000,
-              //   );
-              // }}
-              onRegionChange={(reg) => {
-                // console.log(519,reg)
-                // let region = this.state.region
-                // region.push(reg)
+              onMapReady={() => {
+              this.map.fitToCoordinates(
+                        this.state.coordi.map((item) => item),
+                        {
+                          edgePadding: DEFAULT_PADDING,
+                          animated: true,
+                        },
+                      );
+              this.call();
 
-                //   let coordi = this.state.coordi
-                //   coordi.push = ({
-                //     latitude: reg.letitude,
-                //     longitude: reg.longitude,
-                //   })
-                // this.setState({
-                //   region,
-                //   coordi,
-                //   markers: [],
-                //   data: [],
-                // });
-              }}
-              onRegionChangeComplete={async (reg) => {
-                // let given = await this.map.getCamera();
-                console.log('this.state', reg);
-                // let region = this.state.region
-                // region.push(reg)
-                // let coordi = this.state.coordi
-                // coordi.push({latitude: reg.latitude,
-                //     longitude: reg.longitude});
-                // this.setState({
-                //   region : region,
-                //   markers: [],
-                //   data: [],
-                //   zoom: given.zoom,
-                //   coordi,
-                // });
-                // this.call();
               }}
               initialRegion={region[0]}
               showsUserLocation={true}>
@@ -624,7 +986,7 @@ else
             <Slider
               style={{
                 width: wp('90%'),
-                marginTop: scale(5),
+                marginTop: hp(1),
               }}
               onSlidingStart={() => {}}
               onSlidingComplete={() => {}}
@@ -640,16 +1002,19 @@ else
             />
           </View>
           {this.state.data.length ? (
-            <List style={styles.MapVerticalList} data={this.state.data} renderItem={({item, index}) => (
+            <List style={styles.MapVerticalList} data={this.state.data} 
+                extraData={this.state.data}
+            renderItem={({item, index}) => (
                   <ItemMVJobb
                   item={item}
                   index={index}
                   push={this.push}
                   Video={this.Video}
+                  select= {this.select}
                 />
               )} />
           ) : (
-            <NoData />
+            <NoData text={this.state.message}/>
           )}
         </ImageBackground>
       </View>

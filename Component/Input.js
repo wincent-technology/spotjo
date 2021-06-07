@@ -5,8 +5,9 @@ import { View,Text } from 'react-native'
 import { scale } from '../src/Util'
 import { play,library } from '../src/IconManager'
 import { TouchableOpacity } from 'react-native-gesture-handler'
+import { heightPercentageToDP as hp} from './responsive-ratio'
 
-const All = {height:scale(44),borderRadius:scale(20),width:45,marginRight:-3,justifyContent:"center",alignItems:"center"}
+const All = {height:hp(6.3),borderRadius:hp(3),width:hp(6.3),marginRight:-3,justifyContent:"center",alignItems:"center"}
 export default CustomInput = (props) => <Input
     containerStyle={[{
         width: '100%',
@@ -15,7 +16,7 @@ export default CustomInput = (props) => <Input
     }, props.containerStyle]}
     
     inputContainerStyle={[{
-        height: props.height ? props.height : scale(45),
+        height: props.height ? props.height : hp(6.7),
         width: props.width ? props.width : '92%',
         alignSelf: 'center',
         borderBottomColor: "#E5E5E5",
@@ -26,7 +27,7 @@ export default CustomInput = (props) => <Input
     }
         , props.inputContainerStyle]}
     inputStyle={[{
-        fontSize: props.fontSize ? props.fontSize : scale(16),
+        fontSize: props.fontSize ? props.fontSize : hp(2.7),
         color: props.color ? props.color : themeColor,
         fontWeight: props.fontWeight ? props.fontWeight : 'normal'
     }, props.inputStyle]}
@@ -57,8 +58,8 @@ export default CustomInput = (props) => <Input
     <Image
     source = {props.iconName ? props.iconName : require('../Img/search.png')}
     style={[{
-        width: props.width ? props.width : 25,
-        height: props.height ? props.height : 25
+        width: props.width ? props.width : hp(3),
+        height: props.height ? props.height : hp(3)
     }], props.iconStyle}
     resizeMode={'contain'}
     /></View>
@@ -77,13 +78,13 @@ export default CustomInput = (props) => <Input
      {props.RightIcon && <Image
     source = {props.RightIcon ? cal : props.RightIcon}
     style={[{
-        width: props.width ? props.width : 25,
-        height: props.height ? props.height : 25
+        width: props.width ? props.width : hp(3),
+        height: props.height ? props.height : hp(3)
     }], props.righticonStyle}
     resizeMode={'contain'}
     />}
     {props.Company && <View style={[{backgroundColor:props.Anywhere ? '#37c0d3' : '#cdf5fd'},All]} onStartShouldSetResponder={props.onPress}>
-                        <Text style={{fontSize:scale(16),fontFamily:FontBold,color:props.Anywhere ? '#fff' : '#000'}}>{props.Company}</Text>
+                        <Text style={{fontSize:hp(2.7),fontFamily:FontBold,color:props.Anywhere ? '#fff' : '#000'}}>{props.Company}</Text>
      </View>}
      {props.pass && <View style={{backgroundColor:"green"}}>
             {

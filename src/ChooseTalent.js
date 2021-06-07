@@ -3,15 +3,12 @@ import React, {
 } from 'react';
 import {
     SafeAreaView,
-    TouchableWithoutFeedback,
     TouchableOpacity,
     StatusBar,
     ImageBackground,
     Dimensions,
-    Text,
     Image,
     View,
-    TextInput
 } from 'react-native';
 import {
     withNavigationFocus,
@@ -31,7 +28,6 @@ import {
     heightPercentageToDP as hp
 } from '../Component/responsive-ratio';
 import {
-    switchColor,
     Background,
     themeColor,
     themeWhite
@@ -76,12 +72,28 @@ class ChooseTalent extends Component {
     next = () => {
         // this.props.navigation.navigate('TabScreen')
 
+       
+        global.reset = false
+        let sk = global.Job_Title.map((item) => {
+            let temp = {};
+            (temp.name = global.language == 'english' ? item.cell.english : item.cell.german),
+              (temp.rating = item.rating);
+            return temp;
+          });
+
+          console.log('sk',sk)
+          console.log('company',global.Company)
+          console.log('city',global.Job_Location)
+          console.log('select',global.language)
+
+
         try {
             http.POST('api/appjob/filter', {
-                Job_Title: global.Job_Title,
+                skill: sk,
                 Company: global.Company,
                 Anywhere: global.Anywhere,
                 City: global.Job_Location,
+                selectLanguage: global.language,
                 FullTime: this.state.FullTime,
                 PartTime: this.state.PartTime,
                 Employed: this.state.Employed,
@@ -90,8 +102,8 @@ class ChooseTalent extends Component {
                 HelpingVacancies: this.state.HelpingVacancies,
                 Freelancer: this.state.Freelancer
             }).then((res) => {
+                console.log('res',res);
                 if (res['data']['status']) {
-                    console.log('rrrrrrrrr', res['data']['result']);
                     // global.all = res['data']['result']
                         let p = res['data']['result']
 
@@ -106,12 +118,13 @@ class ChooseTalent extends Component {
                     // will get data in this    res['data']['result']             
                     // this.props.navigation.navigate('TabScreenJob')
                 } else {
+                    console.log('sdf,',res['data'])
                     snack(res['data']['message'])
 
                 }
-            }, err => snack(err['message']));
+            }, err => console.log('eeee',JSON.stringify(err)))
         } catch (error) {
-            snack(error)
+            console.log('error',JSON.stringify(error))
         }
 
 
@@ -142,16 +155,16 @@ class ChooseTalent extends Component {
         <StatusBar hidden ={true}/>
             <View style={styles.MainFlex}>
         <View style={[{
-                top: scale(30),
+                top: hp(5),
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={{
-                height: scale(140),
+                height: hp(20),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View><View style={{
                 width: wp('80%')
             }}><Texting style={[{
-                fontSize: scale(24),
+                fontSize: hp(4),
                 textAlign: 'center'
             }, styles.FontSty]} text='How_will_you_use_your_talent'/></View>
             <View style={styles.PersonalInfoChoose}>
@@ -168,11 +181,11 @@ class ChooseTalent extends Component {
                                 } />
             </View>
              <View style={{
-                marginVertical: hp(4)
+                marginTop: hp(2),marginBottom:hp(4)
             }}><View style={{
                                     justifyContent:"center",alignItems:"center"
                                 }}><Texting style={[{
-                fontSize: scale(22),
+                fontSize: hp(3.5),
                 fontWeight: "bold"
             }, styles.Employment]} text='Employment' />
             </View></View>
@@ -212,7 +225,7 @@ class ChooseTalent extends Component {
                                         HelpingVacancies: !this.state.HelpingVacancies
                             },() => global.HelpingVacancies = this.state.HelpingVacancies)}>
         <Texting style={[styles.Employment, {
-                fontSize: scale(20),
+                fontSize:hp(3),
                 color:HelpingVacancies ? themeColor : themeWhite
             }]} text='Helping_Vacancies'/>
     </TouchableOpacity>
@@ -224,7 +237,7 @@ class ChooseTalent extends Component {
                                 
             </View>
             </View>
-            <BackNext onBack={this.back} onNext={this.next} />
+            <BackNext onBack={this.back} onNext={this.next} show={true}/>
         </ImageBackground></SafeAreaView>
         )
     }

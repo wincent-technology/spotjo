@@ -12,7 +12,7 @@ import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale,snack } from '../src/Util';
 import { leftVid } from '../src/IconManager';
-import { widthPercentageToDP as wp } from '../Component/responsive-ratio';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
 import { Background,url } from '../Constant/index'
 import http from '../api';
 import GoogleSignIn from 'react-native-google-sign-in';
@@ -26,6 +26,8 @@ import {
     GraphRequestManager,
     LoginManager,
   } from 'react-native-fbsdk';
+  import BackNext from '../Component/BackNext';
+import * as Animatable from 'react-native-animatable';
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -34,6 +36,12 @@ class Login extends Component {
             id:'',
             email:''
           };
+          this.text = React.createRef()
+          this.texts = React.createRef()
+          this.textf = React.createRef()
+          this.textl = React.createRef()
+
+
     // this.state = {};
     }
 
@@ -46,6 +54,74 @@ class Login extends Component {
     Login = () => {
         this.props.navigation.navigate('JobLoginWithEmail')
     }
+
+    UNSAFE_componentWillMount () {
+
+      global.Job_Title = [];
+      global.JobID= null
+      global.region = {};
+      global.Company = [];
+      global.Branch = '';
+      global.Anywhere = false;
+      global.FullTime = false;
+      global.PartTime = false;
+      global.Employed = false;
+      global.Internship = false;
+      global.StudentJobs = false;
+      global.HelpingVacancies = false;
+      global.Freelancer = false;
+      global.Start_date = '';
+      global.End_date = '';
+      global.City = [];
+      global.Language = '';
+      global.Task_Description = '';
+      global.Task_Description_Req = '';
+      global.addSkill = [];
+      global.Education = [];
+      global.LanguageSkill = [];
+      global.minSalary = 0;
+      global.maxSalary = 0;
+      global.salaryrating = 1;
+      global.Email = '';
+      global.Mobile = '';
+      global.Address = '';
+      global.CompanyImage = '';
+      global.uploadUri = '';
+      global.Video = '';
+      global.type = '';
+      global.Id = '';
+      global.WebSite = '';
+      global.Experience = [];
+      global.firstName = '';
+      global.lastName = '';
+      global.Place = '';
+      global.UserEmail = '';
+      global.UserMobile = '';
+      global.UserProfile = '';
+      global.UserSkill = '';
+      global.UserEducation = [];
+      global.UserLanguage = '';
+      global.Qualification = '';
+      global.CompanyExp = '';
+      global.ig = [];
+      global.let = 51.1657;
+      global.long = 10.4515;
+      global.all = [];
+      global.minYear;
+      global.maxYear;
+      global.Service;
+      global.role;
+      global.item;
+      global.Job_Location = [];
+      global.msgUnreadTotal = 0;
+      global.language = 'english';
+      global.Role = []
+      global.CompanyGuest = []
+      global.objective = {}
+      global.Favorite_Location = []
+      global.reset = false;
+    }
+
 
     LinkDInLogin = () => {
         var i = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=78mifddvdhglgg&redirect_uri=https://www.spotjo.com&state=fooobar&scope=r_liteprofile%20r_emailaddress`
@@ -127,7 +203,7 @@ class Login extends Component {
    
     callApiLogin = () => {
     
-      this.permission();
+      // this.permission();
       http.POST('api/user/social/login', {
         socialuserId: this.state.id,
                 // name: this.state.name,
@@ -136,6 +212,10 @@ class Login extends Component {
                 longitude:global.long || 0
     }).then((res) => {
         if (res['data']['status']) {
+          AsyncStorage.setItem(
+            'token',
+            JSON.stringify(res['data']['token']),
+          );
             global.Id = res['data']['result']['id'];
             // will get data in this    res['data']['result'] 
             global.firstName = res['data']['result']['first_name']
@@ -143,7 +223,7 @@ class Login extends Component {
             global.UserEmail = res['data']['result']['email']
             global.Place = res['data']['result']['place']
             global.UserMobile = res['data']['result']['mobile']
-            global.UserProfile = url + 'images/user/' + res['data']['result']['profile']
+            global.UserProfile = res['data']['result']['profile'] != null ? url + 'images/user/' + res['data']['result']['profile'] : null;
             global.Video = url + 'images/user/' + res['data']['result']['video']
             global.UserSkill = res['data']['result']['skills']
             global.UserLanguage = res['data']['result']['language']
@@ -175,9 +255,9 @@ class Login extends Component {
             //   console.log('done',img1[j])
             // }
 
-            res['data']['result']['workexp'].filter((i,index)=>
-              console.log('klkjlj',index,i)
-            )
+            // res['data']['result']['workexp'].filter((i,index)=>
+            //   console.log('klkjlj',index,i)
+            // )
 
             // for (let w of res['data']['result']['workexp']) {
             //   // if (JSON.stringify(im[i]) != undefined)
@@ -192,7 +272,7 @@ class Login extends Component {
               this.props.navigation.navigate('JobTalentScreen');
             } else {
               this.callJob();
-              // this.props.navigation.navigate('TabScreenJob');
+              this.props.navigation.navigate('TabScreenJob');
             }
         } else {
             snack(res['data']['message'])
@@ -236,6 +316,21 @@ class Login extends Component {
             },()=> this.callApiLogin())
     }
 
+    next = () => {
+      // this.text.current.zoomIn(800).then(endState => endState));
+      this.texts.current.zoomIn(800)
+      this.text.current.zoomIn(1000)
+      this.textf.current.zoomIn(1200)
+      this.textl.current.zoomIn(1400)
+
+
+      // this.text.current.animate({ 0: { opacity: 0 }, 1: { opacity: 1 } })
+      // this.texts.current.animate({ 0: { opacity: 0 }, 1: { opacity: 1 } })
+
+    }
+
+
+
     render() {
         return (
             <SafeAreaView style={styles.backGround}>
@@ -246,21 +341,21 @@ class Login extends Component {
             } >
         <StatusBar hidden ={true}/>
          <View style={[{
-                top: scale(30)
+                top: hp(5)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={{
-                height: scale(150),
+                height:  hp(20),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
            <Texting style={styles.LookingFor} text='Login' />
             </View>
             <View style={{
                 left: wp('10%'),
-                marginTop: scale(45)
+                marginTop: hp(6)
             }}>
         
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.Login}><View  style={[styles.CompanyLoginalentView, {
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.Login}><Animatable.View  ref={this.texts}  style={[styles.CompanyLoginalentView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
             }]}><View style={{
@@ -268,26 +363,27 @@ class Login extends Component {
             // marginRight: scale(10)
             }}>
             <Texting style={styles.CompanyOppoTalentText} text="Your_Email"/>
-            </View></View></TouchableWithoutFeedback>
+            </View></Animatable.View></TouchableWithoutFeedback>
        
-            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.GoogleSignIn}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('google', 20, 'red')}</View><Texting style={styles.CompanyOppoTalentText} text='Gmail'/></View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.FbLog}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('facebook-square', 20, 'rgb(58, 85, 159)')}</View><Texting style={styles.CompanyOppoTalentText} text='FaceBook'/></View></TouchableWithoutFeedback>
-        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.LinkDInLogin}><View  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('linkedin-square', 20, 'rgb(0, 119, 183)')}</View><Texting style={styles.CompanyOppoTalentText} text='Linkedin'/></View></TouchableWithoutFeedback>
+            <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.GoogleSignIn}><Animatable.View ref={this.text} style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('google', 20, 'red')}</View><Texting style={styles.CompanyOppoTalentText} text='Gmail'/></Animatable.View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.FbLog}><Animatable.View ref={this.textf}  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('facebook-square', 20, 'rgb(58, 85, 159)')}</View><Texting style={styles.CompanyOppoTalentText} text='FaceBook'/></Animatable.View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.LinkDInLogin}><Animatable.View ref={this.textl}  style={[styles.CompanyLoginalentView, styles.CompanyLoginButton]}><View style={styles.CompanyLoginIcon}>{leftVid('linkedin-square', 20, 'rgb(0, 119, 183)')}</View><Texting style={styles.CompanyOppoTalentText} text='Linkedin'/></Animatable.View></TouchableWithoutFeedback>
         </View>
         <View style={styles.CompanyLoginAccountText}>
         <Texting style={[{
-                fontSize: scale(23),
+                fontSize: hp(3.5),
             }, styles.FontSty]} text='Dont_Have_Account'/>
                 <View style={{
                 flexDirection: "row"
             }}>
            <Texting  style={[{
-                fontSize: scale(19),
+                fontSize: hp(3),
             }, styles.FontSty]} text='Create_new_account' /><TouchableWithoutFeedback onPress={this.create}><Texting style={[{
                 textDecorationLine: "underline",
                 // textDecorationColor: "#fff",
-                fontSize: scale(19),
+                fontSize: hp(3),
             }, styles.FontSty]} text='Click_here' /></TouchableWithoutFeedback></View></View>
+            <BackNext onBack={()=> this.props.navigation.goBack()} onNext={this.next} show={true}/>
        </ImageBackground></SafeAreaView>
 
         );

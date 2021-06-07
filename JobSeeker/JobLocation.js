@@ -111,8 +111,8 @@ class JobLocation extends Component {
             style={{
               width: wp('96%'),
               marginHorizontal: wp(2),
-              height: hp('100%') - (100 + wp(14) + 50),
-              top: wp(14)
+              height: hp(80),
+              top: wp(5)
             }}
             >
             <View style={{
@@ -121,7 +121,7 @@ class JobLocation extends Component {
             }}><Text style={{
                 color: themeColor,
                 fontWeight: 'bold',
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 fontFamily: FontBold
             }}>Location</Text></View>
               <MapView.Animated
@@ -132,7 +132,7 @@ class JobLocation extends Component {
                 width: '100%',
               // marginHorizontal: wp(2),
               marginTop:"2%",
-              height: '100%',
+              height: hp(65),
               // top: wp(14)
               }}
               provider={PROVIDER_GOOGLE}
@@ -156,16 +156,16 @@ class JobLocation extends Component {
               showsUserLocation={true}>
             </MapView.Animated>
             </View>
-            <LinearGradient style={{top:hp('100%') - (100 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+            <LinearGradient style={{bottom:48,backgroundColor:"white",justifyContent:"center",
               // zIndex: 5,
               height: 10,
               width: wp(100),}} colors={['white', 'rgba(171,171,171,0.1)', 'rgba(171,171,171,0.4)']}/>
           <View
             style={{
               // top: hp(6),
-              top:hp('100%') - (90 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              bottom:47,backgroundColor:"white",justifyContent:"center",justifyContent:"center",
               // zIndex: 5,
-              height: 50,
+              height: hp(5),
               width: wp(100),
               // left: wp(-2),
               // transform: [{ rotate: "90deg" }]
@@ -183,8 +183,8 @@ class JobLocation extends Component {
                   <Image
                     source={wrong}
                     style={{
-                      height: scale(30),
-                      width: scale(30),
+                      height: hp(3.5),
+                      width: hp(3.5),
                     }}
                     resizeMode={'contain'}
                   />
@@ -193,8 +193,8 @@ class JobLocation extends Component {
                   <Image
                     source={rite}
                     style={{
-                      height: scale(35),
-                      width: scale(35),
+                      height: hp(3.5),
+                      width: hp(3.5),
                     }}
                     resizeMode={'contain'}
                   />

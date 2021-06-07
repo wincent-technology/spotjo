@@ -94,14 +94,23 @@ class MyProfile extends Component {
     let im = global.Experience
 
     // console.log('im>>>>>>>>>>>', im);
-    for (let i=0; i<im.length;i++) {
-      if (JSON.stringify(im[i]) != undefined)
-      {From = im[i].From.split(' ');
-      To = im[i].To.split(' ');
+  global.Experience && im.filter(item => {
+    console.log('item',item)
+    To = item.To.split(' ');
+    From = item.From.split(' ');
+
       ary.push(parseInt(To[1]));
       tot = To[1] - From[1];
-      m = m + tot;}
-    }
+      m = m + tot;
+  })
+    // for (let i=0; i<im.length;i++) {
+    //   if (JSON.stringify(im[i]) != undefined)
+    //   {From = im[i].From.split(' ');
+    //   To = im[i].To.split(' ');
+    //   ary.push(parseInt(To[1]));
+    //   tot = To[1] - From[1];
+    //   m = m + tot;}
+    // }
     this.setState({
       TotalExp: m,
     });
@@ -109,19 +118,30 @@ class MyProfile extends Component {
       console.log('a,b', a, b);
       return b - a;
     });
-    for (let i=0; i<im.length;i++) {
-      // if (JSON.stringify(im[i]) != undefined)
-        {
-          To = im[i].To.split(' ');
-          if (To[1] == jig[0]) {
-            this.setState({
-              CompanyName: im[i].Company,
-              JobHeading: im[i].Role,
-            });
-          }
-        }
+
+    global.Experience && im.filter(item => {
+      To = item.To.split(' ');
+      if (To[1] == jig[0]) {
+        this.setState({
+          CompanyName: item.Company,
+          JobHeading: item.Role,
+        });
+      }
+    })
+
+    // for (let i=0; i<im.length;i++) {
+    //   // if (JSON.stringify(im[i]) != undefined)
+    //     {
+    //       To = im[i].To.split(' ');
+    //       if (To[1] == jig[0]) {
+    //         this.setState({
+    //           CompanyName: im[i].Company,
+    //           JobHeading: im[i].Role,
+    //         });
+    //       }
+    //     }
      
-    }
+    // }
 
     // console.log('hi total', m, new Date(g).getFullYear());
   }
@@ -151,19 +171,24 @@ class MyProfile extends Component {
             rightComponent="edit"
             onExit={() => this.Edit()}
           />
-        <StatusBar hidden={false} backgroundColor={themeColor}/>
+        <StatusBar hidden={true} backgroundColor={themeWhite}/>
           <View style={styles.CompanyProfileMainImage}>
-            <ScrollView style={{flex:1,alignSelf:"stretch",marginBottom:20}}>
+          <View style={{
+              width: wp('96%'),
+              // marginHorizontal:wp(2),
+              flex:1,
+                  // height: '100%' - (StatusBar.currentHeight + 50 + hp(5)),
+                  overflow:"hidden",
+                  zIndex:20
+            }}>
+            <ScrollView style={{flex:1,alignSelf:"stretch"}}>
             <View style={{
               width: wp('96%'),
-              flex:1,paddingBottom:35
-                  // height: hp('100%') - (StatusBar.currentHeight + 50 + hp(5)),
-                  // overflow:"hidden",
-                  // zIndex:20
+              flex:1,paddingBottom:35,
             }}>
                 <View
                   style={{
-                    top: hp(4),
+                    // top: hp(4),
                     marginHorizontal: wp(7),
                   }}>
                   <Text
@@ -173,7 +198,7 @@ class MyProfile extends Component {
                       fontFamily: 'Roboto-Bold',
                     }}
                     numberOfLines={1}>
-                    {global.firstName} {global.lastName}
+                    {global.firstName || 'Unknown'} {global.lastName || 'Unknown'}
                   </Text>
                 </View>
                 <View
@@ -183,7 +208,7 @@ class MyProfile extends Component {
                   }}>
                   <ImageBackground
                     style={{
-                      marginTop: hp(4.5),
+                      marginTop: hp(2),
                       marginLeft: wp(7),
                       width: wp(32),
                       height: wp(32),
@@ -213,7 +238,7 @@ class MyProfile extends Component {
                 flexDirection: "column",
                 height: wp(32),
                 width: wp(50),justifyContent:"center",alignItems:"center",
-                marginTop: hp(3),marginHorizontal:wp(2),
+                marginTop: hp(2),marginHorizontal:wp(2),
             }}>
             <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
                 vid: global.Video
@@ -224,8 +249,8 @@ class MyProfile extends Component {
                 alignItems: "center",
                 justifyContent: "center"
             }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
-                height: scale(65),
-                width: scale(65),
+                height: scale(50),
+                width: scale(50),
             }}/><View style={{marginTop:scale(-10)}}><Text style={{
                 color: themeColor,
                 fontFamily: "Roboto-Regular",
@@ -270,10 +295,15 @@ class MyProfile extends Component {
                 width: scale(25)
             }}/>
             </View>
-            <View style={[styles.CompanyProfileDetail,{marginTop:10}]}>
-                    <ListShow name={CompanyName} image={company} />
+            <View style={{
+              marginTop:10,
+                paddingHorizontal:wp(5),
+                marginTop: scale(5),
+                flexDirection: 'column',
+            }}>
+                    <ListShow name={CompanyName || 'Unknown'} image={company} />
                     <ListShow name={JobHeading ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
-                    <ListShow name={JobHeading} image={skillCategory} />
+                    <ListShow name={JobHeading || 'Unknown'} image={skillCategory} />
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -283,14 +313,10 @@ class MyProfile extends Component {
                           />
                         </View>
                         <Text style={styles.ItemDetailLabel1}>
-                        {TotalExp != 0 ? TotalExp - 1 : 0} - {TotalExp} Years /
-                        </Text>
-                        <Text style={styles.CompanyProfileDetailLabel100}>
-                          {' '}
-                          100%
+                        {TotalExp != 0 ? TotalExp - 1 : 0} - {TotalExp} Years /  {TotalExp == 0 ? '0%' : '100%'}
                         </Text>
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={{height:0.5,maxWidth:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -300,14 +326,12 @@ class MyProfile extends Component {
                           />
                         </View>
                         <Text style={styles.ItemDetailLabel1}>
-                          {global.Place} /
+                          {global.Place || 'Unknown'} /  {' '}
+                          {global.Place ? '100%' : '0%'}
                         </Text>
-                        <Text style={styles.CompanyProfileDetailLabel100}>
-                          {' '}
-                          100%
-                        </Text>
+                        
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={{height:0.5,width:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -317,14 +341,15 @@ class MyProfile extends Component {
                           />
                         </View>
                         <Text style={styles.ItemDetailLabel1}>
-                        {global.UserMobile}
+                        {global.UserMobile || 'Unknown'}
                         </Text>
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
-                    <ListShow name={global.UserEmail} image={Mail} />
+                      <View style={{height:0.5,width:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                    <ListShow name={global.UserEmail || 'Unknown'} image={Mail} />
                     </View>
                 </View>
             </ScrollView>
+            </View>
           </View>
         </ImageBackground>
       </SafeAreaView>

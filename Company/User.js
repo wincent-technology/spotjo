@@ -39,7 +39,7 @@ import {
     mailtheme,
     male,
     blanks,
-    Fulls
+    Fulls,FontRegular
 } from '../Constant/index'
 import styles from '../src/Style'
 const {
@@ -47,7 +47,15 @@ const {
     width
 } = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
+import TimeAgo from '../Component/TimeAgo'
 
+let ItemDetailLabel = {
+marginLeft: scale(6),
+fontFamily: FontRegular,
+fontSize: hp(2),
+width:wp(47),
+flexWrap: 'wrap',
+}
 class User extends PureComponent {
     // title, href, total_time, total_listen, image
     constructor(props) {
@@ -60,6 +68,8 @@ class User extends PureComponent {
         return Math.floor(a - b)
 
     }
+
+
 
     timeConversion = (millisec) => {
         let today = new Date(millisec);
@@ -111,7 +121,7 @@ class User extends PureComponent {
                 alignItems: "center"
             }}><Text style={styles.ItemMVPlayNowText}>Play Now</Text></View>
             <View style={styles.ItemMVPlayIcon}>
-            {play('videocam', scale(20), themeColor)}
+            {play('videocam', hp(3), themeColor)}
             </View></View></TouchableWithoutFeedback></View></View>
             <View style={styles.ItemMVImage}><Image
             source = {this.props.item.logo ? {
@@ -131,19 +141,21 @@ class User extends PureComponent {
             <View style={styles.ItemMVDetailIcon}>
             <View style={styles.CompanyProfileIcon}>
             <Image source ={employedtheme} style={styles.imageStyle} resizeMode={'contain'} /></View>
-            <Text style={styles.ItemDetailLabel}>
+            <Text style={ItemDetailLabel}>
             {this.props.item.role == 4 && 'Staff'}</Text>
             </View>
             <View style={styles.ItemMVDetailIcon}><View style={styles.CompanyProfileIcon}>
             <Image source ={mailtheme} style={styles.imageStyle} resizeMode={'contain'} /></View>
-            <Text style={styles.ItemDetailLabel} numberOfLines={1}>{this.props.item.email}</Text>
+            <Text style={ItemDetailLabel} >{this.props.item.email}</Text>
             </View>
       </View>
-            <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}><Text style={{
-                fontFamily: 'Roboto-Regular',
-                fontSize: scale(12)
-            }}>{this.timeConversion(this.props.item.createdAt)}</Text></View>
-            <View style={styles.ItemMVRatingView}>
+            <View style={styles.ItemMVTimeStamp}><View style={styles.ItemMVTimeStampView}>
+            <TimeAgo style={{
+                  fontFamily: 'Roboto-Regular',
+                  fontSize: hp(2.1),
+                }} time={this.props.item.createdAt}/>
+           </View>
+            {/* <View style={styles.ItemMVRatingView}>
              <StarRating
             emptyStar={blanks}
             fullStar={Fulls}
@@ -155,7 +167,7 @@ class User extends PureComponent {
             rating={5}
             selectedStar={(rating) => this.props.onStarRatingPress(rating)}
             fullStarColor={'orange'}
-            /></View>
+            /></View> */}
             </View>
             </LinearGradient>
             </TouchableWithoutFeedback>

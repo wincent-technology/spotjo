@@ -24,60 +24,113 @@ class ItemMV extends PureComponent {
         return (
             <View style={{
                 flexDirection: "row",
-                alignItems: "center"
-            }}>
+                alignItems: "center",
+                width:wp(79),
+                    borderBottomWidth: scale(1),
+                height:'auto',paddingVertical:5,borderBottomColor:'#eee',
+            }} key={this.props.index}>
             <View style={{
-                marginHorizontal: scale(5)
-            }}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
+                marginRight: scale(5)
+            }}><Icon2 name={'highlight-off'} size={hp(2.5)} color={themeColor} onPress={() => {
                 this.props.remove(this.props.item, this.props.index)
             }}/></View>
-            <View style={{
-                flexDirection: "column",
-                paddingTop: hp(1),
-                // height: hp(4),
-                width: wp('80%')
-            }}><Text style={{
-                fontFamily: FontBold,
-                fontSize: scale(18),
-                color: themeColor
-            }} numberOfLines={1}>{global.language == 'english' ? this.props.item.Degree.english : this.props.item.Degree.german}</Text>
+            
             <View style={{
                 flexDirection: 'row',
                 justifyContent:"space-between",
-                paddingBottom: hp(1),
-            }}><View style={{alignItems:'flex-start',width:wp(55),flexDirection:"column"}}>
+                // paddingBottom: hp(1),
+                // width:wp(80)
+            }}><View style={{width:wp(45)}}>
 <Text style={{
                 fontFamily: FontBold,
-                fontSize: scale(11),
-                color: '#000',
-            }}>{global.language == 'english' ? this.props.item.University.english : this.props.item.University.german} , {this.props.item.From} - {this.props.item.To}</Text>
+                fontSize: hp(2),
+                color: themeColor
+            }} >{global.language == 'english' ? this.props.item.Degree.english : this.props.item.Degree.german}</Text>
             </View>
-            <View style={{alignItems:"flex-end",marginTop:5,marginRight:5}}>
+            <View style={{
+                alignItems: "flex-end",
+                justifyContent: "center",
+                width: '30%',
+                alignItems: "center"
+
+            }}>
             <StarRating
-                emptyStar={blanks}
+               emptyStar={blanks}
                 fullStar={Fulls}
                 halfStar={'star-half'}
                 iconSet={'MaterialIcons'}
                 disabled={false}
                 maxStars={5}
-                starSize={scale(15)}
+                starSize={hp(2.5)}
                 rating={this.props.item.rating}
-            starStyle={{marginLeft:2}}
+            starStyle={{marginHorizontal:2}}
                 // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
                 fullStarColor={'orange'}
               />
             </View>
                     </View>
-                    
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: wp(78),
-                alignItems: "center"
-            }}/></View>
             </View>
+
+            
         )
     }
 }
 
 export default ItemMV
+
+
+// <View style={{
+//                 flexDirection: "row",
+//                 alignItems: "center"
+//             }}>
+//             <View style={{
+//                 marginHorizontal: scale(5)
+//             }}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
+//                 this.props.remove(this.props.item, this.props.index)
+//             }}/></View>
+//             <View style={{
+//                 flexDirection: "column",
+//                 paddingTop: hp(1),
+//                 // height: hp(4),
+//                 width: wp('80%')
+//             }}><Text style={{
+//                 fontFamily: FontBold,
+//                 fontSize: scale(18),
+//                 color: themeColor
+//             }} numberOfLines={1}>{global.language == 'english' ? this.props.item.Degree.english : this.props.item.Degree.german}</Text>
+//             <View style={{
+//                 flexDirection: 'row',
+//                 justifyContent:"space-between",
+//                 paddingBottom: hp(1),
+//             }}>
+//             {/* <View style={{alignItems:'flex-start',width:wp(55),flexDirection:"column"}}>
+// <Text style={{
+//                 fontFamily: FontBold,
+//                 fontSize: scale(11),
+//                 color: '#000',
+//             }}>{global.language == 'english' ? this.props.item.University.english : this.props.item.University.german} , {this.props.item.From} - {this.props.item.To}</Text>
+//             </View> */}
+//             <View style={{alignItems:"flex-end",marginTop:5,marginRight:5}}>
+//             <StarRating
+//                 emptyStar={blanks}
+//                 fullStar={Fulls}
+//                 halfStar={'star-half'}
+//                 iconSet={'MaterialIcons'}
+//                 disabled={false}
+//                 maxStars={5}
+//                 starSize={scale(15)}
+//                 rating={this.props.item.rating}
+//             starStyle={{marginLeft:2}}
+//                 // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+//                 fullStarColor={'orange'}
+//               />
+//             </View>
+//                     </View>
+                    
+//             <View style={{
+//                 borderBottomWidth: scale(2),
+//                 borderBottomColor: '#eee',
+//                 width: wp(78),
+//                 alignItems: "center"
+//             }}/></View>
+//             </View>

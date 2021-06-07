@@ -1,23 +1,17 @@
 import React from 'react'
-import { left } from '../src/IconManager';
-import { themeColor, themeWhite, whiteEdit } from '../Constant/index'
 
 import styles from '../src/Style'
-import { scale } from '../src/Util'
-import { TouchableWithoutFeedback, Text, View,} from 'react-native'
+import { TouchableOpacity, View,} from 'react-native'
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
-  vw,
-  vh,
 } from '../Component/responsive-ratio';
 import Texting from '../Constant/Text'
 
-const hitSlop = {top: 40, bottom: 40, left: 50, right: 50};
 const center = {
   bottom:40,
   position:"absolute",
-  borderTopWidth:1,
+  // borderTopWidth:0.5,
   width:wp(100),justifyContent: 'space-around',
   flexDirection:"row",
   paddingVertical:30,
@@ -27,7 +21,7 @@ const ApplyFilterButton = ({onReset, onApply, ...props}) =>
 (
     <View
     style={center}>
-    <TouchableWithoutFeedback
+    <TouchableOpacity
       style={[
         {
           width: wp('40%')
@@ -43,13 +37,13 @@ const ApplyFilterButton = ({onReset, onApply, ...props}) =>
         <Texting
           style={[
             {
-              fontSize: hp(3),
+              fontSize: hp(2.7),
             },
             styles.FontSty,
           ]} text={props.reset}/>
       </View>
-    </TouchableWithoutFeedback>
-    <TouchableWithoutFeedback
+    </TouchableOpacity>
+    <TouchableOpacity
       style={[
         {
           width: wp('40%'),
@@ -65,12 +59,12 @@ const ApplyFilterButton = ({onReset, onApply, ...props}) =>
         <Texting
           style={[
             {
-              fontSize: hp(3),
+              fontSize: hp(2.7),
             },
             styles.FontSty,
           ]} text={props.apply}/>
       </View>
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   </View>
 )
 

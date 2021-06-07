@@ -11,7 +11,7 @@ import {
   StatusBar,
   ImageBackground,
   Image,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback,ActivityIndicator
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import {
@@ -39,6 +39,8 @@ import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
 import PermissionHelper from '../Component/PermissionHelper'
 import Texting from '../Constant/Text'
+import { heightPercentageToDP as hp, widthPercentageToDP as wp} from '../Component/responsive-ratio';
+import BackNext from '../Component/BackNext';
 
 
 class LoginWithEmail extends Component {
@@ -47,7 +49,9 @@ class LoginWithEmail extends Component {
 
     this.state = {
       email: '',
-      password: '',pass:false
+      password: '',pass:true,
+      load:false,
+      loading:false
     };
   }
 
@@ -74,12 +78,20 @@ class LoginWithEmail extends Component {
 
 
   onLogin = async () => {
+    this.setState({loading:true})
+
     // this.permission();
     const {
       email,
       password
     } = this.state;
     try {
+      const em = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      // var decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+      if(em.test(email))
+      {
+        // if(password.match(decimal)) 
+        //   {
       if (email.length > 0 && password.length > 0) {
         http
           .POST('api/company/login', {
@@ -89,10 +101,16 @@ class LoginWithEmail extends Component {
           .then(
             (res) => {
               console.log('sdf', res['data']);
+              this.setState({loading:false})
               if (res['data']['status']) {
+                global.all = []
+                AsyncStorage.setItem(
+                  'token',
+                  JSON.stringify(res['data']['token']),
+                );
                 if (res['data']['result']['role'] == '2' || res['data']['result']['role'] == '3') {
                   console.log('login id ', res['data']['result']);
-                  global.role = res['data']['result']['role'] ? 'Super Admin' : ''
+                  global.role = res['data']['result']['role'] == '2' ? 'Super Admin' : res['data']['result']['role'] == '3' ? 'Web Reg Company' : ''
                   global.Service = res['data']['result']['services'];
                   global.Id = res['data']['result']['id'];
                   global.Email = res['data']['result']['email'];
@@ -113,12 +131,14 @@ class LoginWithEmail extends Component {
                     'CompanyLoggedInData',
                     JSON.stringify(res['data']['result']),
                   );
+                
                   if (res['data']['result']['isLoggedFirstTime'] == 0) {
-                    this.props.navigation.navigate('TalentCom');
+                    global.role == 'Super Admin' ? this.props.navigation.navigate('TalentCom') : this.props.navigation.navigate('UserProfile');
                   } else {
-                    // this.props.navigation.navigate('TalentCom');
+                    // global.role == 'Super Admin' ? this.props.navigation.navigate('TalentCom') : this.props.navigation.navigate('UserProfile');
 
-                    this.props.navigation.navigate('ComEdit');
+
+                    this.props.navigation.navigate('UserProfile');
                   }
                 } else {
                   console.log('login id ', res['data']['result']);
@@ -138,19 +158,33 @@ class LoginWithEmail extends Component {
                   global.let = parseFloat(res['data']['result']['latitude']) || (global.let || 10);
                   global.long = parseFloat(res['data']['result']['longitude']) || (global.long || 10);
                   console.log('glo', global.let, global.long);
-                  // AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
+                  AsyncStorage.setItem('CompanyLoggedInData', JSON.stringify(res['data']['result']));
                   this.props.navigation.navigate('TalentCom');
                 }
               } else {
                 snack(res['data']['message']);
               }
             },
-            (err) => snack(err['message']),
+              
+              (err) => {snack(err['message']);
+              this.setState({loading:false})},
           );
-      } else {
-        snack('Required Email Password');
-      }
+      // }
+      //  else {
+      //   this.setState({loading:false})
+      //   snack('Required Email Password');
+      // }
+    }
+    else {
+      this.setState({loading:false})
+      alert('please enter at least one lowercase letter, one uppercase letter, one numeric digit, and one special character and minimum 8 character long')
+    }
+    } else {
+      this.setState({loading:false})
+      alert('please enter proper email')
+    }
     } catch (error) {
+      this.setState({loading:false})
       snack('error while register' + error);
     }
   };
@@ -216,7 +250,7 @@ class LoginWithEmail extends Component {
           <View
             style={[
               {
-                top: scale(30),
+                top: hp(5),
               },
               styles.CenterLogo,
             ]}>
@@ -225,7 +259,7 @@ class LoginWithEmail extends Component {
                 source={require('../Img/logo-spotjo.png')}
                 resizeMode={'contain'}
                 style={{
-                  height: scale(150),
+                  height: hp(20),
                   width: Dimensions.get('window').width / 2 + scale(80),
                 }}
               />
@@ -235,14 +269,14 @@ class LoginWithEmail extends Component {
               style={[
                 styles.LookingFor,
                 {
-                  fontSize: scale(17),
+                  fontSize: hp(3),
                 },
               ]} text='Login_with_your_email_address'/>
           </View>
           <View
             style={{
               // left: Dimensions.get('window').width / 7,
-              marginTop: scale(45),
+              marginTop: hp(10),
               justifyContent: 'center',
               alignItems: 'center',
             }}>
@@ -253,6 +287,9 @@ class LoginWithEmail extends Component {
                   email: text,
                 })
               }
+              onFocus={()=>this.setState({load:true})}
+              onBlur={()=>this.setState({load:false})}
+              
             />
             <CustomInput
               placeholder={'Password'}
@@ -267,33 +304,33 @@ class LoginWithEmail extends Component {
               <Texting
                 style={{
                   marginTop: scale(-8),
-                  marginLeft: scale(115),
+                  marginLeft: wp(29),
                   marginBottom: scale(40),
                   color: '#fff',
+                  fontSize:hp(2)
                 }} text='Forget_Password'/>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback
+            {!this.state.load && <TouchableWithoutFeedback
               style={styles.CompanyLoginOpportunityView}
               onPress={this.onLogin}>
               <View
                 style={[
                   styles.CompanyLoginWithEmailView,
                   {
-                    borderRadius: scale(5),
                     justifyContent: 'center',
                   },
                 ]}>
                 <View>
-                  <Texting style={styles.CompanyOppoTalentText} text='Login'/>
+                  {!this.state.loading ? <Texting style={styles.CompanyOppoTalentText} text='Login'/> : <ActivityIndicator size={'small'} color={themeColor} />}
                 </View>
               </View>
-            </TouchableWithoutFeedback>
+            </TouchableWithoutFeedback>}
           </View>
-          <View style={styles.CompanyLoginAccountText}>
+          {!this.state.load && <View style={styles.CompanyLoginAccountText}>
             <Texting
               style={[
                 {
-                  fontSize: scale(23),
+                  fontSize: hp(3.5),
                 },
                 styles.FontSty,
               ]} text='Dont_Have_Account'/>
@@ -304,7 +341,7 @@ class LoginWithEmail extends Component {
               <Texting
                 style={[
                   {
-                    fontSize: scale(19),
+                    fontSize:  hp(3),
                   },
                   styles.FontSty,
                 ]} text='Create_new_account'/>
@@ -314,14 +351,15 @@ class LoginWithEmail extends Component {
                     {
                       textDecorationLine: 'underline',
                       // textDecorationColor: "#fff",
-                      fontSize: scale(19),
+                      fontSize:  hp(3),
                     },
                     styles.FontSty,
                   ]} text='Click_here'/>
                   
               </TouchableWithoutFeedback>
             </View>
-          </View>
+          </View>}
+          <BackNext onBack={()=> this.props.navigation.goBack()} onNext={this.onLogin} show={true}/>
         </ImageBackground>
       </SafeAreaView>
     );

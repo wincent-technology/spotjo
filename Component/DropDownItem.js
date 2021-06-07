@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 
 import PropTypes from 'prop-types';
+import { heightPercentageToDP as hp } from './responsive-ratio';
 var initialValue = 0;
 var finalValue = 0;
 var content = 0;
@@ -25,11 +26,11 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
     },
     Dropicons: {
-        width: 20,
-        height: 20,
+        width: hp(3),
+        height: hp(3),
         position: 'absolute',
         right: 16,
-        top: 20
+        top: hp(2)
     },
     Dropunderline: {
         width: '100%',

@@ -99,15 +99,15 @@ class PreviewJob extends Component {
             }}><Texting style={{
                 color: themeColor,
                 fontWeight: 'bold',
-                fontSize: scale(18),
+                fontSize: hp(3),
                 fontFamily: FontBold
             }} text = 'BASIC_INFO'/></View>
             <View style={{
                 alignItems: "center",
                 justifyContent: "center",
-                top: hp(1),
-                marginLeft: wp('29%'),
-                width: wp('38%'),
+                top: hp(1),backgroundColor:"blue",
+                marginLeft: wp('31%'),
+                width: wp('33%'),
                 height: hp('12%'),
                 // borderRadius: scale(20),
                 overflow: 'hidden',
@@ -121,8 +121,8 @@ class PreviewJob extends Component {
           <View style={{
                 width: '96%',
                 top: hp(2),
-                height: hp('60%'),
-                backgroundColor: themeWhite,
+                // height: hp('10%'),
+                // backgroundColor: 'green',
                 marginHorizontal: wp(2),
                 // marginTop: scale(20),
                 borderRadius: scale(20),
@@ -138,7 +138,7 @@ class PreviewJob extends Component {
                 alignItems: "flex-start",
             }}>
             <Texting style={{
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 fontFamily: FontBold,
                 color: themeColor
             }} text='Company'/>
@@ -148,7 +148,7 @@ class PreviewJob extends Component {
             }}>
             <Text style={{
                 color: '#000',
-                fontSize: scale(16),
+                fontSize: hp(2.4),
                 fontFamily: FontBold,
 
             }}>{global.Company}</Text>
@@ -171,7 +171,7 @@ class PreviewJob extends Component {
                 alignItems: "flex-start",
             }}>
             <Texting style={{
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 fontFamily: FontBold,
                 color: themeColor
             }} text='Location'/>
@@ -181,7 +181,7 @@ class PreviewJob extends Component {
             }}>
             <Text style={{
                 color: '#000',
-                fontSize: scale(16),
+                fontSize: hp(2.4),
                 fontFamily: FontBold,
                 width: wp(85),
             }} numberOfLines={1}>{global.Address}</Text>
@@ -204,7 +204,7 @@ class PreviewJob extends Component {
                 alignItems: "flex-start",
             }}>
             <Texting style={{
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 fontFamily: FontBold,
                 color: themeColor
             }} text='Function'/>
@@ -214,16 +214,16 @@ class PreviewJob extends Component {
             }}>
             <Text style={{
                 color: '#000',
-                fontSize: scale(16),
+                fontSize: hp(2.4),
                 fontFamily: FontBold,
 
             }}>{global.addSkill.map((item, index) => {
                 return (
                     <Text key={index} style={{
                         fontFamily: FontBold,
-                        fontSize: scale(16),
+                        fontSize: hp(2.4),
                         color: '#000'
-                    }}>{Items ? item.english : item.german},</Text>
+                    }}>{global.language == 'english' ? item.english : item.german},</Text>
                 )
             })}</Text>
             </View>
@@ -245,7 +245,7 @@ class PreviewJob extends Component {
                 alignItems: "flex-start",
             }}>
             <Texting style={{
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 fontFamily: FontBold,
                 color: themeColor
             }} text='Experience'/>
@@ -255,7 +255,7 @@ class PreviewJob extends Component {
             }}>
             <Text style={{
                 color: '#000',
-                fontSize: scale(16),
+                fontSize: hp(2.4),
                 fontFamily: FontBold,
 
             }}>{global.minYear}-{global.maxYear} Years</Text>
@@ -278,7 +278,7 @@ class PreviewJob extends Component {
                 alignItems: "flex-start",
             }}>
             <Texting style={{
-                fontSize: scale(18),
+                fontSize: hp(2.7),
                 fontFamily: FontBold,
                 color: themeColor
             }}  text='Work_Type'/>
@@ -289,13 +289,13 @@ class PreviewJob extends Component {
             }}>
             <Text style={{
                 color: '#000',
-                fontSize: scale(16),
+                fontSize: hp(2.4),
                 fontFamily: FontBold,
 
             }}>{global.FullTime ? <Texting text='FullTime' /> : ''}</Text>
             <Text style={{
                 color: '#000',
-                fontSize: scale(16),
+                fontSize: hp(2.4),
                 fontFamily: FontBold,
 
             }}>{global.PartTime ? <Text> , PartTime</Text> : ''}</Text>

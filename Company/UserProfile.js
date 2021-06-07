@@ -82,8 +82,8 @@ class UserProfile extends Component {
         this.props.navigation.goBack();
     };
     Edit = () => {
-      console.log('uploadUri',global.uploadUri)
-        // this.props.navigation.navigate('ComEdit')
+      // console.log('uploadUri',global.uploadUri)
+        this.props.navigation.navigate('UserProfile')
     }
     // Video = (item) => {
     //     console.log('hels');
@@ -131,7 +131,7 @@ class UserProfile extends Component {
                   <Text
                     style={{
                       color: '#333',
-                      fontSize: scale(23),
+                      fontSize: hp(3),
                       fontFamily: 'Roboto-Bold',
                     }}
                     numberOfLines={1}>
@@ -147,8 +147,8 @@ class UserProfile extends Component {
                     style={{
                       marginTop: hp(2),
                       marginLeft: wp(7),
-                      width: wp(32),
-                      height: wp(32),
+                      width: wp(28),
+                      height: wp(28),
                       justifyContent: 'center',
                       alignItems: 'center',
                       zIndex: 5,
@@ -162,8 +162,9 @@ class UserProfile extends Component {
           } : Companyavtar
                       }
                       style={{
-                        height: wp('29'),
-                        width: wp('29'),
+                        height: wp('25'),
+                        width: wp('25'),
+                borderRadius:wp(2),
                         // alignItems: "stretch",
                         // backgroundColor: "transparent"
                       }}
@@ -172,9 +173,9 @@ class UserProfile extends Component {
                   </ImageBackground>
                   <View style={{
                 flexDirection: "column",
-                height: wp(32),
-                width: wp(50),justifyContent:"center",alignItems:"center",
-                marginTop: hp(3),marginHorizontal:wp(2),
+                height: wp(28),
+                width: wp(60),justifyContent:"center",alignItems:"center",
+                marginTop: hp(1),marginHorizontal:wp(2),
             }}>
             <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
                 vid: global.Video
@@ -185,12 +186,12 @@ class UserProfile extends Component {
                 alignItems: "center",
                 justifyContent: "center"
             }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
-                height: scale(65),
-                width: scale(65),
-            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                height: scale(50),
+                width: scale(50),
+            }}/><View style={{marginTop:scale(-8)}}><Text style={{
                 color: themeColor,
                 fontFamily: "Roboto-Regular",
-                fontSize: scale(10)
+                fontSize: hp(1.5)
             }}>Video Resume</Text></View>
             </View></TouchableWithoutFeedback>
             <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
@@ -203,7 +204,7 @@ class UserProfile extends Component {
             iconSet={'MaterialIcons'}
             disabled={false}
             maxStars={5}
-            starSize={scale(15)}
+            starSize={hp(2.5)}
             rating={3}
             // selectedStar={(rating) => this.handleLanguage(rating, index)}
             fullStarColor={'orange'}
@@ -212,7 +213,7 @@ class UserProfile extends Component {
                 </View>
                
                <View style={{
-                marginLeft: wp(7),
+                marginLeft: wp(5),
                 marginTop: hp(1),
                 height: hp(3),
                 width: wp(32),
@@ -220,18 +221,21 @@ class UserProfile extends Component {
                 justifyContent: "center",
                 flexDirection: 'row'
             }}><Image source={facebook} resizeMode={'contain'} style={{
-                height: scale(25),
-                width: scale(25)
+                height: hp(3.7),
+                width: hp(3.7)
             }}/><Image source={linkedin} resizeMode={'contain'} style={{
-                height: scale(25),
-                width: scale(25),
+                height: hp(3.7),
+                width: hp(3.7),
                 marginHorizontal: wp(1)
             }}/><Image source={whatsapp} resizeMode={'contain'} style={{
-                height: scale(25),
-                width: scale(25)
+                height: hp(3.7),
+                width: hp(3.7)
             }}/>
             </View>
-            <View style={[styles.CompanyProfileDetail,{marginTop:10}]}>
+            <View style={{marginTop:10,
+                paddingHorizontal:wp(5),
+                marginTop: scale(10),
+                flexDirection: 'column'}}>
                     <ListShow name={global.Branch} image={company} />
                     <ListShow name={global.Mobile} image={mobile} />
                     <ListShow name={global.Email} image={Mail} />

@@ -3,6 +3,7 @@ import { Button, Icon, Image } from 'react-native-elements'
 import { themeColor, themeWhite } from '../Constant/index'
 import { scale } from '../src/Util'
 import styles from '../src/Style'
+import { heightPercentageToDP } from './responsive-ratio'
 
 const CustomButton = props => (<Button title={props.title}
     icon={props.iconName ?
@@ -26,7 +27,7 @@ const CustomButton = props => (<Button title={props.title}
     buttonStyle = {
     [{
         backgroundColor: props.backgroundColor ? props.backgroundColor : themeColor,
-        height: props.height ? props.height : 40,
+        height: props.height ? props.height : heightPercentageToDP(5.5),
         borderRadius: props.borderRadius ? props.borderRadius : 10,
         borderWidth: props.borderWidth ? borderWidth : 8,
         borderColor: props.borderColor ? props.borderColor : 'green',
@@ -36,7 +37,7 @@ const CustomButton = props => (<Button title={props.title}
     }
     titleStyle = {
     [{
-        fontSize: props.fontSize ? props.fontSize : scale(14),
+        fontSize: props.fontSize ? props.fontSize : heightPercentageToDP(2),
         color: props.color ? props.color : themeColor
     }, props.titleStyle]
 

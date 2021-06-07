@@ -110,65 +110,47 @@ import AddExpSkillEdu from '../Component/AddExpSkillEdu';
     render() {
       return (
         <SafeAreaView style={styles.backGround}>
-          <ImageBackground
-            style={styles.ImageBlue}
-            source={Background}
-            tintColor={themeWhite}
-            resizeMode={'stretch'}>
-            <StatusBar hidden={false} backgroundColor={themeWhite} />
-            <NavigationHead
-              centerComponent="Salary"
-              rightComponent="Save"
-              onPress={() => this.Back()}
-              onExit={() => this.save()}
-            />
-            <AddExpSkillEdu source={salaryFrame} title='Save_Salary' onPress={this.Add} />
-            <ScrollView style={{alignSelf:"stretch",flex:1,marginBottom:45}} nestedScrollEnabled>
-            <View style={{flexDirection:"column",alignItems:"center",marginTop:-5}}>
-            <Text style={{fontSize:18,fontFamily:FontBold}}>
+          <AddExpSkillEdu source = {salaryFrame} title={global.language == 'english' ? 'Save Salary' : 'ger Salary'} onPress={this.Add}/>
+            <View style={{flexDirection:"column",alignItems:"center",marginTop:hp(-5),}} onStartShouldSetResponder={() => true} >
+            <Text style={{fontSize:hp(2.7),fontFamily:FontBold}}>
                           {Math.round((this.state.salaryMax * 200)/150)} K
                         </Text>
             <View style={{
                             opacity: 1,
-                            // position: 'absolute',
-                            width: hp(100) <= 600 ?  wp(70) : wp(80),
-                            // top: scale(30),
-                            backgroundColor: 'transparent',
-                            height: hp(100) <= 600 ? hp(30) * 1.5 : hp(40) * 1.5,
-                            marginHorizontal:wp(15)
-                        }}>
-                        
+                            width: wp(60),
+                            height: hp(40) * 1.5,marginHorizontal:wp(15)
+                        }} >
                         <Slider
             maximumTrackTintColor="transparent"
             onValueChange={ salaryMax => this.setState({salaryMax},()=> console.log('salaryMax',salaryMax)) }
             thumbTintColor={'transparent'}
             value={this.state.salaryMax}
             maximumValue={150}
+            onSlidingStart={() => console.log('hi')}
+              onSlidingComplete={() => console.log('false')}
             style={{
-                width: wp("127%"),
+                width: wp("80%"),
                 transform: [{
                     rotate: '-90deg'
                 }],
-                height:hp(61),
+                height:hp(50),
                 zIndex:1,
-                // width: scale(screenWidth - scale(80))
+                // backgroundColor:"blue"
 
             }}
             minimumTrackTintColor = {'transparent'} />
               <LinearGradient style={{
-                            height: hp(100) <=600 ? hp(30) * this.state.salaryMax / 100 : hp(40) * this.state.salaryMax / 100,
-                            marginTop:hp(100) <=600 ? (hp((30) * 1.5)) - (hp(30) * this.state.salaryMax / 100) : (hp((40) * 1.5)) - (hp(40) * this.state.salaryMax / 100),
-                            width: hp(100) <= 600 ?  wp(70) : wp(80),
+                            height: hp(40) * this.state.salaryMax / 100,
+                            marginTop:(hp((40) * 1.5)) - (hp(40) * this.state.salaryMax / 100),
+                            width: wp(60),
                             transform: [{
                                     rotate: '-180deg'
                                 }],
                             position: 'absolute',
                         }} colors={[themeColor, themeColor,'rgba(55, 192, 211,0.2)',]}/>
-              
             </View>
             <Text style={{fontSize:18,fontFamily:FontBold}}>3 k</Text>
-            </View></ScrollView>
-          </ImageBackground>
+            </View>
         </SafeAreaView>
       );
     }

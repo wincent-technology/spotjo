@@ -14,6 +14,9 @@ import styles from './Style';
 import { scale } from './Util';
 import { Background } from '../Constant/index'
 import Texting from '../Constant/Text'
+import BackNext from '../Component/BackNext';
+import * as Animatable from 'react-native-animatable';
+
 // const {
 //     height,
 //     width
@@ -27,6 +30,8 @@ class LoginFirst extends Component {
         super(props);
 
     // this.state = {};
+    this.text = React.createRef()
+    this.texts = React.createRef()
     console.log('>>>>>>>>',height);
     }
 
@@ -36,6 +41,12 @@ class LoginFirst extends Component {
     Opportunities = () => {
         this.props.navigation.navigate('JobLogin')
     }
+
+    next = () => {
+        this.texts.current.zoomIn(800)
+        this.text.current.zoomIn(1000)
+  
+      }
 
     render() {
         return (
@@ -51,11 +62,12 @@ class LoginFirst extends Component {
             style={styles.imageStyle}/></View>
         <View style={styles.Homelooking}><Texting style={styles.LookingFor} text='Looking_for'/></View>
         <View style={styles.Homebut}>
-        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.Opportunities}><View  style={styles.TalentView}><Texting style={styles.OppoTalentText} text='Opportunities'/></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.Opportunities}><Animatable.View ref={this.texts} style={styles.TalentView}><Texting style={styles.OppoTalentText} text='Opportunities'/></Animatable.View></TouchableWithoutFeedback>
         </View>
         <View style={styles.HomeTel}>
-        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.talent}><View  style={styles.TalentView}><Texting style={styles.OppoTalentText} text='Talent'/></View></TouchableWithoutFeedback>
+        <TouchableWithoutFeedback style={styles.OpportunityView} onPress={this.talent}><Animatable.View ref={this.text} style={styles.TalentView}><Texting style={styles.OppoTalentText} text='Talent'/></Animatable.View></TouchableWithoutFeedback>
         </View>
+        <BackNext onBack={()=> this.props.navigation.goBack()} onNext={this.next} show={true}/>
        </ImageBackground></View>
         );
     }

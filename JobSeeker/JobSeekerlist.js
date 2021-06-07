@@ -50,7 +50,7 @@ import {
 } from '../Component/responsive-ratio';
 import {
   scale,
-  snack
+  snack,NoData
 } from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
@@ -62,48 +62,123 @@ import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 // import JobCompanyProfile from './JobCompanyProfile';
 import http from '../api';
-
+import TopHeader from '../Component/TopHeader'
+import List from '../Component/List'
+import ModalSort from '../Component/ModalSort'
 global.back = false;
 // import styles from './Style'
 
 // global.item = data[0];
 
-class JobSeekerlist extends PureComponent {
+class JobSeekerlist extends React.Component {
+  mounted = false
+
   constructor(props) {
     super(props);
 
     this.state = {
       userdata: '',
+      fil :false,
+      srt : false,
+      detailed:false,
+      openModal:false,
+      relevance:false,
+      Date:false,
+      message:'No_data',
+      load:false
     };
+    this.navigationWillFocusListener = props.navigation.addListener('willFocus', () => {
+      this.checking()
+      // do something like this.setState() to update your view
+    })
   }
 
   Filter = () => {
+    this.setState({
+      fil:true
+    })
     this.props.navigation.navigate('JobSeekerFilter');
   };
+  
+  componentDidMount() {
+    this.mounted = true ;
+   
+  }
   
   checking = () => {
     // console.log('hey - 159 map', global.all)
     // const {params} = this.props.navigation.state;
     // const otherParam = params ? params.otherParam : null;
     // console.log('other item', otherParam);
-    let userdata  = global.all;
-    userdata =global.all.map(item => {
+    // let userdata  = global.all;
+    let userdata =global.all.map(item => {
       return {
         ...item,
         heart:false
       }
     })
-    global.all = userdata
-    this.setState({
-      userdata: global.all,
+
+    this.mounted  && this.setState({ 
+      userdata: JSON.parse(JSON.stringify(userdata)),
+      fil:false,
+      srt:false,
+      load:false,
+      detailed:false,
+      
     });
+   
   };
 
-  heart = (index) => {
-    let d = this.state.userdata
-    d[index].heart = true
-    this.setState({userdata:d});
+  componentWillUnmount(){
+    this.mounted = false ;
+
+  }
+
+  Sort = () => {
+    this.setState({
+      srt:!this.state.srt,
+       openModal:!this.state.openModal
+    })
+    // let data = this.state.data;
+    // data = this.state.srt ? data.sort((a,b) => a.createdAt > b.createdAt ? 1 : -1) : data.sort((a,b) => a.createdAt < b.createdAt ? 1 : -1);
+    // this.setState({data})
+  }
+  date = () => {
+    this.setState({
+      Date:!this.state.Date,
+      relevance:false
+    })
+       let userdata = this.state.userdata;
+    userdata = this.state.Date ? userdata.sort((a,b) => a.createdAt > b.createdAt ? 1 : -1) : userdata.sort((a,b) => a.createdAt < b.createdAt ? 1 : -1);
     
+    this.setState({userdata,openModal:!this.state.openModal})
+    
+  }
+  relevance = () => {
+
+    this.setState({relevance:!this.state.relevance,Date:false})
+    let userdata = this.state.userdata;
+    if (global.addSkill.length === 0)
+    {
+    
+      alert('please select some skills for relevance search')
+      this.props.navigation.navigate('Filter')
+      
+    }
+     else
+     { 
+    userdata = global.addSkill.map(skill => userdata.filter(item => item.skills.filter(item => item.english === skill.cell.english)))
+    console.log('userdata',userdata[0]);
+    userdata = userdata[0];
+     }
+    this.setState({userdata,openModal:false})
+  }
+
+  heart = (index) => {
+    console.log('index',index)
+    let d = this.state.userdata
+    d[index].heart = !d[index].heart
+    this.setState({userdata:d});
   }
 
   push = (item, index) => {
@@ -117,159 +192,65 @@ class JobSeekerlist extends PureComponent {
     // this.props.navigation.navigate('JobCompanyProfile');
   };
   pushy = () => {
+    this.setState({detailed:true})
+    setTimeout(() => {
+
     this.props.navigation.navigate('JobCompanyProfile', {
       item: global.all[0],
       index: 0,
     });
+  }, 300);
+
     // global.item = item;
     // this.props.navigation.navigate('JobCompanyProfile');
   };
   Video = (item) => {
     console.log('hels');
     let m = url + '/images/company/' + item.video;
-    if (item)
+    if (item.video)
       this.props.navigation.navigate('VideoPlayer', {
         vid: m,
       });
-    else alert('not uploaded');
+      else alert('Video is not uploaded');
+
     // this.props.navigation.navigate('VideoResume');
   };
   Back = () => {
     this.props.navigation.navigate('ChooseTalent');
   };
   render() {
-    console.warn('>>', DeviceInfo.hasNotch());
+    let {userdata} = this.state
     return (
       <View style={styles.backGround}>
-        <StatusBar hidden={false} backgroundColor={themeWhite}/>
+        <StatusBar hidden={true} backgroundColor={themeWhite}/>
         <NavigationEvents onDidFocus={this.checking} />
+        <ModalSort isVisible={this.state.openModal} onBackdropPress={()=>this.setState({openModal:false})} 
+          relevance={()=>this.relevance()} bydate={()=> this.date()} date={this.state.Date} rel={this.state.relevance}/>
         <ImageBackground
           style={styles.ImageBlue}
           tintColor={themeWhite}
           source={Background}
           resizeMode={'stretch'}>
-          <NavigationHeader
+           <NavigationHeader
             onPress={() => this.Back()}
-            text="Fresher Java Developer"
+            text={userdata && this.state.userdata.length + ' Jobs Found'}
+            Search={this.Filter}
           />
-          <View style={styles.JoblistSecondViewHeading}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {this.state.userdata.length}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <View style={{marginRight: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={Listed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                        marginHorizontal: scale(10),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={this.pushy}>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={detailed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-          {this.state.userdata != '' ? ( 
-          <FlatList
-            style={{
-              marginTop: 4,
-              marginBottom: 47,
-              backgroundColor: 'transparent',
-            }}
-            data={this.state.userdata}
-            showsHorizontalScrollIndicator={false}
-            removeClippedSubviews={true}
-            renderItem={({item, index}) => (
-              <ItemMV
-                item={item}
-                index={index}
-                push={this.push}
-                heart={this.heart}
-                Video={this.Video}
-              />
-            )}
-            initialNumToRender={5}
-            maxToRenderPerBatch={10}
-            updateCellsBatchingPeriod={70}
-            getItemLayout={(data, index) => ({
-              length: hp('28%'),
-              offset: hp('28%') * index,
-              index,
-            })}
-            keyExtractor={(item, index) => index + ''}
-          />
+           <TopHeader data={userdata && this.state.userdata.length} sort={this.Sort} srtTint={this.state.srt} filTint={this.state.fil} Filter={this.Filter} detailedTint={this.state.detailed} detailed={this.pushy}/>
+          {this.state.userdata != '' ? (
+            <List style={{marginTop: 3,
+                marginBottom: 45,
+                backgroundColor: 'transparent',}} data={userdata} renderItem={({item, index}) => (
+                  <ItemMV
+                  item={item}
+                  index={index}
+                  push={this.push}
+                  heart={this.heart}
+                  Video={this.Video}
+                />
+              )} />
           ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                flex: 1,
-              }}>
-              <Text
-                style={{
-                  textAlign: 'center',
-                  fontFamily: FontBold,
-                  color: themeColor,
-                  fontSize: scale(18),
-                  width: wp(60),
-                }}>
-                No Data found 😞
-              </Text>
-            </View>
+           <NoData text= {this.state.message}/>
           )}
         </ImageBackground>
       </View>

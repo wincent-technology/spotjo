@@ -1,159 +1,82 @@
 import React, {
-    PureComponent
-} from 'react';
-import {
-    SafeAreaView,
+    Component
+  } from 'react';
+  
+  import {
     StyleSheet,
-    StatusBar,
-    FlatList,
-    TouchableWithoutFeedback,
-    TextInput,
-    TouchableOpacity,
-    ImageBackground,
-    Text,
-    Image,
-    View
-} from 'react-native';
-import {
-    withNavigationFocus
-} from 'react-navigation';
-import styles from '../src/Style'
-import {
-    left,
-    library,
-    icon,
-    play,
-    leftVid
-} from '../src/IconManager';
-import {
-    themeColor,
-    themeWhite,
-    Background,
-    sort,
-    filter,
-    TRANLINE,
-    darkract,
-} from '../Constant/index'
-import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp
-} from '../Component/responsive-ratio';
-import {
-    scale
-} from '../src/Util'
-// import { Rating, AirbnbRating } from 'react-native-ratings';
-import {
-    Rating,
-    NavigationHead
-} from '../Component/ViewManager.js'
-import ItemMV from '../src/ItemMV'
-import DeviceInfo from 'react-native-device-info';
-import JobTaskDescription from './JobTaskDescription';
-import http from '../api'
+    View,
+    Platform,TouchableWithoutFeedback
+  } from 'react-native';
+  import {
+    WebView
+  } from 'react-native-webview';
+  import {scale} from '../src/Util'
+  import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
+  const INJECTED_JAVASCRIPT = `(function() {
+    window.ReactNativeWebView.postMessage(JSON.stringify(window.location));
+  })();`;
+  
+  export default class CompanyService extends Component {
 
-class CompanyService extends PureComponent {
-
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            name: ''
-        };
-    }
-
-    Filter = () => {
-        this.props.navigation.navigate('Filter')
-    }
-
-    // push = (item) => {
-    //     console.log("heelo", item);
-    // // global.item = item;
-    // // this.props.navigation.navigate('CompanyProfile')
-    // }
-    componentDidMount() {
-        this.setState({
-            name: global.Service
-        })
-    }
-    Back = () => {
-        this.props.navigation.navigate('ComEdit');
-    }
-    handleChange = (text) => {
-        // event.persist();
-        console.log("textArea", text);
-        this.setState({
-            name: text
-        })
-        global.Service = this.state.name;
-    }
-
-    Exit = () => {
-        try {
-            http.POST('api/company/serviceedit', {
-                comId: global.Id,
-                services: this.state.name
-            }).then((res) => {
-                if (res['data']['status']) {
-                    this.props.navigation.navigate('ComEdit');
-                } else {
-                    snack(res['data']['message'])
-
-                }
-            }, err => snack(err['message']));
-        } catch (error) {
-            snack(error)
-
-        }
-
+    constructor (props){
+        super(props)
     }
 
     render() {
-        const {
-            name
-        } = this.state;
-        return (
-            <View style={styles.backGround}>
-                <StatusBar hidden={false} backgroundColor={themeWhite} />
-                    <NavigationHead centerComponent='Company Service' rightComponent='Save' onPress={() => this.Back()} onExit={() => this.Exit()} />
-                    <View style={{
-                height: hp(100) - (hp(11) + scale(45))
-            }}>
-            
-            <View style={{
-                justifyContent: "center",
-                alignItems: "center"
-            }}>
-            <View style={{
-                alignItems: "center",
-                width: wp(96),
-                marginTop: hp(4),
-                marginBottom: hp(2),
-            }}><Text style={{
-                fontSize: scale(18),
-                fontFamily: "Roboto-Bold",
-                color: themeWhite
-            }}>Company Service</Text></View>
-            <View style={{
-                marginTop: hp(0)
-            }}><TextInput
-            multiline={true}
-            numberOfLines={10}
+      console.log('global',global.WebSite)
+      return (
+        <View style={{flex: 1, height: 300}}>
+        <View
             style={{
-                height: hp(65),
-                width: wp(86),
-                borderRadius: scale(10),
-                backgroundColor: '#eee',
-                alignSelf: 'center',
-                textAlignVertical: 'top'
+              zIndex: 1,
+              top: scale(20),
+              left: scale(15),
+              height: scale(25),
+              width: scale(25),
+              position: 'absolute',backgroundColor:"#eee",justifyContent:"center",alignItems:"center"
+            }}>
+            <TouchableWithoutFeedback
+              onPress={() => this.props.navigation.navigate('UserProfile')}>
+              <View
+                style={{
+                  height: scale(25),
+                  width: scale(25),
+                  zIndex: 1,
+                  justifyContent:"center",alignItems:"center"
+                }}
+                hitSlop={{
+                  top: 15,
+                  bottom: 15,
+                  left: 15,
+                  right: 15,
+                }}>
+                <Icon2 name={'clear'} size={scale(20)} color={'#000'} />
+              </View>
+            </TouchableWithoutFeedback>
+          </View>
+          <WebView
+            style={styles.WebViewContainer}
+            javaScriptEnabled={true}
+            injectedJavaScript=
+                    {INJECTED_JAVASCRIPT}
+                    onMessage={this.onMessage}
+            domStorageEnabled={true}
+            source={{
+              uri: 'https://' + global.WebSite || 'https://www.wikipedia.com',
+                // 'https://www.youtube.com/embed?v=jnLSYfObARA&list=PLGmxyVGSCDKvmLInHxJ9VdiwEb82Lxd2E',
             }}
-            onChangeText ={(text) => this.handleChange(text)}
-            value={name}
-            /></View>
-           </View>
-            </View>
-            </View>
-        )
+            mediaPlaybackRequiresUserAction={((Platform.OS !== 'android') || (Platform.Version >= 17)) ? false : undefined}
+  userAgent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36"
+          />
+        </View>
+      );
     }
-};
-
-export default withNavigationFocus(CompanyService);
+  }
+  
+  const styles = StyleSheet.create({
+    WebViewContainer: {
+      marginTop: Platform.OS == 'ios' ? 20 : 0,
+    },
+  });
+  
+  {/* <iframe width="560" height="315" src="https://www.youtube.com/embed/5d8uRJ2kAeU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> */}

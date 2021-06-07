@@ -37,7 +37,7 @@ import {
   url,
   avtar,
   blanks,
-  Fulls,
+  Fulls,FontRegular
 } from '../Constant/index';
 import styles from '../src/Style';
 const {
@@ -48,14 +48,24 @@ import LinearGradient from 'react-native-linear-gradient';
 import Texting from '../Constant/Text'
 const Items  = global.language == 'english' ? true : false;
 import TimeAgo from '../Component/TimeAgo'
-class ItemMVJobb extends PureComponent {
+class ItemMVJobb extends React.Component {
   // title, href, total_time, total_listen, image
   constructor(props) {
     super(props);
 
-    console.log('this.props?????/ 54', this.props.item.workexp);
+    // console.log('this.props?????/ 54', this.props.item);
   }
+  timeConversion = (a,b,c,d,e) => {
+    let result = []
+   if (a == 1) result.push('Employed')
+   if (b == 1) result.push('FreeLancer')
+   if (c == 1) result.push('Helping Vacancies')
+   if (d == 1) result.push('Internship')
+   if (e == 1) result.push('StudentJob')
 
+   result = result.reduce((name,arr,index) => name + (result.length != 1 && index != 0 ? ' / ' + arr : arr),'')
+    return result.length ? result : 'Fresher'
+}
   render() {
     return (
       <TouchableWithoutFeedback
@@ -70,7 +80,7 @@ class ItemMVJobb extends PureComponent {
                 justifyContent: 'center',
               }}>
               <Text style={styles.ItemMVHeader}>
-                {this.props.item.first_name} {this.props.item.last_name}
+                {this.props.item.first_name || 'Unknown'} {this.props.item.last_name || 'Unknown'}
               </Text>
             </View>
             <View
@@ -82,7 +92,7 @@ class ItemMVJobb extends PureComponent {
                 onPress={() => this.props.Video(this.props.item)}>
                 <View style={styles.ItemMVPlayNowView}>
                  <View style={styles.ItemMVPlayIcon}>
-                    {play('videocam', scale(20), themeColor)}
+                    {play('videocam', hp(3), themeColor)}
                   </View>
                 </View>
               </TouchableWithoutFeedback>
@@ -93,10 +103,11 @@ class ItemMVJobb extends PureComponent {
                 justifyContent: 'center',
               }}>
               <TouchableWithoutFeedback
-                onPress={() => this.props.Video(this.props.item)}>
+
+                onPress={() => this.props.select(this.props.item,this.props.index)}>
                 <View style={styles.ItemMVPlayNowView}>
                   <View style={styles.ItemMVPlayIcon}>
-                    {play('heart-outline', scale(20), themeColor)}
+                    {play(this.props.item.heart ? 'heart' : 'heart-outline', hp(3),this.props.item.heart ? themeColor : '#333')}
                   </View>
                 </View>
               </TouchableWithoutFeedback>
@@ -119,19 +130,19 @@ class ItemMVJobb extends PureComponent {
             <View>
               <Text
                 style={{
-                  fontSize: scale(13),
+                  fontSize: hp(2),
                   fontFamily: 'Roboto-Bold',
                   fontWeight: 'bold',
                 }}>
-                {this.props.item.Company}
+                {this.props.item.Company || 'Unknown'}
               </Text>
             </View>
 
             <View style={styles.ItemMVDetailIcon}>
               <View
                 style={{
-                  height: scale(14),
-                  width: scale(14),
+                  height: hp(2.6),
+                  width: hp(2.6),
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
@@ -141,15 +152,18 @@ class ItemMVJobb extends PureComponent {
                   resizeMode={'contain'}
                 />
               </View>
-              <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-                Employed
+              <Text style={{ marginLeft: scale(6),
+    fontFamily: FontRegular,
+    fontSize: hp(2),width:wp(35)}} numberOfLines={1}>
+              {this.timeConversion(this.props.item.isEmployed,this.props.item.isFreelancer,this.props.item.isHelping,this.props.item.isInternship,
+                this.props.item.isStudentJob)}
               </Text>
             </View>
             <View style={styles.ItemMVDetailIcon}>
               <View
                 style={{
-                  height: scale(14),
-                  width: scale(14),
+                  height: hp(2.6),
+                  width: hp(2.6),
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
@@ -160,10 +174,8 @@ class ItemMVJobb extends PureComponent {
                 />
               </View>
               <Text style={styles.ItemDetailLabel} numberOfLines={1}>
-                {this.props.item.place ? this.props.item.place : this.props.item.address}
+                {this.props.item.place ? this.props.item.place || 'Unknown' : this.props.item.address || 'Unknown'}
               </Text>
-              <Text styles={styles.ItemDetailLabel}> /</Text>
-              <Text style={styles.ItemMVDetailColor}> 100%</Text>
             </View>
             <View
               style={{
@@ -172,8 +184,8 @@ class ItemMVJobb extends PureComponent {
               }}>
               <View
                 style={{
-                  height: scale(14),
-                  width: scale(14),
+                  height: hp(2.6),
+                  width: hp(2.6),
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
@@ -186,12 +198,13 @@ class ItemMVJobb extends PureComponent {
               <Text
                 style={{
                   marginLeft: scale(6),
-                  marginTop: scale(-1),
-                  width:wp(35),
+                  // marginTop: scale(-1),
+                  maxWidth: wp(35),
                       flexWrap:'wrap',
                       overflow:"hidden"
                 }}
                 numberOfLines={1}>
+                {(!this.props.item.skills || this.props.item.skills.length === 0  ) && 'Unknown /'}
                 {this.props.item.skills &&
                   this.props.item.skills.length &&
                   this.props.item.skills.map((item, index) => {
@@ -200,21 +213,20 @@ class ItemMVJobb extends PureComponent {
                         key={index}
                         style={{
                           fontFamily: 'Roboto-Regular',
-                          fontSize: scale(12),
+                          fontSize: hp(2),
                           // marginTop: scale(-2)
                         }}>
-                        {Items ? item.english : item.german} /{' '}
+                        {global.language == 'english' ? item.english : item.german} /{' '}
                       </Text>
                     );
                   })}
               </Text>
-              <Text style={styles.ItemMVDetailColor}>{this.props.item.skills != null && this.props.item.skills.length ==1 && <Text style={{color:'rgba(0,0,0,0.6)'}}>/</Text>} 100%</Text>
             </View>
             <View style={styles.ItemMVDetailIcon}>
               <View
                 style={{
-                  height: scale(14),
-                  width: scale(14),
+                  height: hp(2.6),
+                  width: hp(2.6),
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
@@ -224,30 +236,35 @@ class ItemMVJobb extends PureComponent {
                   resizeMode={'contain'}
                 />
               </View>
-
-              <Text style={styles.ItemDetailLabel}>
+                {this.props.item.totalExp != '' && this.props.item.totalExp != null ?
+              <><Text style={styles.ItemDetailLabel}>
                 {this.props.item.totalExp != '' && this.props.item.totalExp != null
                   ? this.props.item.totalExp - 1
                   : 0 } 
                  -{ this.props.item.totalExp != '' && this.props.item.totalExp != null
                   ? this.props.item.totalExp
                   : 0 }
-                Years /{' '}
+                  {' '}Years /{' '}
               </Text>
-              <Text style={styles.ItemMVDetailColor}> 100%</Text>
+              </>
+              :
+              <>
+              <Texting style={styles.ItemDetailLabel} text='Years_Not_Defined'/>
+              </>
+              }
             </View>
           </View>
           <View style={styles.ItemMVTimeStamp}>
             <View style={styles.ItemMVTimeStampView}>
                 <TimeAgo style={{
                   fontFamily: 'Roboto-Regular',
-                  fontSize: scale(12),
+                  fontSize: hp(2.1),
                 }} time={this.props.item.createdAt}/>
                 
             </View>
             <Text style={{
                   fontFamily: 'Roboto-Regular',
-                  fontSize: scale(12),
+                  fontSize: hp(2),
                 }} >Status: {this.props.item.status}</Text>
             <View style={styles.ItemMVRatingView}>
               <StarRating
@@ -257,8 +274,8 @@ class ItemMVJobb extends PureComponent {
                 iconSet={'MaterialIcons'}
                 disabled={false}
                 maxStars={5}
-                starSize={scale(20)}
-                rating={5}
+                starSize={hp(2.8)}
+                rating={0}
                 // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
                 fullStarColor={'orange'}
               />

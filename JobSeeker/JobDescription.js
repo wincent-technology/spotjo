@@ -73,7 +73,7 @@ class JobDescription extends Component {
       params
     } = this.props.navigation.state;
     const item = global.item;
-    console.log('sdsdsdsdsdsd', global.item);
+    console.log('sdsdsdsdsdsd');
     // console.log('other item', item);
     // this.setState({
     //   data: item != undefined || item != null ? item.description.split('\n') : '',
@@ -91,12 +91,12 @@ class JobDescription extends Component {
           style={styles.ImageBlue}
           source={Background}
           resizeMode={'stretch'}>
-          <StatusBar hidden={false} backgroundColor={themeColor} />
+          <StatusBar hidden={true} backgroundColor={themeWhite} />
           <View
             style={{
               width: wp('96%'),
               marginHorizontal: wp(2),
-              height: hp('100%') - (100 + wp(14) + 50),
+              height: hp(80),
               top: wp(14),
             }}
             >
@@ -109,7 +109,7 @@ class JobDescription extends Component {
                 style={{
                   color: themeColor,
                   fontWeight: 'bold',
-                  fontSize: scale(18),
+                  fontSize: hp(2.7),
                   fontFamily: FontBold,
                 }}>
                 Job description
@@ -118,7 +118,7 @@ class JobDescription extends Component {
             <FlatList
               style={{
                 marginTop: scale(10),
-                marginBottom: 50,
+                marginBottom: 97,
                 backgroundColor: 'transparent',
               }}
               data={
@@ -141,22 +141,21 @@ class JobDescription extends Component {
             />
             
           </View>
-          <LinearGradient style={{top:hp('100%') - (100 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+          <LinearGradient style={{bottom:48,backgroundColor:"white",justifyContent:"center",
               // zIndex: 5,
               height: 10,
               width: wp(100),}} colors={['white', 'rgba(171,171,171,0.1)', 'rgba(171,171,171,0.4)']}/>
           <View
             style={{
               // top: hp(6),
-              top:hp('100%') - (90 + wp(14)),position:"absolute",backgroundColor:"white",justifyContent:"center",
+              bottom:47,backgroundColor:"white",justifyContent:"center",justifyContent:"center",
               // zIndex: 5,
-              height: 50,
+              height: hp(5),
               width: wp(100),
               // left: wp(-2),
               // transform: [{ rotate: "90deg" }]
             }}
-            >
-              <View
+            ><View
                 style={{
                   flexDirection: 'row',
                   alignItems: 'center',
@@ -169,8 +168,8 @@ class JobDescription extends Component {
                   <Image
                     source={wrong}
                     style={{
-                      height: scale(30),
-                      width: scale(30),
+                      height: hp(3.5),
+                      width: hp(3.5),
                     }}
                     resizeMode={'contain'}
                   />
@@ -179,8 +178,8 @@ class JobDescription extends Component {
                   <Image
                     source={rite}
                     style={{
-                      height: scale(35),
-                      width: scale(35),
+                      height: hp(3.5),
+                      width: hp(3.5),
                     }}
                     resizeMode={'contain'}
                   />

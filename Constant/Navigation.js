@@ -42,7 +42,8 @@ import LocationCom from '../Company/LocationCom';
 import ChooseTalentCom from '../Company/ChooseTalentCom';
 import FirstJobList from '../Company/FirstJobList';
 import UserPro from '../Company/UserPro';
-import UserPros from '../Company/UserPro';
+import UserPros from '../Company/UserPros';
+import JobMatches from '../Company/JobMatches'
 
 import PostedJobUser from '../Company/PostedJobUser'
 import FilterUser from '../Company/FilterUser';
@@ -96,6 +97,7 @@ import Resource from '../Company/Resource'
 import BulkUploadResume from '../Company/BulkUploadResume'
 import Setting from '../Company/Setting'
 import test from '../src/test'
+import SettingJob from '../JobSeeker/SettingJob'
 import {
   createBottomTabNavigator
 } from 'react-navigation-tabs';
@@ -130,9 +132,19 @@ const JobLists = createStackNavigator({
   JobList:JobList,
   CompanyProfile: CompanyProfile,
   Filter: Filter,
+  // JobLogin:JobLogin
 }, {
   headerMode: 'none',
   initialRouteName: 'JobList',
+}, );
+
+const maps = createStackNavigator({
+  ScreenMap:ScreenMap,
+  CompanyProfile: CompanyProfile,
+  // Filter: Filter,
+}, {
+  headerMode: 'none',
+  initialRouteName: 'ScreenMap',
 }, );
 
 
@@ -181,7 +193,7 @@ const TabScreen = createBottomTabNavigator({
     },
   },
   ScreenMap: {
-    screen: ScreenMap,
+    screen: maps,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -212,7 +224,7 @@ const TabScreen = createBottomTabNavigator({
   initialRouteName: 'Home',
   order: ['Home', 'CompanyProfiles','ChatGuest','ScreenMap','FilterGuest',],
   tabBarPosition: 'bottom',
-  lazy: false,
+  lazy: true,
   tabBarOptions: {
     keyboardHidesTabBar: true,
     tabBarBadge: 3,
@@ -253,7 +265,8 @@ const Join = createStackNavigator({
   EditWorkExperience: EditWorkExperience,
   AddSkilJob: AddSkilJob,
   EditEducation: EditEducation,
-  AddSalary:AddSalary
+  AddSalary:AddSalary,
+  MyProfile:MyProfile
 }, {
   headerMode: 'none',
   initialRouteName: 'JobEditProfile',
@@ -288,6 +301,8 @@ const ChatsJobScreen = createStackNavigator({
   initialRouteName: 'ChatsJob',
 }, );
 
+
+
 const TabScreenJob = createBottomTabNavigator({
   jobli: {
     screen: jobli,
@@ -302,8 +317,8 @@ const TabScreenJob = createBottomTabNavigator({
       },
     },
   },
-  MyProfile: {
-    screen: MyProfile,
+  Join: {
+    screen: Join,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -328,8 +343,8 @@ const TabScreenJob = createBottomTabNavigator({
       },
     },
   },
-  Join: {
-    screen: Join,
+  SettingJob: {
+    screen: SettingJob,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -367,9 +382,9 @@ const TabScreenJob = createBottomTabNavigator({
   swipeEnabled: true,
   animationEnabled: true,
   initialRouteName: 'Join',
-  order: ['jobli', 'MyProfile', 'ScreenMap','Maps','Join', 'UserAd'],
+  order: ['jobli','Join','ScreenMap','Maps','SettingJob', 'UserAd'],
   tabBarPosition: 'bottom',
-  lazy: false,
+  lazy: true,
   tabBarOptions: {
     keyboardHidesTabBar: true,
     tabBarBadge: 3,
@@ -423,7 +438,8 @@ const Admin = createStackNavigator({
   JobListCompany: JobListCompany,
   CreateJob: CreateJob,
   UserPros:UserPros,
-  ShaduleInterView:ShaduleInterView
+  ShaduleInterView:ShaduleInterView,
+  JobMatches:JobMatches
 }, {
   headerMode: 'none',
   initialRouteName: 'AdminDashboard',
@@ -434,7 +450,8 @@ const CompanyEditProfile = createStackNavigator({
   Admin:Admin,
   Resource:Resource,
   BulkUploadResume:BulkUploadResume,
-  Setting:Setting
+  // Setting:Setting,
+  UserProfile:UserProfile
 }, {
   headerMode: 'none',
   initialRouteName: 'CompanyEditProfile',
@@ -465,6 +482,15 @@ const Chats = createStackNavigator({
   initialRouteName: 'Chat',
 }, );
 
+const maping = createStackNavigator({
+  UserScreenMap: UserScreenMap,
+  FilterUser: FilterUser,
+  UserPro: UserPro,
+}, {
+  headerMode: 'none',
+  initialRouteName: 'UserScreenMap',
+}, );
+
 
 
 // FirstJobList?
@@ -484,7 +510,7 @@ const TabScreenCompany = createBottomTabNavigator({
     },
   },
   UserProfile: {
-    screen: UserProfile,
+    screen: CompanyEditProfile,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -497,7 +523,7 @@ const TabScreenCompany = createBottomTabNavigator({
     },
   },
   ComEdit: {
-    screen: CompanyEditProfile,
+    screen: Setting,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -510,7 +536,7 @@ const TabScreenCompany = createBottomTabNavigator({
     },
   },
   UserScreenMap: {
-    screen: UserScreenMap,
+    screen: maping,
     navigationOptions: {
       tabBarColor: 'transparent',
       tabBarIcon: ({
@@ -575,7 +601,7 @@ const TabScreenCompany = createBottomTabNavigator({
     'CompanyUser',
   ],
   tabBarPosition: 'bottom',
-  lazy: false,
+  lazy: true,
   tabBarOptions: {
     keyboardHidesTabBar: true,
     tabBarBadge: 3,

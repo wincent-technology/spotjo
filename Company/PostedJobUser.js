@@ -71,15 +71,16 @@ import {
 import ListShow from '../Component/ListShow'
 
 // import ItemMV from './ItemMV'
-import {
-  BlurView
-} from "@react-native-community/blur";
+// import {
+//   BlurView
+// } from "@react-native-community/blur";
 import Swiper from 'react-native-deck-swiper';
 import http from '../api';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Share from 'react-native-share';
+import TopHeader from '../Component/TopHeader';
 
 class PostedJobUser extends PureComponent {
   constructor(props) {
@@ -122,9 +123,7 @@ class PostedJobUser extends PureComponent {
   }
 
   Back = () => {
-    if (this.state.status == 'undefined')
-      this.props.navigation.navigate('FirstJobList');
-    else this.props.navigation.navigate('Admin');
+     this.props.navigation.goBack();
   };
 
   onChange = (event, selectedDate) => {
@@ -378,18 +377,19 @@ class PostedJobUser extends PureComponent {
           <ImageBackground
             style={{
               width: wp('96%'),
-           flex:1,paddingBottom:20
+              height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
               // paddingBottom:20
             }}
             source={require('../Img/ract.png')}
             resizeMode={'stretch'}>
           
             <View style={{
-                top: hp(1),
+                top: hp(2),
                 marginHorizontal: wp(7)
             }}><Text style={{
                 color: '#333',
-                fontSize: scale(23),
+                fontSize: hp(3),
+
                 fontFamily: "Roboto-Bold"
             }}>{data.title}</Text></View>
                     <View style={{
@@ -398,9 +398,9 @@ class PostedJobUser extends PureComponent {
             }}>
    <ImageBackground style={{
                 marginTop: hp(4.5),
-                marginLeft: wp(7),
-                width: wp(32),
-                height: wp(32),
+                marginLeft: wp(8),
+                width: wp(28),
+                height: wp(28),
                 justifyContent: "center",
                 alignItems: "center",
                 zIndex: 5
@@ -413,14 +413,15 @@ class PostedJobUser extends PureComponent {
                     : Companyavtar
                           }
             style={{
-                height: wp('29'),
-                width: wp('29'),
+                height: wp(25.5),
+                width: wp(25.5),
+                borderRadius:wp(1.5)
             // alignItems: "stretch",
             // backgroundColor: "transparent"
             }} resizeMode={'contain'}/></ImageBackground>
             <View style={{
                 flexDirection: "column",
-                height:50,
+                height:wp(28),
                 width: wp(50),justifyContent:"center",alignItems:"center",
                 marginTop: hp(3),marginHorizontal:wp(2),
             }}>
@@ -433,12 +434,12 @@ class PostedJobUser extends PureComponent {
                 alignItems: "center",
                 justifyContent: "center"
             }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
-                height: scale(65),
-                width: scale(65),
-            }}/><View style={{marginTop:scale(-10)}}><Text style={{
+                height: scale(50),
+                width: scale(50),
+            }}/><View style={{marginTop:scale(-8)}}><Text style={{
                 color: themeColor,
                 fontFamily: "Roboto-Regular",
-                fontSize: scale(10)
+                fontSize: hp(1.5)
             }}>Company Profile</Text></View>
             </View></TouchableWithoutFeedback>
             <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
@@ -451,7 +452,7 @@ class PostedJobUser extends PureComponent {
             iconSet={'MaterialIcons'}
             disabled={false}
             maxStars={5}
-            starSize={scale(15)}
+            starSize={hp(2.5)}
             rating={3}
             // selectedStar={(rating) => this.handleLanguage(rating, index)}
             fullStarColor={'orange'}
@@ -461,7 +462,7 @@ class PostedJobUser extends PureComponent {
             <View style={styles.CompanyProfileDetail}>
             <ListShow name={data.name} image={company} />
                     <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
-                    <ListShow name={data.title} image={skillCategory} />
+                    <ListShow name={data.title || 'Not Specified'} image={skillCategory} />
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -477,13 +478,10 @@ class PostedJobUser extends PureComponent {
                  -{ data.maxExp != '' && data.maxExp != null
                   ? data.maxExp
                   : 0 }
-                {' '}Years /{' '}
-                        </Text>
-                        <Text style={styles.CompanyProfileDetailLabel100}>
-                          100%
+                {' '}Years {' '}
                         </Text>
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={{height:0.5,width:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -493,19 +491,16 @@ class PostedJobUser extends PureComponent {
                           />
                         </View>
                         <Text style={styles.ItemDetailLabel1}>
-                        {data != null || data && data.city.map((item, index) => {
+                        {(data.city.length == 0) && 'Not Given'}
+                        {data && data.city.map((item, index) => {
                       return (
                         <Text key={index} style={styles.ItemDetailLabel1}>
-                          {item} /
+                          {item} {(data.city.length == 1) || (index == data.city.length) ? '' : '/'}
                         </Text>
                       );
                     })}</Text>
-                        <Text style={styles.CompanyProfileDetailLabel100}>
-                          {' '}
-                          100%
-                        </Text>
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <View style={{height:0.5,width:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
                       <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -518,8 +513,8 @@ class PostedJobUser extends PureComponent {
                           {data.salMin} - {data.salMax},000$
                         </Text>
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
-                    <ListShow name={data.website} image={web} />
+                      <View style={{height:0.5,width:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                    <ListShow name={data.website || 'Not Spacified'} image={web} />
             </View>
           </ImageBackground>
       </ScrollView>
@@ -548,79 +543,8 @@ class PostedJobUser extends PureComponent {
             onPress={() => this.Back()}
             text={global.ig && data.heading}
           />
-          <TopHeader />
-          <View style={styles.JoblistSecondViewHeading}>
-            <View style={styles.JoblistSecondViewHeadingResult}>
-              <Text style={styles.JoblistSecondViewHeadingText}>
-                Results - {global.ig && data.length}
-              </Text>
-            </View>
-            <View style={styles.JobListUpperButtonView}>
-              <View style={{marginRight: scale(5), flexDirection: 'row'}}>
-                <TouchableWithoutFeedback onPress={() => this.Back()}>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={Listed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                        marginHorizontal: scale(10),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback>
-                  <View style={styles.JobListUpperButtonIcon}>
-                    <Image
-                      source={detailed}
-                      style={{
-                        height: scale(26),
-                        width: scale(26),
-                        marginTop: scale(2),
-                      }}
-                      resizeMode={'contain'}
-                    />
-                  </View>
-                </TouchableWithoutFeedback>
-              </View>
-              <TouchableWithoutFeedback>
-                <View
-                  style={[
-                    {
-                      marginRight: scale(15),
-                    },
-                    styles.JobListUpperButtonIcon,
-                  ]}>
-                  <Image
-                    source={sort}
-                    style={{
-                      height: scale(20),
-                      width: scale(16),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Sort</Text>
-                </View>
-              </TouchableWithoutFeedback>
-              <TouchableWithoutFeedback onPress={this.Filter}>
-                <View style={styles.JobListUpperButtonIcon}>
-                  <Image
-                    source={filter}
-                    style={{
-                      height: scale(19),
-                      width: scale(14),
-                      marginTop: scale(1),
-                    }}
-                    resizeMode={'contain'}
-                  />
-                  <Text style={styles.JoblistUpperButton}>Filter</Text>
-                </View>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-          {global.ig ? (
+          <TopHeader data={global.ig && data.length} Filter={this.Filter} detailedTint={true} Listed={() => this.Back()}/>
+         {global.ig ? (
             <View style={styles.CompanyProfileMainImage1}>
               {!this.state.fleg ? (
                 <Swiper

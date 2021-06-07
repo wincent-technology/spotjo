@@ -14,11 +14,12 @@ import {
   vh,
 } from '../Component/responsive-ratio';
 import Texting from '../Constant/Text'
+import { isNumber } from 'underscore';
 
 const hitSlop = {top: 40, bottom: 40, left: 50, right: 50};
 const center = {justifyContent:"center",alignItems:"center",paddingTop:5};
-const CreateJobIndexButton = ({onBack, onNext, ...props}) => 
-(
+const CreateJobIndexButton = ({...props}) => {
+return (
     <View
       style={{
         flexDirection: 'column',
@@ -26,18 +27,18 @@ const CreateJobIndexButton = ({onBack, onNext, ...props}) =>
       }}>
       <View
         style={{
-          flexDirection: 'row',
+          flexDirection: 'row',marginHorizontal:3,alignItems:'center'
         }}>
         <Texting
           style={{
-            fontSize: scale(16),
+            fontSize: hp(2.5),
             fontWeight: 'bold',
-            color:  props.index  ? themeColor : '#000',
+            color: isNumber(props.index)  ? themeColor : '#333',
             // textDecorationLine: props.index == 0 ? 'underline' : 'none'
           }} text = {props.name}/>
         <Text
           style={{
-            fontSize: scale(16),
+            fontSize: hp(2),
             fontWeight: 'bold',
           }}>
           {'>'}
@@ -49,10 +50,10 @@ const CreateJobIndexButton = ({onBack, onNext, ...props}) =>
           marginTop: scale(1),
           width: 'auto',
           backgroundColor:
-            props.index ? '#000' : '#fff',
+            isNumber(props.index) ? '#000' : '#fff',
         }}
       />
     </View>
-)
+)}
 
 export default CreateJobIndexButton

@@ -52,7 +52,7 @@ export default {
         FaceBook:"FaceBook",
         Linkedin:"Linkedin",
         Login_with_your_email_address:'Login with your email address',
-        Forget_Password:'Forget Password?',
+        Forget_Password:'Forgot Password?',
         Dashboard:"Dashboard",
         Company_Information:'Company Information',
         Company_Services:"Company Services",
@@ -63,7 +63,7 @@ export default {
         Add_Education:'+Add Education',
         Add_Experience: '+Add Experience',
         Save_Salary:'Save Salary',
-        'Add_Skiils':'+Add Skills',
+        Add_Skiils:'+Add Skills',
         No_data: 'No Data found...😞',
         No_More_JobSeeker : 'No More JobSeeker...😞',
         Job_Basic_Type:'Job Basic Type',
@@ -89,7 +89,7 @@ export default {
         Select_Language:'Select Language',
         BASIC_INFO:'BASIC INFO',
         Location:'Location',
-        Function:'Function',
+        Function:'Skill',
         Experience:'Experience',
         Work_Type:'Work Type',
         Posted_Jobs:'Posted Jobs',
@@ -115,7 +115,12 @@ export default {
         Resume_Upload:'Resume Upload',
         Setting:"Setting",
         ByDistance:'By Distance',
-        ByLocation:'By Location'
+        ByLocation:'By Location',
+        Select_Excel_File:'Select Excel File',
+        Years_Not_Defined:'Years Not Defined',
+        Search_Job:'Search Job',
+        Done:'Done',
+        SalaryType:'SalaryType'
     },
     german: {
         Play_Now : 'sdfsdf',
@@ -170,7 +175,7 @@ export default {
         FaceBook:"FaceBook",
         Linkedin:"Linkedin",
         Login_with_your_email_address:'Login with your email address',
-        Forget_Password:'Forget Password?',
+        Forget_Password:'Forgot Password?',
         Dashboard:"Dashboard",
         Company_Information:'Company Information',
         Company_Services:"Company Services",
@@ -232,5 +237,7 @@ export default {
         Resource_Profile:`sdfsdf`,
         Resume_Upload:`sdfsdf`,
         Setting:`sdfsdf`,
+        Select_Excel_File:'Select Excel File',
+        SalaryType:'SalaryType'
     }
 }

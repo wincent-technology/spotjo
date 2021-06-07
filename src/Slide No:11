@@ -1,0 +1,51 @@
+Slide No:11
+1>Profile Match Concept
+Company Admin
+--------------------------------------------------
+Tab----->Posted Jobs:
+	 Active
+	 In-Active
+	 Locked (Pause)
+Tab----->Favourites:(No Gray Plates)
+
+Matching Profile(??) Button or link or icon
+	Matched
+	Applied
+	Shortlisted
+	Interview
+	Selected
+	Rejected
+
+JobSeeker:
+--------------------------------------------------
+Tabs(Matches Interviews, Favourites)
+Tab----->Matches: No Gray Plates
+Tab----->Interviews: 
+	 Schduled, 
+	 Rejected, 
+	 InProcess,
+	 Selected,
+	 Seen viewed,
+	 Applied , 
+	 ShortListed, 
+	 Not Intrested.
+Tab----->Favourites:No Gray Plates
+
+Note:
+1.Trasition(Job Seeker & Company Admin) from each screen to another Screen is given in Slide-11 and Slide-12
+2.Transistion Web Portal (Company Admin) Need to taken care.
+3.Super Admin Screen Need to develop in WebPortal for setting Matching Parameters Values
+
+2>Setting:
+-------------
+Logout:
+Language
+Term's & Conditions
+
+3>Bulk Resume Upload
+Points:
+1.Need to develop One new Screen for uploading Bulk Resumes from Excel Sheet.
+2.The above Screen should have Edit, Delete, Active, Pause Action Button. 
+3.In mobile App: Profile serach should be display with contact details of company, and distinguish with tick Mark
+4.If any interview schdule or other activity should be redirected as per job seeker existing functionality
+5.Company admin in mobile app should have New screen, where it display all the profile which is uploaded by them , when it clicks , it should be behave similar to jobseeker functionality.

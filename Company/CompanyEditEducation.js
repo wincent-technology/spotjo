@@ -118,12 +118,35 @@ class CompanyEditEducation extends Component {
     this.props.navigation.goBack();
   };
 
+
+  componentWillUnmount() {
+    console.log(">>>",global.Education);
+    this.setState({
+      show: false,
+      edu:false,
+      fromDate: 'From Date',
+      toDate: 'To Date',
+      Start_date: Date.now(),
+      from: false,
+      to: false,
+      EduTitle: '',
+      EduUni: '',
+      name: '',
+      uni:false,
+      uniVerityName:'',
+      rate:false,
+      rating:3,
+      Anywhere: false,
+    });
+  }
+
   componentDidMount() {
     console.log(">>>",global.Education);
     this.setState({
       sum: global.Education || [],
     });
 
+    
 
     let data = []
     try {
@@ -170,49 +193,52 @@ class CompanyEditEducation extends Component {
 
 
 choose = (choose) => {
-  console.log('choose')
+  // console.log('choose')
   mg.push(choose)
   mg = [...new Set(mg)]
-  console.log('sfdsff', mg)
+  // console.log('sfdsff', mg)
   let mni = []
-  for (let i in mg) {
-      if (mg[i] != choose || mg[i] != '')
-          mni.push(mg[i])
-  }
+
+  mg.filter((i) => i != choose || (i != '' && mni.push(i)));
+
+
+  // for (let i in mg) {
+  //     if (mg[i] != choose || mg[i] != '')
+  //         mni.push(mg[i])
+  // }
+
   this.state.edu && this.setState({
-      suggesion: mni,
-      name:  items ? choose.english : choose.german,
+      suggesion: mg,
+      name:  global.language == 'english' ? choose.english : choose.german,
       EduTitle:choose,
       show: !this.state.show
   })
   this.state.uni && this.setState({
     suggesion: mni,
-    uniVerityName: items ? choose.english : choose.german,
+    uniVerityName: global.language == 'english' ? choose.english : choose.german,
     EduUni:choose,
     show: !this.state.show
   })
-  console.log('this.state>>>>>>>>>>>>>',choose)
+  // console.log('this.state>>>>>>>>>>>>>',choose)
 
 }
 cheks = (text) => {
-  var data = []
-    const newData = this.arrayholder.filter(item => {
-      const itemData = items ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
+    let newData = this.arrayholder.filter(item => {
+      const itemData = global.language == 'english' ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
         const textData = text.toUpperCase();
         console.log('itemdata', itemData)
         return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
 
     });
-    for (let i in newData) {
-        data.push({
-            'name': newData[i],
-            // 'backGround': 'white'
-        })
-    }
-    if (newData != '') {
+    
+  newData = newData.length && newData.length < 10 ? newData : newData.slice(0, 10);
+    this.setState({
+      name:text
+    })
+
+    if (newData.length) {
         this.setState({
             dataCheck: newData,
-            name: text,
             // EduTitle:!newData && text
 
         })
@@ -221,20 +247,18 @@ cheks = (text) => {
 
 Unis = (text) => {
   console.log('text')
-    var data = []
-    const newData = this.arrayholderU.filter(item => {
+    
+    let newData = this.arrayholderU.filter(item => {
       // console.log('item',item);
-      const itemData = items ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
+      const itemData = global.language == 'english' ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
         const textData = text.toUpperCase();
         return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
     });
-    for (let i in newData) {
-        data.push({
-            'name': newData[i],
-            // 'backGround': 'white'
-        })
-    }
-    if (newData != '') {
+
+  // newData = newData.filter((item) => !mg.includes(item));
+  newData = newData.length && newData.length < 10 ? newData : newData.slice(0, 10);
+
+  if (newData.length) {
         this.setState({
             dataCheckU: newData,
             uniVerityName: text
@@ -243,28 +267,53 @@ Unis = (text) => {
 }
 
 renderItem = (item, index) => {
-    return (
-        <View style={{
-            width: wp(80),
-            marginLeft: scale(34),
-        }}>
-        <TouchableWithoutFeedback onPress={() => this.choose(item)}>
-        <View style={{
+  return (
+    <View
+      style={{
+        width: 'auto',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        margin: 2,
+      }}>
+      <TouchableWithoutFeedback
+        onPress={() =>this.choose(item, index)}>
+        <View
+          style={{
+            alignItems: 'flex-start',
+            // borderWidth: item.cell != '' ? 1 : 0,
+            borderColor: themeColor,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            width: 'auto',
+            backgroundColor: themeColor,
+            borderColor:themeColor,
             flexDirection: 'row',
-            alignItems: "center"
-        }}>
-        <View style={{
-            alignItems: "flex-start",
-            width: wp(68)
-        }}><Text style={{
-            fontWeight: "bold",
-            fontSize: scale(18),
-            color: themeColor
-        }}>{items ? item.english : item.german}</Text></View>
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: scale(18),
+              color: themeWhite,
+            }}>
+            {global.language == 'english' ? item.english : item.german}
+          </Text>
+          {item.right && (
+            <View
+              style={{
+                // top: scale(-7),
+                left: scale(5),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {library('highlight-off', scale(17), themeColor)}
+            </View>
+          )}
         </View>
-        </TouchableWithoutFeedback>
-        </View>
-    )
+      </TouchableWithoutFeedback>
+    </View>
+  );
 }
 
 
@@ -293,10 +342,10 @@ renderItem = (item, index) => {
 
       // console.log('i>>>this.state',...this.state.sum);
     tempo.push({
-      Degree : {english : EduTitle.english.toUpperCase(),german: EduTitle.german.toUpperCase()},
-      University : {english : EduUni.english.toUpperCase(),german: EduUni.german.toUpperCase()},
-      From : fromDate,
-      To : toDate,
+      Degree : EduTitle && {english : EduTitle.english.toUpperCase(),german: EduTitle.german.toUpperCase()},
+      // University : EduUni && {english : EduUni.english.toUpperCase(),german: EduUni.german.toUpperCase()},
+      // From : fromDate,
+      // To : toDate,
       rating : rating,
     });
 
@@ -318,7 +367,7 @@ renderItem = (item, index) => {
     } = this.state;
     let m = sum;
     for (let i in m) {
-      if (m[i].id == item.id) {
+      if (m[i].Degree == item.Degree) {
         m.splice(i, 1);
       }
     }
@@ -366,29 +415,29 @@ renderItem = (item, index) => {
     return (
       <>
           <StatusBar hidden={false} backgroundColor={themeWhite} />
-          <AddExpSkillEdu source = {SearchFrame} title='Add_Education' onPress={this.Add}/>
-          {edu && <EducationComponent name={this.state.name} placeHolder={'Enter Education'} 
+          <AddExpSkillEdu source = {SearchFrame} title={global.language == 'english' ? '+Add Education' : '+ger Education'} onPress={this.Add}/>
+          {edu && <EducationComponent  addskillStyle={{elevation:8,borderBottomWidth:0,borderWidth:0}} name={this.state.name} placeHolder={'Enter Education'} 
           textChange={
             (text) => {
                 this.setState({
                     show: text != '' ? true : false
                 })
                 this.cheks(text)
-            }} suggesion={suggesion} onNext={()=> {
+            }} suggesion={suggesion} show={this.state.show} onNext={()=> {
               this.setState({
                 edu:false,
-                uni:true
+                rate:true
               })
               this.AddUni();
             }} />}
-          {uni && <EducationComponentUni width = {true} name={this.state.uniVerityName} placeHolder={'Enter University'} 
+          {/* {uni && <EducationComponentUni show = {this.state.show }width = {true} name={this.state.uniVerityName} placeHolder={'Enter University'} 
           textChange={
             (text) => {
                 this.setState({
                     show: text != '' ? true : false
                 })
                 this.Unis(text)
-            }} suggesion={suggesion} onResponse={()=> this.setState({
+            }} suggesion={this.state.suggesion} onResponse={()=> this.setState({
                             from: !this.state.from,
                           })} fromDate={this.state.fromDate} toDate={this.state.toDate} onResponseTo={
                             ()=> this.setState({
@@ -403,7 +452,7 @@ renderItem = (item, index) => {
               uni:false,edu:true
             })}
 
-            />}
+            />} */}
             {rate && <EducationRate name={'Add Education'} placeHolder={'Rate Your Education'} 
            starCount={this.state.rating} onStarRatingPress={(rating)=> this.setState({
              rating
@@ -414,7 +463,7 @@ renderItem = (item, index) => {
               uni:false,rate:false,edu:false
             },()=> this.ads())
             }/>}
-                          {this.state.from && (
+                          {/* {this.state.from && (
                       <DateTimePicker
                         testID="dateTimePicker"
                         value={this.state.Start_date}
@@ -433,25 +482,34 @@ renderItem = (item, index) => {
                         display="default"
                         onChange={this.onChange1}
                       />
-                    )}
+                    )} */}
          
             { this.state.show && <View style={{
                 // width: wp(90),
                 borderRadius: scale(5),
-                height: dataCheck.length != 1 ? hp(14) : hp(6),
+                height: (dataCheck.length != 1 || this.state.dataCheckU.length != 1) ? hp(20) : hp(6),
                 backgroundColor: "#fff",
                 position: "absolute",
-                top: scale(220),
-                marginHorizontal:wp(7)
+                top: hp(33),
+                marginHorizontal:wp(7),
+                // minWidth:scale(200)
             }}>
-            <ListOfChoosed renderItem={({item, index}) => this.renderItem(item, index)} keyboardShouldPersistTaps='always' data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU}/>
+            <ListOfChoosed renderItem={({item, index}) => this.renderItem(item, index)} 
+            contentContainerStyle={{
+                      flexGrow: 1,
+                      justifyContent: 'flex-start',
+                      paddingLeft: 30,
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                    }}
+            keyboardShouldPersistTaps='always' data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU}/>
             </View> }
           <View
                 style={{
                   width: wp(88.5),
                   alignItems: 'center',
                   alignSelf: 'center',
-                  top: hp(5),
+                  top: hp(2),
                   height: hp('50%'),
                   backgroundColor: themeWhite,
                   borderRadius: scale(20),

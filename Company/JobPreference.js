@@ -45,6 +45,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import http from '../api';
 import {
   play,
+  
   library
 } from '../src/IconManager';
 import Slider from 'rn-range-slider';
@@ -52,6 +53,20 @@ import SuggestionView from '../Component/SuggestionView'
 import ListOfChoosed from '../Component/ListOfChoosed'
 var mg = [];
 import Texting from '../Constant/Text'
+const SPACE = 0.01;
+import MapView, {
+  PROVIDER_GOOGLE,
+  Circle,
+  Marker,
+} from 'react-native-maps';
+const DEFAULT_PADDING = { top: 100, right: 100, bottom: 100, left: 100 };
+const ASPECT_RATIO = wp(96) / hp(23);
+const LATITUDE_DELTA = Platform.OS === 'ios' ? 1.5 : 0.5;
+let LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+import PlacesInput from '../Component/PlacesInput';
+const Lat = 52.520008
+  const  Long = 13.404954
+import flagBlueImg from '../Img/circle-16.png';
 
 class JobPreference extends Component {
   constructor(props) {
@@ -71,6 +86,37 @@ class JobPreference extends Component {
       name: '',
       suggesion: [],
       citys: false,
+      radius: 5000,
+      zoom: 0,
+      granted:true,
+      circlecenter: [{
+        latitude: Lat,
+        longitude:  Long,
+      }],
+      region: [{
+        latitude:  Lat,
+        longitude:  Long,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LONGITUDE_DELTA,
+      }],
+      titleCity : [],
+      coordi: [{
+        latitude:  Lat,
+        longitude:  Long,
+      }],
+      markers: [{
+        coordinate: {
+          latitude: Lat + SPACE,
+          longitude: Long + SPACE,
+          _id:0
+        },
+      }, {
+        coordinate: {
+          latitude: Lat + SPACE,
+          longitude:  Long - SPACE,
+          _id:1
+        },
+      }],
     };
     this.arrayholder = [];
   }
@@ -89,6 +135,26 @@ class JobPreference extends Component {
       global.End_date = new Date(selectedDate).toLocaleDateString();
     }
   };
+
+  componentWillUnmount(){
+    this.setState({
+        show1: false,
+        show: false,
+        currentDate: Date.now(),
+        End_date: 'End Date',
+        From_date: 'From Date',
+        selectedValue: '',
+        minYear: '0',
+        maxYear: '20',
+        lang: [],
+        city: [],
+        name: '',
+        suggesion: [],
+        citys: false,
+    });
+    mg = [];
+  }
+
   onChange = (event, selectedDate) => {
     if (selectedDate === undefined) {
       this.setState({
@@ -103,9 +169,9 @@ class JobPreference extends Component {
       // global.End_date = new Date(selectedDate).toLocaleDateString()
     }
   };
-  next = () => {
-    this.props.navigation.navigate('TabScreen');
-  };
+  // next = () => {
+  //   this.props.navigation.navigate('TabScreen');
+  // };
 
   setSelectedValue = (selectedValue) => {
     console.log('selectedValue', selectedValue);
@@ -122,11 +188,14 @@ class JobPreference extends Component {
     console.log('sfdsff', mg);
     global.City = mg;
     let mni = [];
-    for (let i in mg) {
-      if (mg[i] != choose || mg[i] != '') mni.push(mg[i]);
-    }
+
+    mg.filter((i) => i != choose || (i != '' && mni.push(i)));
+
+    // for (let i in mg) {
+    //   if (mg[i] != choose || mg[i] != '') mni.push(mg[i]);
+    // }
     this.setState({
-      suggesion: mni,
+      suggesion: mg,
       name: '',
       citys: !this.state.citys,
     });
@@ -142,12 +211,7 @@ class JobPreference extends Component {
       console.log('itemdata', itemData);
       return itemData != null && itemData.toString().indexOf(textData) > -1;
     });
-    for (let i in newData) {
-      data.push({
-        name: newData[i],
-        backGround: 'white',
-      });
-    }
+    
     if (newData != '') {
       this.setState({
         city: newData,
@@ -164,91 +228,167 @@ class JobPreference extends Component {
   renderItem = (item,) => {
     return (
       <View
-        style={{
-          width: wp(80),
-          marginLeft: scale(34),
-        }}>
-        <TouchableWithoutFeedback onPress={() => this.choose(item)}>
-          <View
+      style={{
+        width: 'auto',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        margin: 2,
+      }}>
+      <TouchableWithoutFeedback
+        onPress={() =>this.choose(item)}>
+        <View
+          style={{
+            alignItems: 'flex-start',
+            // borderWidth: item.cell != '' ? 1 : 0,
+            borderColor: themeColor,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            width: 'auto',
+            backgroundColor: themeColor,
+            borderColor:themeColor,
+            flexDirection: 'row',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
+              fontWeight: 'bold',
+              fontSize: hp(2.7),
+              color: themeWhite,
             }}>
-            <View
-              style={{
-                alignItems: 'flex-start',
-                width: wp(68),
-              }}>
-              <Text
-                style={{
-                  fontWeight: 'bold',
-                  fontSize: scale(18),
-                  color: themeColor,
-                }}>
-                {item}
-              </Text>
-            </View>
-          </View>
-        </TouchableWithoutFeedback>
-      </View>
+           {item}
+          </Text>
+        </View>
+      </TouchableWithoutFeedback>
+    </View>
     );
   };
   suggestionTag = (elements, index) => {
-    const {
-      suggesion,
-      city
-    } = this.state;
-    let m = suggesion;
-    for (let i in suggesion) {
-      if (m[i] == elements) {
-        m.splice(i, 1), mg.splice(i, 1);
-      }
+    // console.log('this.state',this.state.city)
+    let {titleCity, region, coordi,city} = this.state;
+    index = index;
+    titleCity = titleCity.filter((item) => item != elements);
+   city =city.filter((item) => item.place != elements)
+    region = region.filter((i, id) => id != index);
+    coordi = coordi.filter((i, id) => id != index);
+
+    global.City = city
+    console.log ('tile',titleCity,region,coordi)
+    if (titleCity.length == 0)
+     {
+     this.setState({
+      circlecenter: [
+        {
+          latitude: Lat,
+          longitude:  Long,
+        },
+      ],
+      region: [
+        {
+          latitude:  Lat,
+          longitude: Long,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
+        },
+      ],
+      coordi: [
+        {
+          latitude: Lat,
+          longitude:  Long,
+        },
+      ],
+      titleCity:[]
+     },() => {
+    this.map.animateToRegion(region[0], 1000);
+     });
     }
-    this.setState({
-      suggesion: m,
-    });
+    else {
+      this.setState({
+        titleCity,
+        region,
+        coordi,
+        city
+      },()=> {
+        if (region.length == 1)
+        this.map.animateToRegion(region[0], 1000);
+        else
+        this.map.fitToCoordinates(
+          coordi.map((item) => item),
+       { 
+         edgePadding: DEFAULT_PADDING,
+         animated: true,
+       },
+     );
+      });
   };
+}
   componentDidMount() {
-    try {
-      http.GET('api/applanguage/get').then(
-        (res) => {
-          if (res['data']['status']) {
-            //            //will get data in this    res['data']['result']
-            this.setState({
-              lang: res['data']['result'],
-            });
-          } else {
-            console.log('res', res);
-            alert(res['data']['message']['message']);
-          }
+    this.setState({
+      circlecenter: [
+        {
+          latitude: Lat,
+          longitude:  Long,
         },
-        (err) => alert(JSON.stringify(err)),
-      );
-
-      http.GET('api/appcity/get').then(
-        (res) => {
-          if (res['data']['status']) {
-            //            //will get data in this    res['data']['result']
-            console.log('res>>>>>>>>>>>>>>city', res['data']['result']);
-
-            let mn = [];
-
-            for (let i in res['data']['result'])
-              mn.push(res['data']['result'][i]['title']);
-
-            this.setState({
-              city: mn,
-            });
-            this.arrayholder = mn;
-          } else {
-            alert(res['data']['message']['message']);
-          }
+      ],
+      region: [
+        {
+          latitude:  Lat,
+          longitude: Long,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LONGITUDE_DELTA,
         },
-        (err) => alert(JSON.stringify(err)),
-      );
-    } catch (error) {
-      console.log('error while register' + error);
-    }
+      ],
+      coordi: [
+        {
+          latitude: Lat,
+          longitude:  Long,
+        },
+      ],
+      titleCity:[],
+      city:[]
+     },() => {
+    this.map.animateToRegion(region[0], 1000);
+     });
+    // try {
+    //   http.GET('api/applanguage/get').then(
+    //     (res) => {
+    //       if (res['data']['status']) {
+    //         //            //will get data in this    res['data']['result']
+    //         this.setState({
+    //           lang: res['data']['result'],
+    //         });
+    //       } else {
+    //         console.log('res', res);
+    //         alert(res['data']['message']['message']);
+    //       }
+    //     },
+    //     (err) => alert(JSON.stringify(err)),
+    //   );
+
+    //   http.GET('api/appcity/get').then(
+    //     (res) => {
+    //       if (res['data']['status']) {
+    //         //            //will get data in this    res['data']['result']
+    //         console.log('res>>>>>>>>>>>>>>city', res['data']['result']);
+
+    //         let mn = [];
+
+    //         for (let i in res['data']['result'])
+    //           mn.push(res['data']['result'][i]['title']);
+
+    //         this.setState({
+    //           city: mn,
+    //         });
+    //         this.arrayholder = mn;
+    //       } else {
+    //         alert(res['data']['message']['message']);
+    //       }
+    //     },
+    //     (err) => alert(JSON.stringify(err)),
+    //   );
+    // } catch (error) {
+    //   console.log('error while register' + error);
+    // }
   }
   render() {
     const {
@@ -262,6 +402,9 @@ class JobPreference extends Component {
     return (
       <>
             <StatusBar hidden={false} backgroundColor={themeColor} />
+            <ScrollView removeClippedSubviews={true} 
+          style={{height:hp('72%'),
+          alignSelf:"stretch",marginBottom:200}} nestedScrollEnabled = {true} persistentScrollbar={true}>
         <View
           style={{
             justifyContent: 'center',
@@ -271,11 +414,11 @@ class JobPreference extends Component {
             style={{
               alignItems: 'center',
               width: wp(96),
-              marginVertical: hp(4),
+              marginTop: hp(3),
             }}>
             <Text
               style={{
-                fontSize: scale(18),
+                fontSize:hp(2.7),
                 fontFamily: 'Roboto-Bold',
                 color: '#333',
               }}>
@@ -293,7 +436,7 @@ class JobPreference extends Component {
             <View
               style={{
                 flexDirection: 'row',
-                height: scale(50),
+                height: hp(5),
                 alignItems: 'center',
                 borderBottomWidth:1,
                 borderColor:"#eee",
@@ -304,7 +447,7 @@ class JobPreference extends Component {
                 <Text
                   style={{
                     color: "#333",
-                    fontSize: scale(18),
+                    fontSize: hp(2.6),
                     fontWeight: 'bold',
                     fontFamily: FontRegular,
                   }}>
@@ -316,18 +459,18 @@ class JobPreference extends Component {
                   selectedValue={this.state.selectedValue}
                   style={{
                     width: wp(50),
-                    height: scale(40),
+                    height: hp(4),
                     color: '#333',
-                    fontSize: scale(22),
+                    fontSize: hp(1),
                     fontWeight: 'bold',
                     fontFamily: FontRegular,
-                    left: scale(15),
+                    left: scale(20),
                     transform: [
                       {
-                        scaleX: 1.1,
+                        scaleX: 1,
                       },
                       {
-                        scaleY: 1.1,
+                        scaleY: 1,
                       },
                     ],
                   }}
@@ -343,7 +486,7 @@ class JobPreference extends Component {
             <View
               style={{
                 width: wp(70),
-                height: scale(40),
+                height: hp(5),
                 borderBottomWidth:1,
                 borderColor:"#eee",
                 alignItems: 'center',
@@ -364,7 +507,7 @@ class JobPreference extends Component {
                 <Text
                   style={{
                     color: '#333',
-                    fontSize: scale(18),
+                    fontSize: hp(2.6),
                     fontFamily: 'Roboto-Regular',
                     fontWeight: 'bold',
                   }}>
@@ -374,8 +517,8 @@ class JobPreference extends Component {
               <View
                 style={{
                   marginLeft: scale(20),
-                  width: scale(20),
-                  height: scale(20),
+                  width: hp(2.6),
+                  height: hp(2.6),
                   alignItems: 'flex-end',
                   justifyContent: 'center',
                   alignItems: 'center',
@@ -384,8 +527,8 @@ class JobPreference extends Component {
                   source={cal}
                   tintColor={themeColor}
                   style={{
-                    height: scale(20),
-                    width: scale(20),
+                    height: hp(2.6),
+                    width: hp(2.6),
                   }}
                   resizeMode={'contain'}
                 />
@@ -397,7 +540,7 @@ class JobPreference extends Component {
                   borderBottomWidth:1,
                 borderColor:"#eee",
                   width: wp(70),
-                  height: scale(40),
+                  height: hp(5),
                   marginTop: hp(2),
                   alignItems: 'center',
                   borderRadius: scale(5),
@@ -417,7 +560,7 @@ class JobPreference extends Component {
                   <Text
                     style={{
                       color: '#333',
-                      fontSize: scale(18),
+                      fontSize: hp(2.6),
                       fontFamily: 'Roboto-Bold',
                       fontWeight: 'bold',
                     }}>
@@ -427,8 +570,8 @@ class JobPreference extends Component {
                 <View
                   style={{
                     marginLeft: scale(20),
-                    width: scale(20),
-                    height: scale(20),
+                    width: hp(2.6),
+                    height: hp(2.6),
                     alignItems: 'flex-end',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -437,8 +580,8 @@ class JobPreference extends Component {
                     source={cal}
                     tintColor={themeColor}
                     style={{
-                      height: scale(20),
-                      width: scale(20),
+                      height: hp(2.6),
+                      width: hp(2.6),
                     }}
                     resizeMode={'contain'}
                   />
@@ -470,95 +613,21 @@ class JobPreference extends Component {
               onChange={this.onChange1}
             />
           )}
-          <ScrollView
-            style={{
-              width: wp(75),
-              height:
-                this.state.citys || suggesion != '' ? scale(100) : scale(50),
-              borderRadius: scale(5),
-              backgroundColor: 'transparent',
-              marginTop: hp(2),
-              zIndex: 1,
-            }}>
-            <CustomInput
-              placeholder={'City'}
-              textChange={(text) => {
-                this.setState({
-                  citys: text != '' ? true : false,
-                });
-                this.cheks(text);
-              }}
-              inputContainerStyle={{
-                height: scale(40),
-                borderColor: '#eee',
-                borderBottomWidth: scale(1),
-                borderRadius: scale(5),
-              }}
-              inputStyle={{
-                color: '#333',
-                fontSize: scale(18),
-                fontFamily: 'Roboto-Bold',
-                fontWeight: 'bold',
-              }}
-              containerStyle={{
-                width: wp(75),
-              }}
-              placeholderTextColor={'#333'}
-            />
-            <View
-              style={{
-                alignItems: 'flex-start',
-                flexDirection: 'row',
-                flexWrap: 'wrap',
-                marginTop: scale(-15),
-                width: wp(75),
-                height: suggesion != [] && scale(70),
-              }}>
-              <ScrollView
-                contentContainerStyle={{
-                  flexDirection: 'row',
-                  flexWrap: 'wrap',
-                }}>
-                {suggesion &&
-                  suggesion.map((elements, index) => (
-                    <SuggestionView onPress={() => this.suggestionTag(elements, index)} 
-                    elements={elements} index={index} />
-                  ))}
-              </ScrollView>
-            </View>
-            {this.state.citys && (
-              <View
-                style={{
-                  width: wp(70),
-                  borderRadius: scale(5),
-                  height: this.state.city.length != 1 ? hp(12) : hp(6),
-                  backgroundColor: '#fff',
-                  position: 'absolute',
-                  marginLeft: scale(10),
-                  top: scale(55),
-                  alignItems: 'center',
-                }}>
-                <ListOfChoosed style={{
-                    marginTop: scale(2),
-                  }} data={this.state.city} renderItem={({item, index}) => this.renderItem(item, index)} />
-              </View>
-            )}
-          </ScrollView>
           
           <View
             style={{
               width: wp(70),
-              height: scale(90),
-              // marginTop: hp(1),
+              height: hp(13),
+              marginTop: hp(1),
               borderRadius: scale(5),
               borderBottomWidth:1,
-              borderColor:"#eee",paddingBottom:10,
+              borderColor:"#eee",paddingBottom:15,
               // backgroundColor: themeColor,
             }}>
             <Texting
                 style={{
                   left: scale(15),
-                  fontSize: scale(15),
+                  fontSize: hp(2.5),
                   fontFamily: FontRegular,
                   color: '#333',alignItems:"flex-start",
                   fontWeight: 'bold',marginBottom:5,
@@ -569,7 +638,7 @@ class JobPreference extends Component {
               <Text
                 style={{
                   // left: scale(15),
-                  fontSize: scale(15),
+                  fontSize: hp(2),
                   fontFamily: FontRegular,
                   color: '#333',
                   fontWeight: 'bold',
@@ -581,7 +650,7 @@ class JobPreference extends Component {
                 style={{
                   // right: scale(5),
                   // position: 'absolute',
-                  fontSize: scale(15),
+                  fontSize: hp(2),
                   fontFamily: FontRegular,
                   color: '#333',
                   fontWeight: 'bold',
@@ -593,14 +662,15 @@ class JobPreference extends Component {
               style={{
                 width: wp(70),
                 flex: 1,
-                height: scale(10),
+                height: hp(10),justifyContent:"center",
                 alignSelf: 'center',
-                marginTop: scale(-30),
+                marginTop: scale(-40),
               }}
-              gravity={'bottom'}
+              gravity={'center'}
               floatingLabel
               min={0}
               max={20}
+              lineWidth={5}
               step={1}
               selectionColor={themeColor}
               blankColor="#333"
@@ -617,7 +687,203 @@ class JobPreference extends Component {
               }}
             />
           </View>
-        </View>
+          <View style={{alignItems:'center',width:wp(70)}}>
+          <PlacesInput
+            googleApiKey={'AIzaSyD44YCFNIXiBB411geZjrcQ2v1_knq71Hg'}
+            placeHolder={'Search Place'}
+            language={'en-US'}
+            mainStyle={true}
+            clearQueryOnSelect={true}
+            ref={(ref) => {
+                    this.input = ref;
+                  }}
+            calla={(place) => console(place)}
+            preferance={true}
+            onSelect={(place) => {
+              console.log('place>>>>>>>>>>>', place.result.name);
+              let region = this.state.region
+              let titleCity = this.state.titleCity;
+              let city = this.state.city;
+              let coordi = this.state.coordi;
+              let markers = this.state.markers;
+
+              if(titleCity.length == 0)
+                          {
+                            // let coordi = this.state.coordi;
+              // let markers = this.state.markers;
+                            region = []; 
+                            coordi = [];
+                            global.Favorite_Location = [];
+                            markers = [];
+                           }
+
+                           let p = titleCity.find(item => item === place.result.name)
+                                          if (p)
+                                          {
+                                            alert('You have selected same city..please select different city')
+                                            return
+                                          }
+                                          else{
+                                            titleCity.push(place.result.name);
+
+                           city.push({place : place.result.name,kilometer:this.state.radius / 1000,latitude:place.result.geometry.location.lat,
+                  longitude:place.result.geometry.location.lng});
+                            global.City = city
+              // titleCity.push(place.result.name)
+
+              region.push({
+                    latitude: place.result.geometry.location.lat,
+                    longitude: place.result.geometry.location.lng,
+                    latitudeDelta:  LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
+                  })
+
+                  // let coordi = this.state.coordi
+                  coordi.push({
+                    latitude: place.result.geometry.location.lat,
+                    longitude: place.result.geometry.location.lng,
+                  })
+              this.setState(
+                {
+                  markers: [],
+                  data: [],
+                  region,
+                  coordi,titleCity
+                },
+                () => {
+                  // global.Job_Location = global.Favorite_Location
+                  if (region.length == 1)
+                                      this.map.animateToRegion(region[0], 1000);
+                                  else
+                        this.map.fitToCoordinates(
+                        this.state.coordi.map((item) => item),
+                        {
+                          edgePadding: DEFAULT_PADDING,
+                          animated: true,
+                        },
+                      );
+                })
+                  // this.map.animateToRegion(this.state.region[0], 500);
+                  // this.call();
+                                          }
+            }}
+            stylesList={{
+              width: wp('70%'),
+            }}
+            stylesInput={{
+              backgroundColor: 'transparent',
+              justifyContent: 'center',
+              fontSize: hp(2.6),
+                  height: hp(8),
+              width: wp(65),
+              fontFamily: FontBold,
+              fontWeight: 'bold',
+              color: '#000',
+            }}
+            stylesContainer={{
+              alignItems: 'center',
+              backgroundColor: '#ecfbfe',
+              width: wp(70),
+              borderRadius: wp(10),
+              marginBottom: scale(2),
+              height: hp(6),
+              marginHorizontal: wp(8),
+              // marginTop: scale(3),
+              justifyContent: 'center',flexDirection:"row",
+              // marginTop: hasNotch ? StatusBar.currentHeight : hp(2),
+            }}
+          />
+          </View>
+          <View
+                style={{
+                  alignItems: 'flex-start',
+                  flexDirection: 'row',
+                  flexWrap: 'wrap',
+                  flexGrow: 0,
+                  marginTop: this.state.titleCity.length ? 0 : 1,
+                  width: wp(70),
+                  paddingHorizontal: wp(2),
+                  marginHorizontal: wp(1),
+                  height: this.state.titleCity.length === 0 ? 0 : 'auto',
+                  // borderRadius: this.state.titleCity.length === 0 ? 0 : 30,
+                  // borderWidth: this.state.titleCity.length === 0 ? 0 : 1,
+                  padding: 2,
+                  marginTop: 2,
+                  maxHeight:hp(10)
+                }}>
+                <ScrollView
+                  contentContainerStyle={{
+                    flexDirection: 'row',
+                    flexWrap:'wrap',
+                    marginHorizontal: 2,
+                    width:wp(70)
+                  }}>
+                  {this.state.titleCity &&
+                    this.state.titleCity.map((elements, index) => (
+                      <SuggestionView
+                        backGroundC={'#afafaf'}
+                        textColor={themeWhite}
+                        onPress={() => this.suggestionTag(elements, index)}
+                        elements={elements}
+                        index={index}
+                      />
+                    ))}
+                </ScrollView>
+              </View>
+          <View
+            style={{
+              width: wp('70%'),
+              height: hp(23),
+            }}>
+            <MapView.Animated
+              ref={(ref) => {
+                this.map = ref;
+              }}
+              style={{ width: wp('70%'),
+              height: hp(23),}}
+              provider={PROVIDER_GOOGLE}
+              onMapReady={() => {
+              this.map.fitToCoordinates(
+                        this.state.coordi.map((item) => item),
+                        {
+                          edgePadding: DEFAULT_PADDING,
+                          animated: true,
+                        },
+                      );
+              }}
+              initialRegion={region[0]}
+              showsUserLocation={true}>
+                 {
+                this.state.coordi.map((coordi,index) => 
+                (<MapView.Marker.Animated
+                draggable
+                coordinate={coordi}
+                pinColor={'red'}
+                title={this.state.titleCity[index]}
+                onDragEnd={(e) => {
+                  console.log('dragEnd', e.nativeEvent.coordinate);
+                  console.log('this.state.coordi',this.state.coordi)
+                  this.onMarkerDrag(e,index);
+                  //this.call();
+                }}
+              />)
+                )}
+              {this.state.region.map(cir => 
+                   (
+                  <Circle
+                center ={{latitude: cir.latitude,
+                      longitude: cir.longitude}}
+                radius={this.state.radius}
+                strokeColor={themeColor}
+                strokeWidth={2}
+                fillColor="rgba(255,255,255,0.3)"
+                // zIndex={2}
+              />)
+             )}
+             
+            </MapView.Animated>
+          </View>
+        </View></ScrollView>
       </>
     );
   }

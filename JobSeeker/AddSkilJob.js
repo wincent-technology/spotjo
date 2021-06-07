@@ -163,7 +163,7 @@ choose = (choose) => {
             mni.push(mg[i])
     }
     this.state.edu && this.setState({
-        name:  items ? choose.english : choose.german,
+        name: global.language == 'english' ? choose.english : choose.german,
         EduTitle:choose,
         show: !this.state.show
     })
@@ -173,21 +173,17 @@ choose = (choose) => {
 }
 cheks = (text) => {
   // console.log('text')
-    var data = []
-    const newData = this.arrayholder.filter(item => {
-      console.log('item',items)
-      const itemData = items ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
-      const textData = text.toUpperCase();
-      // console.log('itemdata', itemData)
-      return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
-    });
-    for (let i in newData) {
-        data.push({
-            'name': newData,
-            'backGround': 'white'
-        })
-    }
-    if (newData != '') {
+  let newData = this.arrayholder.filter(item => {
+    const itemData = global.language == 'english' ? item && item != '' ? item.english : `${item}` : item && item != '' ? item.german : `${item}`
+    const textData = text.toUpperCase();
+    // console.log('itemdata', itemData)
+    return itemData != null && itemData.toUpperCase().toString().indexOf(textData) > -1;
+  });
+
+  newData = newData.filter((item) => !mg.includes(item));
+  newData = newData.length && newData.length < 10 ? newData : newData.slice(0, 10);
+  
+    if (newData.length) {
         this.setState({
             dataCheck: newData,
             name: text,
@@ -195,31 +191,59 @@ cheks = (text) => {
 
         })
     } 
+  else{
+    this.setState({name:text})
+  }
 }
 
 
 renderItem = (item, index) => {
     return (
-        <View style={{
-            width: wp(80),
-            marginLeft: scale(34),
-        }}>
-        <TouchableWithoutFeedback onPress={() => this.choose(item)}>
-        <View style={{
+      <View
+      style={{
+        width: 'auto',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        margin: 2,
+      }}>
+      <TouchableWithoutFeedback
+        onPress={() =>this.choose(item, index)}>
+        <View
+          style={{
+            alignItems: 'flex-start',
+            // borderWidth: item.cell != '' ? 1 : 0,
+            borderColor: themeColor,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            width: 'auto',
+            backgroundColor: themeColor,
+            borderColor:themeColor,
             flexDirection: 'row',
-            alignItems: "center"
-        }}>
-        <View style={{
-            alignItems: "flex-start",
-            width: wp(68)
-        }}><Text style={{
-            fontWeight: "bold",
-            fontSize: scale(18),
-            color: themeColor
-        }}>{items ? item.english : item.german}</Text></View>
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: hp(2.7),
+              color: themeWhite,
+            }}>
+            {global.language == 'english' ? item.english : item.german}
+          </Text>
+          {item.right && (
+            <View
+              style={{
+                // top: scale(-7),
+                left: scale(5),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {library('highlight-off', hp(2.6), themeColor)}
+            </View>
+          )}
         </View>
-        </TouchableWithoutFeedback>
-        </View>
+      </TouchableWithoutFeedback>
+    </View>
     )
 }
 
@@ -391,27 +415,34 @@ renderItem = (item, index) => {
                         <View style={{
                 flexDirection: "row",
                 alignItems: "center",
-                width:wp(82),
+                width:wp(79),
                     borderBottomWidth: scale(1),
-                height:50,borderBottomColor:'#eee',
+                height:'auto',paddingVertical:5,borderBottomColor:'#eee',
             }} key={index}>
             <View style={{
                 marginRight: scale(5)
-            }}><Icon2 name={'highlight-off'} size={scale(20)} color={themeColor} onPress={() => {
+            }}><Icon2 name={'highlight-off'} size={hp(2.5)} color={themeColor} onPress={() => {
               this.remove(item, index);
             }}/></View>
             
             <View style={{
                 flexDirection: 'row',
                 justifyContent:"space-between",
+                // paddingBottom: hp(1),
+                // width:wp(80)
             }}><View style={{width:wp(45)}}>
 <Text style={{
                 fontFamily: FontBold,
-                fontSize: scale(16),
-                color: themeColor,width:wp(40)
-            }} numberOfLines={1}>{items ? item.english : item.german}</Text>
+                fontSize: hp(2),
+                color: themeColor
+            }} >{global.language == 'english' ? item.english : item.german}</Text>
             </View>
-            <View>
+            <View style={{
+                alignItems: "flex-end",
+                justifyContent: "center",
+                width: '30%',
+                alignItems: "center"
+            }}>
             <StarRating
                 emptyStar={blanks}
                 fullStar={Fulls}
@@ -419,20 +450,17 @@ renderItem = (item, index) => {
                 iconSet={'MaterialIcons'}
                 disabled={false}
                 maxStars={5}
-                starSize={scale(17)}
+                starSize={hp(2.5)}
                 rating={item.rating}
-            starStyle={{marginLeft:2}}
-                // selectedStar={(rating) => this.props.onStarRatingPress(rating)}
+                selectedStar={(rating) =>
+                                  this.handleChange(rating,index)
+                                }
+            starStyle={{marginHorizontal:2}}
                 fullStarColor={'orange'}
               />
             </View>
                     </View>
-            <View style={{
-                borderBottomWidth: scale(2),
-                borderBottomColor: '#eee',
-                width: wp(78),
-                alignItems: "center"
-            }}/></View>
+            </View>
                       );
                     })}
                   </ScrollView>

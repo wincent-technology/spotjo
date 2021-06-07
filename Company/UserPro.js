@@ -11,7 +11,7 @@ import {
   ImageBackground,
   Text,
   Image,
-  View,Dimensions
+  View,Dimensions,Linking,Alert
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler'
 import {
@@ -75,16 +75,21 @@ import CustomInput from '../Component/Input';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Share from 'react-native-share';
 import TopHeader from '../Component/TopHeader';
+import ModalSort from '../Component/ModalSort'
 const {
   height,
   width
 } = Dimensions.get('window');
 import Texting from '../Constant/Text'
+import { G } from 'react-native-svg';
 const wrapper = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
 }
+import JobSelectId from '../Component/JobSelectId'
+import RadioButton from '../Component/Radios'
+
 const LanguageCheck = global.language == 'english' ? true : false
 
 
@@ -105,12 +110,56 @@ class UserPro extends Component {
       interviewDate: 'Interview Date',
       interviewTime: 'Interview Time',
       dark: false,
-      fleg:false
+      fleg:false,
+      openModal:false,
+      relevance:false,
+      Date:false,
+      selectedIndex : 0,
+      JobSelect : false,
+      JobIdSelected:''
+
     };
   }
 
 
-  
+  Sort = () => {
+    this.setState({
+      srt:true,
+      openModal:!this.state.openModal
+
+    })
+  }
+
+  date = () => {
+    this.setState({
+      Date:!this.state.Date,
+      relevance:false
+    })
+       let data = this.state.data;
+    data = this.state.Date ? data.sort((a,b) => a.createdAt > b.createdAt ? 1 : -1) : data.sort((a,b) => a.createdAt < b.createdAt ? 1 : -1);
+    
+    this.setState({data,openModal:!this.state.openModal})
+    
+  }
+  relevance = () => {
+
+    this.setState({relevance:!this.state.relevance,Date:false})
+    let data = this.state.data;
+    if (global.CompanyGuest.length === 0)
+    {
+    
+      alert('please select some skills for relevance search')
+      this.props.navigation.navigate('FilterUser')
+      
+    }
+     else
+     { 
+    data = global.CompanyGuest.map(skill => data.filter(item => item.skills.filter(item => item.english === skill.cell.english)))
+    console.log('data',data[0]);
+    data = data[0];
+     }
+    this.setState({data,openModal:false})
+  }
 
   checking = () => {
     const {
@@ -129,8 +178,37 @@ class UserPro extends Component {
       this.swiper.jumpToCardIndex(params.index);
     });
   };
-
-
+  timeConversion = (a,b,c,d,e) => {
+    let result = []
+    console.log('a',a,b,c,d,e)
+   if (a == 1) result.push('Employed')
+   if (b == 1) result.push('FreeLancer')
+   if (c == 1) result.push('Helping Vacancies')
+   if (d == 1) result.push('Internship')
+   if (e == 1) result.push('StudentJob')
+  
+   result = result.reduce((name,arr,index) => name + (result.length != 1 && index != 0 ? ' / ' + arr : arr),'')
+    return result.length ? result : 'Fresher'
+  }
+  whatsap = (mobile) => {
+    if (mobile === '000')
+     {alert('Contact Number is not given')
+      return}
+      else{
+  let url =
+        "whatsapp://send?text=" +
+       '' +
+        "&phone=91" +
+        mobile;
+      Linking.openURL(url)
+        .then(data => {
+          console.log("WhatsApp Opened successfully " + data);
+        })
+        .catch(() => {
+          alert("Make sure WhatsApp installed on your device");
+        });
+      }
+}
 
   Back = () => {
     if (this.state.status == 'undefined')
@@ -250,7 +328,29 @@ class UserPro extends Component {
     }
   };
 
+  Filter = () => {
+    this.setState({
+      fil:true
+    })
+    this.props.navigation.navigate('FilterUser');
+  };
+
   jaaveda = (status, item) => {
+    console.log('status',status)
+    if (!global.JobID)
+    {
+      Alert.alert("INFO", "Please Select job first", [{
+        text: "No",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "Yes",
+        onPress: () => {
+          this.Filter()
+        }
+      }])
+    }
+    else{
     console.log('hi');
     let Matched = [],
       Shortlisted = [],
@@ -278,9 +378,13 @@ class UserPro extends Component {
     } catch (error) {
       snack('error while register' + error);
     }
+  }
   };
 
   onSwiped = (type, index) => {
+if (this.state.JobSelect){
+  // this.setState({JobIdSelected:''})
+
     console.log(`on swiped ${type}`, index);
     console.log(',,,,', this.state.status);
     const {
@@ -297,7 +401,7 @@ class UserPro extends Component {
     }
 
     if (type == 'left') {
-      if (status == null) {
+      if (status == null || status == 'undefined') {
         // alert('NotInterested')
         // this.setState({
         //   left: true
@@ -350,7 +454,10 @@ class UserPro extends Component {
             () => this.InterviewOperation('Selected'),
           );
         }
-      }
+      } 
+      else if (status == null || status == 'undefined') {
+        this.jaaveda('Selected', item);
+      } 
     } else if (type == 'top') {
       if (status == null || status == 'undefined') {
         this.setState({
@@ -360,9 +467,14 @@ class UserPro extends Component {
         );
       }
     } else if (type == 'bottom') {
-      if (status == null) this.jaaveda('Shortlisted', item);
+      if (status == null  || status == 'undefined') this.jaaveda('Shortlisted', item);
       // alert(' Short Listed ' + item)    }
     }
+  }
+  else {
+    this.setState({JobSelect:true})
+  }
+
   };
 
   Sharing = async () => {
@@ -393,37 +505,42 @@ class UserPro extends Component {
   renderCard = (data,) => {
     this.setState({userHeading:data.Role})
     return (
-      
+      <ScrollView
+        style={{
+          alignSelf: 'stretch',
+        }}>
+        <View onStartShouldSetResponder={() => true}>
         <ImageBackground
           style={{
             width: wp('96%'),
             height: hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
-            // flex:1
-            // overflow: 'hidden',
+            // paddingBottom:15
           }}
-          
           source={require('../Img/ract.png')}
           resizeMode={'stretch'}>
-          <ScrollView removeClippedSubviews={true} style={{height:hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
+          <ScrollView removeClippedSubviews={true} 
+          style={{height:hp('100%') - (StatusBar.currentHeight + scale(100) + hp(5)),
+          alignSelf:"stretch",marginBottom:15}} nestedScrollEnabled = {true}>
           <View style={{
                 top: hp(2),
                 marginHorizontal: wp(7)
             }}><Text style={{
                 color: '#333',
-                fontSize: scale(23),
+                fontSize: hp(3),
                 fontFamily: "Roboto-Bold"
-            }}>{data.first_name} {data.last_name}</Text></View>
+            }}>{data.first_name || 'Unknown'} {data.last_name || 'Unknown'}</Text></View>
             <View style={{
                 flexDirection: "row",
                 alignItems: "flex-start",alignItems:"center"
             }}>
    <ImageBackground style={{
-                marginTop: hp(4.5),
+                marginTop: hp(4),
                 marginLeft: wp(7),
-                width: wp(32),
-                height: wp(32),
+                width: wp(28),
+                height: wp(28),
                 justifyContent: "center",
                 alignItems: "center",
+
                 zIndex: 5
             }}
             source={backgroundCorner}><Image 
@@ -434,14 +551,16 @@ class UserPro extends Component {
                     : avtar
                           }
             style={{
-                height: wp('29'),
-                width: wp('29'),
+                height: wp(26),
+                width: wp(26),
+                borderRadius:wp(1.5)
+
             }} resizeMode={'contain'}/></ImageBackground>
             <View style={{
                 flexDirection: "column",
-                height: 50,
+                height: wp(27),
                 width: wp(50),justifyContent:"center",alignItems:"center",
-                marginTop: hp(4) ,marginHorizontal:wp(2)
+                marginTop: hp(3) ,marginHorizontal:wp(2)
             }}>
             <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
                 vid: url + '/images/user/' + data.video
@@ -452,12 +571,12 @@ class UserPro extends Component {
                 alignItems: "center",
                 justifyContent: "center"
             }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
-                height: scale(65),
-                width: scale(65),
-            }}/><View style={{marginTop:scale(-10)}}><Texting style={{
+                height: scale(50),
+                width: scale(50),
+            }}/><View style={{marginTop:scale(-8)}}><Texting style={{
                 color: themeColor,
                 fontFamily: "Roboto-Regular",
-                fontSize: scale(10)
+                fontSize: hp(1.5)
             }} text='Company_Profile' /></View>
             </View></TouchableWithoutFeedback>
             <View style={{height:1,width:wp(40),backgroundColor:"#333",marginVertical:scale(7)}}/>
@@ -470,37 +589,39 @@ class UserPro extends Component {
             iconSet={'MaterialIcons'}
             disabled={false}
             maxStars={5}
-            starSize={scale(15)}
-            rating={3}
+            starSize={hp(2.5)}
+            rating={global.JobID && global.JobID.length != 0 ? 3 : 0}
             // selectedStar={(rating) => this.handleLanguage(rating, index)}
             fullStarColor={'orange'}
             /></View>
             </View>
             </View>
             <View style={{
-                marginLeft: wp(7),
+                marginLeft: wp(5),
                 marginTop: hp(1),
                 height: hp(3),
                 width: wp(32),
                 alignItems: "center",
                 justifyContent: "center",
                 flexDirection: 'row'
-            }}><Image source={facebook} resizeMode={'contain'} style={{
-                height: scale(25),
-                width: scale(25)
-            }}/><Image source={linkedin} resizeMode={'contain'} style={{
-                height: scale(25),
-                width: scale(25),
+            }}><TouchableOpacity onPress={() => alert('hi facebook')}><Image source={facebook} resizeMode={'contain'} style={{
+                height: hp(3.7),
+                width: hp(3.7)
+            }}/></TouchableOpacity>
+            <TouchableOpacity onPress={()=>alert('hi linkedin')}><Image source={linkedin} resizeMode={'contain'} style={{
+                height: hp(3.7),
+                width: hp(3.7),
                 marginHorizontal: wp(1)
-            }}/><Image source={whatsapp} resizeMode={'contain'} style={{
-                height: scale(25),
-                width: scale(25)
-            }}/>
+            }}/></TouchableOpacity><TouchableOpacity onPress={()=>this.whatsap(data.mobile || '000')}><Image source={whatsapp} resizeMode={'contain'} style={{
+                height: hp(3.7),
+                width: hp(3.7)
+            }}/></TouchableOpacity>
             </View>
           <View style={styles.CompanyProfileDetail}>
-          <ListShow name={data.Company} image={company} />
-          <ListShow name={data.isEmployed ? 'Employed' : 'Fresher' } image={icons_jobType_blue} />
-          <ListShow name={data.Role} image={skillCategory} />
+          <ListShow name={data.Company || 'Unknown'} image={company} />
+          <ListShow name={this.timeConversion(data.isEmployed,data.isFreelancer,data.isHelping,data.isInternship,
+      data.isStudentJob)} image={icons_jobType_blue} />
+          <ListShow name={data.Role || 'Unknown'} image={skillCategory} />
           <View style={styles.CompanyDetailIcon}>
                         <View style={styles.CompanyDetailProfileIcon}>
                           <Image
@@ -516,20 +637,47 @@ class UserPro extends Component {
                  -{ data.totalExp != '' && data.totalExp != null
                   ? data.totalExp
                   : 0 }
-                {' '}Years /{' '}
-                        </Text>
-                        <Text style={styles.CompanyProfileDetailLabel100}>
-                          100%
+                {' '}Years {' '}
                         </Text>
                       </View>
-                      <View style={{height:0.5,width:wp(80)-24,backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
-                      <ListShow name={data.place + ' / 100%'} image={placeIcon} />
-                      <ListShow name={data.mobile} image={mobile} />
-                      <ListShow name={data.email} image={Mail} />
+                      <View style={{height:0.5,width:wp(80),backgroundColor:themeColor,marginLeft:5,marginTop:3,}}/>
+                      <ListShow name={data.place || 'Unknown' + ' / 100%'} image={placeIcon} />
+                      <ListShow name={data.distinguish == 'Company' ? data.comContact : data.mobile || 'Unknown'} image={mobile} />
+                      <ListShow name={data.distinguish == 'Company' ? data.comEmail:data.email || 'Not Avialable'} image={Mail} />
           </View></ScrollView>
-        </ImageBackground>
+        </ImageBackground></View>
+        </ScrollView>
     );
   };
+
+
+  renderItemJob = (item,index) => {
+    return <View style={{backgroundColor:themeWhite,height:'auto',width:wp(90),padding:5}}>
+        
+     <TouchableOpacity style={{height:hp(6),justifyContent:"center",borderBottomWidth:0.5}}>
+     <View style={{flexDirection:"row",justifyContent:"space-around"}}>
+         <Text style={{width:wp(50),fontFamily:FontBold}} numberOfLines={1}>{item.name}</Text>
+         <RadioButton
+                             innerColor={themeColor}
+                             outerColor={'#afadaf'}
+                             animation={'bounceIn'}
+                             isSelected={this.state.selectedIndex === index}
+                             onPress={() => this.onPress(item,index)}
+                         />
+     </View>
+     </TouchableOpacity>
+   </View>
+  }
+
+  onPress = ( item,index) =>  {
+    this.setState({
+      selectedIndex:index,
+      JobIdSelected:item.id
+    })
+    setTimeout(() => {
+      this.setState({  JobSelect:false});
+    }, 1000);
+}
 
   render() {
     const {
@@ -540,11 +688,16 @@ class UserPro extends Component {
       id,
       left
     } = this.state;
-    console.log('id>>>>>',global.ig[id])
+    console.log(global.JobID)
     return (
       <SafeAreaView style={styles.backGround}>
         <NavigationEvents onDidFocus={this.checking} />
-          <StatusBar hidden={false} backgroundColor={themeWhite} />
+          <StatusBar hidden={true} backgroundColor={themeWhite} />
+          <ModalSort isVisible={this.state.openModal} onBackdropPress={()=>this.setState({openModal:false})} 
+          relevance={()=>this.relevance()} bydate={()=> this.date()} date={this.state.Date} rel={this.state.relevance}/>
+          <JobSelectId data={global.JobID} nodata={()=> {global.JobID.length == 0 && this.props.navigation.navigate('FilterUser')
+          this.setState({JobSelect:false})
+          }} isVisible={this.state.JobSelect} renderItem={({item,index}) => this.renderItemJob(item,index)} />
         <ImageBackground
           style={styles.ImageBlue}
           source={Background}
@@ -554,7 +707,7 @@ class UserPro extends Component {
             onPress={() => this.Back()}
             text={global.ig && this.state.userHeading}
           />
-          <TopHeader data={global.ig && data.length} Filter={this.Filter} Listed={() => this.Back()}/>
+          <TopHeader data={global.ig && data.length} sort={this.Sort} srtTint={this.state.srt} Filter={this.Filter} detailedTint={true} Listed={() => this.Back()}/>
 
           {global.ig ? (
             <View style={styles.CompanyProfileMainImage1}>
@@ -664,6 +817,48 @@ class UserPro extends Component {
                                wrapper,
                             },
                           },
+                          left: {
+                            title: 'rejected',
+                            style: {
+                              label: {
+                                borderColor: 'red',
+                                color: 'red',
+                                borderWidth: 5,
+                                fontSize: 32,
+                                borderRadius: 5,
+                                textAlign: 'center',
+                              },
+                              wrapper,
+                            },
+                          },
+                          right: {
+                            title: 'Selected',
+                            style: {
+                              label: {
+                                borderColor: 'green',
+                                color: 'green',
+                                borderWidth: 5,
+                                fontSize: 32,
+                                borderRadius: 5,
+                                textAlign: 'center',
+                              },
+                              wrapper,
+                            },
+                          },
+                          bottom: {
+                            title: 'Shortlisted',
+                            style: {
+                              label: {
+                                borderColor: themeColor,
+                                color: themeColor,
+                                borderWidth: 5,
+                                fontSize: 32,
+                                borderRadius: 5,
+                                textAlign: 'center',
+                              },
+                              wrapper,
+                            },
+                          }
                         }
                       : {
                           left: {

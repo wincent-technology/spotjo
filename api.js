@@ -1,9 +1,21 @@
 import axios from 'axios';
 import {url} from './Constant/index';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const POST = (endPoint, payload) => {
+
+// var result =  AsyncStorage.getItem('CompanyLoggedInData');
+// result = JSON.parse(result)
+
+ const  POST = async (endPoint, payload) => {
+  var result =  await AsyncStorage.getItem('token');
+result = JSON.parse(result)
+  console.log('result Post',result)
   return new Promise((resolve, reject) => {
-    const config = {};
+    const config = {
+      headers:{
+      Authorization: 'Bearer '+ result
+      }
+    };
     const fullUrl = url + endPoint;
     axios
       .post(fullUrl, payload, config)
@@ -32,12 +44,20 @@ const PUT = (endPoint, payload) => {
         //API error
         reject(error);
       });
-  });
+  }); 
 };
 
-const GET = (endPoint) => {
+const GET = async (endPoint) => {
+  var result =  await AsyncStorage.getItem('token');
+  result = JSON.parse(result)
+console.log('result get',result)
   return new Promise((resolve, reject) => {
-    const config = {};
+    const config = {
+        headers :
+{
+  'Authorization': 'Bearer ' + result
+} 
+    };
     const fullUrl = url + endPoint;
     axios
       .get(fullUrl, config)

@@ -5,6 +5,7 @@ import { themeColor, themeWhite, whiteEdit,user } from '../Constant/index'
 import styles from '../src/Style'
 import { scale } from '../src/Util'
 import { TouchableOpacity, Text, View, Image } from 'react-native'
+import { heightPercentageToDP as hp } from './responsive-ratio';
 
 const NavigationHead = ({onPress, onExit, centerComponent = '', rightComponent = '', ...props}) => (
     <View style={[styles.filterHeader,{
@@ -12,12 +13,12 @@ const NavigationHead = ({onPress, onExit, centerComponent = '', rightComponent =
     }]}>
             <TouchableOpacity style={styles.FilterLeft} onPress={onPress}>
             {
-    left(scale(30), themeColor)
+    left(hp(4), themeColor)
     }
             </TouchableOpacity>
             <View style={styles.CenterLogo}>
     <Text style={{
-        fontSize: scale(18),
+        fontSize: hp(3),
         fontFamily: "Roboto-Bold",
         color:themeColor,
         fontWeight: 'bold',
@@ -29,12 +30,12 @@ const NavigationHead = ({onPress, onExit, centerComponent = '', rightComponent =
     <TouchableOpacity onPress={onExit}>
     {rightComponent == 'edit' ?
         (<Image source={props.creauser ? user : whiteEdit} tintColor={themeColor} style={{
-            height: scale(23),
-            width: scale(23)
+            height: hp(3),
+            width: hp(3)
             
         }} resizeMode={'contain'} />) :
         (<Text style={[{
-            fontSize: scale(18),
+            fontSize: hp(2.7),
             fontFamily: "Roboto-Bold",
         }, styles.FontSty]}>{rightComponent}</Text>)}</TouchableOpacity></View>
             </View>

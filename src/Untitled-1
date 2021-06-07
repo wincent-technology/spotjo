@@ -1,0 +1,8 @@
+https://api.xing.com/auth/oauth2/authorize?client_id=b152ac0e86f8fdd2fdf6&response_type=code&redirect_uri=http://www.spotjo.com
+
+
+https://api.xing.com/auth/oauth2/token?client_id=b152ac0e86f8fdd2fdf6&code=mumVU8MQqDp_p7JbHv2-cy8-xbYVH9_iGYPIhXaL20inTH5Wry-cINMBaEhrvDjX19uAOAs1uE2_-LQADF-UCOEShDrw57zYMWfW_B-jCcRK4v4aU0vwX0TVrDa8-otg_G_gxAXrO-vmnX2CE2vcB6sxu1pe-FF_y0G-RJTWDHUhZUGmt9ZgLE-fJ6-td8axrFxVTEsbYq8KyHnn5-6ticJFqCCIE3nCIjR86WzbTZ1ne458mAEl2b_Pav8CAi5OU1i5pW3riDenXW-BUpLSuHj2wVDOssX7HGPVxoQvWKHZPT0o3o3BjZre8D1Vn_Wi_6YvIFoXSXWKRNMn8ts7yJmLnkiY7LWXRFcaCj7jjUzYQ1-6qpPXtiSWyXvNi6GLEgRYUQBiLAyqRSIcYBtD-tJjUejsgA-h0kq5FQulFLV-jKawtFlx1tqeUGfgV70qNDMelQEjFk2iVscqiRwjTkwZBpxoSuDj0csSph_dewlW7Ypfu953dsqkNzcio_cGpBn72jznC-g&redirect_uri=http://www.spotjo.com&coder_verifier=plain&grant_type=authorization_code
+
+{"error":"invalid_client","error_description":"The authentication method 'client_id' is not allowed for this grant_type.","error_detail_key":"E20199","error_uri":"https://dev.xing.com/docs/error_responses"}
+
+

@@ -12,6 +12,7 @@ import {
   Text,
   Image,
   View,
+  ActivityIndicator
 } from 'react-native';
 import {
   withNavigationFocus,
@@ -68,6 +69,7 @@ class PostedJobList extends PureComponent {
       pub: false,
       Expired: [],
       Published: [],
+      load:false
     };
     this._isMounted = false;
   }
@@ -171,6 +173,7 @@ class PostedJobList extends PureComponent {
                 dataitem: res['data']['result'],
                 Published: res['data']['result'],
                 pub: true,
+                load : true
               });
               // this.props.navigation.navigate('AdminDashboard');
               // this.postedJob(res['data']['result']);
@@ -195,6 +198,8 @@ class PostedJobList extends PureComponent {
               // console.log('126', res['data']['result']);
               this.setState({
                 Active: res['data']['result'],
+                // load : true
+                
               });
               // this.props.navigation.navigate('AdminDashboard');
               // this.postedJob(res['data']['result']);
@@ -219,6 +224,7 @@ class PostedJobList extends PureComponent {
               // console.log('146', res['data']['result']);
               this.setState({
                 Expired: res['data']['result'],
+                // load : true
               });
               // this.props.navigation.navigate('AdminDashboard');
               // this.postedJob(res['data']['result']);
@@ -232,6 +238,9 @@ class PostedJobList extends PureComponent {
       snack(error);
     }
   };
+  editJob = (item) => {
+    console.log('item',item)
+  }
 
   Video = (item) => {
     console.log('hels', item.video);
@@ -244,18 +253,26 @@ class PostedJobList extends PureComponent {
     // this.props.navigation.navigate('VideoResume');
   };
 
+  Match= () => {
+    this.props.navigation.navigate('JobMatches')
+  }
+
   render() {
+    if (!this.state.load)
+    return <View style={{flex:1,justifyContent:"center"}}><NavigationEvents onDidFocus={this.checking} /><ActivityIndicator size={'large'} color={themeColor} /></View>;
+    else
     return (
       <View>
-          <StatusBar hidden={false} backgroundColor={themeWhite} />
+          <StatusBar hidden={true} backgroundColor={themeWhite} />
         <NavigationEvents onDidFocus={this.checking} />
         <View
           style={{
             flexDirection: 'row',
-            width: wp('100%') - scale(35),
-            marginHorizontal: scale(5),
+            width: wp(100),
+            justifyContent:'space-evenly',
+            // marginHorizontal: scale(5),
             backgroundColor: 'transparent',
-            height: wp(100) / 3 - scale(5),
+            height: wp(25),
             marginTop: hp(0.6),
             marginBottom: hp(-0.3),
             alignItems: 'center',
@@ -279,7 +296,7 @@ class PostedJobList extends PureComponent {
                 resizeMode={'stretch'}>
                 <Text
                   style={{
-                    fontSize: scale(20),
+                    fontSize: hp(2.7),
                     fontFamily: 'Roboto-Regular',
                     color: themeWhite,
                   }}>
@@ -288,11 +305,11 @@ class PostedJobList extends PureComponent {
                 <View>
                   <Text
                     style={{
-                      fontSize: scale(16),
+                      fontSize: hp(2.5),
                       fontFamily: 'Roboto-Regular',
                       color: themeWhite,
                     }}>
-                    Published
+                    Active
                   </Text>
                 </View>
               </ImageBackground>
@@ -318,7 +335,7 @@ class PostedJobList extends PureComponent {
                 resizeMode={'stretch'}>
                 <Text
                   style={{
-                    fontSize: scale(20),
+                    fontSize: hp(2.7),
                     fontFamily: 'Roboto-Regular',
                     color: themeWhite,
                   }}>
@@ -327,11 +344,11 @@ class PostedJobList extends PureComponent {
                 <View>
                   <Text
                     style={{
-                      fontSize: scale(16),
+                      fontSize: hp(2.5),
                       fontFamily: 'Roboto-Regular',
                       color: themeWhite,
                     }}>
-                    Expired
+                    In-Active
                   </Text>
                 </View>
               </ImageBackground>
@@ -354,7 +371,7 @@ class PostedJobList extends PureComponent {
                 resizeMode={'stretch'}>
                 <Text
                   style={{
-                    fontSize: scale(20),
+                    fontSize: hp(2.7),
                     fontFamily: 'Roboto-Regular',
                     color: themeWhite,
                   }}>
@@ -363,26 +380,28 @@ class PostedJobList extends PureComponent {
                 <View>
                   <Text
                     style={{
-                      fontSize: scale(16),
+                      fontSize: hp(2.5),
                       fontFamily: 'Roboto-Regular',
                       color: themeWhite,
                     }}>
-                    Active
+                    Locked
                   </Text>
                 </View>
               </ImageBackground>
             </View>
           </TouchableWithoutFeedback>
         </View>
-        {this.state.dataitem != '' ? (
+        {this.state.dataitem.length ? (
           <List style={{marginTop: 4,
-              marginBottom: 40,
+              marginBottom : (wp(25)) + 50,
               backgroundColor: 'transparent',}} data={this.state.dataitem} renderItem={({item, index}) => (
                 <ItemMV
                 item={item}
                 index={index}
                 push={this.push}
                 Video={this.Video}
+                Match={this.Match}
+                EditingJob={this.editJob}
               />
               )} />
         ) : (

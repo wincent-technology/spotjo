@@ -11,7 +11,7 @@ import {
   ImageBackground,
   Picker,
   Text,
-  Image,
+  Image,Keyboard,
   View,
 } from 'react-native';
 import {
@@ -72,7 +72,7 @@ const Input = ({placeholder,...props}) => {
                         inputContainerStyle={{
                           backgroundColor: themeWhite,
                           // width: "100%",
-                          height: scale(40),
+                          height: hp(6.5),
                           borderBottomColor: '#eee',
                           justifyContent: 'center',
                           borderBottomWidth: scale(1),
@@ -80,14 +80,14 @@ const Input = ({placeholder,...props}) => {
                         }}
                         inputStyle={{
                           color: '#333',
-                          fontSize: scale(18),
+                          fontSize: hp(2.7),
                           fontFamily: 'Roboto-Bold',
                           fontWeight: 'bold',
                         }}
                         placeholderTextColor={'#333'}
                         containerStyle={{
                           width: wp(86),
-                          height: scale(40),
+                          height: hp(5.5),
                         }}
                         iconName={iconSearch}
                       />
@@ -106,7 +106,9 @@ class UserCreation extends PureComponent {
       lastName: '',
       email: '',
       pass: '',
-      cpass:''
+      cpass:'',
+      keyboardShown:false
+
     };
   }
 
@@ -159,7 +161,36 @@ class UserCreation extends PureComponent {
     // global.Ci?ty = selectedValue
   };
 
-  
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow = () => {
+    this.setState({
+      keyboardShown: true,
+    });
+    console.log('Keyboard Shown');
+  };
+
+  _keyboardDidHide = () => {
+    this.setState({
+      keyboardShown: false,
+    });
+
+    console.log('Keyboard Hidden');
+  };
+
+  componentDidMount() {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow,
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide,
+    );
+    }
 
 
 
@@ -188,13 +219,13 @@ class UserCreation extends PureComponent {
               flex:1,
               width: wp(96),
               marginHorizontal: wp(2),
-              top: hp(2),
+              top: hp(0),
             }}>
                 <View
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
-                    marginTop: hp(4),
+                    marginTop: hp(2),
                   }}>
                  
                   <View
@@ -220,7 +251,7 @@ class UserCreation extends PureComponent {
                     <View
                       style={{
                         width: wp(80),
-                        height: scale(40),
+                        height: hp(5),
                         borderRadius: scale(5),
                         borderBottomWidth:1,
                         borderBottomColor:"#eee",
@@ -235,18 +266,18 @@ class UserCreation extends PureComponent {
                         selectedValue={this.state.selectedValue}
                         style={{
                           width: wp(60),
-                          height: scale(40),
+                          height: hp(5),
                           color: '#333',
-                          fontSize: scale(22),
+                          fontSize: hp(2),
                           fontWeight: 'bold',
                           fontFamily: FontRegular,
                           left: scale(33),
                           transform: [
                             {
-                              scaleX: 1.3,
+                              scaleX: 1.2,
                             },
                             {
-                              scaleY: 1.3,
+                              scaleY: 1.2,
                             },
                           ],
                           // backgroundColor: themeColor
@@ -262,26 +293,25 @@ class UserCreation extends PureComponent {
                   </View>
                 </View>
             </View>
-             <View style={{
+             {!this.state.keyboardShown && <View style={{
                 bottom: 55,
                 // position: "absolute",
 
             }}>
-            <TouchableWithoutFeedback onPress={this.callApi}>
+            <TouchableOpacity onPress={this.callApi}>
             <View style={{
                 marginHorizontal: wp(8),
-                borderRadius: 15,height:50,
+                borderRadius: 15,height:hp(6),
                 justifyContent:"center",alignItems:"center",backgroundColor:themeColor
             }}>
             <Text style={{
                 color: themeWhite,
-                fontSize: scale(20),
+                fontSize: hp(2.7),
                 fontFamily: "Roboto-Bold"
             }}>Create User</Text>
            </View>
-            </TouchableWithoutFeedback>
-            
-            </View>
+            </TouchableOpacity>
+            </View> }
       </View>
     );
   }

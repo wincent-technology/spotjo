@@ -89,7 +89,7 @@ class Splash extends Component {
             global.Address = result['address']
             global.long = parseFloat(result['longitude'])
             global.let = parseFloat(result['latitude'])
-            navigate = result['isLoggedFirstTime']  == 0 ? 'TalentCom' : 'ComEdit'
+            navigate = result['isLoggedFirstTime']  == 0 ? 'TalentCom' : 'UserProfile'
         }
     // setTimeout(() => {
     //     this.props.navigation.navigate(navigate)

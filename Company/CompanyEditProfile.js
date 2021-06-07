@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   Text,
-  Image,
+  Image,Alert,
   View,
 } from 'react-native';
 import {
@@ -50,6 +50,32 @@ import {
 import { PieChart } from 'react-native-svg-charts'
 import Texting from '../Constant/Text'
 
+const RippleButton = ({...props}) => {
+	return <TouchableNativeFeedback
+	onPress={props.onPress}
+	background={TouchableNativeFeedback.Ripple(props.rippleColor)}>
+	<View style={styles.NativeViewButton}>
+	  <View style={styles.NativeSecondView}>
+		<Image
+		  source={props.source}
+		  resizeMethod={'resize'}
+		  style={styles.imageStyle}
+		  resizeMode={'contain'}
+		/>
+	  </View>
+	  <View style={styles.NativeThirdView}>
+		<Texting
+		  style={styles.NativeFontSty}
+		  numberOfLines={1}
+		  text={props.title}
+		/>
+	  </View>
+	</View>
+  </TouchableNativeFeedback>
+}
+
+
+
 class CompanyEditProfile extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +86,7 @@ class CompanyEditProfile extends Component {
       piedata : []
     };
     this.sum = 0
-    console.log('global', global.role);
+    // console.log('global', global.role);
   }
 
   onStarRatingPress(rating) {
@@ -68,6 +94,7 @@ class CompanyEditProfile extends Component {
       starCount: rating,
     });
   }
+
   Back = () => {
     // console.log("hi");
     this.props.navigation.goBack();
@@ -82,33 +109,104 @@ class CompanyEditProfile extends Component {
     // this.props.navigation.navigate('VideoResume');
   };
   Personal = () => {
+    
     this.props.navigation.navigate('PersonalCompany');
   };
   Dashboard = () => {
+    if (global.role == 'Super Admin')
     this.props.navigation.navigate('Admin');
+    else 
+      Alert.alert("Register", "please validate the otp", [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "ok",
+        onPress: () => {}
+    }], {
+        cancelable: false
+    });
   };
   Resource = () => {
+    if (global.role == 'Super Admin')
     this.props.navigation.navigate('Resource');
+    else 
+      Alert.alert("Register", "please validate the otp", [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "ok",
+        onPress: () => {}
+    }], {
+        cancelable: false
+    });
   };
   CompanyService = () => {
+    if (global.role == 'Super Admin')
     this.props.navigation.navigate('CompanyServices');
+    else 
+      Alert.alert("Register", "please validate the otp", [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "ok",
+        onPress: () => {}
+    }], {
+        cancelable: false
+    });
   };
   User = () => {
+    if (global.role == 'Super Admin')
     this.props.navigation.navigate('CompanyUser');
+    else 
+      Alert.alert("Register", "please validate the otp", [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "ok",
+        onPress: () => {}
+    }], {
+        cancelable: false
+    });
   };
   Bulk = () => {
+    if (global.role == 'Super Admin')
     this.props.navigation.navigate('BulkUploadResume');
+    else 
+      Alert.alert("Register", "please validate the otp", [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "ok",
+        onPress: () => {}
+    }], {
+        cancelable: false
+    });
   };
   Setting = () => {
-    this.props.navigation.navigate('Setting');
+    if (global.role == 'Super Admin')
+    this.props.navigation.navigate('UserProfile');
+    else 
+      Alert.alert("Register", "please validate the otp", [{
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel"
+    }, {
+        text: "ok",
+        onPress: () => {}
+    }], {
+        cancelable: false
+    });
   };
-  componentWillMount(){
-    
-
+  componentDidMount(){
     
     this.sum = this.sums();
     let piedata = this.piedata();
-    console.log('piedata>',piedata)
+    // console.log('piedata>',piedata)
     this.setState({
       piedata
     })
@@ -160,37 +258,37 @@ class CompanyEditProfile extends Component {
           source={Background}
           tintColor={themeWhite}
           resizeMode={'stretch'}>
-          <StatusBar hidden={false} backgroundColor={themeWhite} />
+          <StatusBar hidden={true} backgroundColor={themeWhite} />
           <NavigationHead
             centerComponent="Edit Company Profile"
             onPress={() => this.Back()}
           />
-          <ScrollView style={{flex:1,alignSelf:"stretch",marginBottom:hp(100) <= 600 ? 150 : 20}}>
+          <ScrollView style={{flex:1,alignSelf:"stretch",}}>
           <View style={{ width: wp('96%'),
-              height: hp('100%'),
-              flexGrow:1,
+              // height: hp('100%'),
+              // flexGrow:1,
               marginHorizontal: wp('2%'),
               borderRadius: scale(20),
             }}>
           <View style={{
-                top: hp(4),
+                top: hp(1),
                 marginHorizontal: wp(7)
             }}><Text style={{
                 color: 'gray',
-                fontSize: scale(23),
+                fontSize: hp(3),
                 fontFamily: "Roboto-Bold"
             }}>{global.Company}</Text></View>
           <View style={{
                 flexDirection: "row",
                 alignItems: "flex-start",
-                marginBottom:20,
+                marginBottom:10,
                 justifyContent:"space-between"
             }}>
                 <View style={{
-                marginTop: hp(4.5),
-                marginLeft: wp(7),
-                width: wp(32),
-                height: wp(32),
+                marginTop: hp(2),
+                marginLeft: wp(8),
+                width: wp(28),
+                height: wp(28),
                 justifyContent: "center",
                 alignItems: "center",
                 zIndex: 5,backgroundColor:"white",borderColor:themeColor,borderWidth:2,borderRadius:15
@@ -205,16 +303,18 @@ class CompanyEditProfile extends Component {
                               : Companyavtar
                           }
             style={{
-                height: wp('29'),
-                width: wp('29'),
+              height: wp(25),
+                width: wp(25),
+                borderRadius:wp(2),
+              
             // alignItems: "stretch",
             // backgroundColor: "transparent"
             }} resizeMode={'contain'}/></View>
             <View style={{
                 flexDirection: "column",
-                height: wp(32),
+                height: wp(28),
                 width: wp(50),justifyContent:"center",alignItems:"flex-end",
-                marginTop: hp(3),marginRight:wp(10),
+                marginTop: hp(1),marginRight:wp(10),
             }}>
             <TouchableWithoutFeedback onPress = {() => this.props.navigation.navigate('VideoPlayer', {
                 vid: global.Video
@@ -225,17 +325,17 @@ class CompanyEditProfile extends Component {
                 alignItems: "center",
                 justifyContent: "center"
             }}><Image source={WhiteVideo}  tintColor={themeColor}resizeMode={'contain'} style={{
-                height: scale(65),
-                width: scale(65),
+                height: scale(50),
+                width: scale(50),
             }}/>
             <View style={{height:1,width:wp(30),backgroundColor:"#333",marginTop:scale(0)}}/>
             <View style={{marginTop:scale(5)}}><Texting style={{
                 color: "#333",
                 fontFamily: "Roboto-Bold",
-                fontSize: scale(12)
+                fontSize: hp(1.5)
             }} text='Company_Video'/></View>
             </View></TouchableWithoutFeedback>
-            <View style={{marginTop:scale(5)}}>
+            <View style={{marginTop:scale(5),marginHorizontal:wp(-1)}}>
             <StarRating
             emptyStar={blanks}
             starStyle={{marginLeft:5}}
@@ -244,7 +344,7 @@ class CompanyEditProfile extends Component {
             iconSet={'MaterialIcons'}
             disabled={false}
             maxStars={5}
-            starSize={scale(15)}
+            starSize={hp(2.5)}
             rating={this.state.starCount}
                       selectedStar={(rating) => this.onStarRatingPress(rating)}
             fullStarColor={'orange'}
@@ -254,139 +354,26 @@ class CompanyEditProfile extends Component {
               <View
                 style={{
                   flexDirection: 'column',
-                  marginHorizontal:wp(7)
+                  marginHorizontal:wp(6)
                 }}>
-                <TouchableNativeFeedback
-                  onPress={this.Dashboard}
-                  background={TouchableNativeFeedback.Ripple(themeColor)}>
-                  <View style={styles.NativeViewButton}>
-                    <View style={styles.NativeSecondView}>
-                      <Image
-                        source={Dashboard}
-                        resizeMethod={'resize'}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <View style={styles.NativeThirdView}>
-                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Dashboard'/>
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  onPress={this.Personal}
-                  background={TouchableNativeFeedback.Ripple('#feba4b')}>
-                  <View style={styles.NativeViewButton}>
-                    <View style={styles.NativeSecondView}>
-                      <Image
-                        source={education}
-                        resizeMethod={'resize'}property
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <View style={styles.NativeThirdView}>
-                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Company_Information'/>
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  onPress={this.CompanyService}
-                  background={TouchableNativeFeedback.Ripple('#8bbdb2')}>
-                  <View style={styles.NativeViewButton}>
-                    <View style={styles.NativeSecondView}>
-                      <Image
-                        source={company}
-                        resizeMethod={'resize'}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <View style={styles.NativeThirdView}>
-                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Company_Services'/>
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
+       <RippleButton title={'Dashboard'} rippleColor={themeColor} onPress={this.Dashboard} source={Dashboard} />
+       <RippleButton title={'Company_Information'} rippleColor={'#feba4b'} onPress={this.Personal} source={education} />
+       <RippleButton title={'Company_Services'} rippleColor={'#8bbdb2'} onPress={this.CompanyService} source={company} />
                 {global.role != 'Staff' && (
-                  <TouchableNativeFeedback
-                    onPress={this.User}
-                    background={TouchableNativeFeedback.Ripple('#a26e85')}>
-                    <View style={styles.NativeViewButton}>
-                      <View style={styles.NativeSecondView}>
-                        <Image
-                          source={jobType}
-                          resizeMethod={'resize'}
-                          style={styles.imageStyle}
-                          resizeMode={'contain'}
-                        />
-                      </View>
-                      <View style={styles.NativeThirdView}>
-                        <Texting style={styles.NativeFontSty} numberOfLines={1} text='User_Management'/>
-                      </View>
-                    </View>
-                  </TouchableNativeFeedback>
+       <RippleButton title={'User_Management'} rippleColor={'#a26e85'} onPress={this.User} source={jobType} />
                 )}
-                
-                <TouchableNativeFeedback
-                  onPress={this.Resource}
-                  background={TouchableNativeFeedback.Ripple('#a26e85')}>
-                  <View style={styles.NativeViewButton}>
-                    <View style={styles.NativeSecondView}>
-                      <Image
-                        source={Resource_Profile}
-                        resizeMethod={'resize'}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <View style={styles.NativeThirdView}>
-                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Resource_Profile'/>
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  onPress={this.Bulk}
-                  background={TouchableNativeFeedback.Ripple('#a26e85')}>
-                  <View style={styles.NativeViewButton}>
-                    <View style={styles.NativeSecondView}>
-                      <Image
-                        source={Resource_Profile}
-                        resizeMethod={'resize'}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <View style={styles.NativeThirdView}>
-                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Resume_Upload'/>
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
-                <TouchableNativeFeedback
-                  onPress={this.Setting}
-                  background={TouchableNativeFeedback.Ripple('#a26e85')}>
-                  <View style={styles.NativeViewButton}>
-                    <View style={styles.NativeSecondView}>
-                      <Image
-                        source={Resource_Profile}
-                        resizeMethod={'resize'}
-                        style={styles.imageStyle}
-                        resizeMode={'contain'}
-                      />
-                    </View>
-                    <View style={styles.NativeThirdView}>
-                      <Texting style={styles.NativeFontSty} numberOfLines={1} text='Setting'/>
-                    </View>
-                  </View>
-                </TouchableNativeFeedback>
+       <RippleButton title={'Resource_Profile'} rippleColor={'#a26e85'} onPress={this.Resource} source={Resource_Profile} />
+       <RippleButton title={'Resume_Upload'} rippleColor={'#a26e85'} onPress={this.Bulk} source={Resource_Profile} />
+       <RippleButton title={'My Profile'} rippleColor={'#a26e85'} onPress={this.Setting} source={Resource_Profile} />
               </View>
           </View></ScrollView>
-          <View style={{alignItems:"center",bottom:50,position:"absolute",justifyContent:"center",width:"100%"}}>
-              {this.state.piedata && <PieChart style={{ height: 100,width:100,marginBottom:5 }} data={this.piedata()}/>}
+          <View style={{alignItems:"center",bottom:47,position:"absolute",justifyContent:"center",width:"100%"}}>
+              {this.state.piedata && <PieChart style={{ height: hp(8),width:hp(8),marginBottom:3 }} data={this.piedata()}/>}
             <View style={{alignItems:"center",justifyContent:"center"}}>
-              <Text style={{color:themeColor,fontSize:scale(20),fontFamily:FontBold}}>
+              <Text style={{color:themeColor,fontSize:hp(2.7),fontFamily:FontBold}}>
                   {this.sums()}
               </Text>
-              <Texting style={{color:'gray',fontSize:scale(20),fontFamily:FontBold}} text='Profile_Completion'/>
+              <Texting style={{color:'gray',fontSize:hp(3),fontFamily:FontBold}} text='Profile_Completion'/>
             </View> 
           </View>
         </ImageBackground>

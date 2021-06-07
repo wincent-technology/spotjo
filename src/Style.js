@@ -1,7 +1,8 @@
 import {
   Dimensions,
   StyleSheet,
-  StatusBar
+  StatusBar,
+  Platform
 } from 'react-native';
 import {
   scale,
@@ -26,7 +27,6 @@ import {
 import DeviceInfo from 'react-native-device-info';
 
 let hasNotch = DeviceInfo.hasNotch();
-
 module.exports = {
   textboxfieldd: {
     fontWeight: 'bold',
@@ -55,27 +55,27 @@ module.exports = {
     flex: 1,
   },
   OpportunityView: {
-    height: scale(40),
-    width: scale(250),
+    height: hp(5.5),
+    width: wp(70),
     backgroundColor: themeWhite,
     elevation: 17,
   },
   TalentView: {
-    height: scale(40),
-    width: scale(250),
+    height: hp(5.5),
+    width: wp(70),
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: themeWhite,
     borderRadius: scale(5),
   },
   OppoTalentText: {
-    fontSize: scale(18),
+    fontSize: hp(3),
     fontFamily: FontBold,
     color: '#37c0d3',
     fontWeight: 'bold',
   },
   LookingFor: {
-    fontSize: scale(24),
+    fontSize: hp(3.8),
     fontFamily: FontBold,
     fontWeight: 'bold',
     color: 'rgba(255,255,255,0.9)',
@@ -113,7 +113,7 @@ module.exports = {
   },
   HomeLogo: {
     top: scale(150),
-    height: scale(150),
+    height: hp(20),
     width: Dimensions.get('window').width / 2 + scale(80),
     justifyContent: 'center',
     alignItems: 'center',
@@ -123,11 +123,11 @@ module.exports = {
   Homelooking: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: scale(300),
+    marginTop: hp(43),
   },
   Homebut: {
     left: Dimensions.get('window').width / 7,
-    marginTop: scale(360),
+    marginTop: hp(50),
     position: 'absolute',
   },
   HomebutGuest: {
@@ -137,7 +137,7 @@ module.exports = {
   },
   HomeTel: {
     left: Dimensions.get('window').width / 7,
-    marginTop: scale(420),
+    marginTop: hp(57),
     position: 'absolute',
   },
   FontSty: {
@@ -146,7 +146,7 @@ module.exports = {
     // fontFamily: FontRegular
   },
   Size: {
-    height: scale(20),
+    // backgroundColor:"blue",
     // width: scale(50),
     width: wp('20%'),
   },
@@ -169,7 +169,7 @@ module.exports = {
     alignItems:"center",
     borderTopWidth:1,
     borderTopColor:"#fff",
-    height:45,
+    height:hp(5),
   },
   SuggestionView:{
     flexDirection: 'row',
@@ -229,11 +229,11 @@ module.exports = {
     width: wp('100%'),
     justifyContent: 'center',
     alignItems: 'center',
-    height:50,
+    height:hp(6.5),
     // marginTop: hasNotch ? StatusBar.currentHeight + hp(3.5) : hp(1),
   },
   FilterLeft: {
-    left: scale(10),
+    left: scale(5),
     position: 'absolute',
   },
   FilterMainView: {
@@ -269,19 +269,20 @@ module.exports = {
     // elevation: scale(4)
   },
   FilterDropDownInnerView: {
-    height: hp(8),
+    height: hp(7),
     // width: scale(25),
     alignItems: 'center',
     marginLeft: scale(10),
     flexDirection: 'row',
+    // justifyContent:"space-between",
     // marginBottom:20
     flex:1
   },
   DropDownHeader: {
-    fontSize: hp(3.5),
+    fontSize: hp(3.2),
     fontFamily: FontRegular,
     color: '#000',
-    marginLeft: scale(5),
+    marginLeft: hp(1.5),
   },
   FilterMinimumSalary: {
     width: wp('90%'),
@@ -293,13 +294,13 @@ module.exports = {
   },
   FilterMinText: {
     left: scale(15),
-    fontSize: scale(12),
+    fontSize: hp(2),
     fontFamily: FontRegular,
   },
   FilterMaxText: {
     right: scale(20),
     position: 'absolute',
-    fontSize: scale(12),
+    fontSize: hp(2),
     fontFamily: FontRegular,
   },
   FilterMinimumSalarySlider: {
@@ -321,7 +322,7 @@ module.exports = {
     marginLeft: scale(7),
   },
   CheckBoxLabelFont: {
-    fontSize: scale(18),
+    fontSize: hp(2.7),
     fontFamily: FontRegular,
   },
   CheckBoxLabelFontSc: {
@@ -361,7 +362,7 @@ module.exports = {
   ItemMVMainView: {
     flex: 1,
     // backgroundColor: themeWhite,
-    height: scale(180),
+    height: hp(26),
     width: wp(97),
     marginHorizontal: wp(1.5),
     marginVertical: hp(0.5),
@@ -376,7 +377,7 @@ module.exports = {
   },
   ItemMVHeader: {
     fontWeight: 'normal',
-    fontSize: scale(15),
+    fontSize: hp(2.2),
     fontFamily: FontBold,
     color: themeColor,
     fontWeight: 'bold',
@@ -398,8 +399,8 @@ module.exports = {
   },
   ItemMVPlayIcon: {
     marginLeft: scale(5),
-    height: scale(20),
-    width: scale(26),
+    height: hp(3),
+    width: wp(9),
     // borderBottomColor: themeColor,
     // borderBottomWidth: scale(2),
     // borderRadius: scale(5),
@@ -408,8 +409,8 @@ module.exports = {
     alignItems: 'center',
   },
   ItemMVImage: {
-    height: scale(95),
-    width: scale(110),
+    height: hp(14),
+    width: wp(32),
     justifyContent: 'center',
     alignItems: 'center',
     borderWidth: scale(1),
@@ -432,38 +433,40 @@ module.exports = {
   CompanyDetailIcon: {
     marginTop: scale(5),
     marginLeft: scale(12),
-    flexDirection: 'row',alignItems: 'center',height:40
+    flexDirection: 'row',alignItems: 'center',height:hp(4.3)
   },
   ItemDetailLabel: {
     marginLeft: scale(6),
     fontFamily: FontRegular,
-    fontSize: scale(12),
+    fontSize: hp(2),
     // marginTop: scale(-1)
   },
   ItemDetailLabel1: {
     marginLeft: scale(10),
-    fontSize: scale(16),
+    fontSize: hp(2),
     fontFamily: FontRegular,
+    width:wp(72)
     // marginTop: scale(-3),
     // justifyContent: "center"
   },
   CompanyProfileDetailLabel100: {
     // marginTop: scale(-2),
-    fontSize: scale(16),
+    fontSize: hp(2),
     fontFamily: 'Roboto-Regular',
   },
   ItemMVDetailColor: {
     color: themeColor,
     fontFamily: FontRegular,
-    fontSize: scale(12),
+    fontSize: hp(2),
   },
   ItemMVTimeStamp: {
     flexDirection: 'row',
     // marginTop: scale(8),
-    marginTop: scale(20),
+    marginTop: hp(2.5),
     backgroundColor: 'transparent',
     justifyContent:'space-between',
     paddingHorizontal:10,
+    alignItems:"center"
   },
   ItemMVTimeStampView: {
     // left: scale(20),
@@ -480,10 +483,10 @@ module.exports = {
     width: wp('100%'),
     backgroundColor: 'transparent',
     alignItems: 'center',
-    marginTop: hasNotch ? StatusBar.currentHeight : hp(1),
+    marginTop: Platform.OS === 'ios' ? getStatusBarHeight() : hp(1)
   },
   JoblistLogo: {
-    marginLeft: scale(10),
+    marginLeft: hp(1),
     justifyContent: 'center',
     alignItems: 'flex-start',
     // paddingTop: hp(1.5),
@@ -491,11 +494,11 @@ module.exports = {
     // alignSelf: 'center'
   },
   JoblistLogoImageSize: {
-    width: scale(18),
-    height: scale(18),
+    width: hp(2.7),
+    height: hp(2.7),
   },
   JoblistMainViewHeading: {
-    marginLeft: scale(10),
+    marginLeft: hp(1),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -524,7 +527,7 @@ module.exports = {
     left: scale(10),
   },
   JoblistSecondViewHeadingText: {
-    fontSize: scale(20),
+    fontSize: hp(3),
     fontFamily: FontRegular,
     fontWeight: 'normal',
   },
@@ -547,20 +550,20 @@ module.exports = {
     alignItems: 'center',
   },
   CompanyProfileIcon: {
-    height: scale(30),
-    width: scale(30),
+    height: hp(4),
+    width: hp(4),
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   CompanyDetailProfileIcon: {
-    height: scale(30),
-    width: scale(30),
+    height: hp(4),
+    width: hp(4),
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   fliterIcon: {
-    height: scale(30),
-    width: scale(30),
+    height: hp(4.5),
+    width: hp(4.5),
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
@@ -609,25 +612,27 @@ module.exports = {
   },
   CompanyProfileDetail: {
     marginLeft: scale(20),
-    marginTop: scale(5),
+    marginTop: scale(10),
     flexDirection: 'column',
   },
   CompanyLoginOpportunityView: {
-    height: scale(40),
+    height: hp(5.5),
     width: wp('80%'),
     backgroundColor: themeWhite,
     elevation: 17,
   },
   CompanyLoginalentView: {
-    height: scale(40),
+    height: hp(5.5),
     width: wp('80%'),
     alignItems: 'center',
     backgroundColor: themeWhite,
     borderRadius: scale(5),
     marginBottom: scale(5),
+    borderRadius: scale(5),
+    flexDirection: 'row',
   },
   CompanyOppoTalentText: {
-    fontSize: scale(18),
+    fontSize: hp(2.6),
     fontFamily: FontBold,
     color: '#37c0d3',
     fontWeight: 'bold',
@@ -637,21 +642,21 @@ module.exports = {
     flexDirection: 'row',
   },
   CompanyLoginIcon: {
-    height: scale(20),
-    width: scale(20),
+    height: hp(2.7),
+    width: hp(2.7),
     marginLeft: scale(50),
     marginRight: scale(10),
   },
   CompanyLoginAccountText: {
-    bottom: scale(40),
+    bottom: scale(60),
     alignSelf: 'center',
     position: 'absolute',
     textAlign: 'center',
     alignItems: 'center',
   },
   CompanyLoginWithEmailView: {
-    height: scale(30),
-    width: scale(100),
+    height: hp(4.5),
+    width: wp(25),
     alignItems: 'center',
     backgroundColor: themeWhite,
     borderRadius: scale(5),
@@ -680,7 +685,7 @@ module.exports = {
   },
   NativeViewButton: {
     width: wp(84),
-    height: scale(40),
+    height: hp(5),
     borderBottomWidth: scale(1.5),
     marginVertical: wp(1),
     borderBottomColor: '#b0b0b0',
@@ -688,8 +693,8 @@ module.exports = {
     alignItems: 'center',
   },
   NativeSecondView: {
-    height: scale(30),
-    width: scale(30),
+    height: hp(4.2),
+    width: hp(4.2),
     justifyContent: 'center',
     alignItems: 'flex-start',
     marginRight: scale(10),
@@ -703,7 +708,7 @@ module.exports = {
     color: 'black',
     position: 'absolute',
     fontFamily: FontRegular,
-    fontSize: scale(20),
+    fontSize: hp(2.8),
   },
   buttonContainerStyle: {
     width: '93%',
@@ -736,15 +741,15 @@ module.exports = {
     marginRight: scale(10),
   },
   MapViewStyle: {
-    height: wp('65%'),
+    height: hp('30%'),
     width: wp('96%'),
     marginLeft: wp('2%'),
     marginTop: wp('2%'),
   },
   MapSliderText: {
-    marginTop: scale(10),
+    marginTop: hp(1.5),
     width: wp('90%'),
-    height: scale(20),
+    height: hp(3.5),
     marginLeft: wp('5%'),
   },
   MapVerticalList: {
@@ -760,8 +765,8 @@ module.exports = {
     width: scale(40),
   },
   AvtarView: {
-    width: wp(32),
-    height: wp(32),
+    width: wp(29),
+    height: wp(29),
     // backgroundColor: "transparent",
     // borderColor: "#eee",
     // borderWidth: wp(0.7),
@@ -779,7 +784,7 @@ module.exports = {
     paddingBottom: wp(0.5),
     borderColor: '#fff',
     marginTop: wp(1),
-    height: scale(40),
+    height: hp(5.5),
   },
   PersonalInfoStart: {
     alignItems: 'flex-start',
@@ -798,6 +803,7 @@ module.exports = {
     flexDirection: 'column',
     width: wp(85),
     top: hp(3),
+   
   },
   PersonalInfoRowChoose: {
     flexDirection: 'row',
@@ -838,6 +844,7 @@ module.exports = {
   HeaderLayer: {
     backgroundColor: '#ecfbfe',
     width: wp(80),
+    marginLeft:wp(2),
     borderRadius: wp(10),
     height: hp(4.3),
     marginBottom: scale(2),
@@ -870,19 +877,25 @@ module.exports = {
   },
   PersonalCompanyTextInput: {
     width: wp(43),
-    alignItems: 'flex-end',
-    right: wp(-1.5),
-    marginTop: scale(-5),
+    alignItems: 'center',
+    // justifyContent:"flex-start",
+    right: wp(-5),
+    marginTop: scale(0),
+    // backgroundColor:"blue",
+    height:hp(5)
+
   },
   PersonalCompanystyleInput: {
     width: '100%',
-    alignSelf: 'center',
+    marginTop:scale(3),
+    height:hp(5),
+    // alignSelf: 'center',
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignContent: 'center',
     borderBottomColor: '#fff',
     borderBottomWidth: 0,
     borderRadius: scale(5),
-    backgroundColor: 'transparent',
+    // backgroundColor: 'green',
   },
   TextInputAddExp: {
     height: scale(40),
@@ -1007,8 +1020,8 @@ module.exports = {
     flexDirection: 'column',
   },
   postedJoblist: {
-    width: wp(100) / 3 - scale(7),
-    height: wp(100) / 3 - scale(7),
+    width: wp(25),
+    height: wp(25),
     borderRadius: scale(20),
     borderColor: 'white',
     overflow: 'hidden',

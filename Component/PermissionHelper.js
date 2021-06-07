@@ -21,7 +21,11 @@ const requestLocationPermission = async () => {
 };
 
 const isLocationPermissionGranted = () => {
+    try{
     return PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+} catch (err) {
+    notifyError(err);
+}
 };
 
 

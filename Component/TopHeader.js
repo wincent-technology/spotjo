@@ -1,10 +1,13 @@
 import React from 'react'
-import {Listed,detailed,sort,filter, themeColor,FontRegular} from '../Constant'
+import {Listed,detailed,sort,filter,detailedgray, themeColor,FontRegular} from '../Constant'
 import styles from '../src/Style'
 import { scale } from '../src/Util'
 import { Text, View, Image,TouchableWithoutFeedback } from 'react-native'
 import Texting from '../Constant/Text'
-
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
 const TopHeader = ({data, ...props}) => (
 <View style={styles.JoblistSecondViewHeading}>
             <View style={[styles.JoblistSecondViewHeadingResult,{flexDirection:"row"}]}>
@@ -14,28 +17,29 @@ const TopHeader = ({data, ...props}) => (
               </Text>
             </View>
             <View style={styles.JobListUpperButtonView}>
-              <View style={{right:20, flexDirection: 'row'}}>
-                <TouchableWithoutFeedback onPress={props.Listed}>
+              <View style={{right:wp(3), flexDirection: 'row'}}>
+                <TouchableWithoutFeedback onPress={props.detailed}>
                   <View style={styles.JobListUpperButtonIcon}>
                     <Image
                       source={Listed}
                       style={{
-                        height: scale(26),
-                        width: scale(26),
+                        height:hp(4),
+                        width:hp(4),
                         marginTop: scale(2),
                         marginRight: scale(10),
                       }}
+                      tintColor={props.detailedTint ? themeColor : 'gray'  }
                       resizeMode={'contain'}
                     />
                   </View>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={props.detailed}>
+                <TouchableWithoutFeedback onPress={props.Listed}>
                   <View style={styles.JobListUpperButtonIcon}>
                     <Image
-                      source={detailed}
+                      source={props.detailedTint ? detailedgray :  detailed  }
                       style={{
-                        height: scale(26),
-                        width: scale(26),
+                        height:hp(4),
+                        width:hp(4),
                         // marginTop: scale(2),
                       }}
                       resizeMode={'contain'}
@@ -60,7 +64,7 @@ const TopHeader = ({data, ...props}) => (
                     tintColor={props.srtTint ? themeColor : 'gray'}
                     resizeMode={'contain'}
                   />
-                  <Texting style={[styles.JoblistUpperButton],{fontSize: scale(19),
+                  <Texting style={[styles.JoblistUpperButton],{fontSize: hp(3),
     fontFamily: FontRegular,
     marginLeft: scale(2),color:props.srtTint ? themeColor:'gray'}} text='Sort'/>
                 </View>
@@ -77,7 +81,7 @@ const TopHeader = ({data, ...props}) => (
                     }}
                     resizeMode={'contain'}
                   />
-                  <Texting style={[styles.JoblistUpperButton],{fontSize: scale(19),
+                  <Texting style={[styles.JoblistUpperButton],{fontSize: hp(3),
     fontFamily: FontRegular,
     marginLeft: scale(2),color:props.filTint ? themeColor:'gray'}} text='Filter'/>
                 </View>

@@ -81,6 +81,7 @@ var mg = []
 var items = global.language == 'english' ? true : false
 
 
+
 class EditEducation extends Component {
   constructor(props) {
     super(props);
@@ -245,26 +246,51 @@ Unis = (text) => {
 
 renderItem = (item, index) => {
     return (
-        <View style={{
-            width: wp(80),
-            marginLeft: scale(34),
-        }}>
-        <TouchableWithoutFeedback onPress={() => this.choose(item)}>
-        <View style={{
+      <View
+      style={{
+        width: 'auto',
+        flexWrap: 'wrap',
+        flexDirection: 'row',
+        margin: 2,
+      }}>
+      <TouchableWithoutFeedback
+        onPress={() =>this.choose(item, index)}>
+        <View
+          style={{
+            alignItems: 'flex-start',
+            // borderWidth: item.cell != '' ? 1 : 0,
+            borderColor: themeColor,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+            width: 'auto',
+            backgroundColor: themeColor,
+            borderColor:themeColor,
             flexDirection: 'row',
-            alignItems: "center"
-        }}>
-        <View style={{
-            alignItems: "flex-start",
-            width: wp(68)
-        }}><Text style={{
-            fontWeight: "bold",
-            fontSize: scale(18),
-            color: themeColor
-        }}>{items ? item.english : item.german}</Text></View>
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
+          <Text
+            style={{
+              fontWeight: 'bold',
+              fontSize: scale(18),
+              color: themeWhite,
+            }}>
+            {global.language == 'english' ? item.english : item.german}
+          </Text>
+          {item.right && (
+            <View
+              style={{
+                // top: scale(-7),
+                left: scale(5),
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+              {library('highlight-off', scale(17), themeColor)}
+            </View>
+          )}
         </View>
-        </TouchableWithoutFeedback>
-        </View>
+      </TouchableWithoutFeedback>
+    </View>
     )
 }
 
@@ -417,7 +443,7 @@ renderItem = (item, index) => {
                     show: text != '' ? true : false
                 })
                 this.cheks(text)
-            }} suggesion={suggesion && suggesion} onNext={()=> {
+            }} suggesion={suggesion && suggesion} show={this.state.show} onNext={()=> {
               this.setState({
                 edu:false,
                 uni:true
@@ -485,7 +511,13 @@ renderItem = (item, index) => {
                 top: scale(260),
                 marginHorizontal:wp(7)
             }}>
-            <ListOfChoosed keyboardShouldPersistTaps='always' data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU} renderItem={({item, index}) => this.renderItem(item, index)} />
+            <ListOfChoosed  contentContainerStyle={{
+                      flexGrow: 1,
+                      justifyContent: 'flex-start',
+                      paddingLeft: 30,
+                      flexDirection: 'row',
+                      flexWrap: 'wrap',
+                    }} keyboardShouldPersistTaps='always' data = {this.state.edu ? this.state.dataCheck : this.state.dataCheckU} renderItem={({item, index}) => this.renderItem(item, index)} />
             </View> }
           <View
                 style={{

@@ -76,7 +76,7 @@ class JobListCompany extends PureComponent {
             if (res['data']['status']) {
               //            //will get data in this    res['data']['result']
               console.log('data', res['data']['result']);
-              for (let i in res['data']['result']) {
+              for (let i=0;i<res['data']['result'].length;i++) {
                 if (res['data']['result'][i]['status'] == 'Selected') {
                   Selected.push(res['data']['result'][i]);
                   InterView.push(res['data']['result'][i]);

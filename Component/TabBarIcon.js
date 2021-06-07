@@ -6,6 +6,7 @@ import {
   withNavigationFocus,
   NavigationEvents
 } from 'react-navigation';
+import { heightPercentageToDP as hp} from "./responsive-ratio";
 
 class TabBarIcon extends React.Component {
 
@@ -14,7 +15,7 @@ class TabBarIcon extends React.Component {
       icon,
       tintColor,
     } = this.props;
-    console.log('icon',this.props);
+    // console.log('icon',this.props);
     const numberWrap = (number = 0) => (
       number != 0 && <View style={styles.numberWrap}>
         <Text style={styles.number}>{number}</Text>
@@ -40,23 +41,23 @@ class TabBarIcon extends React.Component {
 
 const styles = StyleSheet.create({
   icon: {
-    width: 27,
-    height: 27,
+    width: hp(3.7),
+    height: hp(3.7),
     resizeMode: "contain",
   },
   numberWrap: {
     // ...Styles.Common.ColumnCenter,
     position: "absolute",
-    top: -10,
-    right: -10,
-    height: 18,
-    minWidth: 18,
+    top: hp(-1.5),
+    right: hp(-1.5),
+    height: hp(2.5),
+    minWidth: hp(2.5),
     backgroundColor: 'tomato',
-    borderRadius: 9,alignItems:"center",justifyContent:"center"
+    borderRadius: hp(1.3),alignItems:"center",justifyContent:"center"
   },
   number: {
     color: "white",
-    fontSize: 12,
+    fontSize: hp(2),
     // marginLeft: 3,
     // marginRight: 3,
   },

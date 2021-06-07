@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { SafeAreaView, Dimensions, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback } from 'react-native';
+import { SafeAreaView, Dimensions, View, Text, StatusBar, ImageBackground, Image, TouchableWithoutFeedback,ActivityIndicator } from 'react-native';
 import { withNavigationFocus } from 'react-navigation';
 import styles from '../src/Style';
 import { scale, snack } from '../src/Util';
 import CustomInput from '../Component/TextInput'
-import { Background, url } from '../Constant/index'
+import { Background, url,themeColor } from '../Constant/index'
 import http from '../api';
 import AsyncStorage from '@react-native-community/async-storage';
 import Geolocation from '@react-native-community/geolocation';
@@ -19,9 +19,11 @@ class LoginWithEmail extends Component {
         this.state = {
             email: '',
             password: '',
-            pass:true
+            pass:true,
+            loading:false
         };
     }
+
 
 
     permission = async () => {
@@ -39,16 +41,26 @@ class LoginWithEmail extends Component {
       }
       
     onLogin = async () => {
-    this.permission();
+    this.setState({loading:true})
+
+    // this.permission();
 
         const {email, password} = this.state;
         try {
+          const em = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          // var decimal=  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,15}$/;
+          if(em.test(email))
+          {
             if (email.length > 0 && password.length > 0) {
                 http.POST('api/user/login', {
                     email: email,
                     password: password
                 }).then((res) => {
                     if (res['data']['status']) {
+                      AsyncStorage.setItem(
+                        'token',
+                        JSON.stringify(res['data']['token']),
+                      );
                         console.log('responce user', res['data']['result'])
                         global.Id = res['data']['result']['id'];
                         // will get data in this    res['data']['result'] 
@@ -84,12 +96,19 @@ class LoginWithEmail extends Component {
                         snack(res['data']['message'])
 
                     }
-                }, err => snack(err['message']))
+                }, err => {snack(err['message'])
+              this.setState({loading:false})},)
             } else {
+      this.setState({loading:false})
                 snack('Required Email Password')
 
             }
+          } else {
+            this.setState({loading:false})
+            alert('please enter proper email')
+          }
         } catch ( error ) {
+      this.setState({loading:false})
             snack(error)
 
         }
@@ -152,10 +171,9 @@ class LoginWithEmail extends Component {
             <TouchableWithoutFeedback style={styles.CompanyLoginOpportunityView} onPress={this.onLogin}><View  style={[styles.CompanyLoginWithEmailView, {
                 borderRadius: scale(5),
                 justifyContent: "center",
-            }]}><View style={{
-                // marginLeft: scale(-45),
-                // marginRight: scale(10)
-            }}><Texting style={styles.CompanyOppoTalentText} text='Login'/></View></View></TouchableWithoutFeedback>
+            }]}><View>
+            {!this.state.loading ? <Texting style={styles.CompanyOppoTalentText} text='Login'/> : <ActivityIndicator size={'small'} color={themeColor} />}
+            </View></View></TouchableWithoutFeedback>
         </View>
         <View style={styles.CompanyLoginAccountText}><Texting
               style={[

@@ -15,7 +15,7 @@ import { scale, snack } from '../src/Util';
 import { left, library, icon, play, leftVid } from '../src/IconManager';
 import CustomInput from '../Component/Input'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
-import { Background } from '../Constant/index'
+import { Background, FontBold } from '../Constant/index'
 import http from '../api'
 import Texting from '../Constant/Text'
 class EmailSend extends Component {
@@ -73,22 +73,22 @@ class EmailSend extends Component {
             resizeMode={'stretch'}>
         <StatusBar hidden ={true}/>
          <View style={[{
-                top: scale(30)
+                top: hp(5)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={{
-                height: scale(150),
+                height: hp(20),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }}/></View>
            <Texting style={[styles.LookingFor, {
                 textAlign: "center",
                 width: wp('80%'),
-                fontSize: scale(17)
-            }]} tet='forget_Pass_Detail'/>
+                fontSize: hp(2.7)
+            }]} text='forget_Pass_Detail'/>
             </View>
             <View style={{
                 // left: Dimensions.get('window').width / 7,
-                marginTop: hp(50),
+                marginTop: hp(45),
                 // flex: 1,
                 position: 'absolute',
                 justifyContent: "center",
@@ -108,17 +108,19 @@ class EmailSend extends Component {
                 width: wp(100)
             }}
             inputStyle={{
-                textAlign: "center"
+                textAlign: "center" ,
+                fontSize:hp(2.7),
+                fontFamily:FontBold
             }}
             />
       <View style={{
-                top: scale(150),
+                top: hp(20),
                 right: wp('7%'),
                 position: "absolute"
             }}><TouchableWithoutFeedback style={styles.Size} onPress={this.Reset}><View  style={[styles.Size, {
                 alignItems: 'flex-end'
             }]}><Texting style={[{
-                fontSize: scale(20),
+                fontSize: hp(2.9),
             }, styles.FontSty]} text='Send'/></View></TouchableWithoutFeedback></View>
         </View>
        </ImageBackground></SafeAreaView>

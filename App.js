@@ -9,22 +9,17 @@
 //   console.log = () => {};
 // }
 
-import React, {
-  Component
-} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,Button,
-  Text,
-  StatusBar,
-  AppState,
-} from 'react-native';
+
+
+import React, {Component} from 'react';
+import {View} from 'react-native';
 import Routes from './Constant/Navigation';
-import LanguageProvider, { LanguageContext } from './Constant/LanguageContext';
-global.Job_Title = '';
-global.Company = '';
+import LanguageProvider, {LanguageContext} from './Constant/LanguageContext';
+
+global.Job_Title = [];
+global.JobID= null
+global.region = {};
+global.Company = [];
 global.Branch = '';
 global.Anywhere = false;
 global.FullTime = false;
@@ -68,8 +63,8 @@ global.UserLanguage = '';
 global.Qualification = '';
 global.CompanyExp = '';
 global.ig = [];
-global.let;
-global.long;
+global.let = 51.1657;
+global.long = 10.4515;
 global.all = [];
 global.minYear;
 global.maxYear;
@@ -77,8 +72,14 @@ global.Service;
 global.role;
 global.item;
 global.Job_Location = [];
-global.msgUnreadTotal=0
-global.language = 'english'
+global.msgUnreadTotal = 0;
+global.language = 'english';
+global.Role = []
+global.CompanyGuest = []
+global.objective = {}
+global.Favorite_Location = []
+global.reset = false;
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -88,31 +89,26 @@ export default class App extends Component {
       // isLoaded: false
     };
   }
-  ComponentDidMount() {}
-
 
   changeLanguage = (language, data) => () => {
     /**
      * Confused? It is just a simple function which returns another function
      * I use this pattern to minimize the use of anonymous arrow functions.
-     * Why? For better performance as they are made on every render.  
+     * Why? For better performance as they are made on every render.
      */
     data.changeLanguage(language);
-    global.language = language
-
-  }
-
-
+    global.language = language;
+  };
 
   render() {
     return (
       <LanguageProvider>
-      <View
-        style={{
-          flex: 1,
-        }}>
-        <Routes />
-      </View>
+        <View
+          style={{
+            flex: 1,
+          }}>
+          <Routes />
+        </View>
       </LanguageProvider>
     );
   }

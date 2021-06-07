@@ -57,7 +57,9 @@ import CustomInput from '../Component/Input';
 import ListOfChoosed from '../Component/ListOfChoosed';
 var mg = [];
 import Texting from '../Constant/Text'
-
+import TimeAgo from '../Component/TimeAgo'
+import Modal from 'react-native-modal'
+import WebRegisterCompanyCheck from '../Component/WebRegisterCompanyCheck'
 
 class Chat extends React.Component {
   static navigationOptions = {
@@ -75,7 +77,7 @@ class Chat extends React.Component {
             show: false,
             add:false,
             suggesion: [],
-            dataChecks:[]
+            dataChecks:[],role:false
           };
           this.arrayholder = [];
 
@@ -103,7 +105,7 @@ class Chat extends React.Component {
         this.props.navigation.navigate('Filter')
     }
     Back = () => {
-        this.props.navigation.navigate('ComEdit')
+        this.props.navigation.navigate('UserProfile')
     }
     createJob = () => {
         console.log('hey');
@@ -255,7 +257,7 @@ class Chat extends React.Component {
     renderItems = (item) => {
       console.log('item',item);
        return <TouchableOpacity
-        onPress={() => this.props.navigation.navigate('ChatOne', { thread: item })}
+        onPress={() => global.role == 'Super Admin' ? this.props.navigation.navigate('ChatOne', { thread: item }) : this.setState({role:true})}
       >
        <View style={{marginTop:5,justifyContent:"center",alignItems:"center"}}>
         <View style={{flexDirection:'row',justifyContent:"center",alignItems:"center",width:wp(100),padding:7,}}>
@@ -278,9 +280,9 @@ class Chat extends React.Component {
             <Text style={{color:item.isBlock == 1 ? 'red' : 'gray'}}>
                 {item.isBlock == 1 ? 'Blocked' : 'Private'}
             </Text>
-            <Text style={{color:themeColor,fontSize:14,fontFamily:FontBold}}>
-                {new Date(item.updatedAt).toDateString()}
-            </Text>
+            <TimeAgo style={{
+                  color:themeColor,fontSize:14,fontFamily:FontBold,
+                }} time={item.createdDate}/>
             </View>
             <Text style={{color:themeColor,fontSize:16,fontFamily:FontBold}}>
                 {item.firstName} {item.lastName}
@@ -340,14 +342,15 @@ class Chat extends React.Component {
        
 
         return (
-            <View style={styles.backGround}>
+            <View style={styles.backGround} onStartShouldSetResponder={() => global.role != 'Super Admin' && this.setState({role:true})}>
                 <StatusBar hidden={false} backgroundColor={'#eee'} />
                 <ImageBackground style={styles.ImageBlue}
             source={Background}
             tintColor={themeWhite}
             resizeMode={'stretch'}>
         <NavigationEvents onDidFocus={this.checking}/>
-                    <NavigationHead centerComponent='Messages' color ={true} rightComponent='edit' onPress={() => this.Back()} onExit={() => this.FindChat()} />
+        <WebRegisterCompanyCheck onPress={()=> this.setState({role:false})} role={this.state.role} />
+                    <NavigationHead centerComponent='Messages' color ={true} rightComponent='edit' onPress={() => this.Back()} onExit={() => global.role == 'Super Admin' ? this.FindChat() : this.setState({role:true})} />
                     <View style={{width:"100%",paddingTop:5,backgroundColor:"#eeee",borderBottomWidth:1,
                     borderBottomColor:'#eee',paddingBottom:3,justifyContent:"center",alignItems:"center",flexDirection:"row"}}>
                             <Text>

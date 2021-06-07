@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Image, Dimensions, Text, StyleSheet, TouchableWithoutFeedback } from 'react-native'
 import { scale, secondsToTime } from '../src/Util'
-import { widthPercentageToDP as wp, heightPercentageToDP as hp } from '../Component/responsive-ratio';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp, } from '../Component/responsive-ratio';
 import { StarRating, NavigationHead, DropDownItem } from '../Component/ViewManager'
 // import { Rating } from '../Component/ViewManager.js'
 // import { left, library, icon, play, leftVid } from './IconManager';
@@ -9,7 +9,7 @@ import { themeColor, themeWhite,blanks,Fulls } from '../Constant/index'
 // import styles from './Style'
 const {height, width} = Dimensions.get('window')
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
-const Items = global.language =='english' ? true : false
+let  Items = global.language =='english' ? true : false
 
 import { FontBold, FontRegular } from '../Constant/index'
 
@@ -26,31 +26,33 @@ class Itemskill extends Component {
                 justifyContent: "space-around",
                 marginBottom: scale(2),
                 marginTop: scale(1.5),
-                height: scale(15),
+                // height: scale(15),
                 // paddingHorizontal:5,
                 alignItems: "center"
             }}><View style={{
-                height: scale(20),
+                height: 'auto',
                 // width: scale(20),
                 justifyContent: "center",
                 alignItems: "center",
                 marginTop: scale(-2)
-            }}><Icon2 name={'highlight-off'} size={scale(15)} color={themeColor} onPress={() => {
+            }}><Icon2 name={'highlight-off'} size={hp(2.5)} color={themeColor} onPress={() => {
                 this.props.remove(this.props.item.cell, this.props.index)
             }}/></View><View style={{
                 alignItems: "flex-start",
                 justifyContent: "center",
-                width: '45%',
+                width: '50%',
+                flexWrap:'wrap',
+                height:"auto"
                 // marginLeft: '3%',
                 // marginTop: scale(2)
 
             }}><Text
             style={{
-                fontSize: scale(16),
+                fontSize: hp(2.5),
                 color: themeColor,
                 fontFamily: 'Roboto-Regular',
-            }} numberOfLines={1}>
-                      {Items ? this.props.item.cell.english : this.props.item.cell.german}
+            }} >
+                      {global.language == 'english' ? this.props.item.cell.english : this.props.item.cell.german}
                     </Text></View><View style={{
                 alignItems: "flex-end",
                 justifyContent: "center",
@@ -65,7 +67,7 @@ class Itemskill extends Component {
                                 iconSet={'MaterialIcons'}
                                 disabled={false}
                                 maxStars={5}
-                                starSize={scale(20)}
+                                starSize={hp(3)}
                                 rating={this.props.item.rating}
                                 selectedStar={(rating) =>
                                   this.props.handleChange(rating, this.props.index)

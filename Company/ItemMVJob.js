@@ -42,9 +42,9 @@ const {
     width
 } = Dimensions.get('window')
 import LinearGradient from 'react-native-linear-gradient'
-import GestureRecognizer, {
-    swipeDirections
-} from 'react-native-swipe-gestures';
+// import GestureRecognizer, {
+//     swipeDirections
+// } from 'react-native-swipe-gestures';
 
 class ItemMVJob extends PureComponent {
     // title, href, total_time, total_listen, image

@@ -159,8 +159,7 @@ class VideoPlayer extends Component {
           onFullScreen={this.state.isFullScreen}
           source={{
             uri:
-              this.state.data ||
-              'https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4',
+              this.state.data || this.props.navigation.state.params.vid
           }}
           style={styles.mediaPlayer}
           volume={10}

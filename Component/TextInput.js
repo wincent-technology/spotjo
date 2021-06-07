@@ -16,7 +16,7 @@ export default CustomInput = (props) => <Input
         marginVertical: scale(-5),
     }, props.containerStyle]}
     inputContainerStyle={[{
-        height: scale(40),
+        height: hp(5.5),
         width: '92%',
         alignSelf: 'center',
         borderBottomColor: themeWhite,
@@ -27,7 +27,7 @@ export default CustomInput = (props) => <Input
     }
         , props.inputContainerStyle]}
     inputStyle={[{
-        fontSize: scale(16),
+        fontSize: hp(2.4),
         color: themeWhite
     }, props.inputStyle]}
     keyboardType = {props.keyboardType ? props.keyboardType : 'default'  }
@@ -64,7 +64,7 @@ export default CustomInput = (props) => <Input
         marginRight: props.pass  ? 0 : 0,
     }}>
      {props.passs && <View onStartShouldSetResponder={props.onPress}>
-                {library(props.pass ? 'visibility-off' :'visibility',20,'#fff')}</View>
+                {library(props.pass ? 'visibility-off' :'visibility',hp(3),'#fff')}</View>
     }
     </View>
     }

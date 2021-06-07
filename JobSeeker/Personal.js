@@ -24,6 +24,7 @@ import {
 } from 'react-native';
 import {
     withNavigationFocus
+
 } from 'react-navigation';
 import styles from '../src/Style'
 import {
@@ -46,11 +47,11 @@ import BackNext from '../Component/BackNext'
 
 const InputText = ({...props}) => {
     console.log(props)
-    return <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center",borderBottomWidth:1,borderBottomColor:"#fff"}}>
+    return <View style={{flexDirection:"row",justifyContent:"space-between",alignItems:"center",borderBottomWidth:1,borderBottomColor:"#fff",height:hp(7)}}>
                 <View style={{ alignItems: 'baseline'}}>
                 <Text style={[styles.PersonalInfoText, {
             fontFamily: FontBold,
-            fontSize: scale(18),
+            fontSize: hp(2.7),
             }]}>{props.Text} </Text></View>
             <View>
             <TextInput
@@ -61,10 +62,11 @@ const InputText = ({...props}) => {
             placeholderTextColor={'rgba(255,255,255,0.5)'}
             style={[{ flex: 1,width:'auto',
             justifyContent:"center",
+            height:'auto',
                 // alignItems: 'stretch',
             fontFamily: FontRegular,
             fontWeight: '700',
-            fontSize: scale(18),
+            fontSize: hp(2.5),
             borderColor: 'black'},styles.PersonalInfoText]}
             {...props}
             /></View>
@@ -177,11 +179,11 @@ class Personal extends Component {
             resizeMode={'stretch'}>
                 <StatusBar hidden={true} />
                 <View style={[{
-                top: scale(30)
+                top: hp(5)
             }, styles.CenterLogo]}><View><Image source={require('../Img/logo-spotjo.png')}
             resizeMode={'contain'}
             style={{
-                height: scale(150),
+                height: hp(20),
                 width: Dimensions.get('window').width / 2 + scale(80),
             }} /></View>
                         <ImageBackground style={styles.AvtarView} source={backgroundCorner} resizeMode={'contain'}>
@@ -189,15 +191,17 @@ class Personal extends Component {
                         <Image source={{
                 uri: global.UserProfile
             }} style={{
-                height: wp('29'),
-                width: wp('29'),
+                height: wp(26),
+                width: wp(26),
+                borderRadius:wp(2)
 
             // backgroundColor: "transparent"
             }} resizeMode={'cover'}/></TouchableWithoutFeedback></ImageBackground>
                         <View style={styles.PersonalInfo}>
                             <ScrollView style={{
                 alignSelf: "stretch",
-                height: hp(35)
+                height: 'auto'
+
             }}>
             <InputText Text ={'First Name'} value={firstName} textChange = {(text) => this.setState({
                 firstName: text
@@ -228,7 +232,7 @@ class Personal extends Component {
                         </ScrollView>
                         </View>
                     </View>
-                    <BackNext onBack={this.back} onNext={this.next} />
+                    <BackNext onBack={this.back} onNext={this.next} show={true}/>
                 </ImageBackground></SafeAreaView>
         );
     }

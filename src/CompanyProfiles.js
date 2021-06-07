@@ -54,6 +54,9 @@ class CompanyProfiles extends Component {
     };
   }
 
+  componentDidMount(){
+    this.props.navigation.navigate('JobLogin')
+  }
   checking = () => {
     // console.log('hey')
     this.props.navigation.navigate('LoginFirst')
@@ -70,7 +73,7 @@ class CompanyProfiles extends Component {
     const {data} = this.state;
     return (
       <SafeAreaView style={styles.backGround}>
-        <NavigationEvents onDidFocus={this.checking} />
+        {/* <NavigationEvents onDidFocus={this.checking} /> */}
         <ImageBackground
         tintColor={themeWhite}
           style={styles.ImageBlue}
@@ -79,7 +82,7 @@ class CompanyProfiles extends Component {
           {/* <NavigationHeader onPress={() => this.Back()} text={data.title} /> */}
          {/* <TopHeader data={data && data.length} /> */}
           <View style={[styles.CompanyProfileMainImage1],{flex:1}}>
-          <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('LoginFirst')}><Animatable.View
+          <TouchableWithoutFeedback onPress={()=> this.props.navigation.navigate('JobLogin')}><Animatable.View
                 style={{
                   justifyContent: 'center',
                   alignItems: 'center',

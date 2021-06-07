@@ -36,7 +36,7 @@ return (
         }}
         /></View>
         <View style={{justifyContent:"space-between",alignItems:"flex-end",marginHorizontal:wp(8)}}>
-        <View style={{flexDirection:'row',width:props.width ? wp(80) : wp(84),justifyContent:"space-between",marginBottom:10,}}>
+        {!props.show && <View style={{flexDirection:'row',width:props.width ? wp(80) : wp(84),justifyContent:"space-between",marginBottom:10,}}>
                 <View
                         style={{
                           backgroundColor: themeWhite,
@@ -135,8 +135,8 @@ return (
                           />
                         </View>
                       </View>
-                </View>
-                <View style={{flexDirection:"row"}}>
+                </View>}
+                {!props.show && <View style={{flexDirection:"row"}}>
               <TouchableOpacity 
               style={{borderWidth:1,paddingVertical:7,marginRight:10,paddingHorizontal:15,borderRadius:20,borderColor:"#333",justifyContent:"center",alignItems:"center"}} 
               onPress={onBack}>
@@ -161,7 +161,7 @@ return (
                   Next
                 </Text>
               </TouchableOpacity>
-              </View>
+              </View>}
             </View>
             <View style={{
                 alignItems: "flex-start",

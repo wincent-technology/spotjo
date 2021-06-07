@@ -1,100 +1,151 @@
-import React, {
-    Component
-  } from 'react';
-  import {
-    StatusBar,
-    TextInput,
-    View,
-  } from 'react-native';
-  import {
-    withNavigationFocus
-  } from 'react-navigation';
-  import {
-    scale
-  } from '../src/Util';
-  import {
-    widthPercentageToDP as wp,
-    heightPercentageToDP as hp,
-  } from '../Component/responsive-ratio';
-  import {
-    themeWhite,
-  } from '../Constant/index';
-  
-  import Texting from '../Constant/Text'
-  class JobTaskRequirement extends Component {
+import React, { Component } from 'react';
+import { View, StyleSheet, Keyboard
+, TouchableWithoutFeedback, Text
+, KeyboardAvoidingView } from 'react-native';
+
+
+import  CNRichTextEditor , { CNToolbar,convertToHtmlString, getInitialObject , getDefaultStyles } from "react-native-cn-richtext-editor";
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from '../Component/responsive-ratio';
+import Texting from '../Constant/Text'
+import {
+  themeWhite,
+} from '../Constant/index';
+
+const defaultStyles = getDefaultStyles();
+
+class JobTaskRequirement extends Component {
+ 
     constructor(props) {
-      super(props);
-  
-      this.state = {
-        name: '',
-        requiremnt: '',
-      };
+        super(props);
+        
+        this.state = {
+            selectedTag : 'body',
+            selectedStyles : [],
+            value: [getInitialObject()]
+        };
+
+        this.editor = null;
     }
-  
-    handleChange1 = (text) => {
-      console.log('textArea', text);
-      this.setState({
-        requiremnt: text,
-      });
-      global.Task_Description_Req = this.state.requiremnt;
-    };
-  
-    onKeyPress = (e) => {
-      if (e.nativeEvent.key == "Enter")
-        {
-            
-         
-        }
-  }
-  
+
+
+componentDidMount () {
+  this.editor.applyToolbar('ul');
+
+}
+    onStyleKeyPress = (toolType) => {
+      console.log('toolt',toolType)
+        this.editor.applyToolbar(toolType);
+    }
+
+    onSelectedTagChanged = (tag) => {
+        this.setState({
+            selectedTag: tag
+        })
+    }
+
+    onSelectedStyleChanged = (styles) => { 
+        this.setState({
+            selectedStyles: styles,
+        })
+    }
+
+    onValueChanged = (value) => {
+      console.log('valule',value)
+        this.setState({
+            value: value
+        });
+
+        global.Task_Description_Req = this.state.value;
+    console.log('glboal.rask',convertToHtmlString(global.Task_Description))
+
+
+    }
+
+
     render() {
-      return (
-        <>
-              <StatusBar hidden={false} backgroundColor={themeWhite} />
-          <View
+        return (
+            <KeyboardAvoidingView 
+            behavior="padding" 
+            enabled
+            keyboardVerticalOffset={0}
             style={{
-              justifyContent: 'center',
+        // height:hp(70),
+
+                // marginTop: 15,
+                // backgroundColor:'#eee',
+                // flexDirection: 'column', 
+                // justifyContent: 'flex-end', 
+            }}
+            ><View
+            style={{
               alignItems: 'center',
+              width: wp(96),
+              marginTop: hp(3),
+              marginBottom: hp(1),
             }}>
-            <View
+            <Texting
               style={{
-                alignItems: 'center',
-                width: wp(96),
-                marginTop: hp(4),
-                marginBottom: hp(2),
-              }}>
-              <Texting
-                style={{
-                  fontSize: scale(18),
-                  fontFamily: 'Roboto-Bold',
-                  color: '#333',
-                }} text='Task_Requirements'/>
-                
-            </View>
-            <View
-              style={{
-                marginTop: hp(0),
-              }}>
-              <TextInput
-                multiline={true}
-                numberOfLines={10}
-                placeholder= {global.language == 'english' ? "Requirements" : 'Requirements'}
-                style={{
-                  height: hp(60),
-                  width: wp(80),
-                  marginBottom: 1,
-                  backgroundColor: '#eee',
-                  alignSelf: 'center',
-                  fontWeight: 'bold',
-                  textAlignVertical: 'top',
-                }}
-                onChangeText={(text) => this.handleChange1(text)}
-              />
-            </View>
-          </View>
-        </>
-      );
+                fontSize: hp(2.7),
+                fontFamily: 'Roboto-Bold',
+                color: '#333',
+              }} text='Task_Requirements'/>
+                        </View>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss} >             
+                    <View style={styles.main}>
+                        <CNRichTextEditor                   
+                            ref={input => this.editor = input}
+                            onSelectedTagChanged={this.onSelectedTagChanged}
+                            onSelectedStyleChanged={this.onSelectedStyleChanged}
+                            value={this.state.value}
+                            style={{ backgroundColor : '#eee',
+                                  // height:heightPercentageToDP(50),
+                            }}
+                            onFocus={() => this.editor.applyToolbar('ul')}
+                            styleList={defaultStyles}
+                            onValueChanged={this.onValueChanged}
+                        />                        
+                    </View>
+                </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+        );
     }
-  }
-  
-  export default withNavigationFocus(JobTaskRequirement);
+
+}
+
+var styles = StyleSheet.create({
+    main: {
+        // flex: 1,
+        marginTop: 10,
+        paddingLeft: 30,
+        paddingRight: 30,
+        paddingBottom: 1,
+        height:hp(60),
+        alignItems: 'stretch',
+    },
+    toolbarButton: {
+        fontSize: 20,
+        width: 28,
+        height: 28,
+        textAlign: 'center'
+    },
+    italicButton: {
+        fontStyle: 'italic'
+    },
+    boldButton: {
+        fontWeight: 'bold'
+    },
+    underlineButton: {
+        textDecorationLine: 'underline'
+    },
+    lineThroughButton: {
+        textDecorationLine: 'line-through'
+    },
+});
+
+
+export default JobTaskRequirement;
+
+

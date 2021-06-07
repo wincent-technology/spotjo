@@ -10,19 +10,24 @@ import React, {
     Component
 } from 'react';
 import {
+    SafeAreaView,
     Dimensions,
+    StyleSheet,
+    Platform,
+    ActivityIndicator,
     View,
     Text,
-    SafeAreaView,
     StatusBar,
-    ActivityIndicator,
     ImageBackground,
-    Image,Alert,
+    ScrollView,
     PermissionsAndroid,
-    TouchableOpacity
+    Image,
+    Alert,
+    TouchableOpacity,
 } from 'react-native';
 import {
     withNavigationFocus
+
 } from 'react-navigation';
 import styles from '../src/Style';
 import {
@@ -40,15 +45,16 @@ import CustomButton from '../Component/Button'
 import {
     themeColor,
     Background,
-    url
-} from '../Constant/index'
-import ImagePicker from 'react-native-image-picker';
+    url,FontRegular
+} from '../Constant/index';
 import http from '../api'
 import RNFS from 'react-native-fs';
 import AsyncStorage from '@react-native-community/async-storage';
 import Video from 'react-native-video';
 import BackNext from '../Component/BackNext'
-
+import ImagePicker from 'react-native-image-picker';
+import Texting from '../Constant/Text'
+import Modal from "react-native-modal";
 
 
 class JobVideoResume extends Component {
@@ -56,7 +62,9 @@ class JobVideoResume extends Component {
         super(props);
         this.state = {
             show: false,
-            letdue: 0,flag:false
+            letdue: 0,flag:false,
+            changeImage:false
+
 
         }
         // this.state = {};
@@ -93,6 +101,7 @@ class JobVideoResume extends Component {
 
         }
     }
+ 
 
     back = () => {
         console.log('dfgdg');
@@ -202,6 +211,71 @@ class JobVideoResume extends Component {
             source={Background}
             resizeMode={'stretch'}>
         <StatusBar hidden ={true}/>
+        <Modal
+              style={{ justifyContent: 'center', alignItems: 'center'}}
+              isVisible={this.state.changeImage}
+              backdropOpacity={0.3}
+              onBackdropPress={()=>{this.setState({changeImage:false})}}
+              onBackButtonPress={()=>{this.setState({changeImage:false})}}
+              animationOutTiming={600}
+              onSwipeComplete={()=>{this.setState({changeImage:false})}}
+              swipeDirection="left"
+          >
+
+              <View
+                  style={{
+                    //   height: '35%',
+                      width: '100%',
+                      backgroundColor: '#fff',
+                      borderRadius: 20,
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      position:'absolute',
+                      bottom:0,
+                      padding:10
+                  }}
+              >
+        <View style={{justifyContent:'center',alignItems:'center',alignContent:'center'}}>
+                      <View style={{justifyContent:'center',alignItems:'center',alignContent:'center',marginVertical:10}}>
+                          <Text style={{fontSize:hp(2.7),fontWeight:'bold',color:'black'}}>Video Resume</Text>
+                      </View>
+                      <View style={{flex:2,flexDirection:'row',justifyContent:'center',alignItems:'center',alignContent:'center',
+                     }}>
+                          <View style={{flex:1,justifyContent:'center',alignItems:'center',alignContent:'center'}}>
+                              <TouchableOpacity
+                                  onPress={() =>this.Record() }
+                                  style={{
+                                      backgroundColor: 'white',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      width: '100%',
+                                      height: '100%'
+                                  }}
+                              >
+                                  <Image source={require('../Img/camera2.png')} style={{width:hp(5),height:hp(5)}}/>
+                                  <Text style={{ color: '#000000',fontSize:hp(2),fontFamily:FontRegular }}> Camera </Text>
+                              </TouchableOpacity>
+                          </View>
+                          <View style={{flex:1,justifyContent:'center',alignItems:'center',alignContent:'center'}}>
+                              <TouchableOpacity
+                                  onPress={() => this.OpenImage()}
+                                  style={{
+                                      backgroundColor: 'white',
+                                      justifyContent: 'center',
+                                      alignItems: 'center',
+                                      width: '100%',
+                                      height: '100%'
+                                  }}
+                              >
+                                  <Image source={require('../Img/gallery.png')} style={{width:hp(5),height:hp(5)}}/>
+                                  <Text style={{ color: '#000000',fontSize:hp(2),fontFamily:FontRegular }}> Gallery </Text>
+                              </TouchableOpacity>
+                          </View>
+
+                      </View>
+                                  </View>
+                                  </View>
+          </Modal>
          <View style={[{
                 top: scale(30)
             }, styles.CenterLogo]}><View><Image source = {require('../Img/logo-spotjo.png')}
@@ -214,11 +288,11 @@ class JobVideoResume extends Component {
             play('videocam', scale(100), '#fff')
             }
         
-       <CustomButton title = {'Upload Video'}
-            onPress = {this.OpenImage}
+            <CustomButton title = {global.language == 'english' ? 'Upload Video' : 'Upload Video' }
+            onPress = {()=> this.setState({changeImage:true})}
             containerStyle = {{
                 width: wp('80%'),
-                marginTop: scale(20),
+                marginTop: hp(5),
                 elevation: 5
             }}
             buttonStyle={{
@@ -230,26 +304,7 @@ class JobVideoResume extends Component {
             }}
             titleStyle={{
                 color: themeColor,
-                fontSize: scale(17)
-            }}
-            />
-            <CustomButton title = {'Record Video'}
-            onPress = {()=> this.Record()}
-            containerStyle = {{
-                width: wp('80%'),
-                marginTop: scale(20),
-                elevation: 5
-            }}
-            buttonStyle={{
-                backgroundColor: "white",
-                width: wp('80%'),
-                borderRadius: scale(3),
-                borderWidth: 0,
-
-            }}
-            titleStyle={{
-                color: themeColor,
-                fontSize: scale(17)
+                fontSize: hp(2.7)
             }}
             />
         </View>

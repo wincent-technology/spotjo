@@ -42,7 +42,7 @@ import {
 } from '../Component/responsive-ratio';
 import {
   scale,
-  snack
+  snack,NoData
 } from '../src/Util';
 // import { Rating, AirbnbRating } from 'react-native-ratings';
 import {
@@ -243,7 +243,7 @@ class PostedJobList extends PureComponent {
   render() {
     return (
       <View>
-        <StatusBar hidden={false} backgroundColor={themeColor} />
+        <StatusBar hidden={true} backgroundColor={themeColor} />
         <NavigationEvents onDidFocus={this.checking} />
         <View
           style={{
@@ -252,24 +252,25 @@ class PostedJobList extends PureComponent {
             borderBottomWidth: scale(2),
             borderBottomColor: 'gray',
             width: wp('100%'),
-            backgroundColor: themeWhite,
-            height: scale(40),
+            // backgroundColor: 'blue',
+            height: hp(5),
             alignItems: 'center',
             justifyContent: 'center',
-            elevation: 8,
+            // elevation: 8,
           }}>
           <Text style={styles.JoblistSecondViewHeadingText}>Jobs Info</Text>
         </View>
         <View
           style={{
             flexDirection: 'row',
-            width: wp('100%') - scale(35),
-            marginHorizontal: scale(5),
-            backgroundColor: 'transparent',
+            width: wp('100%'),
+            // marginHorizontal: scale(5),
+            // backgroundColor: 'blue',
             height: wp(100) / 3 - scale(5),
             marginTop: hp(0.6),
             marginBottom: hp(-0.3),
             alignItems: 'center',
+            justifyContent:'space-around'
             // marginTop: hp(1),
             // alignItems: 'center',
           }}>
@@ -427,16 +428,7 @@ class PostedJobList extends PureComponent {
               height: hp(50),
               width: wp(100),
             }}>
-            <Text
-              style={{
-                textAlign: 'center',
-                fontFamily: FontBold,
-                color: themeWhite,
-                fontSize: scale(18),
-                width: wp(60),
-              }}>
-              No Data found 😞
-            </Text>
+            <NoData text={this.state.message}/>
           </View>
         )}
       </View>

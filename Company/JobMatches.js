@@ -59,15 +59,18 @@ import ItemMVJobbM from './ItemMVJobbM';
 import CompanyProfile from '../src/CompanyProfile';
 import DeviceInfo from 'react-native-device-info';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import GestureRecognizer, {
-  swipeDirections
-} from 'react-native-swipe-gestures';
+// import GestureRecognizer, {
+//   swipeDirections
+// } from 'react-native-swipe-gestures';
 import http from '../api';
 import Icon2 from 'react-native-vector-icons/dist/MaterialIcons';
 import CustomInput from '../Component/Input';
-
+import BoxButton from '../Component/BoxButton'
 // import styles from './Style'
 var c = 0;
+
+
+
 
 class JobMatches extends React.Component {
   constructor(props) {
@@ -126,8 +129,9 @@ class JobMatches extends React.Component {
 
               // this.setState({
               //     Applied: res['data']['result']
-              // })
-              for (let i in res['data']['result']) {
+              // }).
+
+              for (let i=0 ; i<res['data']['result'].length ; i++) {
                 if (res['data']['result'][i]['status'] == 'Matched') {
                   // Matched.push(res['data']['result'][i])
                 } else if (
@@ -259,10 +263,10 @@ class JobMatches extends React.Component {
       tmpobj,
       jobs = this.state.data;
 
-    for (let i in jobs) {
+    for (let i=0;i<jobs.length;i++) {
 
       if (jobs[i]['workexp']) {
-        for (let j in jobs[i]['workexp']) {
+        for (let j=0;j<jobs[i]['workexp'].length;j++) {
           tmpobj = JSON.parse(JSON.stringify(jobs[i]));
 
           From = jobs[i]['workexp'][j]['From'].split(' ');
@@ -404,241 +408,12 @@ class JobMatches extends React.Component {
           }}>
           <ScrollView horizontal>
             <NavigationEvents onDidFocus={this.checking} />
-            <TouchableWithoutFeedback onPress={() => this.Shortlisted()}>
-              <View
-                style={[
-                  {
-                    borderWidth: this.state.short ? scale(2) : 0,
-                  },
-                  styles.MatchersStyleTab,
-                ]}>
-                <ImageBackground
-                  source={canvas}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    // position: "absolute",
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  resizeMode={'stretch'}>
-                  <Text
-                    style={{
-                      fontSize: scale(20),
-                      fontFamily: 'Roboto-Regular',
-                      color: themeWhite,
-                    }}>
-                    {this.state.Shortlisted.length}
-                  </Text>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: scale(16),
-                        fontFamily: 'Roboto-Regular',
-                        color: themeWhite,
-                      }}>
-                      Shortlisted
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => this.Matched()}>
-              <View
-                style={[
-                  {
-                    borderWidth: this.state.mat ? scale(2) : 0,
-                  },
-                  styles.MatchersStyleTab,
-                ]}>
-                <ImageBackground
-                  source={canvas}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  resizeMode={'stretch'}>
-                  <Text
-                    style={{
-                      fontSize: scale(20),
-                      fontFamily: 'Roboto-Regular',
-                      color: themeWhite,
-                    }}>
-                    {this.state.Matched.length}
-                  </Text>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: scale(16),
-                        fontFamily: 'Roboto-Regular',
-                        color: themeWhite,
-                      }}>
-                      Matched
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => this.Rejected()}>
-              <View
-                style={[
-                  {
-                    borderWidth: this.state.rej ? scale(2) : 0,
-                  },
-                  styles.MatchersStyleTab,
-                ]}>
-                <ImageBackground
-                  source={canvas}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  resizeMode={'stretch'}>
-                  <Text
-                    style={{
-                      fontSize: scale(20),
-                      fontFamily: 'Roboto-Regular',
-                      color: themeWhite,
-                    }}>
-                    {this.state.Rejected.length}
-                  </Text>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: scale(16),
-                        fontFamily: 'Roboto-Regular',
-                        color: themeWhite,
-                      }}>
-                      Rejected
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => this.Applied()}>
-              <View
-                style={[
-                  {
-                    borderWidth: this.state.app ? scale(2) : 0,
-                  },
-                  styles.MatchersStyleTab,
-                ]}>
-                <ImageBackground
-                  source={canvas}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    // position: "absolute",
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  resizeMode={'stretch'}>
-                  <Text
-                    style={{
-                      fontSize: scale(20),
-                      fontFamily: 'Roboto-Regular',
-                      color: themeWhite,
-                    }}>
-                    {this.state.Applied.length}
-                  </Text>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: scale(16),
-                        fontFamily: 'Roboto-Regular',
-                        color: themeWhite,
-                      }}>
-                      Applied
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => this.Interested()}>
-              <View
-                style={[
-                  {
-                    borderWidth: this.state.int ? scale(2) : 0,
-                  },
-                  styles.MatchersStyleTab,
-                ]}>
-                <ImageBackground
-                  source={canvas}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  resizeMode={'stretch'}>
-                  <Text
-                    style={{
-                      fontSize: scale(20),
-                      fontFamily: 'Roboto-Regular',
-                      color: themeWhite,
-                    }}>
-                    {this.state.Interested.length}
-                  </Text>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: scale(16),
-                        fontFamily: 'Roboto-Regular',
-                        color: themeWhite,
-                      }}>
-                      Interested
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => this.NotInterested()}>
-              <View
-                style={[
-                  {
-                    borderWidth: this.state.not ? scale(2) : 0,
-                  },
-                  styles.MatchersStyleTab,
-                ]}>
-                <ImageBackground
-                  source={canvas}
-                  style={{
-                    height: '100%',
-                    width: '100%',
-                    position: 'absolute',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                  resizeMode={'stretch'}>
-                  <Text
-                    style={{
-                      fontSize: scale(20),
-                      fontFamily: 'Roboto-Regular',
-                      color: themeWhite,
-                    }}>
-                    {this.state.NotInterested.length}
-                  </Text>
-                  <View>
-                    <Text
-                      style={{
-                        fontSize: scale(16),
-                        fontFamily: 'Roboto-Regular',
-                        color: themeWhite,
-                      }}
-                      numberOfLines={1}>
-                      Not Interested
-                    </Text>
-                  </View>
-                </ImageBackground>
-              </View>
-            </TouchableWithoutFeedback>
+            <BoxButton types={this.state.short} lengthing={this.state.Shortlisted.length} title='Shortlisted' onPress={()=>this.Shortlisted()}/>
+            <BoxButton types={this.state.mat} lengthing={this.state.Matched.length} title='Matched' onPress={()=>this.Matched()}/>
+            <BoxButton types={this.state.rej} lengthing={this.state.Rejected.length} title='Rejected' onPress={()=>this.Rejected()}/>
+            <BoxButton types={this.state.app} lengthing={this.state.Applied.length} title='Applied' onPress={()=>this.Applied()}/>
+            <BoxButton types={this.state.int} lengthing={this.state.Interested.length} title='Interested' onPress={()=>this.Interested()}/>
+            <BoxButton types={this.state.not} lengthing={this.state.NotInterested.length} title='Not Interested' onPress={()=>this.NotInterested()}/>
           </ScrollView>
         </View>
         {data != '' ? (

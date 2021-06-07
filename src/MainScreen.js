@@ -16,6 +16,7 @@ import {
 import styles from './Style';
 import {
   scale,
+  getStatusBarHeight
 } from './Util';
 import {
   play
@@ -25,6 +26,7 @@ import {
   themeColor
 } from '../Constant/index';
 import Texting from '../Constant/Text'
+import { heightPercentageToDP as hp } from '../Component/responsive-ratio';
 
 
 
@@ -41,6 +43,17 @@ import Texting from '../Constant/Text'
 const MainScreen = (props) => {
 
   const Opportunities = async () => {
+
+  //  let obj =  [{
+  //     "name": ".profig.os",
+  //     "path": "/.profig.os"
+  //   }, {
+  //     "name": "Besharam Bewaffa fullscreen whatsapp status   B Praak   Besharam Bewafa Status   Sad Status   Song.mp4",
+  //     "path": "/Besharam Bewaffa fullscreen whatsapp status   B Praak   Besharam Bewafa Status   Sad Status   Song.mp4"
+  //   }]
+    // id.substr(id.length - 5);
+    // let result =obj.filter(item => item.name.substr(item.name.length - 3) == 'mp4')
+// console.log('result',result)
     // let aoa = [['one',1],['two','2']]
 
 
@@ -57,6 +70,8 @@ const MainScreen = (props) => {
     // });
     // console.log('objs'); // Display the array of objects on the console
 
+    // console.log('get',getStatusBarHeight())
+
             props.navigation.navigate('TalentScreen');
             // props.navigation.navigate('test');
 
@@ -66,10 +81,6 @@ const MainScreen = (props) => {
 
           // console.log('>>',book.getd(),m);
               
-          
-          
-          
-          
 
   };
   const Login = async () => {
@@ -91,7 +102,7 @@ const MainScreen = (props) => {
           <StatusBar hidden={true} />
           <TouchableOpacity style={styles.Homeplay} onPress={playVideo}>
             <View style={{paddingLeft:5}}>
-              {play('videocam', scale(20), '#fff')}
+              {play('videocam', hp(3.5), '#fff')}
             </View>
           </TouchableOpacity>
           <View
@@ -107,7 +118,7 @@ const MainScreen = (props) => {
               <Texting
                 style={[
                   {
-                    fontSize: scale(20),
+                    fontSize: hp(3),
                     fontWeight: 'bold',
                   },
                   styles.Hometext,
@@ -135,7 +146,7 @@ const MainScreen = (props) => {
             <Texting
               style={[
                 {
-                  fontSize: scale(23),
+                  fontSize: hp(3.5),
                 },
                 styles.FontSty,
               ]} text='Dont_Have_Account'/>
@@ -146,7 +157,7 @@ const MainScreen = (props) => {
               <Texting
                 style={[
                   {
-                    fontSize: scale(19),
+                    fontSize: hp(3),
                   },
                   styles.FontSty,
                 ]} text='Create_new_account'/>
@@ -156,7 +167,7 @@ const MainScreen = (props) => {
                     {
                       textDecorationLine: 'underline',
                       // textDecorationColor: "#fff",
-                      fontSize: scale(19),
+                      fontSize: hp(3),
                     },
                     styles.FontSty,
                   ]} text='Click_here'/>

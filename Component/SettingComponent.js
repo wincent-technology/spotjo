@@ -15,6 +15,8 @@ import {
   Image,
   ViewPropTypes
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { heightPercentageToDP, widthPercentageToDP } from './responsive-ratio';
 
 const ARROW_ICON = require('../Img/icon-arrow-settings.png');
 
@@ -238,8 +240,20 @@ class SettingsList extends React.Component {
               : item.isEditable ? this._itemEditableBlock(item, index) : this._itemTitleBlock(item, index)}
 
             {item.rightSideContent ? item.rightSideContent : null}
+            {
+              item.butt ? 
+              <TouchableOpacity style={[styles.rightSide,{
+                backgroundColor : item.langchange ? 'rgba(55, 192, 211, 1)' : 'gray' ,
+                height:heightPercentageToDP(6),marginTop:heightPercentageToDP(0.5),width:widthPercentageToDP(20),justifyContent:"center",alignItems:"center",
+                borderRadius:20
+                }]} onPress = {() => console.log('hi')}>
+                    <Text style={{color:"white"}}>
+                        {item.texting}
+                    </Text>
+              </TouchableOpacity>
+              : null }
             {item.hasSwitch ?
-              <Switch
+                        <Switch
                 {...item.switchProps}
                 thumbColor={'#37c0d3'}
                 trackColor={{false:'gray',true:'rgba(55, 192, 211, 0.5)'}}
@@ -282,11 +296,14 @@ const styles = StyleSheet.create({
   },
   titleText: {
     flex: 1,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    color:"#333"
+
   },
   rightSide: {
     marginRight: 5,
-    alignSelf: 'center'
+    alignSelf: 'center',
+    // justifyContent:"center"
   },
   editableText: {
     flex: 1,

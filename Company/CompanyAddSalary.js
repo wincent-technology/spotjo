@@ -62,7 +62,7 @@ import React, {
   
       this.setState({
         salary: parseInt(global.minSalary) || 0,
-        salaryMax: Math.round(parseInt(global.maxSalary) || 0) *150/200,
+        salaryMax: Math.round(parseInt(global.maxSalary) || 45) *150/200,
         salaryrating: global.salaryrating || 1,
       });
       console.log(this.state);
@@ -88,37 +88,38 @@ import React, {
     render() {
       return (
         <>
-          <AddExpSkillEdu source = {salaryFrame} title='Save_Salary' onPress={this.Add}/>
-            <View style={{flexDirection:"column",alignItems:"center",marginTop:-5}}>
-            <Text style={{fontSize:18,fontFamily:FontBold}}>
+          <AddExpSkillEdu source = {salaryFrame} title={global.language == 'english' ? 'Save Salary' : 'ger Salary'} onPress={this.Add}/>
+            <View style={{flexDirection:"column",alignItems:"center",marginTop:hp(-5),}} onStartShouldSetResponder={() => true} >
+            <Text style={{fontSize:hp(2.7),fontFamily:FontBold}}>
                           {Math.round((this.state.salaryMax * 200)/150)} K
                         </Text>
             <View style={{
                             opacity: 1,
                             width: wp(60),
-                            backgroundColor: 'transparent',
-                            height: hp(30) * 1.5,marginHorizontal:wp(15)
-                        }}>
-                        
+                            height: hp(28) * 1.5,marginHorizontal:wp(15)
+                        }} >
                         <Slider
             maximumTrackTintColor="transparent"
             onValueChange={ salaryMax => this.setState({salaryMax},()=> console.log('salaryMax',salaryMax)) }
             thumbTintColor={'transparent'}
             value={this.state.salaryMax}
             maximumValue={150}
+            onSlidingStart={() => console.log('hi')}
+              onSlidingComplete={() => console.log('false')}
             style={{
-                width: wp("127%"),
+                width: wp("80%"),
                 transform: [{
                     rotate: '-90deg'
                 }],
-                height:hp(61),
+                height:hp(50),
                 zIndex:1,
+                // backgroundColor:"blue"
 
             }}
             minimumTrackTintColor = {'transparent'} />
               <LinearGradient style={{
-                            height: hp(30) * this.state.salaryMax / 100,
-                            marginTop:(hp((30) * 1.5)) - (hp(30) * this.state.salaryMax / 100),
+                            height: hp(28) * this.state.salaryMax / 100,
+                            marginTop:(hp((28) * 1.5)) - (hp(28) * this.state.salaryMax / 100),
                             width: wp(60),
                             transform: [{
                                     rotate: '-180deg'

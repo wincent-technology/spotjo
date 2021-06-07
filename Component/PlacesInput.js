@@ -6,10 +6,11 @@ import {
   ActivityIndicator,
   StyleSheet,
   Text,
-  TextInput,Image,
+  TextInput,Image,FlatList,
   TouchableOpacity,
   View,
 } from 'react-native';
+import { heightPercentageToDP } from './responsive-ratio';
 
 class PlacesInput extends Component {
   state = {
@@ -41,16 +42,15 @@ class PlacesInput extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={this.props.mainStyle ? styles.mainStyle : styles.container}>
       <View style={this.props.stylesContainer}>
-      <View
-              style={{marginLeft:35,borderRightWidth:0.8,borderRightColor:"#afafaf",paddingRight:10}}>
+      <TouchableOpacity onPress={this.props.calla} style={{marginLeft:35,borderRightWidth:0.8,borderRightColor:"#afafaf",paddingRight:10}}>
               <Image
                 source={require('../Img/compass.png')}
-                style={{height:15,width:15}}
+                style={{height:heightPercentageToDP(2),width:heightPercentageToDP(2)}}
                 resizeMode={'contain'}
               />
-            </View>
+            </TouchableOpacity>
         <TextInput
           placeholder={this.props.placeHolder}
           placeholderTextColor={'#333'}
@@ -58,7 +58,7 @@ class PlacesInput extends Component {
           onChangeText={query => {
             this.setState({query}, () => {
               this.onPlaceSearch();
-              this.props.onChangeText && this.props.onChangeText(query, this);
+              this.props.onChangeText && this.props.onChangeText(query, this.state.showList);
             });
           }}
           onContentSizeChange={(e) => {
@@ -66,9 +66,16 @@ class PlacesInput extends Component {
                  this.props.onContentSizeChange && this.props.onContentSizeChange(e.nativeEvent.contentSize.height);
              }}
           value={this.state.query}
-          onFocus={() => this.setState({showList: true})}
-          onBlur={() => this.setState({showList: false})}
+          onFocus={() => {this.setState({showList: true}) 
+                                    // this.props.onFocus
+                                    }
+                                    }
+          onBlur={() => {!this.props.preferance && this.setState({showList: false})
+          // this.props.onBlur(false)
+          }}
+          
           {...this.props.textInputProps}
+          // {...this.props}
           clearButtonMode="always"
         />
         </View>
@@ -94,7 +101,7 @@ class PlacesInput extends Component {
                   <Text style={[styles.placeText, this.props.stylesItemText]}>
                     {this.props.resultRender(place)}
                   </Text>
-                  {this.props.iconResult}
+                  {/* {this.props.iconResult} */}
                 </TouchableOpacity>
               );
             })}
@@ -182,7 +189,6 @@ class PlacesInput extends Component {
             this.props.queryFields
           }${this.buildLocationQuery()}${this.buildCountryQuery()}${this.buildTypesQuery()}${this.buildSessionQuery()}`
         ).then(response => response.json());
-          console.log("sdfsfsfdfdf>>>>>>>>",places)
         this.setState({
           isLoading: false,
           places: places.predictions,
@@ -203,7 +209,6 @@ class PlacesInput extends Component {
         const place = await fetch(
           `https://maps.googleapis.com/maps/api/place/details/json?placeid=${id}&key=${this.props.googleApiKey}&fields=${this.props.queryFields}&language=${this.props.language}${this.buildSessionQuery()}`
         ).then(response => response.json());
-          console.log('placeInput',place)
         return this.setState({
             showList: false,
             isLoading: false,
@@ -236,6 +241,7 @@ PlacesInput.propTypes = {
   contentScrollViewTop: PropTypes.node,
   stylesInput: PropTypes.object,
   stylesContainer: PropTypes.object,
+  mainStyle: PropTypes.bool,
   stylesList: PropTypes.object,
   stylesItem: PropTypes.object,
   stylesItemText: PropTypes.object,
@@ -264,6 +270,7 @@ PlacesInput.propTypes = {
 
 PlacesInput.defaultProps = {
   stylesInput: {},
+  mainStyle:false,
   stylesContainer: {},
   stylesList: {},
   stylesItem: {},
@@ -284,9 +291,16 @@ const styles = StyleSheet.create({
     top: 5,
     // left: 10,
     // right: 10,
-    zIndex: 1000,
+    zIndex: 400,
 
   },
+  mainStyle:{
+    // position: 'absolute',
+    marginTop:10,
+    // left: 10,
+    // right: 10,
+    zIndex: 400,
+          },
   input: {
     height: 40,
     backgroundColor: '#fff',

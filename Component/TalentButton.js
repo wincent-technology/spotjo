@@ -25,13 +25,13 @@ const TalentButton = ({onPress, ...props}) =>
         borderRadius: props.bool ? 20 : 0,backgroundColor: props.bool ? "#fff" : 0,paddingHorizontal:scale(10),}} 
     onPress={onPress}>
             <Texting style={{
-        fontSize: scale(20),
+        fontSize: props.height ? hp(2.7) : hp(3),
         color: props.bool ? themeColor : themeWhite,
         fontFamily: FontRegular,
        fontWeight: 'bold',
     }} text={props.name}/>
     </TouchableOpacity>
-    {props.name != 'FullTime' && props.name != 'Part_time' && <View style={{height:1,backgroundColor:"#fff",width:wp(35),marginVertical:scale(10)}}/>}
+    {props.name != 'FullTime' && props.name != 'Part_time' && <View style={{height:0.5,backgroundColor:"#fff",width:wp(35),marginTop: props.height ? scale(10) : scale(10)}}/>}
 </View>
         ) : (
 <View style={[styles.PersonalInfoStartChoose, {
@@ -40,13 +40,13 @@ const TalentButton = ({onPress, ...props}) =>
         borderRadius: props.bool ? 20 : 20,backgroundColor: props.bool ? themeColor : 'transparent',paddingHorizontal:scale(10),borderWidth: props.job ? 1 : 0,borderColor : props.bool ? themeColor : 'black',        }} 
     onPress={onPress}>
             <Texting style={{
-        fontSize: scale(20),
+        fontSize:props.height ? hp(2.7) : hp(3),
         color: props.bool ? themeWhite : "#333",
         fontFamily: FontRegular,
     //    fontWeight: 'bold',
     }} text={props.name}/>
     </TouchableOpacity>
-    {props.name != 'FullTime' && props.name != 'Part_time' && <View style={{height:1,backgroundColor:themeColor,width:wp(35),marginVertical:scale(10)}}/>}
+    {props.name != 'FullTime' && props.name != 'Part_time' && <View style={{height:0.5,backgroundColor:themeColor,width:wp(35),marginTop:props.height ? scale(10) :scale(10)}}/>}
 </View>
         )
     }</>

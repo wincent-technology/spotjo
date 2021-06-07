@@ -9,10 +9,9 @@ import {
   Text,
   Image,
   View,ScrollView,
+  Keyboard
 } from 'react-native';
-
 import styles from '../src/Style';
-
 import {
   themeColor,
   themeWhite,
@@ -41,6 +40,7 @@ import CompanyAddSalary from './CompanyAddSalary';
 import CompanyAddSkillJob from './CompanyAddSkilJob';
 import CompanyAddLanguage from './CompanyAddLanguage';
 import PreviewJob from './PreviewJob';
+import JobSalaryType from './JobSalaryType'
 import Swiper from 'react-native-swiper';
 import http from '../api';
 import Texting from '../Constant/Text'
@@ -53,11 +53,12 @@ class CreateJob extends PureComponent {
       flagInterView: false,
       flagMatches: false,
       index: 0,
+      groom :false
     };
   }
 
   back = () => {
-    console.log('hey back');
+    console.log('hey back',this.state.index);
     if (this.state.index > 0) this.refs.swiper.scrollBy(-1);
   };
   Back = () => {
@@ -68,10 +69,23 @@ class CreateJob extends PureComponent {
     this.props.navigation.navigate('AdminDashboard');
   };
   next = () => {
-    if (this.state.index < 8) {this.refs.swiper.scrollBy(1);
+    console.log('global',global.Job_Title)
+    
+    if (this.state.index < 9) {this.refs.swiper.scrollBy(1);
       this.state.index == 3 && this.myScroll.scrollTo({ x: wp(100), animated: true });
     }
   };
+
+  componentDidMount () {
+    this.keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      this._keyboardDidShow,
+    );
+    this.keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      this._keyboardDidHide,
+    );
+  }
   callApi = () => {
     try {
       http
@@ -79,7 +93,7 @@ class CreateJob extends PureComponent {
           companyId: global.Id,
           minExp: global.minYear,
           maxExp: global.maxYear,
-          Job_title: global.Job_Title,
+          Job_title:  global.Job_Title + '(m/v/d)',
           Company: global.Company,
           Anywhere: global.Anywhere || false,
           salMin: global.minSalary,
@@ -121,6 +135,23 @@ class CreateJob extends PureComponent {
     }
   };
 
+  componentWillUnmount() {
+    this.keyboardDidShowListener.remove();
+    this.keyboardDidHideListener.remove();
+  }
+
+  _keyboardDidShow = () => {
+    this.setState({
+      groom: true,
+    });
+  };
+
+  _keyboardDidHide = () => {
+    this.setState({
+      groom: false,
+    });
+  };
+
   render() {
     const {
       index
@@ -135,7 +166,7 @@ class CreateJob extends PureComponent {
           resizeMode={'stretch'}>
           <NavigationHead
             centerComponent={
-              this.state.index != 8 ? 'Create Job' : 'Preview Job'
+              this.state.index != 9 ? 'Create Job' : 'Preview Job'
             }
             rightComponent="Exit"
             onPress={() => this.Back()}
@@ -146,11 +177,11 @@ class CreateJob extends PureComponent {
               flex:1,
               marginHorizontal: wp(2)
             }}>
-            <ScrollView style={{alignSelf:"stretch",flexWrap:"wrap"}}>
             <Swiper
               ref={'swiper'}
-              dotColor={themeColor}
-              index={index}
+              dotColor={'lightgray'}
+              index={this.state.index}
+              activeDotColor={themeColor}
               onIndexChanged={(index) =>
                 this.setState({
                   index: index,
@@ -184,15 +215,18 @@ class CreateJob extends PureComponent {
                 <CompanyAddLanguage />
               </View>
               <View>
+                <JobSalaryType />
+              </View>
+              <View>
                 <PreviewJob />
               </View>
-            </Swiper></ScrollView>
-            <View
+            </Swiper>
+            {!this.state.groom && <View
               style={{
                 flexDirection: 'row',
                 width: wp(100),
                 justifyContent:"space-between",
-                bottom:70,
+                bottom:hp(10),
                 position: 'absolute',
                 zIndex: 999,
               }}>
@@ -213,11 +247,11 @@ class CreateJob extends PureComponent {
                         styles.FontSty,
 
                         {
-                          fontSize: scale(22),
+                          fontSize: hp(3),
                           color:themeColor
                         }
                       ]}>
-                      {this.state.index == 8 ? '' : <Texting text='Back'/>}
+                      {this.state.index == 9 ? '' : <Texting text='Back'/>}
                     </Text>
                   </View>
                 </TouchableOpacity>
@@ -235,42 +269,48 @@ class CreateJob extends PureComponent {
                     <Text
                       style={[styles.FontSty,
                         {
-                          fontSize: scale(22),
+                          fontSize: this.state.index == 8 ? hp(2.5) : hp(3),
                           color:themeColor
                         }
                       ]}
                       numberOfLines={1}>
-                      {this.state.index == 7? (
-                        <Texting numberOfLines={1} text='Preview'/>
-                      ) : this.state.index == 8 ? (
-                        ''
+                      {this.state.index == 8? (
+                        <Texting  style = {{
+                          fontSize: hp(2.5),
+                          color:themeColor
+                        }} numberOfLines={1} text='Preview'/>
                       ) : (
-                        <Texting text='Next' />
+                        <Texting 
+                        style = {{
+                          fontSize: hp(3),
+                          color:this.state.index == 9 ? themeWhite : themeColor
+                        }}
+                        text='Next' />
                       )}
                     </Text>
                   </View>
                 </TouchableOpacity>
               </View>
-            </View>
+            </View>}
           </View>
           <View>
           </View>
           {/* </ScrollView> */}
-          <View
+          {!this.state.groom && <View
             style={{
               bottom: 45,
-              height: hp(6),
+              height: hp(5.5),
               width: wp(100),elevation:20,backgroundColor:"white"
               // left: wp(-2),
             }}>
              
-              {this.state.index < 8 ? (
+              {this.state.index < 9 ? (
                 <ScrollView 
                  horizontal={true} contentContainerStyle={{justifyContent:"center",alignItems:'center'}}
                  ref={(ref) => {
             this.myScroll = ref
           }}>
-                <CreateJobIndexButton name='Type' index={this.state.index == 0 && this.state.index}/>
+                <CreateJobIndexButton name='Type' index={this.state.index == 0 && this.state.index} tps={true}/>
                 <CreateJobIndexButton name='Preferences' index={this.state.index == 1 && this.state.index}/>
                 <CreateJobIndexButton name='Description' index={this.state.index == 2 && this.state.index}/>
                 <CreateJobIndexButton name='Requirements' index={this.state.index == 3 && this.state.index}/>
@@ -278,12 +318,13 @@ class CreateJob extends PureComponent {
                 <CreateJobIndexButton name='Salary' index={this.state.index == 5 && this.state.index}/>
                 <CreateJobIndexButton name='Education' index={this.state.index == 6 && this.state.index}/>
                 <CreateJobIndexButton name='Language' index={this.state.index == 7 && this.state.index}/>
-                <CreateJobIndexButton name='Preview' index={this.state.index == 8 && this.state.index}/>
+                <CreateJobIndexButton name='SalaryType' index={this.state.index == 8 && this.state.index}/>
+                <CreateJobIndexButton name='Preview' index={this.state.index == 9 && this.state.index}/>
                 </ScrollView>
               ) : (
                 <View
                   style={{
-                    height: hp(6),
+                    height: hp(5.5),
                     width: wp(100),
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -291,20 +332,20 @@ class CreateJob extends PureComponent {
                   <TouchableWithoutFeedback onPress={this.callApi}>
                     <View
                       style={{
-                        flexDirection: 'row',
+                        flexDirection: 'row',marginTop:hp(-0.5)
                       }}>
                       <Image
                         source={rite}
                         style={{
-                          height: scale(30),
-                          width: scale(30),
+                          height: hp(3.5),
+                          width: hp(3.5),
                           marginRight: scale(5),
                         }}
                         resizeMode={'contain'}
                       />
                       <Texting
                         style={{
-                          fontSize: scale(22),
+                          fontSize: hp(3),
                           fontFamily: FontBold,
                           color: themeColor,
                         }} text='Go_Live'/>
@@ -312,7 +353,7 @@ class CreateJob extends PureComponent {
                   </TouchableWithoutFeedback>
                 </View>
               )}
-          </View>
+          </View>}
         </ImageBackground>
       </View>
     );
